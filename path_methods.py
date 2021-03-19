@@ -2,13 +2,13 @@ import math
 import os
 
 class PathStatement:
-    def __init__(self, tikz_code):
+    def __init__(self):
         self.tikz_statements = []
 
-    def get_tikz_code():
-        return tikz_statements
+    def get_tikz_code(self):
+        return self.tikz_statements
 
-    def create_draw_statement(self, start, end, options = "", control_pts = []):
+    def append_draw_statement(self, start, end, options = "", control_pts = []):
         if len(control_pts) == 0:
             tikz_cmd = f"\draw[{options}] {start} -- {end};"
         else:
@@ -20,18 +20,18 @@ class PathStatement:
         
         self.tikz_statements += [tikz_cmd]
 
-    def create_plot_coords(self, draw_options, plot_options, points):
+    def append_plot_coords(self, draw_options, plot_options, points):
         tikz_cmd = f"\draw[{draw_options}] plot[{plot_options}] coordinates {{"
         for pt in points:
             tikz_cmd += str(pt) + " "
         tikz_cmd += "};"
         self.tikz_statements += [tikz_cmd]
 
-    def create_circle(self, options, position, radius):
+    def append_circle(self, options, position, radius):
         tikz_cmd = f"\draw[{options}] {position} circle ({radius}cm);"
         self.tikz_statements += [tikz_cmd]
 
-    def create_node(self, options, position, contents):
+    def append_node(self, options, position, contents):
         tikz_cmd = f"\\node[{options}] at {position} {{ {contents} }};"
         self.tikz_statements += [tikz_cmd]
 
