@@ -28,13 +28,13 @@ One can do more than just draw lines. The following table lists some objects one
 
 Object        | Raw Tikz Code   | Tikz-Python Code |
  -------------| -------------   | ------------- |
-Line         | \draw[blue] (0,0) -- (1,1);            | tikz.draw_line( (0,0), (1,1), options = "blue") 
-Circle        | \draw[fill = blue] (0,0) circle (2cm); | tikz.draw_circle( (0,0), 2, options = "fill = blue")  |
-Rectangle     | \draw[blue] (0,0) rectangle (5, 6);    | tikz.rectangle( (0,0), (5,6), options = "Blue")  |
-Ellipse       | \draw (0,0) ellipse (2cm and 4cm)      | tikz.ellipse( (0,0), 2, 4)
-Arc           | \draw (1,1) arc (45:90:5cm)            | 	tikz.arc( (1,1), 45, 90, 5)
-Node          | \node[above] at (0,0) {I am a node!};  | tikz.node((0,0), "I am a node!", "above")
-Plot Coordinates   | \draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) }; | tikz.draw_plot_coords(draw_options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])	
+Line         | `\draw[blue] (0,0) -- (1,1);`             | `tikz.draw_line( (0,0), (1,1), options = "blue")` 
+Circle        | `\draw[fill = blue] (0,0) circle (2cm);` | `tikz.draw_circle( (0,0), 2, options = "fill = blue")`  |
+Rectangle     | `\draw[blue] (0,0) rectangle (5, 6);`    | `tikz.rectangle( (0,0), (5,6), options = "Blue")`  |
+Ellipse       | `\draw (0,0) ellipse (2cm and 4cm)`      | `tikz.ellipse( (0,0), 2, 4)`
+Arc           | `\draw (1,1) arc (45:90:5cm)`            | `tikz.arc( (1,1), 45, 90, 5)`
+Node          | `\node[above] at (0,0) {I am a node!};`  | `tikz.node((0,0), "I am a node!", "above")`
+Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.draw_plot_coords(draw_options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`	
 
 Again: The difference with TikZ, and with other Python-Tikz mashups, is that the above python calls are class instances that we can subject to further manipulations.
 
@@ -104,7 +104,7 @@ for i in range(n):
 tikz.write()
 ```
 Which generates: 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/roots_of_unity.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/roots_of_unity.png" height = 300/>
 
 
 
