@@ -4,7 +4,11 @@ import os
 
 class TikzStatement:
     def __init__(
-        self, filename="tikz_code/tikz-code.tex", new_file=False, center=False
+        self,
+        filename="tikz_code/tikz-code.tex",
+        new_file=False,
+        center=False,
+        options="",
     ):
         """Example:
         LaTeX:
@@ -15,10 +19,11 @@ class TikzStatement:
         """
 
         # Create a Tikz Environment
+        self.filename = filename
+        self.options = options
         self.begin = "\\begin{tikzpicture}\n"
         self.tikz_statements = []
         self.end = "\\end{tikzpicture}\n"
-        self.filename = filename
 
         if new_file == True:
             tex_file = open(filename, "w")
