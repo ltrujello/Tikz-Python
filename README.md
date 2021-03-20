@@ -12,14 +12,14 @@ A typical example of this module in action is below.
 import tikz_python
 
 tikz = TikzStatement(filename = "my_tikz_code.tex")
-tikz.draw_line( (0,0), (1,1), options = "thick, blue")
+tikz.line( (0,0), (1,1), options = "thick, blue")
 tikz.write()
 ```
 We explain line-by-line what this means.
 
 * When we begin a TikZ drawing in LaTeX, we write `\begin{tikzpicture}` and `\end{tikzpicture}`. This is analagous to the code `tikz = TikzStatement(filename = "my_tikz_code.tex")`. The variable `tikz` is now a tikz environment that we can append drawings to. `TikzStatement` is a class to create such tikz environments. And `filename` is the file (or more generally, any file path) where our tikz code will be stored.
 
-* The line `tikz.draw_line( (0,0), (1,1), options = "thick, blue")` draws a blue line in the tikz environment `tikz`. 
+* The line `tikz.line( (0,0), (1,1), options = "thick, blue")` draws a blue line in the tikz environment `tikz`. 
 In Tex, this code would be `\draw[thick, blue] (0,0) -- (1,1);`.
 
 * Finally, `tikz.write()` subsequently writes all of our code into `my_tikz_code.tex`.
@@ -46,9 +46,9 @@ Because Python is amazing, I can be fancier and write:
 start = (0,0)
 end = (2,1)
 tikz = TikzStatement()
-line = tikz.draw_line(start, end, options = "thick, blue, o-o")
-start_node = tikz.draw_node(start, options = "below", content = "Start!")
-end_node = tikz.draw_node(end, options = "above", content = "End!")
+line = tikz.line(start, end, options = "thick, blue, o-o")
+start_node = tikz.node(start, options = "below", content = "Start!")
+end_node = tikz.node(end, options = "above", content = "End!")
 ```
 This creates a line with two nodes labeling the start and end. As stated before, drawings are class objects so I can easily access information:
 ```python
@@ -71,10 +71,10 @@ tikz = TikzStatement(new_file=True)
 for i in range(30):
     point = (math.sin(2 * math.pi * i / 30), math.cos(2 * math.pi * i / 30))
 
-    tikz.draw_circle(point, 2, "Blue") 
-    tikz.draw_circle(point, 2.2, "Green")
-    tikz.draw_circle(point, 2.4, "Red")
-    tikz.draw_circle(point, 2.6, "Purple")
+    tikz.circle(point, 2, "Blue") 
+    tikz.circle(point, 2.2, "Green")
+    tikz.circle(point, 2.4, "Red")
+    tikz.circle(point, 2.6, "Purple")
 
 tikz.write()
 ```
@@ -93,7 +93,7 @@ for i in range(n):
     root_label = f"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$"
 
     # Draw line to nth root of unity
-    tikz.draw_line((0, 0), (x, y), options="-o")
+    tikz.line((0, 0), (x, y), options="-o")
 
     if 0 <= theta <= math.pi:
         node_option = "above"
@@ -101,7 +101,7 @@ for i in range(n):
         node_option = "below"
 
     # Label the nth root of unity
-    tikz.draw_node((x, y), options=node_option, content=root_label)
+    tikz.node((x, y), options=node_option, content=root_label)
 
 tikz.write()
 ```
