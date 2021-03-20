@@ -14,7 +14,7 @@ def roots_of_unity(n, scale):
         content = f"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$"
 
         # Draw line to nth root of unity
-        new_tikz.draw_line((0, 0), (x, y), options="-o")
+        new_tikz.line((0, 0), (x, y), options="-o")
 
         if 0 <= theta <= math.pi:
             node_option = "above"
@@ -22,6 +22,6 @@ def roots_of_unity(n, scale):
             node_option = "below"
 
         # Label the nth root of unity
-        new_tikz.draw_node((x, y), options=node_option, content=content)
+        new_tikz.node((x, y), options=node_option, content=content)
 
     new_tikz.write()

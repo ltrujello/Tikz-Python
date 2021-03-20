@@ -27,9 +27,9 @@ def barycentric_subdivision(iterations, new_tikz):
     pt_three = (3, 4.24)
     init_coords = [pt_one, pt_two, pt_three]
 
-    new_tikz.draw_line(pt_one, pt_two)
-    new_tikz.draw_line(pt_two, pt_three)
-    new_tikz.draw_line(pt_three, pt_one)
+    new_tikz.line(pt_one, pt_two)
+    new_tikz.line(pt_two, pt_three)
+    new_tikz.line(pt_three, pt_one)
 
     triangles = queue.Queue()  # queue of lists of tuples
     triangles.put(init_coords)  # Put goes to the end [... {]}
@@ -59,7 +59,7 @@ def medians(coords, new_tikz, iteration):
         # get median coords, draw median
         x = statistics.mean([bx, cx])
         y = statistics.mean([by, cy])
-        new_tikz.draw_line((ax, ay), (x, y), colors[iteration % len(colors)])  # tikz
+        new_tikz.line((ax, ay), (x, y), colors[iteration % len(colors)])  # tikz
         midpts.append((x, y))
 
     # get coords of all new triangles created

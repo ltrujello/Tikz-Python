@@ -6,7 +6,7 @@ from tikz_methods import *
 new_tikz = TikzStatement(new_file=True)
 pts = list(range(0, 10))
 for i in pts:
-    new_tikz.draw_line(
+    new_tikz.line(
         (i, 0),
         (0, 5),
         options="blue!" + str(100 * i // len(pts)),

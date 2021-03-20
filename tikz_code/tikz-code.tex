@@ -1,5 +1,8 @@
 \begin{tikzpicture}
-	\draw[thick, blue, o-o] (0, 0) -- (2, 1);
-	\node[below] at (0, 0) { Start! };
-	\node[above] at (2, 1) { End! };
+	\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };
+	\draw[fill = purple] (1, 1) circle (1cm);
+	\node[above] at (3, 3) { I love $ \sum_{x \in \mathbb{R}} f(x^2)$ ! };
+	\draw[Blue] (2, 2) rectangle (3, 4);
+	\draw (0, 0) ellipse (3cm and 4cm);
+	\draw (0, 0) arc (20:90:4cm);
 \end{tikzpicture}

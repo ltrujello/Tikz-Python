@@ -2,34 +2,35 @@
 This is TikZ-Python, a python module that allows one to very simply and intuitively create complex figures in TikZ. 
 
 ## Why
-This is for people who know basic Python and TikZ, but who have realized that while TikZ is amazing, it is *really* annoying to use. (This is not a snipe at TikZ. TikZ was implemented in TeX, a 1980s markup language written in an outdated literate programming language/obfuscated, incompilable "Pascal-H", so it is only unnecessarily difficult and inconvenient to use because TeX was never made to be a programming language.)
+This is for people who know basic Python and TikZ, but who have realized that while TikZ is amazing, it is *really* annoying to use. 
 
-I've looked at other Python/TikZ mashups, and they are generally not very simple and do not have examples on how to use.
-
-The goal of this is to automate most of the process of making TikZ figures so that it is no longer a tedious and inefficient task. This has led the philosophy of this code is to interpret tikz attributes as *class objects*. For example, we interpret a line as not only a drawing, but as an instance of a class `DrawingStatement`. This allows us to easily draw and further subject a drawing to complex manipulations (e.g., rotations, shifting) which would require lots of copy-pasting, typing, backspacing, and debbuging in LaTeX alone. 
+The goal of this is to automate most of the process of making TikZ figures so that it is no longer a tedious and inefficient task. This has led the philosophy of this code is to interpret tikz attributes as *class objects*. For example, we interpret a line as not only a drawing, but as an instance of a class `Line`. This allows us to easily draw and further subject a drawing to complex manipulations (e.g., rotations, shifting) which would require lots of copy-pasting, typing, backspacing, and debbuging in LaTeX alone. 
 
 ## How to Use: Basics
-When we begin a TikZ drawing in LaTeX, we write `\begin{tikzpicture}` and `\end{tikzpicture}`. The analagous python code is 
+A typical example of this module in action is below. 
 ```python
+import tikz_python
+
 tikz = TikzStatement(filename = "my_tikz_code.tex")
-```
-Here, `tikz` is a tikz environment that we can now append drawings to, and `filename` is the file (or more generally, a file path) where our tikz code will be stored. For example, to draw a blue line, I can write:
-```python
 tikz.draw_line( (0,0), (1,1), options = "thick, blue")
-```
-One executed, the user is displayed with the corresponding tikz code, in this case, `\draw[thick, blue] (0,0) -- (1,1);`, so that they can check this is what they wanted. To let Python know you are done adding things to `tikz`, simply execute
-```python
 tikz.write()
 ```
-This will write all of our tikz code into `my_tikz_code.tex`. 
+We explain line-by-line what this means.
+
+* When we begin a TikZ drawing in LaTeX, we write `\begin{tikzpicture}` and `\end{tikzpicture}`. This is analagous to the code `tikz = TikzStatement(filename = "my_tikz_code.tex")`. The variable `tikz` is now a tikz environment that we can append drawings to. `TikzStatement` is a class to create such tikz environments. And `filename` is the file (or more generally, any file path) where our tikz code will be stored.
+
+* The line `tikz.draw_line( (0,0), (1,1), options = "thick, blue")` draws a blue line in the tikz environment `tikz`. 
+In Tex, this code would be `\draw[thick, blue] (0,0) -- (1,1);`.
+
+* Finally, `tikz.write()` subsequently writes all of our code into `my_tikz_code.tex`.
 
 ## Methods Provided
-One can do more than just draw lines. The following table lists some objects one might want to draw in TikZ, an example of TikZ code on drawing such an object, and the analagous Python code that this module allows one to write. 
+One can do more than just draw lines. The following table lists three things: Some objects one might want to draw in TikZ, an example of TikZ code on drawing such an object, and the code for how this module would write such commands.
 
 Object        | Raw Tikz Code   | Tikz-Python Code |
  -------------| -------------   | ------------- |
-Line         | `\draw[blue] (0,0) -- (1,1);`             | `tikz.draw_line( (0,0), (1,1), options = "blue")` 
-Circle        | `\draw[fill = blue] (0,0) circle (2cm);` | `tikz.draw_circle( (0,0), 2, options = "fill = blue")`  |
+Line         | `\draw[blue] (0,0) -- (1,1);`             | `tikz.line( (0,0), (1,1), options = "blue")` 
+Circle        | `\draw[fill = blue] (0,0) circle (2cm);` | `tikz.circle( (0,0), 2, options = "fill = blue")`  |
 Rectangle     | `\draw[blue] (0,0) rectangle (5, 6);`    | `tikz.rectangle( (0,0), (5,6), options = "Blue")`  |
 Ellipse       | `\draw (0,0) ellipse (2cm and 4cm)`      | `tikz.ellipse( (0,0), 2, 4)`
 Arc           | `\draw (1,1) arc (45:90:5cm)`            | `tikz.arc( (1,1), 45, 90, 5)`
@@ -44,6 +45,7 @@ Because Python is amazing, I can be fancier and write:
 ```python
 start = (0,0)
 end = (2,1)
+tikz = TikzStatement()
 line = tikz.draw_line(start, end, options = "thick, blue, o-o")
 start_node = tikz.draw_node(start, options = "below", content = "Start!")
 end_node = tikz.draw_node(end, options = "above", content = "End!")
@@ -58,11 +60,11 @@ This creates a line with two nodes labeling the start and end. As stated before,
 "Start!"
 ```
 Running our previous python code, we obtain
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_and_two_nodes.png" height = 200/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_and_two_nodes.png" height = 200/> 
+
 
 ### Example: Circles
-Python's flexibility can also allow us to easily create more complicated figures which would require way too much time and effort to do in TeX alone. The following example code
-generates the figure below.
+Python's flexibility can also allow us to easily create more complicated figures which would require way too much time and effort to do in TeX alone. The following example code generates the figure below.
 ```python
 tikz = TikzStatement(new_file=True)
 
