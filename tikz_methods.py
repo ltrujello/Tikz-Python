@@ -10,48 +10,67 @@ class TikzStatement:
         center=False,
         options="",
     ):
+        # Todo: improve unit tests
+        # Todo: check if filename path exists
+        # Todo: add an undo method for appending draw objects/tikz environments, but don't make it too powerful
+        # Todo: figure out a nice way to implement scope
+
         # Create a Tikz Environment
         self.filename = filename
         self.options = options
         self.begin = "\\begin{tikzpicture}\n"
-        self.tikz_statements = []
+        self._statements = {}
         self.end = "\\end{tikzpicture}\n"
-
-        if new_file == True:
-            tex_file = open(filename, "w")
-            tex_file.close
 
         if center == True:
             self.begin = "\\begin{center}\n" + "\t" + self.begin
             self.end = "\t" + self.end + "\\end{center}\n"
 
+        if new_file == True:
+            tex_file = open(filename, "w")
+            tex_file.close
+
     def __repr__(self):
-        return self.write_tikz_code()
+        return self.code
 
-    def add_statement(self, statements):
-        # Adds code to the Tikz Environment
-        for statement in statements:
-            self.tikz_statements.append(statement)
+    @property
+    def statements(self):
+        print("accessing statements")
+        statement_dict = {}
+        for draw_obj in self._statements:
+            statement_dict[draw_obj] = draw_obj.code
+        return statement_dict
 
-    def write_tikz_code(self):
+    @statements.setter
+    def statements(self, draw_obj):
+        print("Setting statements...")
+        self._statements[draw_obj] = draw_obj.code
+
+    @property
+    def code(self):
+        print("writing code")
         code = self.begin + "\n"
-        for cmd in self.tikz_statements:
-            code += cmd + "\n"
+        for draw_obj in self.statements:
+            code += draw_obj.code + "\n"
         code += self.end + "\n"
         return code
+
+    def add_statement(self, statement):
+        # Manually add code to the Tikz Environment
+        self.statements[len(self.statements)] = statement
 
     def scope(self, statements):
         tikz_cmd = "\\begin{scope}\n"
         for statement in statements:
             tikz_cmd += "\t" + statement + "\n"
         tikz_cmd += "\\end{scope}\n"
-        self.tikz_statements += [tikz_cmd]
+        self.statements += [tikz_cmd]
 
     def write(self):
         tex_file = open(self.filename, "a+")
         tex_file.write(self.begin)
 
-        for cmd in self.tikz_statements:
+        for cmd in self.statements.values():
             tex_file.write("\t" + cmd + "\n")
 
         tex_file.write(self.end)
@@ -62,25 +81,41 @@ class TikzStatement:
     """
 
     def line(self, start, end, options="", control_pts=[]):
-        return TikzStatement.Line(self, start, end, options, control_pts)
+        line = TikzStatement.Line(self, start, end, options, control_pts)
+        self._statements[line] = line.code
+        return line
 
     def plot_coords(self, draw_options, plot_options, points):
-        return TikzStatement.PlotCoordinates(self, draw_options, plot_options, points)
+        plot_coords = TikzStatement.PlotCoordinates(
+            self, draw_options, plot_options, points
+        )
+        self._statements[plot_coords] = plot_coords.code
+        return plot_coords
 
     def circle(self, position, radius, options=""):
-        return TikzStatement.Circle(self, position, radius, options)
+        circle = TikzStatement.Circle(self, position, radius, options)
+        self._statements[circle] = circle.code
+        return circle
 
     def node(self, position, content, options=""):
-        return TikzStatement.Node(self, position, content, options)
+        node = TikzStatement.Node(self, position, content, options)
+        self._statements[node] = node.code
+        return node
 
     def rectangle(self, left_corner, right_corner, options=""):
-        return TikzStatement.Rectangle(self, left_corner, right_corner, options)
+        rectangle = TikzStatement.Rectangle(self, left_corner, right_corner, options)
+        self._statements[rectangle] = rectangle.code
+        return rectangle
 
     def ellipse(self, position, horiz_axis, vert_axis):
-        return TikzStatement.Ellipse(self, position, horiz_axis, vert_axis)
+        ellipse = TikzStatement.Ellipse(self, position, horiz_axis, vert_axis)
+        self._statements[ellipse] = ellipse.code
+        return ellipse
 
     def arc(self, position, start_angle, end_angle, radius):
-        return TikzStatement.Arc(self, position, start_angle, end_angle, radius)
+        arc = TikzStatement.Arc(self, position, start_angle, end_angle, radius)
+        self._statements[arc] = arc.code
+        return arc
 
     """
         Classes for drawing
@@ -94,7 +129,6 @@ class TikzStatement:
             self.end = end
             self.options = options
             self.control_pts = control_pts
-            # tikz_inst.add_statement([self.code])  # May want to be dependent on if/else?
 
         @property
         def code(self):
@@ -108,6 +142,8 @@ class TikzStatement:
                 tikz_cmd = (
                     f"\draw[{self.options}] {self.start} {control_stmt} {self.end};"
                 )
+            # self.tikz_inst.statements[self] = tikz_cmd # this actually helped!
+
             return tikz_cmd
 
         def __repr__(self):
@@ -119,7 +155,6 @@ class TikzStatement:
             self.draw_options = draw_options
             self.plot_options = plot_options
             self.points = points
-            tikz_inst.add_statement([self.code])
 
         @property
         def code(self):
@@ -140,7 +175,6 @@ class TikzStatement:
             self.position = position
             self.radius = radius
             self.options = options
-            tikz_inst.add_statement([self.code])
 
         @property
         def code(self):
@@ -158,7 +192,6 @@ class TikzStatement:
             self.position = position
             self.content = content
             self.options = options
-            tikz_inst.add_statement([self.code])
 
         @property
         def code(self):
@@ -175,7 +208,6 @@ class TikzStatement:
             self.left_corner = left_corner
             self.right_corner = right_corner
             self.options = options
-            tikz_inst.add_statement([self.code])
 
         @property
         def code(self):
@@ -190,7 +222,6 @@ class TikzStatement:
             self.position = position
             self.horiz_axis = horiz_axis
             self.vert_axis = vert_axis
-            tikz_inst.add_statement([self.code])
 
         @property
         def code(self):
@@ -206,7 +237,6 @@ class TikzStatement:
             self.start_angle = start_angle
             self.end_angle = end_angle
             self.radius = radius
-            tikz_inst.add_statement([self.code])
 
         @property
         def code(self):
@@ -393,51 +423,52 @@ if __name__ == "__main__":
     # Arc
     arc = tikz.arc((0, 0), 20, 90, 4)
 
-    # Test Line
-    assert line.start == (0, 0)
-    assert line.end == (1, 1)
-    assert line.options == "thick, blue"
-    assert line.control_pts == [(0.25, 0.25), (0.75, 0.75)]
-    assert (
-        line.code
-        == "\\draw[thick, blue] (0, 0) .. controls (0.25, 0.25) and (0.75, 0.75)  .. (1, 1);"
-    )
-    # Test Plot
-    assert plot.draw_options == "green"
-    assert plot.plot_options == "smooth "
-    assert plot.points == [(1, 1), (2, 2), (3, 3), (2, -4)]
-    assert (
-        plot.code
-        == "\\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };"
-    )
-    # Test Circle
-    assert circle.position == (1, 1)
-    assert circle.radius == 1
-    assert circle.options == "fill = purple"
-    assert circle.code == "\\draw[fill = purple] (1, 1) circle (1cm);"
-    # Test Node
-    assert node.position == (3, 3)
-    assert node.content == "I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !"
-    assert node.options == "above"
-    assert (
-        node.code
-        == "\\node[above] at (3, 3) { I love $ \\sum_{x \\in \\mathbb{R}} f(x^2)$ ! };"
-    )
-    # Rectangle
-    assert rectangle.left_corner == (2, 2)
-    assert rectangle.right_corner == (3, 4)
-    assert rectangle.options == "Blue"
-    assert rectangle.code == "\\draw[Blue] (2, 2) rectangle (3, 4);"
-    # Ellipse
-    assert ellipse.position == (0, 0)
-    assert ellipse.horiz_axis == 3
-    assert ellipse.vert_axis == 4
-    assert ellipse.code == "\\draw (0, 0) ellipse (3cm and 4cm);"
-    # Arc
-    assert arc.position == (0, 0)
-    assert arc.start_angle == 20
-    assert arc.end_angle == 90
-    assert arc.radius == 4
-    assert arc.code == "\\draw (0, 0) arc (20:90:4cm);"
+    def test():
+        # Test Line
+        assert line.start == (0, 0)
+        assert line.end == (1, 1)
+        assert line.options == "thick, blue"
+        assert line.control_pts == [(0.25, 0.25), (0.75, 0.75)]
+        assert (
+            line.code
+            == "\\draw[thick, blue] (0, 0) .. controls (0.25, 0.25) and (0.75, 0.75)  .. (1, 1);"
+        )
+        # Test Plot
+        assert plot.draw_options == "green"
+        assert plot.plot_options == "smooth "
+        assert plot.points == [(1, 1), (2, 2), (3, 3), (2, -4)]
+        assert (
+            plot.code
+            == "\\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };"
+        )
+        # Test Circle
+        assert circle.position == (1, 1)
+        assert circle.radius == 1
+        assert circle.options == "fill = purple"
+        assert circle.code == "\\draw[fill = purple] (1, 1) circle (1cm);"
+        # Test Node
+        assert node.position == (3, 3)
+        assert node.content == "I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !"
+        assert node.options == "above"
+        assert (
+            node.code
+            == "\\node[above] at (3, 3) { I love $ \\sum_{x \\in \\mathbb{R}} f(x^2)$ ! };"
+        )
+        # Rectangle
+        assert rectangle.left_corner == (2, 2)
+        assert rectangle.right_corner == (3, 4)
+        assert rectangle.options == "Blue"
+        assert rectangle.code == "\\draw[Blue] (2, 2) rectangle (3, 4);"
+        # Ellipse
+        assert ellipse.position == (0, 0)
+        assert ellipse.horiz_axis == 3
+        assert ellipse.vert_axis == 4
+        assert ellipse.code == "\\draw (0, 0) ellipse (3cm and 4cm);"
+        # Arc
+        assert arc.position == (0, 0)
+        assert arc.start_angle == 20
+        assert arc.end_angle == 90
+        assert arc.radius == 4
+        assert arc.code == "\\draw (0, 0) arc (20:90:4cm);"
 
-    tikz.write()
+        tikz.write()

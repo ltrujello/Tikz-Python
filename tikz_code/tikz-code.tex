@@ -1,4 +1,5 @@
 \begin{tikzpicture}
+	\draw[thick, blue] (0, 0) .. controls (0.25, 0.25) and (0.75, 0.75)  .. (1, 1);
 	\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };
 	\draw[fill = purple] (1, 1) circle (1cm);
 	\node[above] at (3, 3) { I love $ \sum_{x \in \mathbb{R}} f(x^2)$ ! };
