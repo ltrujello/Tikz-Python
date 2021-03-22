@@ -3,7 +3,7 @@ import sys
 sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
 from tikz_methods import *
 
-tikz = TikzStatement(new_file=True)
+tikz = TikzPicture(new_file=True)
 
 for i in range(30):
     point = (math.sin(2 * math.pi * i / 30), math.cos(2 * math.pi * i / 30))

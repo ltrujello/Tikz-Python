@@ -6,7 +6,7 @@ from tikz_methods import *
 
 def roots_of_unity(n, scale):
     """Creates a diagram for the n-th roots of unity."""
-    new_tikz = TikzStatement(new_file=True)
+    new_tikz = TikzPicture(new_file=True)
 
     for i in range(n):
         theta = (2 * math.pi * i) / n

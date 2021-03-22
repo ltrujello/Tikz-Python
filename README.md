@@ -11,18 +11,18 @@ A typical example of this module in action is below.
 ```python
 import tikz_python
 
-tikz = TikzStatement(filename = "my_tikz_code.tex")
+tikz = TikzPicture(tikz_file = "my_tikz_code.tex")
 tikz.line( (0,0), (1,1), options = "thick, blue")
 tikz.write()
 ```
 We explain line-by-line what this means.
 
-* When we begin a TikZ drawing in LaTeX, we write `\begin{tikzpicture}` and `\end{tikzpicture}`. This is analagous to the code `tikz = TikzStatement(filename = "my_tikz_code.tex")`. The variable `tikz` is now a tikz environment that we can append drawings to. `TikzStatement` is a class to create such tikz environments. And `filename` is the file (or more generally, any file path) where our tikz code will be stored.
+* When we begin a TikZ drawing in LaTeX, we write `\begin{tikzpicture}` and `\end{tikzpicture}`. This is analagous to the code `tikz = TikzPicture(tikz_file = "my_tikz_code.tex")`. The variable `tikz` is now a tikz environment that we can append drawings to. `TikzPicture` is a class to create such tikz environments. And `tikz_file` is the file (or more generally, any file path) where our tikz code will be stored.
 
 * The line `tikz.line( (0,0), (1,1), options = "thick, blue")` draws a blue line in the tikz environment `tikz`. 
-In Tex, this code would be `\draw[thick, blue] (0,0) -- (1,1);`.
+In TeX, this code would be `\draw[thick, blue] (0,0) -- (1,1);`.
 
-* Finally, `tikz.write()` subsequently writes all of our code into `my_tikz_code.tex`.
+* Finally, `tikz.write()` writes all of our code into the file `my_tikz_code.tex`.
 
 ## Methods Provided
 One can do more than just draw lines. The following table lists three things: Some objects one might want to draw in TikZ, an example of TikZ code on drawing such an object, and the code for how this module would write such commands.
@@ -41,16 +41,15 @@ Again: The difference with TikZ, and with other Python-Tikz mashups, is that the
 
 
 ### Example: Line and two nodes
-Because Python is amazing, I can be fancier and write: 
+Suppose I want to create a line and two labels at the ends:
 ```python
-start = (0,0)
-end = (2,1)
-tikz = TikzStatement()
-line = tikz.line(start, end, options = "thick, blue, o-o")
-start_node = tikz.node(start, options = "below", content = "Start!")
-end_node = tikz.node(end, options = "above", content = "End!")
+tikz = TikzPicture()
+line = tikz.line((0,0), (1,1), options = "thick, blue, o-o")
+start_node = tikz.node(line.start, options = "below", content = "Start!")
+end_node = tikz.node(line.end, options = "above", content = "End!")
 ```
-This creates a line with two nodes labeling the start and end. As stated before, drawings are class objects so I can easily access information:
+Saving the line as a variable `line` allows us to pass in `line.start` and `line.end` into the node positions, so we don't have to type out the exact coordinates. 
+This is because lines, nodes, etc. are class instances with useful attributes: 
 ```python
 >>> line.start
 (0,0)
@@ -66,7 +65,7 @@ Running our previous python code, we obtain
 ### Example: Circles
 Python's flexibility can also allow us to easily create more complicated figures which would require way too much time and effort to do in TeX alone. The following example code generates the figure below.
 ```python
-tikz = TikzStatement(new_file=True)
+tikz = TikzPicture(new_file=True)
 
 for i in range(30):
     point = (math.sin(2 * math.pi * i / 30), math.cos(2 * math.pi * i / 30))
@@ -84,7 +83,7 @@ tikz.write()
 ### Example: Roots of Unity 
 Suppose I want to talk about [roots of unity](https://en.wikipedia.org/wiki/Root_of_unity). The corresponding code would be
 ```python
-tikz = TikzStatement()
+tikz = TikzPicture()
 
 n = 13
 for i in range(n):

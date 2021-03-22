@@ -1,41 +1,57 @@
 import math
 import os
+import subprocess
+import webbrowser
+from pathlib import Path
 
 
-class TikzStatement:
+class TikzPicture:
+    """
+    A class for a Tikz picture environment.
+
+    Attributes:
+        tikz_file (str) : A file path to a desired destination to output the tikz code
+        tex_file (str) : A file path to the TeX file which will accept the tikz code
+        center (bool) : True/False if one wants to center their Tikz code
+        options (str) : A list of options for the Tikz picture
+        statements (dict) : See docstring for statements below
+    """
+
     def __init__(
         self,
-        filename="tikz_code/tikz-code.tex",
-        new_file=False,
+        tikz_file="tikz_code/tikz-code.tex",
+        tex_file="tex/tex_file.tex",
         center=False,
         options="",
     ):
-        # Todo: improve unit tests
-        # Todo: check if filename path exists
-        # Todo: add an undo method for appending draw objects/tikz environments, but don't make it too powerful
-        # Todo: figure out a nice way to implement scope
+        # TODO: improve unit tests (verify shift and scale work, ...)
+        # TODO: add an undo method for appending draw objects/tikz environments, but don't make it too powerful
+        # TODO: figure out a ni ce way to implement scope
+        # TODO: If self.options is empty, don't print empty brackets []
+        # TODO: Figure out a good way to allow the user to color the tikzpictures by RGB values. Tikz does not support this
+        #       and requires the user to manually define the color before using it, so this would save a lot of typing.
 
         # Create a Tikz Environment
-        self.filename = filename
+        self.tikz_file = tikz_file
+        self.tex_file = tex_file
         self.options = options
-        self.begin = "\\begin{tikzpicture}\n"
+        self.center = center
         self._statements = {}
-        self.end = "\\end{tikzpicture}\n"
 
-        if center == True:
-            self.begin = "\\begin{center}\n" + "\t" + self.begin
-            self.end = "\t" + self.end + "\\end{center}\n"
-
-        if new_file == True:
-            tex_file = open(filename, "w")
-            tex_file.close
-
-    def __repr__(self):
-        return self.code
+        # Check if the file destination for the Tikz output code exists
+        if not os.path.exists(self.tikz_file):
+            try:
+                os.mkdir(self.tikz_file)
+            except:
+                print(f"Could not find or create file at {self.tikz_file}")
 
     @property
     def statements(self):
-        print("accessing statements")
+        """self.statements: A dictionary where
+        keys : instances of subclasses created (e.g, Line)
+        values : the Tikz code of the instance (e.g., Line.code)
+        """
+        print("Accessing statements")
         statement_dict = {}
         for draw_obj in self._statements:
             statement_dict[draw_obj] = draw_obj.code
@@ -43,77 +59,117 @@ class TikzStatement:
 
     @statements.setter
     def statements(self, draw_obj):
-        print("Setting statements...")
         self._statements[draw_obj] = draw_obj.code
 
+    # Assemble tikz_code in a list format (for ease in handling)
+    @property
+    def list_statements(self):
+        list_code = []
+        list_code.append(f"\\begin{{tikzpicture}}[{self.options}]\n")
+        for draw_obj in self.statements:
+            list_code.append("\t" + draw_obj.code + "\n")
+        list_code.append(f"\\end{{tikzpicture}}\n")
+        return list_code
+
+    # Assemble tikz_code as a string (for output readability, see __repr__)
     @property
     def code(self):
-        print("writing code")
-        code = self.begin + "\n"
-        for draw_obj in self.statements:
-            code += draw_obj.code + "\n"
-        code += self.end + "\n"
+        print("Writing code")
+        code = ""
+        for statement in self.list_statements:
+            code += statement
         return code
 
+    def __repr__(self):
+        return self.code
+
+    # Remove a code statement from the Tikz environment, e.g., a line
+    def remove(self, draw_obj):
+        del self._statements[draw_obj]
+
+    # TODO: Manually add code to the Tikz Environment
     def add_statement(self, statement):
-        # Manually add code to the Tikz Environment
-        self.statements[len(self.statements)] = statement
+        self._statements[len(self._statements)] = statement
 
-    def scope(self, statements):
-        tikz_cmd = "\\begin{scope}\n"
-        for statement in statements:
-            tikz_cmd += "\t" + statement + "\n"
-        tikz_cmd += "\\end{scope}\n"
-        self.statements += [tikz_cmd]
-
+    # TODO: Write current Tikz code to the file. But, don't duplicate
+    # the code already written there.
     def write(self):
-        tex_file = open(self.filename, "a+")
-        tex_file.write(self.begin)
+        tex_code = self.code
 
-        for cmd in self.statements.values():
-            tex_file.write("\t" + cmd + "\n")
+        # Center the tikzpicture environment
+        if self.center:
+            tex_code = "\\begin{center}\n" + self.code + "\\end{center}\n"
 
-        tex_file.write(self.end)
+        tex_file = open(self.tikz_file, "a+")
+        tex_file.write(tex_code)
         tex_file.close()
 
+    # TODO: Clear the code that was written to the Tikz file
+    # Need to find the chunk of tikz_code in the tikz_file
+    # This is potentially dangerous if the user is being careless with their own TeX code.
+    # Perhaps make this method private, and don't advertise it.
+    def clear(self):
+        with open(tikz_file, "r+") as tikz_file:
+            lines = tikz_file.readlines()
+
+    # Display the current tikz drawing
+    def show(self):
+        if not os.path.exists(self.tex_file):
+            with open("template/template_tex.tex") as template:
+                lines = template.readlines()
+                lines = [l for l in lines if "ROW" in l]
+                lines = template.readlines()
+                with open(self.tex_file, "w") as tex_file:
+                    tex_file.writelines(lines)
+
+        pdf_file = self.tex_file[:-4] + ".pdf"
+
+        if not os.path.exists(pdf_file):
+            subprocess.run(
+                f"latexmk -pdf -pv {self.tex_file}",
+                shell=True,
+            )
+        pdf_path = Path(pdf_file).resolve()
+        webbrowser.open_new("file://" + str(pdf_path))
+
     """
-        Methods to code in the Tikz Environment
+        Methods to code objects in the Tikz Environment
     """
 
     def line(self, start, end, options="", control_pts=[]):
-        line = TikzStatement.Line(self, start, end, options, control_pts)
+        line = TikzPicture.Line(self, start, end, options, control_pts)
         self._statements[line] = line.code
         return line
 
     def plot_coords(self, draw_options, plot_options, points):
-        plot_coords = TikzStatement.PlotCoordinates(
+        plot_coords = TikzPicture.PlotCoordinates(
             self, draw_options, plot_options, points
         )
         self._statements[plot_coords] = plot_coords.code
         return plot_coords
 
     def circle(self, position, radius, options=""):
-        circle = TikzStatement.Circle(self, position, radius, options)
+        circle = TikzPicture.Circle(self, position, radius, options)
         self._statements[circle] = circle.code
         return circle
 
     def node(self, position, content, options=""):
-        node = TikzStatement.Node(self, position, content, options)
+        node = TikzPicture.Node(self, position, content, options)
         self._statements[node] = node.code
         return node
 
     def rectangle(self, left_corner, right_corner, options=""):
-        rectangle = TikzStatement.Rectangle(self, left_corner, right_corner, options)
+        rectangle = TikzPicture.Rectangle(self, left_corner, right_corner, options)
         self._statements[rectangle] = rectangle.code
         return rectangle
 
     def ellipse(self, position, horiz_axis, vert_axis):
-        ellipse = TikzStatement.Ellipse(self, position, horiz_axis, vert_axis)
+        ellipse = TikzPicture.Ellipse(self, position, horiz_axis, vert_axis)
         self._statements[ellipse] = ellipse.code
         return ellipse
 
     def arc(self, position, start_angle, end_angle, radius):
-        arc = TikzStatement.Arc(self, position, start_angle, end_angle, radius)
+        arc = TikzPicture.Arc(self, position, start_angle, end_angle, radius)
         self._statements[arc] = arc.code
         return arc
 
@@ -123,6 +179,17 @@ class TikzStatement:
 
     # Class for Lines
     class Line:
+        """
+        A subclass of TikzPicture to create lines in the tikz environment
+
+        Attributes :
+            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+            start (tuple) : Pair of floats representing the start of the line
+            end (tuple) : Pair of floats representing the end of the line
+            options (str) : String containing Tikz drawing options, e.g. "Blue"
+            control_pts (list): List of control points for the line
+        """
+
         def __init__(self, tikz_inst, start, end, options, control_pts):
             self.tikz_inst = tikz_inst
             self.start = start
@@ -142,15 +209,29 @@ class TikzStatement:
                 tikz_cmd = (
                     f"\draw[{self.options}] {self.start} {control_stmt} {self.end};"
                 )
-            # self.tikz_inst.statements[self] = tikz_cmd # this actually helped!
-
             return tikz_cmd
+
+        def shift(self, xshift, yshift):
+            shifted = shift_coords([self.start, self.end], xshift, yshift)
+            self.start = shifted[0]
+            self.end = shifted[1]
 
         def __repr__(self):
             return self.code
 
     # Class for Plotting
     class PlotCoordinates:
+        """
+        A subclass of TikzPicture to create plots in the tikz environment
+
+        Attributes :
+            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+            draw_options (str) : String containing drawing options (e.g., "Blue")
+            plot_options (str) : String containing the plot options (e.g., "smooth cycle")
+            points (list) : A list of points to be drawn
+
+        """
+
         def __init__(self, tikz_inst, draw_options, plot_options, points):
             self.draw_options = draw_options
             self.plot_options = plot_options
@@ -166,11 +247,24 @@ class TikzStatement:
             tikz_cmd += "};"
             return tikz_cmd
 
+        def shift(self, xshift, yshift):
+            self.points = shift_coords(self.points, xshift, yshift)
+
         def __repr__(self):
             return self.code
 
     # Class for Circles
     class Circle:
+        """
+        A subclass of TikzPicture to create circles in the tikz environment
+
+        Attributes :
+            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+            position (tuple) : Pair of floats representing the center of the circle
+            radius (float) : Length (in cm) of the radius
+            options (str) : String containing the drawing options (e.g, "Blue")
+        """
+
         def __init__(self, tikz_inst, position, radius, options):
             self.position = position
             self.radius = radius
@@ -183,11 +277,25 @@ class TikzStatement:
             )
             return tikz_cmd
 
+        def shift(self, xshift, yshift):
+            shifted_coords = shift_coords([self.position], xshift, yshift)
+            self.position = shifted_coords[0]
+
         def __repr__(self):
             return self.code
 
     # Class for Nodes
     class Node:
+        """
+        A subclass of TikzPicture to create lines in the tikz environment
+
+        Attributes :
+            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+            position (tuple) : Pair of floats representing the location of the node
+            content (str): Text that will be displayed with the node; can use dollar signs $ for LaTeX
+            options (str) : String containing node options (e.g., "above")
+        """
+
         def __init__(self, tikz_inst, position, content, options):
             self.position = position
             self.content = content
@@ -200,10 +308,24 @@ class TikzStatement:
             )
             return tikz_cmd
 
+        def shift(self, xshift, yshift):
+            shifted_coords = shift_coords([self.position], xshift, yshift)
+            self.position = shifted_coords[0]
+
         def __repr__(self):
             return self.code
 
     class Rectangle:
+        """
+        A subclass of TikzPicture to create lines in the tikz environment
+
+        Attributes :
+            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+            left_corner (tuple) : Pair of floats representing the position of the bottom left corner
+            right_corner (tuple) : Pair of floats representing the position of the upper right corner
+            options (str) : String containing the drawing options, e.g, ("Blue")
+        """
+
         def __init__(self, tikz_inst, left_corner, right_corner, options):
             self.left_corner = left_corner
             self.right_corner = right_corner
@@ -218,6 +340,16 @@ class TikzStatement:
             return self.code
 
     class Ellipse:
+        """
+        A subclass of TikzPicture to create lines in the tikz environment
+
+        Attributes :
+            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+            position (tuple) : Pair of floats representing the center of the ellipse
+            horiz_axis (float): The length (in cm) of the horizontal axis of the ellipse
+            vert_axis (float): The length (in cm) of the vertical axis of the ellipse
+        """
+
         def __init__(self, tikz_inst, position, horiz_axis, vert_axis):
             self.position = position
             self.horiz_axis = horiz_axis
@@ -232,6 +364,17 @@ class TikzStatement:
             return self.code
 
     class Arc:
+        """
+        A subclass of TikzPicture to create lines in the tikz environment
+
+        Attributes :
+            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+            position (tuple) : Pair of points representing the relative center of the arc
+            start_angle (float) : The angle (in degrees) of the start of the arc
+            end_angle (float) : The angle (in degrees) of the end of the arc
+            radius (float) : The radius (in cm) of the arc
+        """
+
         def __init__(self, tikz_inst, position, start_angle, end_angle, radius):
             self.position = position
             self.start_angle = start_angle
@@ -309,95 +452,111 @@ def shift_and_center_points(coords):
     return shift_coords(coords, -x_mean, -y_mean)
 
 
-# def compile(filname = "tikz-code.tex"):
+def rgb(r, g, b):
+    # When calling rgb, it is necessary to specific "color = " or "fill =". This is
+    # annoying aspect with Tikz.
+    return f"{{ rgb,255:red, {r}; green, {g}; blue, {b} }}"
 
-colors = [
-    "Apricot",
-    "Aquamarine",
-    "Bittersweet",
-    "Black",
-    "Blue",
-    "BlueGreen",
-    "BlueViolet",
-    "BrickRed",
-    "Brown",
-    "BurntOrange",
-    "CadetBlue",
-    "CarnationPink",
-    "Cerulean",
-    "CornflowerBlue",
-    "Cyan",
-    "Dandelion",
-    "DarkOrchid",
-    "Emerald",
-    "ForestGreen",
-    "Fuchsia",
-    "Goldenrod",
-    "Gray",
-    "Green",
-    "GreenYellow",
-    "JungleGreen",
-    "Lavender",
-    "LimeGreen",
-    "Magenta",
-    "Mahogany",
-    "Maroon",
-    "Melon",
-    "MidnightBlue",
-    "Mulberry",
-    "NavyBlue",
-    "OliveGreen",
-    "Orange",
-    "OrangeRed",
-    "Orchid",
-    "Peach",
-    "Periwinkle",
-    "PineGreen",
-    "Plum",
-    "ProcessBlue",
-    "Purple",
-    "RawSienna",
-    "Red",
-    "RedOrange",
-    "RedViolet",
-    "Rhodamine",
-    "RoyalBlue",
-    "RoyalPurple",
-    "RubineRed",
-    "Salmon",
-    "SeaGreen",
-    "Sepia",
-    "SkyBlue",
-    "SpringGreen",
-    "Tan",
-    "TealBlue",
-    "Thistle",
-    "Turquoise",
-    "Violet",
-    "VioletRed",
-    "White",
-    "WildStrawberry",
-    "Yellow",
-    "YellowGreen",
-    "YellowOrange",
-]
+
+# Collect xcolor names
+colors = []
+try:
+    with open("misc/xcolors_dvipsnames.txt") as f:
+        lines = f.readlines()
+        for line in lines:
+            colors.append(line.split(",")[0])
+except:
+    colors = [
+        "Apricot",
+        "Aquamarine",
+        "Bittersweet",
+        "Black",
+        "Blue",
+        "BlueGreen",
+        "BlueViolet",
+        "BrickRed",
+        "Brown",
+        "BurntOrange",
+        "CadetBlue",
+        "CarnationPink",
+        "Cerulean",
+        "CornflowerBlue",
+        "Cyan",
+        "Dandelion",
+        "DarkOrchid",
+        "Emerald",
+        "ForestGreen",
+        "Fuchsia",
+        "Goldenrod",
+        "Gray",
+        "Green",
+        "GreenYellow",
+        "JungleGreen",
+        "Lavender",
+        "LimeGreen",
+        "Magenta",
+        "Mahogany",
+        "Maroon",
+        "Melon",
+        "MidnightBlue",
+        "Mulberry",
+        "NavyBlue",
+        "OliveGreen",
+        "Orange",
+        "OrangeRed",
+        "Orchid",
+        "Peach",
+        "Periwinkle",
+        "PineGreen",
+        "Plum",
+        "ProcessBlue",
+        "Purple",
+        "RawSienna",
+        "Red",
+        "RedOrange",
+        "RedViolet",
+        "Rhodamine",
+        "RoyalBlue",
+        "RoyalPurple",
+        "RubineRed",
+        "Salmon",
+        "SeaGreen",
+        "Sepia",
+        "SkyBlue",
+        "SpringGreen",
+        "Tan",
+        "TealBlue",
+        "Thistle",
+        "Turquoise",
+        "Violet",
+        "VioletRed",
+        "White",
+        "WildStrawberry",
+        "Yellow",
+        "YellowGreen",
+        "YellowOrange",
+    ]
 
 rainbow_colors = [
-    "red",
-    "Orange",
-    "BurntOrange",
-    "Yellow",
-    "Green",
-    "ForestGreen",
-    "ProcessBlue",
-    "Blue",
-    "Plum",
+    "{rgb,255:red, 255; green, 0; blue, 0 }",  # red
+    "{rgb,255:red, 255; green, 125; blue, 0 }",  # orange
+    "{rgb,255:red, 255; green, 255; blue, 0 }",  # yellow
+    "{rgb,255:red, 125; green, 255; blue, 0 }",  # spring
+    "{rgb,255:red, 0; green, 255; blue, 0 }",  # green
+    "{rgb,255:red, 0; green, 255; blue, 125 }",  # turquoise
+    "{rgb,255:red, 0; green, 255; blue, 255 }",  # cyan
+    "{rgb,255:red, 0; green, 125; blue, 255 }",  # ocean
+    "{rgb,255:red, 0; green, 0; blue, 255 }",  # blue
+    "{rgb,255:red, 125; green, 0; blue, 255 }",  # violet
+    "{rgb,255:red, 255; green, 0; blue, 12 }",  # magenta
+    "{rgb,255:red, 255; green, 0; blue, 255 }",  # raspberry
 ]
+
 
 if __name__ == "__main__":
     """Quick sanity tests for our classes."""
 
-    tikz = TikzStatement(new_file=True)
+    tikz = TikzPicture()
     # Line
     line = tikz.line(
         (0, 0), (1, 1), options="thick, blue", control_pts=[(0.25, 0.25), (0.75, 0.75)]
@@ -470,5 +629,4 @@ if __name__ == "__main__":
         assert arc.end_angle == 90
         assert arc.radius == 4
         assert arc.code == "\\draw (0, 0) arc (20:90:4cm);"
-
-        tikz.write()
+        print("flying colors!")

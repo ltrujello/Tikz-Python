@@ -5,11 +5,11 @@ import sys
 sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
 from tikz_methods import *
 
-tikz = TikzStatement(new_file=True)
+tikz = TikzPicture(new_file=True)
 
 
 def nth_subdivision(n):
-    new_tikz = TikzStatement()
+    new_tikz = TikzPicture()
     iters = 0
     if n > 0:
         for i in range(n):
