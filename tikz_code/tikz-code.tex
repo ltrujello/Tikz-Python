@@ -1,4 +1,4 @@
-\begin{tikzpicture}[]
+\begin{tikzpicture}[]% TikzPython id = (0) 
 	\draw[thick, blue] (0, 0) .. controls (0.25, 0.25) and (0.75, 0.75)  .. (1, 1);
 	\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };
 	\draw[fill = purple] (1, 1) circle (1cm);
@@ -6,6 +6,4 @@
 	\draw[Blue] (2, 2) rectangle (3, 4);
 	\draw (0, 0) ellipse (3cm and 4cm);
 	\draw (0, 0) arc (20:90:4cm);
-	\draw[thick, color={ rgb,255:red, 255; green, 0; blue, 0 }] (0, 0) -- (5, 0);
-    \draw[thick, Red] (0, -1) -- (5, -1);
 \end{tikzpicture}

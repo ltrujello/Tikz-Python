@@ -1,8 +1,17 @@
 import math
-import os
 import subprocess
 import webbrowser
 from pathlib import Path
+
+""" _N_TIKZs: records the number of TikZ environments created.
+
+This global variable is the simplest solution to (1) avoiding making a TeX class 
+and (2) designing deletion and update processes of files in such 
+a way that even the most careless user will never delete anything 
+important on their computer (e.g., a tex document).
+"""
+
+_N_TIKZs = 0
 
 
 class TikzPicture:
@@ -26,24 +35,40 @@ class TikzPicture:
     ):
         # TODO: improve unit tests (verify shift and scale work, ...)
         # TODO: add an undo method for appending draw objects/tikz environments, but don't make it too powerful
-        # TODO: figure out a ni ce way to implement scope
+        # TODO: figure out a nice way to implement scope
         # TODO: If self.options is empty, don't print empty brackets []
-        # TODO: Figure out a good way to allow the user to color the tikzpictures by RGB values. Tikz does not support this
-        #       and requires the user to manually define the color before using it, so this would save a lot of typing.
-
+        global _N_TIKZs
         # Create a Tikz Environment
-        self.tikz_file = tikz_file
-        self.tex_file = tex_file
+        self.tikz_file = Path(tikz_file)
+        self.tex_file = Path(tex_file)
         self.options = options
         self.center = center
         self._statements = {}
+        self._id = _N_TIKZs
 
-        # Check if the file destination for the Tikz output code exists
-        if not os.path.exists(self.tikz_file):
+        # Check if the tikz_file exists. If not, create it.
+        if not self.tikz_file.is_file():
             try:
-                os.mkdir(self.tikz_file)
+                with open(self.tikz_file.resolve(), "w"):
+                    pass
             except:
                 print(f"Could not find or create file at {self.tikz_file}")
+            else:
+                print(
+                    f"File created at {str(self.tikz_file.resolve())}, tikz_code will output there"
+                )
+        # Upon successful creation of an object, we create increase the counter
+        _N_TIKZs += 1
+
+    @property
+    def begin(self):
+        return (
+            f"\\begin{{tikzpicture}}[{self.options}]% TikzPython id = ({self._id}) \n"
+        )
+
+    @property
+    def end(self):
+        return f"\\end{{tikzpicture}}\n"
 
     @property
     def statements(self):
@@ -51,7 +76,6 @@ class TikzPicture:
         keys : instances of subclasses created (e.g, Line)
         values : the Tikz code of the instance (e.g., Line.code)
         """
-        print("Accessing statements")
         statement_dict = {}
         for draw_obj in self._statements:
             statement_dict[draw_obj] = draw_obj.code
@@ -65,16 +89,17 @@ class TikzPicture:
     @property
     def list_statements(self):
         list_code = []
-        list_code.append(f"\\begin{{tikzpicture}}[{self.options}]\n")
+        list_code.append(self.begin)
+
         for draw_obj in self.statements:
             list_code.append("\t" + draw_obj.code + "\n")
-        list_code.append(f"\\end{{tikzpicture}}\n")
+
+        list_code.append(self.end)
         return list_code
 
     # Assemble tikz_code as a string (for output readability, see __repr__)
     @property
     def code(self):
-        print("Writing code")
         code = ""
         for statement in self.list_statements:
             code += statement
@@ -91,46 +116,133 @@ class TikzPicture:
     def add_statement(self, statement):
         self._statements[len(self._statements)] = statement
 
-    # TODO: Write current Tikz code to the file. But, don't duplicate
-    # the code already written there.
-    def write(self):
-        tex_code = self.code
+    def write(self, overwrite=True):
+        global _N_TIKZs
 
-        # Center the tikzpicture environment
+        tikz_file_path = str(self.tikz_file.resolve())
+        tex_code = self.code
+        # Center the tikzpicture environment if necessary
         if self.center:
             tex_code = "\\begin{center}\n" + self.code + "\\end{center}\n"
 
-        tex_file = open(self.tikz_file, "a+")
-        tex_file.write(tex_code)
-        tex_file.close()
+        if not overwrite:
+            with open(tikz_file_path, "a+") as tikz_file:
+                tikz_file.write(tex_code)
+            _N_TIKZs += 1
+        else:
+            begin_ind = -1
+            # open the file, grab the file lines
+            with open(tikz_file_path, "r") as tikz_file:
+                lines = tikz_file.readlines()
+            # Loop over the file lines to find our old code
+            for i, line in enumerate(lines):
+                # Look for our begin statement
+                if line == self.begin:
+                    begin_ind = i
+                    # Look ahead of our statement
+                    for j, later_lines in enumerate(lines[i:]):
+                        # Look later for the end statement
+                        if later_lines == self.end:
+                            end_ind = i + j
+                            break
+                    break
+            # If we never found our id, then we are safe to write
+            if begin_ind == -1:
+                print("Adding new Tikz environment")
+                with open(tikz_file_path, "a+") as tikz_file:
+                    tikz_file.write(tex_code)
+                _N_TIKZs += 1
+            # Otherwise, we found the \begin{tikzpicture}\end{tikzpicture} statement.
+            else:
+                print("Updating Tikz environment with new code")
+                # Transfer the text, excluding our old \begin{tikzpicture}\end{tikzpicture} statement.
+                new_lines = lines[:begin_ind] + lines[end_ind + 1 :]
+
+                # We create a new file with our desired file contents
+                tikz_file_temp = Path(
+                    str(self.tikz_file.parents[0])
+                    + "/"
+                    + self.tikz_file.stem
+                    + "_temp.tex"
+                )
+                tikz_file_temp_path = str(tikz_file_temp.resolve())
+                with open(tikz_file_temp_path, "w") as new_tikz_file:
+                    # Write everything before what needed to be replaced
+                    for line in lines[:begin_ind]:
+                        new_tikz_file.write(line)
+                    # Substitute in our updated code
+                    new_tikz_file.write(self.code)
+                    # Write everything after what needed to be replaced
+                    for line in lines[end_ind + 1 :]:
+                        new_tikz_file.write(line)
+                # Now rename the file
+                tikz_file_temp.replace(tikz_file_path)
+                print("Successful write")
+
+    def file_lines(self):
+        tikz_file_path = str(self.tikz_file.resolve())
+        with open(tikz_file_path, "r") as tikz_file:
+            lines = tikz_file.readlines()
+        for line in lines:
+            print(line)
+        return lines
 
     # TODO: Clear the code that was written to the Tikz file
     # Need to find the chunk of tikz_code in the tikz_file
-    # This is potentially dangerous if the user is being careless with their own TeX code.
-    # Perhaps make this method private, and don't advertise it.
     def clear(self):
-        with open(tikz_file, "r+") as tikz_file:
+        """
+        Idea: Starting from the last line of the file, loop backwards
+        and compare each line with the contents of self.list_statements. Break the loop
+        if there is a mismatch. If all lines match, then we are sure self.list_statements
+        is already written in the file, so we remove.
+
+        The reason why we are very careful about deleting file contents is
+        because the user could potentially be careless and delete their
+        tex project contents. This guarantees that will never happen because we will
+        only ever delete tikz code that they themselves added.
+        """
+
+        tikz_file_path = str(self.tikz_file.resolve())
+        with open(tikz_file_path, "r") as tikz_file:
             lines = tikz_file.readlines()
+        matches = 0
+
+        if len(lines) >= len(self.list_statements):
+            stmt_ind = len(lines) - len(self.list_statements)
+            for i in reversed(range(stmt_ind, len(lines))):
+                if self.list_statements[i - stmt_ind] == lines[i]:
+                    matches += 1
+                else:
+                    print("No match")
+                    break
+
+        if matches == len(self.list_statements):
+            with open(tikz_file_path, "w") as tikz_file:
+                for line in lines[stmt_ind:]:
+                    tikz_file.write(line)
 
     # Display the current tikz drawing
     def show(self):
-        if not os.path.exists(self.tex_file):
+        """Displays the pdf of the TikzPicture to the user."""
+        tex_file_path = str(self.tex_file.resolve())
+        # Check if TeX exists, if not, create it using our template
+        if not self.tex_file.is_file():
             with open("template/template_tex.tex") as template:
                 lines = template.readlines()
                 lines = [l for l in lines if "ROW" in l]
-                lines = template.readlines()
-                with open(self.tex_file, "w") as tex_file:
-                    tex_file.writelines(lines)
-
-        pdf_file = self.tex_file[:-4] + ".pdf"
-
-        if not os.path.exists(pdf_file):
+                with open(tex_file_path, "w") as tex_file:
+                    for line in lines:
+                        tex_file.writelines(line)
+        # Find the pdf
+        pdf_file = Path(self.tex_file.parent.name + "/" + self.tex_file.stem + ".pdf")
+        # If we cannot find it, it has not been compiled. Thus, we compile it.
+        if not pdf_file.is_file():
             subprocess.run(
-                f"latexmk -pdf -pv {self.tex_file}",
+                f"latexmk -pdf -pv {tex_file_path}",
                 shell=True,
             )
-        pdf_path = Path(pdf_file).resolve()
-        webbrowser.open_new("file://" + str(pdf_path))
+        # Show the user the TikzPicture
+        webbrowser.open_new("file://" + str(pdf_file.resolve()))
 
     """
         Methods to code objects in the Tikz Environment
@@ -211,10 +323,25 @@ class TikzPicture:
                 )
             return tikz_cmd
 
+        @property
+        def midpoint(self):
+            mid_x = round((self.start[0] + self.end[0]) / 2, 7)
+            mid_y = round((self.start[1] + self.end[1]) / 2, 7)
+            return (mid_x, mid_y)
+
         def shift(self, xshift, yshift):
             shifted = shift_coords([self.start, self.end], xshift, yshift)
-            self.start = shifted[0]
-            self.end = shifted[1]
+            self.start, self.end = shifted[0], shifted[1]
+
+        def scale(self, scale):
+            scaled = scale_coords([self.start, self.end], scale)
+            self.start, self.end = scaled[0], scaled[1]
+
+        def rotate(self, angle, about_pt=None, radians=False):
+            if about_pt == None:
+                about_pt = self.midpoint
+            rotated = rotate_coords([self.start, self.end], angle, about_pt, radians)
+            self.start, self.end = rotated[0], rotated[1]
 
         def __repr__(self):
             return self.code
@@ -247,8 +374,27 @@ class TikzPicture:
             tikz_cmd += "};"
             return tikz_cmd
 
+        @property
+        def center(self):
+            mean_x = 0
+            mean_y = 0
+            for pt in self.points:
+                mean_x += pt[0]
+                mean_y += pt[1]
+            mean_x = round(mean_x / len(self.points), 7)
+            mean_y = round(mean_y / len(self.points), 7)
+            return (mean_x, mean_y)
+
         def shift(self, xshift, yshift):
             self.points = shift_coords(self.points, xshift, yshift)
+
+        def scale(self, scale):
+            self.points = scale_coords(self.points, scale)
+
+        def rotate(self, angle, about_pt=None, radians=False):
+            if about_pt == None:
+                about_pt = self.center
+            self.points = rotate_coords(self.points, angle, about_pt, radians)
 
         def __repr__(self):
             return self.code
@@ -278,8 +424,13 @@ class TikzPicture:
             return tikz_cmd
 
         def shift(self, xshift, yshift):
-            shifted_coords = shift_coords([self.position], xshift, yshift)
-            self.position = shifted_coords[0]
+            self.position = shift_coords([self.position], xshift, yshift)[0]
+
+        def scale(self, scale):
+            self.position = scale_coords([self.position], scale)
+
+        def rotate(self, angle, about_pt, radians=False):
+            self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
 
         def __repr__(self):
             return self.code
@@ -309,8 +460,13 @@ class TikzPicture:
             return tikz_cmd
 
         def shift(self, xshift, yshift):
-            shifted_coords = shift_coords([self.position], xshift, yshift)
-            self.position = shifted_coords[0]
+            self.position = shift_coords([self.position], xshift, yshift)
+
+        def scale(self, scale):
+            self.position = scale_coords([self.position], scale)
+
+        def rotate(self, angle, about_pt, radians=False):
+            self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
 
         def __repr__(self):
             return self.code
@@ -390,154 +546,174 @@ class TikzPicture:
             return self.code
 
 
-""" Helper functions
+""" Shifting, Scaling, and Rotating calculations called by above methods
 """
 
 
 def shift_coords(coords, xshift, yshift):
+    """Shift a list of 2D-coordinates by "xshift", "yshift".
+        Accuracy to 7 decimal places for readability.
+    coords (list) : A list of tuples (x, y) with x, y floats
+    xshift (float) : An amount to shift the x values
+    yshift (float) : An amount to shift the y values
+    """
+
     shifted_coords = []
     for coord in coords:
         x = coord[0]
         y = coord[1]
 
-        shifted_x = round(x + xshift, 5)
-        shifted_y = round(y + yshift, 5)
+        shifted_x = round(x + xshift, 7)
+        shifted_y = round(y + yshift, 7)
         shifted_coords.append((shifted_x, shifted_y))
     return shifted_coords
 
 
 def scale_coords(coords, scale):
+    """Scale a list of 2D-coordinates by "scale".
+        Accuracy to 7 decimal places for readability.
+    coords (list) : A list of tuples (x, y) with x, y floats
+    scale (float) : An amount to scale the x and y values
+    """
     scaled_coords = []
     for coord in coords:
         x = coord[0]
         y = coord[1]
 
-        scale_x = round(scale * x, 5)
-        scale_y = round(scale * y, 5)
+        scale_x = round(scale * x, 7)
+        scale_y = round(scale * y, 7)
         scaled_coords.append((scale_x, scale_y))
     return scaled_coords
 
 
-def rotate_coords(coords, angle):  # rotate counterclockwise; angle is in degrees
+def rotate_coords(coords, angle, about_pt, radians=False):  # rotate counterclockwise
+    """Rotate in degrees (or radians) a list of 2D-coordinates about the point "about_pt".
+        Accuracy to 7 decimal places for readability.
+    coords (list) : A list of tuples (x, y) with x, y floats
+    angle (float) : The angle to rotate the coordinates
+    about_pt (tuple) : A point (x,y) of reference for rotation
+    radians (bool) : Specify type of angle (radians or degrees)
+    """
+    if not radians:
+        angle *= math.pi / 180
+
     rotated_coords = []
     for coord in coords:
         x = coord[0]
         y = coord[1]
 
-        rotated_x = round(
-            x * math.cos(angle * (math.pi / 180))
-            - y * math.sin(angle * (math.pi / 180)),
-            5,
-        )
-        rotated_y = round(
-            x * math.sin(angle * (math.pi / 180))
-            + y * math.cos(angle * (math.pi / 180)),
-            5,
-        )
+        # Shift by about_pt, so that rotation is now relative to that point
+        x -= about_pt[0]
+        y -= about_pt[1]
+
+        # Rotate the points
+        rotated_x = x * math.cos(angle) - y * math.sin(angle)
+        rotated_y = x * math.sin(angle) + y * math.cos(angle)
+
+        # Shift them back by about_pt, truncate the decimal places
+        rotated_x += round(about_pt[0], 7)
+        rotated_y += round(about_pt[1], 7)
 
         rotated_coords.append((rotated_x, rotated_y))
     return rotated_coords
 
 
-def shift_and_center_points(coords):
-    x_mean = 0
-    y_mean = 0
-    for point in coords:
-        x_mean += point[0]
-        y_mean += point[1]
-
-    x_mean /= len(coords)
-    y_mean /= len(coords)
-
-    return shift_coords(coords, -x_mean, -y_mean)
+"""
+    Functions for colors
+"""
 
 
 def rgb(r, g, b):
-    # When calling rgb, it is necessary to specific "color = " or "fill =". This is
-    # annoying aspect with Tikz.
+    """A wrapper function that outputs xcolor/Tikz code for coloring via rgb values.
+
+    When calling rgb, it is necessary to specify "color = " or "fill =" right before.
+    E.g., tikz.line(... options = "color =" + rgb(r,g,b) ...)
+
+    This is an annoying aspect with Tikz.
+    """
     return f"{{ rgb,255:red, {r}; green, {g}; blue, {b} }}"
 
 
-# Collect xcolor names
-colors = []
-try:
-    with open("misc/xcolors_dvipsnames.txt") as f:
-        lines = f.readlines()
-        for line in lines:
-            colors.append(line.split(",")[0])
-except:
-    colors = [
-        "Apricot",
-        "Aquamarine",
-        "Bittersweet",
-        "Black",
-        "Blue",
-        "BlueGreen",
-        "BlueViolet",
-        "BrickRed",
-        "Brown",
-        "BurntOrange",
-        "CadetBlue",
-        "CarnationPink",
-        "Cerulean",
-        "CornflowerBlue",
-        "Cyan",
-        "Dandelion",
-        "DarkOrchid",
-        "Emerald",
-        "ForestGreen",
-        "Fuchsia",
-        "Goldenrod",
-        "Gray",
-        "Green",
-        "GreenYellow",
-        "JungleGreen",
-        "Lavender",
-        "LimeGreen",
-        "Magenta",
-        "Mahogany",
-        "Maroon",
-        "Melon",
-        "MidnightBlue",
-        "Mulberry",
-        "NavyBlue",
-        "OliveGreen",
-        "Orange",
-        "OrangeRed",
-        "Orchid",
-        "Peach",
-        "Periwinkle",
-        "PineGreen",
-        "Plum",
-        "ProcessBlue",
-        "Purple",
-        "RawSienna",
-        "Red",
-        "RedOrange",
-        "RedViolet",
-        "Rhodamine",
-        "RoyalBlue",
-        "RoyalPurple",
-        "RubineRed",
-        "Salmon",
-        "SeaGreen",
-        "Sepia",
-        "SkyBlue",
-        "SpringGreen",
-        "Tan",
-        "TealBlue",
-        "Thistle",
-        "Turquoise",
-        "Violet",
-        "VioletRed",
-        "White",
-        "WildStrawberry",
-        "Yellow",
-        "YellowGreen",
-        "YellowOrange",
-    ]
+def rainbow_colors(i):
+    """A wrapper function for obtaining rainbow colors.
+    Any integer can be passed in.
+    """
+    return rainbow_cols[i % len(rainbow_cols)]
 
-rainbow_colors = [
+
+# Collect xcolor names
+colors = [
+    "Apricot",
+    "Aquamarine",
+    "Bittersweet",
+    "Black",
+    "Blue",
+    "BlueGreen",
+    "BlueViolet",
+    "BrickRed",
+    "Brown",
+    "BurntOrange",
+    "CadetBlue",
+    "CarnationPink",
+    "Cerulean",
+    "CornflowerBlue",
+    "Cyan",
+    "Dandelion",
+    "DarkOrchid",
+    "Emerald",
+    "ForestGreen",
+    "Fuchsia",
+    "Goldenrod",
+    "Gray",
+    "Green",
+    "GreenYellow",
+    "JungleGreen",
+    "Lavender",
+    "LimeGreen",
+    "Magenta",
+    "Mahogany",
+    "Maroon",
+    "Melon",
+    "MidnightBlue",
+    "Mulberry",
+    "NavyBlue",
+    "OliveGreen",
+    "Orange",
+    "OrangeRed",
+    "Orchid",
+    "Peach",
+    "Periwinkle",
+    "PineGreen",
+    "Plum",
+    "ProcessBlue",
+    "Purple",
+    "RawSienna",
+    "Red",
+    "RedOrange",
+    "RedViolet",
+    "Rhodamine",
+    "RoyalBlue",
+    "RoyalPurple",
+    "RubineRed",
+    "Salmon",
+    "SeaGreen",
+    "Sepia",
+    "SkyBlue",
+    "SpringGreen",
+    "Tan",
+    "TealBlue",
+    "Thistle",
+    "Turquoise",
+    "Violet",
+    "VioletRed",
+    "White",
+    "WildStrawberry",
+    "Yellow",
+    "YellowGreen",
+    "YellowOrange",
+]
+
+rainbow_cols = [
     "{rgb,255:red, 255; green, 0; blue, 0 }",  # red
     "{rgb,255:red, 255; green, 125; blue, 0 }",  # orange
     "{rgb,255:red, 255; green, 255; blue, 0 }",  # yellow

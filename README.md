@@ -12,14 +12,14 @@ A typical example of this module in action is below.
 import tikz_python
 
 tikz = TikzPicture(tikz_file = "my_tikz_code.tex")
-tikz.line( (0,0), (1,1), options = "thick, blue")
+tikz.line((0,0), (1,1), options = "thick, blue")
 tikz.write()
 ```
 We explain line-by-line what this means.
 
 * When we begin a TikZ drawing in LaTeX, we write `\begin{tikzpicture}` and `\end{tikzpicture}`. This is analagous to the code `tikz = TikzPicture(tikz_file = "my_tikz_code.tex")`. The variable `tikz` is now a tikz environment that we can append drawings to. `TikzPicture` is a class to create such tikz environments. And `tikz_file` is the file (or more generally, any file path) where our tikz code will be stored.
 
-* The line `tikz.line( (0,0), (1,1), options = "thick, blue")` draws a blue line in the tikz environment `tikz`. 
+* The line `tikz.line((0,0), (1,1), options = "thick, blue")` draws a blue line in the tikz environment `tikz`. 
 In TeX, this code would be `\draw[thick, blue] (0,0) -- (1,1);`.
 
 * Finally, `tikz.write()` writes all of our code into the file `my_tikz_code.tex`.
@@ -29,11 +29,11 @@ One can do more than just draw lines. The following table lists three things: So
 
 Object        | Raw Tikz Code   | Tikz-Python Code |
  -------------| -------------   | ------------- |
-Line         | `\draw[blue] (0,0) -- (1,1);`             | `tikz.line( (0,0), (1,1), options = "blue")` 
-Circle        | `\draw[fill = blue] (0,0) circle (2cm);` | `tikz.circle( (0,0), 2, options = "fill = blue")`  |
-Rectangle     | `\draw[blue] (0,0) rectangle (5, 6);`    | `tikz.rectangle( (0,0), (5,6), options = "Blue")`  |
-Ellipse       | `\draw (0,0) ellipse (2cm and 4cm)`      | `tikz.ellipse( (0,0), 2, 4)`
-Arc           | `\draw (1,1) arc (45:90:5cm)`            | `tikz.arc( (1,1), 45, 90, 5)`
+Line         | `\draw[blue] (0,0) -- (1,1);`             | `tikz.line((0,0), (1,1), options = "blue")` 
+Circle        | `\draw[fill = blue] (0,0) circle (2cm);` | `tikz.circle((0,0), 2, options = "fill = blue")`  |
+Rectangle     | `\draw[blue] (0,0) rectangle (5, 6);`    | `tikz.rectangle((0,0), (5,6), options = "Blue")`  |
+Ellipse       | `\draw (0,0) ellipse (2cm and 4cm)`      | `tikz.ellipse((0,0), 2, 4)`
+Arc           | `\draw (1,1) arc (45:90:5cm)`            | `tikz.arc((1,1), 45, 90, 5)`
 Node          | `\node[above] at (0,0) {I am a node!};`  | `tikz.node((0,0), "I am a node!", "above")`
 Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.draw_plot_coords(draw_options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`	
 

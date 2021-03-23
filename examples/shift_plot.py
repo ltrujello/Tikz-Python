@@ -24,17 +24,13 @@ points = [
     (6.2, 12.5),
 ]
 
-for theta in range(0, 540, 5):
-    # Plot the points
+for i in range(1, 20):
     plot = tikz.plot_coords(
-        draw_options=f"fill = {rainbow_colors(theta)}",
+        draw_options=f"fill = {rainbow_colors(i)}, opacity = 0.5",
         plot_options="smooth, tension=.5, closed hobby",
         points=points,
     )
-    # plot.rotate(theta, radians=True)
-    # Rotate them
-    plot.rotate(theta, about_pt=(0, 0))
-    # Scale them
-    plot.scale(math.exp(-1.5 * theta / 180))
+    plot.shift(0, i / 5)
+    plot.rotate(45, about_pt=plot.center, radians=False)
 
 tikz.write()
