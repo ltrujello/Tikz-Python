@@ -119,7 +119,7 @@ One can also create a function to perform the n-th barycentric subdivision of a 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 250/>
 
-## Methods for Class: TikzPicture
+# Methods for Class: TikzPicture
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture(my_tikz_file)
@@ -127,15 +127,17 @@ tikz = TikzPicture(my_tikz_file)
 We describe the methods for this class as below. 
 
 ### `TikzPicture.write()`
-Writes the current Tikz code into the .tex file located at `TikzPicture.tikz_file`. If `tikz_file` wasn't specified, a file is created at `tikz_code/tikz_code.tex` and the code will be stored there. (So it might be more convenient for you to just not specify `my_tikz_file`).
+Writes the current Tikz code into the .tex file located at `TikzPicture.tikz_file`. 
 
-Note: You can continue editing your tikzpicture even after you've executed `.write()`. And you won't add duplicate code (i.e., code you've already written) by executing `.write()` twice.
+-If `tikz_file` wasn't specified, a file is created at `tikz_code/tikz_code.tex` and the code will be stored there. (So it might be more convenient for you to just not specify `my_tikz_file`).
+
+- Note: You can continue editing your tikzpicture even after you've executed `.write()`. And you won't add duplicate code (i.e., code you've already written) by executing `.write()` twice.
 ```python
 >>> tikz = TikzPicture()
 >>> circle = tikz.circle((0,0), 2, options = "Blue") # Draws a blue circle 
 >>> tikz.write()
 >>> tikz 
-\begin{tikzpicture}[]% TikzPython id = (1) 
+...\begin{tikzpicture}[]% TikzPython id = (1) 
 	\draw[Blue] (0, 0) circle (2cm);
 \end{tikzpicture}
 >>> another_circle = tikz.circle((1,1), 2, options = "Red") # I forgot! I want another circle...
@@ -170,13 +172,16 @@ Example:
 ```
 
 ### `TikzPicture.show()`
-Pulls up a PDF of the current drawing to the user in your browser (may default to your PDF viewer). Of course, execute `TikzPicture.write()` prior in order to view your latest changes. 
+Pulls up a PDF of the current drawing to the user in your browser (may default to your PDF viewer). 
 
-If the PDF hasn't been compiled, the program finds the TeX file, compiles the PDF for you via `latexmk -pdf -pv (tex_file_path)`, and then displays it. Most people have `latexmk` so this shouldn't be a problem.
+- Of course, execute `TikzPicture.write()` prior in order to view your latest changes. 
 
-## Colors
-- One is free to use whatever colors they like, but all 68 xcolor dvipnames 
-are within a global variable `xcolors`.
+- If the PDF hasn't been compiled, the program finds the TeX file, compiles the PDF for you via `latexmk -pdf -pv (tex_file_path)`, and then displays it. Most people have `latexmk` so this shouldn't be a problem.
+
+# Colors
+Coloring Tikz pictures in TeX tends to be annoying. A goal of this has been to make it as easy as possible to color Tikz pictures.
+
+- One is free to use whatever colors they like, but all 68 xcolor dvipnames are stored within a global variable `xcolors`. (Hence, they can be looped over). 
 
 - There is also a global function `rgb(r, g, b)` which can be called to color a Tikz object by RGB values. For example, 
 ```python
@@ -194,9 +199,9 @@ are within a global variable `xcolors`.
 ```
 
 
-## Methods for Class: Line
+# Methods for Class: `Line`
 Initialize an object of the class as below:
-```
+```python
 tikz = TikzPicture()
 line = tikz.line(start, end, options "", control_pts = [])
 ```
@@ -227,9 +232,9 @@ Scales a line by an amount `scale`, usually a python float.
 Rotates a line counterclockwise by angle `angle` relative to the point `about_pt`. One can specify their angle units via the boolean `radians`. If `about_pt` is not specified, the default is to rotate the line about its midpoint.
 
 
-## Methods for Class: PlotCoordinates
+## Methods for Class: `PlotCoordinates`
 Initialize an object of the class as below:
-```
+```python
 tikz = TikzPicture()
 plot = tikz.plot_coords(points, draw_options = "", plot_options ""):
 ```
@@ -243,6 +248,7 @@ Parameter    | Description | Default|
 
 This method analagous to the Tikz command `\draw plot coordinates{...};`. For example,
 ```python
+>>> tikz = TikzPicture()
 >>> points = [(2,2), (4,0), (1,-3) (-2, -1), (-1, 3)]
 >>> plot = tikz.plot_coords(points, draw_options = "Blue", plot_options = "smooth cycle, tension = 0.5")
 ```
@@ -250,6 +256,7 @@ corresponds to `\draw[Blue] plot[smooth cycle, tension = 0.5] coordinates{(2,2),
 
 `PlotCoordinates` has methods `.shift()`, `.scale`, and `.rotate`, similar to the class `Line`, and the parameters behave similarly. For example, 
 ```python
+>>> tikz = TikzPicture()
 >>> points = [(5.6, 11.1),(5.2, 9.6),(3.2, 10.6),(4.3, 7.3),(3, 4.1),(5.6, 5.2),(7.2, 3.9),(8.4, 5.6),(10.2, 4.5),(8.7, 6.9),(10, 8.6),(8.1, 8.8), (9.3, 11.8), (7.2, 11.1), (6.2, 12.5)]
 >>> for i in range(1, 20):
 >>>     draw_options=f"fill = {rainbow_colors(i)}, opacity = 0.5",
@@ -261,9 +268,9 @@ corresponds to `\draw[Blue] plot[smooth cycle, tension = 0.5] coordinates{(2,2),
 The methods `.shift`, `.scale`, `.rotate` are more interestingly used on `PlotCoordinates` than on `Line`. 
 
 
-## Methods for Class: Circle
+## Methods for Class: `Circle`
 Initialize an object of the class as below:
-```
+```python
 tikz = TikzPicture()
 circle = tikz.circle(center, radius, options = "")
 ```
@@ -279,9 +286,9 @@ Parameter    | Description | Default|
 `Circle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
 
-## Methods for Class: Node
+## Methods for Class: `Node`
 Initialize an object of the class as below:
-```
+```python
 tikz = TikzPicture()
 node = tikz.node(position, options = "", content)
 ```
@@ -296,9 +303,9 @@ Parameter    | Description | Default|
 
 `Node` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
-## Methods for Class: Rectangle
+## Methods for Class: `Rectangle`
 Initialize an object of the class as below:
-```
+```python
 tikz = TikzPicture()
 rectangle = tikz.rectangle(left_corner, right_corner, options = "")
 ```
@@ -312,9 +319,9 @@ Parameter    | Description | Default|
 
 `Rectangle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
-## Methods for Class: Ellipse
+## Methods for Class: `Ellipse`
 Initialize an object of the class as below:
-```
+```python
 tikz = TikzPicture()
 ellipse = tikz.ellipse(center, horiz_axis, vert_axis)
 ```
@@ -327,10 +334,10 @@ Parameter    | Description | Default|
 `Ellipse` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
 
-## Methods for Class: Arc
+## Methods for Class: `Arc`
 Initialize an object of the class as below:
 
-```
+```python
 tikz = TikzPicture()
 arc = tikz.arc(start, end, options, control_pts = [])
 ```
