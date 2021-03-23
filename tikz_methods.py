@@ -20,7 +20,7 @@ class TikzPicture:
 
     Attributes:
         tikz_file (str) : A file path to a desired destination to output the tikz code
-        tex_file (str) : A file path to the TeX file which will accept the tikz code
+        tex_file (str) : A file path to the TeX file which will accept the tikz code.
         center (bool) : True/False if one wants to center their Tikz code
         options (str) : A list of options for the Tikz picture
         statements (dict) : See docstring for statements below
@@ -106,7 +106,8 @@ class TikzPicture:
         return code
 
     def __repr__(self):
-        return self.code
+        print(self.code)
+        return ""
 
     # Remove a code statement from the Tikz environment, e.g., a line
     def remove(self, draw_obj):
@@ -179,48 +180,6 @@ class TikzPicture:
                 tikz_file_temp.replace(tikz_file_path)
                 print("Successful write")
 
-    def file_lines(self):
-        tikz_file_path = str(self.tikz_file.resolve())
-        with open(tikz_file_path, "r") as tikz_file:
-            lines = tikz_file.readlines()
-        for line in lines:
-            print(line)
-        return lines
-
-    # TODO: Clear the code that was written to the Tikz file
-    # Need to find the chunk of tikz_code in the tikz_file
-    def clear(self):
-        """
-        Idea: Starting from the last line of the file, loop backwards
-        and compare each line with the contents of self.list_statements. Break the loop
-        if there is a mismatch. If all lines match, then we are sure self.list_statements
-        is already written in the file, so we remove.
-
-        The reason why we are very careful about deleting file contents is
-        because the user could potentially be careless and delete their
-        tex project contents. This guarantees that will never happen because we will
-        only ever delete tikz code that they themselves added.
-        """
-
-        tikz_file_path = str(self.tikz_file.resolve())
-        with open(tikz_file_path, "r") as tikz_file:
-            lines = tikz_file.readlines()
-        matches = 0
-
-        if len(lines) >= len(self.list_statements):
-            stmt_ind = len(lines) - len(self.list_statements)
-            for i in reversed(range(stmt_ind, len(lines))):
-                if self.list_statements[i - stmt_ind] == lines[i]:
-                    matches += 1
-                else:
-                    print("No match")
-                    break
-
-        if matches == len(self.list_statements):
-            with open(tikz_file_path, "w") as tikz_file:
-                for line in lines[stmt_ind:]:
-                    tikz_file.write(line)
-
     # Display the current tikz drawing
     def show(self):
         """Displays the pdf of the TikzPicture to the user."""
@@ -253,9 +212,9 @@ class TikzPicture:
         self._statements[line] = line.code
         return line
 
-    def plot_coords(self, draw_options, plot_options, points):
+    def plot_coords(self, points, draw_options, plot_options):
         plot_coords = TikzPicture.PlotCoordinates(
-            self, draw_options, plot_options, points
+            self, points, draw_options, plot_options
         )
         self._statements[plot_coords] = plot_coords.code
         return plot_coords
@@ -265,8 +224,8 @@ class TikzPicture:
         self._statements[circle] = circle.code
         return circle
 
-    def node(self, position, content, options=""):
-        node = TikzPicture.Node(self, position, content, options)
+    def node(self, position, options="", content):
+        node = TikzPicture.Node(self, position, options, content)
         self._statements[node] = node.code
         return node
 
@@ -330,8 +289,11 @@ class TikzPicture:
             return (mid_x, mid_y)
 
         def shift(self, xshift, yshift):
-            shifted = shift_coords([self.start, self.end], xshift, yshift)
-            self.start, self.end = shifted[0], shifted[1]
+            shifted_start_end = shift_coords([self.start, self.end], xshift, yshift)
+            shifted_control_pts = shift_coords(self.control_pts, xshift, yshift)
+
+            self.start, self.end = shifted_start_end[0], shifted_start_end[1]
+            self.control_pts = shifted_control_pts
 
         def scale(self, scale):
             scaled = scale_coords([self.start, self.end], scale)
@@ -359,10 +321,10 @@ class TikzPicture:
 
         """
 
-        def __init__(self, tikz_inst, draw_options, plot_options, points):
+        def __init__(self, tikz_inst, points, draw_options, plot_options):
+            self.points = points
             self.draw_options = draw_options
             self.plot_options = plot_options
-            self.points = points
 
         @property
         def code(self):
@@ -411,26 +373,26 @@ class TikzPicture:
             options (str) : String containing the drawing options (e.g, "Blue")
         """
 
-        def __init__(self, tikz_inst, position, radius, options):
-            self.position = position
+        def __init__(self, tikz_inst, center, radius, options):
+            self.center = center
             self.radius = radius
             self.options = options
 
         @property
         def code(self):
             tikz_cmd = (
-                f"\draw[{self.options}] {self.position} circle ({self.radius}cm);"
+                f"\draw[{self.options}] {self.center} circle ({self.radius}cm);"
             )
             return tikz_cmd
 
         def shift(self, xshift, yshift):
-            self.position = shift_coords([self.position], xshift, yshift)[0]
+            self.center = shift_coords([self.center], xshift, yshift)[0]
 
         def scale(self, scale):
-            self.position = scale_coords([self.position], scale)
+            self.center = scale_coords([self.center], scale)
 
         def rotate(self, angle, about_pt, radians=False):
-            self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
+            self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
         def __repr__(self):
             return self.code
@@ -447,7 +409,7 @@ class TikzPicture:
             options (str) : String containing node options (e.g., "above")
         """
 
-        def __init__(self, tikz_inst, position, content, options):
+        def __init__(self, tikz_inst, position, options, content):
             self.position = position
             self.content = content
             self.options = options
