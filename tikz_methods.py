@@ -20,27 +20,17 @@ class TikzPicture:
 
     Attributes:
         tikz_file (str) : A file path to a desired destination to output the tikz code
-        tex_file (str) : A file path to the TeX file which will accept the tikz code.
         center (bool) : True/False if one wants to center their Tikz code
         options (str) : A list of options for the Tikz picture
         statements (dict) : See docstring for statements below
     """
 
-    def __init__(
-        self,
-        tikz_file="tikz_code/tikz-code.tex",
-        tex_file="tex/tex_file.tex",
-        center=False,
-        options="",
-    ):
+    def __init__(self, tikz_file="tikz_code/tikz-code.tex", center=False, options=""):
         # TODO: improve unit tests (verify shift and scale work, ...)
-        # TODO: add an undo method for appending draw objects/tikz environments, but don't make it too powerful
         # TODO: figure out a nice way to implement scope
-        # TODO: If self.options is empty, don't print empty brackets []
         global _N_TIKZs
         # Create a Tikz Environment
         self.tikz_file = Path(tikz_file)
-        self.tex_file = Path(tex_file)
         self.options = options
         self.center = center
         self._statements = {}
@@ -62,17 +52,58 @@ class TikzPicture:
 
     @property
     def begin(self):
-        return (
-            f"\\begin{{tikzpicture}}[{self.options}]% TikzPython id = ({self._id}) \n"
-        )
+        """The beginning code of our tikz environment.
+        * For each environment we create, we assign an ID that our program can later identify.
+          Such an ID is of the form of a TeX comment " % TikzPython id = ({self._id}) "
+        * This is to ensure safe, efficient file update and deletion processes.
+        """
+        return f"\\begin{{tikzpicture}}{options(self.options)}% TikzPython id = ({self._id}) \n"
 
     @property
     def end(self):
-        return f"\\end{{tikzpicture}}\n"
+        """ End statement for the TikzPicture."""
+        return "\\end{tikzpicture}\n"
+
+    @property
+    def tex_file(self):
+        """Takes care of the TeX file, containing necessary \\usepackage{...} and \\usetikzlibrary{...} statements,
+        which is used to call the Tikz code and compile it.
+        * The TeX file is stored in a hidden folder "./tex", in the same directory as self.tikz_file.
+            * This is to make everything easier for the user. They don't have to waste their time with the tedious task
+              of sorting and connecting their files together, figuring out full paths, dealing with the stupid .aux, .log... files,
+              figuring our \\input{...}, etc. This process is automatic.
+            * When a PDF compiles, the pdf is moved to the same directory as self.tikz_file
+              so the user can see it. (All those moronic .log, .aux files are left behind in the hidden folder,
+              another benefit of this approach).
+        Overall, the user doesn't really need to tamper with the file at all. They can still look at it
+        to see what \\usepackage{...} and \\usetikzlibrary{...} imports that we're using, though.
+        """
+        tikz_path = str(
+            self.tikz_file.resolve().parents[0]
+        )  # Full path for self.tikz_file
+        tex_file = Path(
+            tikz_path + "/.tex/tex_file.tex"
+        )  # Full path for the hidden tex_file
+        # Check if the folder exists. If so, create the hidden folder .tex/
+        if not tex_file.exists():
+            tex_file.parent.mkdir(parents=True)
+            # Create the tex file in the hiden folder
+            with open(str(tex_file.resolve()), "w+") as f:
+                pass
+        # It's possible the user changed self.tikz_file. In that case we need to update self.tex_file
+        with open("template/tex_file.tex") as template:
+            lines = template.readlines()
+        with open(tikz_path + "/.tex/tex_file.tex", "w") as f:
+            for line in lines:
+                if line[:6] == "\\input":
+                    f.write(f"\\input{{{str(self.tikz_file.resolve())}}}")
+                else:
+                    f.write(line)
+        return tex_file
 
     @property
     def statements(self):
-        """self.statements: A dictionary where
+        """A dictionary to keep track of the current Tikz code we've commanded. This is for the program.
         keys : instances of subclasses created (e.g, Line)
         values : the Tikz code of the instance (e.g., Line.code)
         """
@@ -85,77 +116,80 @@ class TikzPicture:
     def statements(self, draw_obj):
         self._statements[draw_obj] = draw_obj.code
 
-    # Assemble tikz_code in a list format (for ease in handling)
-    @property
-    def list_statements(self):
-        list_code = []
-        list_code.append(self.begin)
-
-        for draw_obj in self.statements:
-            list_code.append("\t" + draw_obj.code + "\n")
-
-        list_code.append(self.end)
-        return list_code
-
-    # Assemble tikz_code as a string (for output readability, see __repr__)
     @property
     def code(self):
-        code = ""
-        for statement in self.list_statements:
-            code += statement
+        """A string contaning our Tikz code. This uses self._statements, and self.code
+        gets passed to __repr__.
+        """
+        code = self.begin
+        for draw_obj in self.statements:
+            code += "\t" + draw_obj.code + "\n"
+        code += self.end
         return code
 
     def __repr__(self):
         print(self.code)
         return ""
 
-    # Remove a code statement from the Tikz environment, e.g., a line
     def remove(self, draw_obj):
+        """A method to remove a code statement from the Tikz environment, e.g., a line."""
         del self._statements[draw_obj]
 
     # TODO: Manually add code to the Tikz Environment
     def add_statement(self, statement):
+        """User can add their own Tikz Code to the environment."""
         self._statements[len(self._statements)] = statement
 
     def write(self, overwrite=True):
-        global _N_TIKZs
-
+        """Our method to write the current recorded Tikz code into self.tikz_file, a .tex file somewhere.
+        There are two main cases:
+        A. This is our first time calling write().
+            In this case, we just write into the file.
+        B. We've already called .write() before, and we have a TikzPicture environment matching our current ID
+        in self.tikz_file.
+            In this case, we carefully delete the contents of the old TikzPicture environment. We do this
+            by finding our ID. Then we update the environment with our new code.
+        If we don't do (2), then we will potentially write duplicate TikzPicture code over and over again.
+        Usually, a user won't want this. If for some weird reason they do want this, then they set
+        overwrite = False.
+        """
+        global _N_TIKZs  # Load in the global to update this variable, in the off chance overwrite = False.
         tikz_file_path = str(self.tikz_file.resolve())
-        tex_code = self.code
+        output_code = self.code
+
         # Center the tikzpicture environment if necessary
         if self.center:
-            tex_code = "\\begin{center}\n" + self.code + "\\end{center}\n"
+            output_code = "\\begin{center}\n" + self.code + "\\end{center}\n"
 
-        if not overwrite:
-            with open(tikz_file_path, "a+") as tikz_file:
-                tikz_file.write(tex_code)
-            _N_TIKZs += 1
-        else:
+        # If we want to overwrite and update our last TikzPicture environment (in most cases, we do)
+        if overwrite:
             begin_ind = -1
-            # open the file, grab the file lines
+            end_ind = -1
+            # open the tikz_file and obtain its contents
             with open(tikz_file_path, "r") as tikz_file:
                 lines = tikz_file.readlines()
-            # Loop over the file lines to find our old code
             for i, line in enumerate(lines):
-                # Look for our begin statement
+                """We look for our old TikzPicture code in the file as follows.
+                * Loop over the file lines.
+                * For each line, we check if it is our begin statement.
+                * If so, we look ahead and search for our end statement.
+                """
                 if line == self.begin:
                     begin_ind = i
-                    # Look ahead of our statement
                     for j, later_lines in enumerate(lines[i:]):
-                        # Look later for the end statement
                         if later_lines == self.end:
                             end_ind = i + j
                             break
                     break
-            # If we never found our id, then we are safe to write
-            if begin_ind == -1:
-                print("Adding new Tikz environment")
-                with open(tikz_file_path, "a+") as tikz_file:
-                    tikz_file.write(tex_code)
-                _N_TIKZs += 1
-            # Otherwise, we found the \begin{tikzpicture}\end{tikzpicture} statement.
-            else:
+
+            # If we found our begin statement, then we know we've written in the file before.
+            # In this case, we carefully update the file.
+            if begin_ind != -1:
+                assert (
+                    end_ind != -1
+                ), "Found code statement at line {begin_ind}, but never found end statement"
                 print("Updating Tikz environment with new code")
+
                 # Transfer the text, excluding our old \begin{tikzpicture}\end{tikzpicture} statement.
                 new_lines = lines[:begin_ind] + lines[end_ind + 1 :]
 
@@ -167,80 +201,126 @@ class TikzPicture:
                     + "_temp.tex"
                 )
                 tikz_file_temp_path = str(tikz_file_temp.resolve())
-                with open(tikz_file_temp_path, "w") as new_tikz_file:
-                    # Write everything before what needed to be replaced
+                with open(tikz_file_temp_path, "w") as f:
+                    # Write everything before our begin statement
                     for line in lines[:begin_ind]:
-                        new_tikz_file.write(line)
+                        f.write(line)
                     # Substitute in our updated code
-                    new_tikz_file.write(self.code)
-                    # Write everything after what needed to be replaced
+                    f.write(self.code)
+                    # Write everything after our end statement
                     for line in lines[end_ind + 1 :]:
-                        new_tikz_file.write(line)
+                        f.write(line)
                 # Now rename the file
                 tikz_file_temp.replace(tikz_file_path)
                 print("Successful write")
 
+            # If we never found our old TikzPicture code, then it was never entered. We are safe to append.
+            else:
+                print("Adding new Tikz environment")
+                with open(tikz_file_path, "a+") as tikz_file:
+                    tikz_file.write(output_code)
+                _N_TIKZs += 1
+
+        # If for some reason we do not want to overwrite our last TikzPicture
+        else:
+            with open(tikz_file_path, "a+") as tikz_file:
+                tikz_file.write(output_code)
+            _N_TIKZs += 1
+
+        # Finally, we move onto compiling our PDF.
+        # First we get the full path and filename.
+        tex_file_parents = str(self.tex_file.resolve().parents[0])
+        tex_filename = self.tex_file.stem
+        # Now we have our tex file paths.
+        tex_file = tex_file_parents + "/" + tex_filename + ".tex"
+        # We now compile the PDF
+        subprocess.run(
+            f"latexmk -pdf -output-directory='{tex_file_parents}' {tex_file}",
+            shell=True,
+        )
+        # We move the PDF up one directory, our of the hidden folder, so the viewer can see it.
+        pdf_file = Path(tex_file_parents + "/" + tex_filename + ".pdf")
+        pdf_file.rename(pdf_file.resolve().parents[1] / pdf_file.name)
+
     # Display the current tikz drawing
     def show(self):
         """Displays the pdf of the TikzPicture to the user."""
-        tex_file_path = str(self.tex_file.resolve())
-        # Check if TeX exists, if not, create it using our template
-        if not self.tex_file.is_file():
-            with open("template/template_tex.tex") as template:
-                lines = template.readlines()
-                lines = [l for l in lines if "ROW" in l]
-                with open(tex_file_path, "w") as tex_file:
-                    for line in lines:
-                        tex_file.writelines(line)
-        # Find the pdf
-        pdf_file = Path(self.tex_file.parent.name + "/" + self.tex_file.stem + ".pdf")
-        # If we cannot find it, it has not been compiled. Thus, we compile it.
-        if not pdf_file.is_file():
-            subprocess.run(
-                f"latexmk -pdf -pv {tex_file_path}",
-                shell=True,
+        # Location of the PDF
+        pdf_file_path = (
+            str(self.tex_file.parents[1]) + "/" + self.tex_file.stem + ".pdf"
+        )
+        pdf = Path(pdf_file_path).resolve()
+        # Check if the PDF exists
+        if not pdf.is_file():
+            print(
+                f"\nCouldn't find the PDF in {pdf_file_path}. Perhaps you forgot to compile it with .write() first? \n"
             )
-        # Show the user the TikzPicture
-        webbrowser.open_new("file://" + str(pdf_file.resolve()))
+        # Use webbrowser to open it
+        webbrowser.open_new("file://" + pdf_file_path)
 
     """
         Methods to code objects in the Tikz Environment
     """
 
-    def line(self, start, end, options="", control_pts=[]):
-        line = TikzPicture.Line(self, start, end, options, control_pts)
+    def line(self, start, end, options="", to_options="--", control_pts=[]):
+        """Draws a line by creating an instance of the Line class.
+        Upon creation, we update self._statements with our new code.
+        * Key feature: If we update any attributes of our line, the changes
+          to the Tikz code are automatically reflected in self._statements.
+        """
+        line = TikzPicture.Line(self, start, end, options, to_options, control_pts)
         self._statements[line] = line.code
         return line
 
     def plot_coords(self, points, draw_options, plot_options):
+        """Draws a plot coordinates statement by creating an instance of the PlotCoordinates class.
+        Updates self._statements when necessary; see above comment under line function above.
+        """
         plot_coords = TikzPicture.PlotCoordinates(
             self, points, draw_options, plot_options
         )
         self._statements[plot_coords] = plot_coords.code
         return plot_coords
 
-    def circle(self, position, radius, options=""):
-        circle = TikzPicture.Circle(self, position, radius, options)
+    def circle(self, center, radius, options=""):
+        """Draws a circle by creating an instance of the Circle class.
+        Updates self._statements when necessary; see above comment under line function above.
+        """
+        circle = TikzPicture.Circle(self, center, radius, options)
         self._statements[circle] = circle.code
         return circle
 
-    def node(self, position, options="", content):
+    def node(self, position, options="", content=""):
+        """Draws a node by creating an instance of the Node class.
+        Updates self._statements when necessary; see above comment under line function above.
+        """
         node = TikzPicture.Node(self, position, options, content)
         self._statements[node] = node.code
         return node
 
     def rectangle(self, left_corner, right_corner, options=""):
+        """Draws a rectangle by creating an instance of the Rectangle class.
+        Updates self._statements when necessary; see above comment under line function above.
+        """
         rectangle = TikzPicture.Rectangle(self, left_corner, right_corner, options)
         self._statements[rectangle] = rectangle.code
         return rectangle
 
-    def ellipse(self, position, horiz_axis, vert_axis):
-        ellipse = TikzPicture.Ellipse(self, position, horiz_axis, vert_axis)
+    def ellipse(self, center, horiz_axis, vert_axis, options=""):
+        """Draws an ellipse by creating an instance of the Ellipse class.
+        Updates self._statements when necessary; see above comment under line function above.
+        """
+        ellipse = TikzPicture.Ellipse(self, center, horiz_axis, vert_axis, options)
         self._statements[ellipse] = ellipse.code
         return ellipse
 
-    def arc(self, position, start_angle, end_angle, radius):
-        arc = TikzPicture.Arc(self, position, start_angle, end_angle, radius)
+    def arc(self, center, start_angle, end_angle, radius, options="", radians=False):
+        """Draws an arc by creating an instance of the Arc class.
+        Updates self._statements when necessary; see above comment under line function above.
+        """
+        arc = TikzPicture.Arc(
+            self, center, start_angle, end_angle, radius, options, radians
+        )
         self._statements[arc] = arc.code
         return arc
 
@@ -261,25 +341,26 @@ class TikzPicture:
             control_pts (list): List of control points for the line
         """
 
-        def __init__(self, tikz_inst, start, end, options, control_pts):
+        def __init__(
+            self, tikz_inst, start, end, draw_options, to_options, control_pts
+        ):
             self.tikz_inst = tikz_inst
             self.start = start
             self.end = end
-            self.options = options
+            self.draw_options = draw_options
+            self.to_options = to_options
             self.control_pts = control_pts
 
         @property
         def code(self):
             if len(self.control_pts) == 0:
-                tikz_cmd = f"\draw[{self.options}] {self.start} -- {self.end};"
+                tikz_cmd = f"\draw{options(self.draw_options)} {self.start} {self.to_options} {self.end};"
             else:
                 control_stmt = ".. controls "
                 for pt in self.control_pts:
                     control_stmt += f"{pt[0], pt[1]}" + " and "
                 control_stmt = control_stmt[:-4] + " .."
-                tikz_cmd = (
-                    f"\draw[{self.options}] {self.start} {control_stmt} {self.end};"
-                )
+                tikz_cmd = f"\draw[{self.draw_options}] {self.start} {control_stmt} {self.end};"
             return tikz_cmd
 
         @property
@@ -328,9 +409,7 @@ class TikzPicture:
 
         @property
         def code(self):
-            tikz_cmd = (
-                f"\draw[{self.draw_options}] plot[{self.plot_options}] coordinates {{"
-            )
+            tikz_cmd = f"\draw{options(self.draw_options)} plot{options(self.plot_options)} coordinates {{"
             for pt in self.points:
                 tikz_cmd += str(pt) + " "
             tikz_cmd += "};"
@@ -381,7 +460,7 @@ class TikzPicture:
         @property
         def code(self):
             tikz_cmd = (
-                f"\draw[{self.options}] {self.center} circle ({self.radius}cm);"
+                f"\draw{options(self.options)} {self.center} circle ({self.radius}cm);"
             )
             return tikz_cmd
 
@@ -416,16 +495,14 @@ class TikzPicture:
 
         @property
         def code(self):
-            tikz_cmd = (
-                f"\\node[{self.options}] at {self.position} {{ {self.content} }};"
-            )
+            tikz_cmd = f"\\node{options(self.options)} at {self.position} {{ {self.content} }};"
             return tikz_cmd
 
         def shift(self, xshift, yshift):
-            self.position = shift_coords([self.position], xshift, yshift)
+            self.position = shift_coords([self.position], xshift, yshift)[0]
 
         def scale(self, scale):
-            self.position = scale_coords([self.position], scale)
+            self.position = scale_coords([self.position], scale)[0]
 
         def rotate(self, angle, about_pt, radians=False):
             self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
@@ -451,8 +528,27 @@ class TikzPicture:
 
         @property
         def code(self):
-            tikz_cmd = f"\draw[{self.options}] {self.left_corner} rectangle {self.right_corner};"
+            tikz_cmd = f"\draw{options(self.options)} {self.left_corner} rectangle {self.right_corner};"
             return tikz_cmd
+
+        def shift(self, xshift, yshift):
+            shifted_corners = shift_coords(
+                [self.left_corner, self.right_corner], xshift, yshift
+            )
+            self.left_corner = shifted_corners[0]
+            self.right_corner = shifted_corners[1]
+
+        def scale(self, scale):
+            scaled_corners = scale_coords([self.left_corner, self.right_corner], scale)
+            self.left_corner = scaled_corners[0]
+            self.right_corner = scaled_corners[1]
+
+        def rotate(self, angle, about_pt, radians=False):
+            rotated_corners = rotate_coords(
+                [self.left_corner, self.right_corner], angle, about_pt, radians
+            )
+            self.left_corner = rotated_corners[0]
+            self.right_corner = rotated_corners[1]
 
         def __repr__(self):
             return self.code
@@ -463,20 +559,36 @@ class TikzPicture:
 
         Attributes :
             tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-            position (tuple) : Pair of floats representing the center of the ellipse
+            center (tuple) : Pair of floats representing the center of the ellipse
             horiz_axis (float): The length (in cm) of the horizontal axis of the ellipse
             vert_axis (float): The length (in cm) of the vertical axis of the ellipse
         """
 
-        def __init__(self, tikz_inst, position, horiz_axis, vert_axis):
-            self.position = position
+        def __init__(self, tikz_inst, center, horiz_axis, vert_axis, options):
+            self.center = center
             self.horiz_axis = horiz_axis
             self.vert_axis = vert_axis
+            self.options = options
 
         @property
         def code(self):
-            tikz_cmd = f"\draw {self.position} ellipse ({self.horiz_axis}cm and {self.vert_axis}cm);"
+            tikz_cmd = f"\draw{options(self.options)} {self.center} ellipse ({self.horiz_axis}cm and {self.vert_axis}cm);"
             return tikz_cmd
+
+        def shift(self, xshift, yshift):
+            self.center = shift_coords([self.center], xshift, yshift)[0]
+
+        def scale(self, scale):
+            scaled_center = scale_coords([self.center], scale)[0]
+            scaled_h = round(self.horiz_axis * scale, 7)
+            scaled_v = round(self.vert_axis * scale, 7)
+
+            self.center = scaled_center
+            self.horiz_axis = scaled_h
+            self.vert_axis = scaled_v
+
+        def rotate(self, angle, about_pt, radians=False):
+            self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
         def __repr__(self):
             return self.code
@@ -487,22 +599,43 @@ class TikzPicture:
 
         Attributes :
             tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-            position (tuple) : Pair of points representing the relative center of the arc
-            start_angle (float) : The angle (in degrees) of the start of the arc
-            end_angle (float) : The angle (in degrees) of the end of the arc
+            center (tuple) : Pair of points representing the relative center of the arc
+            start_angle (float) : The angle of the start of the arc
+            end_angle (float) : The angle of the end of the arc
             radius (float) : The radius (in cm) of the arc
+            radians (bool) : Set true if inputting radians. Default behavior is for degrees.
         """
 
-        def __init__(self, tikz_inst, position, start_angle, end_angle, radius):
-            self.position = position
+        def __init__(
+            self, tikz_inst, center, start_angle, end_angle, radius, options, radians
+        ):
+            self.center = center
             self.start_angle = start_angle
             self.end_angle = end_angle
             self.radius = radius
+            self.options = options
+
+            if radians:
+                self.start_angle = round(self.start_angle, 180 / math.pi, 7)
+                self.end_angle = round(self.end_angle, 180 / math.pi, 7)
 
         @property
         def code(self):
-            tikz_cmd = f"\draw {self.position} arc ({self.start_angle}:{self.end_angle}:{self.radius}cm);"
+            tikz_cmd = f"\draw{options(self.options)} {self.center} arc ({self.start_angle}:{self.end_angle}:{self.radius}cm);"
             return tikz_cmd
+
+        def shift(self, xshift, yshift):
+            self.center = shift_coords([self.center], xshift, yshift)[0]
+
+        def scale(self, scale):
+            scaled_center = scale_coords([self.center], scale)
+            scaled_radius = round(self.radius * scale, 7)
+
+            self.center = scaled_center[0]
+            self.radius = scaled_radius
+
+        def rotate(self, angle, about_pt, radians=False):
+            self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
         def __repr__(self):
             return self.code
@@ -580,6 +713,20 @@ def rotate_coords(coords, angle, about_pt, radians=False):  # rotate countercloc
     return rotated_coords
 
 
+def recenter_to_origin(coords):
+    """Shifts a set of 2D points such that their center corresponds to the origin."""
+    x_mean = 0
+    y_mean = 0
+    for point in coords:
+        x_mean += point[0]
+        y_mean += point[1]
+
+    x_mean /= len(coords)
+    y_mean /= len(coords)
+
+    return shift_coords(coords, -x_mean, -y_mean)
+
+
 """
     Functions for colors
 """
@@ -603,8 +750,23 @@ def rainbow_colors(i):
     return rainbow_cols[i % len(rainbow_cols)]
 
 
+"""
+    Miscellaneous Helpers
+"""
+
+
+def options(string):
+    """A helper function for creating tikz code.
+    Basically, if the string is empty, we don't obtain brackets [].
+    """
+    if len(string) != 0:
+        return "[" + string + "]"
+    else:
+        return ""
+
+
 # Collect xcolor names
-colors = [
+xcolors = [
     "Apricot",
     "Aquamarine",
     "Bittersweet",
@@ -724,7 +886,7 @@ if __name__ == "__main__":
         # Test Line
         assert line.start == (0, 0)
         assert line.end == (1, 1)
-        assert line.options == "thick, blue"
+        assert line.draw_options == "thick, blue"
         assert line.control_pts == [(0.25, 0.25), (0.75, 0.75)]
         assert (
             line.code
@@ -739,7 +901,7 @@ if __name__ == "__main__":
             == "\\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };"
         )
         # Test Circle
-        assert circle.position == (1, 1)
+        assert circle.center == (1, 1)
         assert circle.radius == 1
         assert circle.options == "fill = purple"
         assert circle.code == "\\draw[fill = purple] (1, 1) circle (1cm);"
@@ -757,12 +919,12 @@ if __name__ == "__main__":
         assert rectangle.options == "Blue"
         assert rectangle.code == "\\draw[Blue] (2, 2) rectangle (3, 4);"
         # Ellipse
-        assert ellipse.position == (0, 0)
+        assert ellipse.center == (0, 0)
         assert ellipse.horiz_axis == 3
         assert ellipse.vert_axis == 4
         assert ellipse.code == "\\draw (0, 0) ellipse (3cm and 4cm);"
         # Arc
-        assert arc.position == (0, 0)
+        assert arc.center == (0, 0)
         assert arc.start_angle == 20
         assert arc.end_angle == 90
         assert arc.radius == 4

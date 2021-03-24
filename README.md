@@ -1,10 +1,9 @@
-
-This is TikZ-Python, a python module that allows one to very simply and intuitively create complex figures in TikZ. 
+# Tikz-Python
+This an object-oriented approach via Python towards providing a giant wrapper for Tikz code, with the goal of streamling the process of creating complex figures for TeX documents.
 
 ## Why
 This is for people who know basic Python and TikZ, but who have realized that while TikZ is amazing, it is *really* annoying to use. 
-
-The goal of this is to automate most of the process of making TikZ figures so that it is no longer a tedious and inefficient task. This has led the philosophy of this code is to interpret tikz attributes as *class objects*. For example, we interpret a line as not only a drawing, but as an instance of a class `Line`. This allows us to easily draw and further subject a drawing to complex manipulations (e.g., rotations, shifting) which would require lots of copy-pasting, typing, backspacing, and debbuging in LaTeX alone. 
+ 
 
 ## How to Use: Basics
 A typical example of this module in action is below. 
@@ -24,18 +23,18 @@ In TeX, this code would be `\draw[thick, blue] (0,0) -- (1,1);`.
 
 * Finally, `tikz.write()` writes all of our code into the file `my_tikz_code.tex`.
 
-## Methods Provided
+## What Else?
 One can do more than just draw lines. The following table lists three things: Some objects one might want to draw in TikZ, an example of TikZ code on drawing such an object, and the code for how this module would write such commands.
 
 Object        | Raw Tikz Code   | Tikz-Python Code |
  -------------| -------------   | ------------- |
-Line         | `\draw[blue] (0,0) -- (1,1);`             | `tikz.line((0,0), (1,1), options = "blue")` 
+Line          | `\draw[blue] (0,0) -- (1,1);`             | `tikz.line((0,0), (1,1), options = "blue")` 
 Circle        | `\draw[fill = blue] (0,0) circle (2cm);` | `tikz.circle((0,0), 2, options = "fill = blue")`  |
 Rectangle     | `\draw[blue] (0,0) rectangle (5, 6);`    | `tikz.rectangle((0,0), (5,6), options = "Blue")`  |
 Ellipse       | `\draw (0,0) ellipse (2cm and 4cm)`      | `tikz.ellipse((0,0), 2, 4)`
 Arc           | `\draw (1,1) arc (45:90:5cm)`            | `tikz.arc((1,1), 45, 90, 5)`
 Node          | `\node[above] at (0,0) {I am a node!};`  | `tikz.node((0,0), "I am a node!", "above")`
-Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.draw_plot_coords(draw_options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`	
+Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.draw_plot_coords(draw_options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`|	
 
 Again: The difference with TikZ, and with other Python-Tikz mashups, is that the above python calls are class instances that we can subject to further manipulations.
 
@@ -119,37 +118,52 @@ One can also create a function to perform the n-th barycentric subdivision of a 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 250/>
 
-# Methods for Class: TikzPicture
+# Methods for Class: `TikzPicture`
 Initialize an object of the class as below:
 ```python
-tikz = TikzPicture(my_tikz_file)
+tikz = TikzPicture(tikz_file = "tikz_code/tikz-code.tex", center = False, options = "")
 ```
 We describe the methods for this class as below. 
 
+Parameter    | Description | Default|
+-------------|-------------|-------------|
+`tikz_file` (str) | The desired file path for Tikz code output. Can be a relative or full path. | `tikz_code/tikz_code.tex`|
+`center` (bool) | True if you would like your tikzpicture to be centered, false otherwise. | `False`|
+`options` (str) | A string containing valid Tikz options. | `""`|
+
+If `tikz_file` is blank, the directory `tikz/tikz_file.tex` is created automatically. Thus, it is actually less work for the user to leave this variable unspecified and let the program organize the file for you.
+
 ### `TikzPicture.write()`
-Writes the current Tikz code into the .tex file located at `TikzPicture.tikz_file`. 
+This method does three things.
+1. Writes the current Tikz code into the .tex file located at `my_tikz_file`.
 
--If `tikz_file` wasn't specified, a file is created at `tikz_code/tikz_code.tex` and the code will be stored there. (So it might be more convenient for you to just not specify `my_tikz_file`).
+2. Links the Tikz code to a TeX file `tex_file.tex`, hidden in a folder `.tex/` (which you can access). This folder can be found in the same directory as `my_tikz_file`. The TeX file is then compiled.
 
-- Note: You can continue editing your tikzpicture even after you've executed `.write()`. And you won't add duplicate code (i.e., code you've already written) by executing `.write()` twice.
+3. Moves the compiled PDF into the same directory as `my_tikz_file` for viewing. All the silly `.aux` and `.log` files are left behind in the hidden folder.
+
+The program uses `latexmk`, which comes on most installations, to compile the TeX document.
+
+Note: You can continue editing your tikzpicture even after you've executed `.write()`. And you won't add duplicate code (i.e., code you've already written) by executing `.write()` twice. For example, if I create a circle
 ```python
 >>> tikz = TikzPicture()
 >>> circle = tikz.circle((0,0), 2, options = "Blue") # Draws a blue circle 
 >>> tikz.write()
 >>> tikz 
-...\begin{tikzpicture}[]% TikzPython id = (1) 
+... \begin{tikzpicture}[]% TikzPython id = (1) 
 	\draw[Blue] (0, 0) circle (2cm);
 \end{tikzpicture}
+```
+Then eeven thought I called `tikz.write()`, I can still add code.
+```python
 >>> another_circle = tikz.circle((1,1), 2, options = "Red") # I forgot! I want another circle...
->>> tikz.write() # same code as before, with the new red circle added
->>> tikz 
-\begin{tikzpicture}[]% TikzPython id = (1) 
+>>> tikz.write() 
+>>> tikz # same code as before, with the new red circle added
+... \begin{tikzpicture}[]% TikzPython id = (1) 
 	\draw[Blue] (0, 0) circle (2cm);
 	\draw[Red] (1, 1) circle (2cm);
 \end{tikzpicture}
-
 ```
-This feature, in combination with `.remove` and `.show()` (see below), allows you to gradually build and view a tikzpicture quite painlessly.
+This feature, in combination with `.remove()` and `.show()` (see below), allows you to gradually build and view a tikzpicture quite painlessly.
 
 ### `TikzPicture.remove(draw_obj)`
 Removes a drawing object, such as a line, from a TikzPicture. 
@@ -158,25 +172,21 @@ Example:
 ```python
 >>> tikz = TikzPicture()
 >>> line = tikz.line((0,0), (1,1), options = "Blue") # Draws a line 
->>> arc = tikz.arc((0,0), 45, 90, 3)
+>>> arc = tikz.arc((0,0), 45, 90, 3) # Draws an arc
 >>> tikz 
-\begin{tikzpicture}[]% TikzPython id = (1)
+... \begin{tikzpicture}[]% TikzPython id = (1)
     \draw[Blue] (0, 0) -- (1,1);
     \draw (0, 0) arc (45:90:3cm);
 \end{tikzpicture}
->>> tikz.remove(line) # The line is no longer in the environment
->>> tikz 
-\begin{tikzpicture}[]% TikzPython id = (1) 
+>>> tikz.remove(line) 
+>>> tikz # The line is no longer in the environment
+... \begin{tikzpicture}[]% TikzPython id = (1) 
 	\draw (0, 0) arc (45:90:3cm);
 \end{tikzpicture}
 ```
 
 ### `TikzPicture.show()`
-Pulls up a PDF of the current drawing to the user in your browser (may default to your PDF viewer). 
-
-- Of course, execute `TikzPicture.write()` prior in order to view your latest changes. 
-
-- If the PDF hasn't been compiled, the program finds the TeX file, compiles the PDF for you via `latexmk -pdf -pv (tex_file_path)`, and then displays it. Most people have `latexmk` so this shouldn't be a problem.
+Pulls up a PDF of the current drawing to the user in your browser (may default to your PDF viewer). Of course, execute `TikzPicture.write()` prior in order to view your latest changes. 
 
 # Colors
 Coloring Tikz pictures in TeX tends to be annoying. A goal of this has been to make it as easy as possible to color Tikz pictures.
@@ -190,7 +200,7 @@ Coloring Tikz pictures in TeX tends to be annoying. A goal of this has been to m
 >>> rectangle = tikz.rectangle( (0,0), (5,5)), options = "fill=" + rgb(120, 0, 120))
 ```
 
-- A wrapper function `rainbow_colors` uses the above function to provide rainbow colors. The function takes in any integer, and wraps around via a modulo operation to always return a rainbow color. 
+- A wrapper function `rainbow_colors` uses the above function to provide rainbow colors. The function takes in any integer, and grabs a rainbow color, computing a modulo operation if necessary  (hence, any integer is valid). 
 ```python
 >>> tikz = TikzPicture()
 >>> for i in range(0, 20):
@@ -203,7 +213,7 @@ Coloring Tikz pictures in TeX tends to be annoying. A goal of this has been to m
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
-line = tikz.line(start, end, options "", control_pts = [])
+line = tikz.line(start, end, options "", to_options = "--",control_pts = [])
 ```
 We explain the parameters. 
 
@@ -212,6 +222,7 @@ Parameter    | Description | Default|
 `start` (tuple) | Pair of floats representing the start of the line | 
 `end` (tuple) | Pair of floats representing the end of the line |
 `options` (str) | String containing valid Tikz drawing options, e.g. "Blue" | `""`
+`to_options` (str) | String containing Tikz specifications for connecting the start to the end (e.g. `"to [bend right = 45]"`) | "--"
 `control_pts` (list) | List of control points for the line | `[]`
 
 ### `TikzPicture.Line.shift(xshift, yshift)`
@@ -219,10 +230,10 @@ Shifts the current line by amount `xshift` in the x-direction and `yshift` in th
 ```python
 >>> line = tikz.line((0,0), (1,1), options = "Blue", control_pts = [(0.5, 0.5), (0.75, -2)])
 >>> line 
-\draw[Blue] (0, 0) .. controls (0.5, 0.5) and (0.75, -2)  .. (1, 1);
+... \draw[Blue] (0, 0) .. controls (0.5, 0.5) and (0.75, -2)  .. (1, 1);
 >>> line.shift(2, 2)
 >>> line
-\draw[Blue] (2, 2) .. controls (2.5, 2.5) and (2.75, 0)  .. (3, 3);
+... \draw[Blue] (2, 2) .. controls (2.5, 2.5) and (2.75, 0)  .. (3, 3);
 ```
 
 ### `TikzPicture.Line.scale(scale)`
@@ -246,26 +257,31 @@ Parameter    | Description | Default|
 `draw_options` (str) | A string of valid Tikz drawing options. | `""`
 `plot_options` (str) | A string of valid Tikz plotting options | `""`
 
-This method analagous to the Tikz command `\draw plot coordinates{...};`. For example,
+This method is analagous to the Tikz command `\draw plot coordinates{...};`. For example, the code
 ```python
 >>> tikz = TikzPicture()
->>> points = [(2,2), (4,0), (1,-3) (-2, -1), (-1, 3)]
+>>> points = [(2,2), (4,0), (1,-3), (-2, -1), (-1, 3)]
 >>> plot = tikz.plot_coords(points, draw_options = "Blue", plot_options = "smooth cycle, tension = 0.5")
 ```
-corresponds to `\draw[Blue] plot[smooth cycle, tension = 0.5] coordinates{(2,2), (4,0), (1,-3) (-2, -1), (-1, 3)};`.
+corresponds to the Tikz command `\draw[Blue] plot[smooth cycle, tension = 0.5] coordinates{(2,2), (4,0), (1,-3) (-2, -1), (-1, 3)};`.
 
-`PlotCoordinates` has methods `.shift()`, `.scale`, and `.rotate`, similar to the class `Line`, and the parameters behave similarly. For example, 
+`PlotCoordinates` has methods `.shift()`, `.scale`, and `.rotate`, similar to the class `Line`, and the parameters behave similarly. These methods are more interestingly used on `PlotCoordinates` than on `Line`. For example, the code
 ```python
->>> tikz = TikzPicture()
->>> points = [(5.6, 11.1),(5.2, 9.6),(3.2, 10.6),(4.3, 7.3),(3, 4.1),(5.6, 5.2),(7.2, 3.9),(8.4, 5.6),(10.2, 4.5),(8.7, 6.9),(10, 8.6),(8.1, 8.8), (9.3, 11.8), (7.2, 11.1), (6.2, 12.5)]
->>> for i in range(1, 20):
->>>     draw_options=f"fill = {rainbow_colors(i)}, opacity = 0.5",
->>>     plot_options="smooth, tension=.5, closed hobby" # Need \usetikzlibrary{hobby}
->>>     plot = tikz.plot_coords(points, draw_options, plot_options)
->>>     plot.shift(0, i/5)
->>>     plot.rotate(45, about_pt=plot.center, radians=False) #plot.center is the center of the plot
+tikz = TikzPicture()
+tikz = TikzPicture()
+points = [(14.4, 3.2), (16.0, 3.6), (16.8, 4.8), (16.0, 6.8), (16.4, 8.8), (13.6, 8.8), (12.4, 7.6), (12.8, 5.6), (12.4, 3.6)]
+
+for i in range(0, 20):
+    draw_options = f"fill = {rainbow_colors(i)}, opacity = 0.7"
+    # User will need \usetikzlibrary{hobby} to use closed hobby
+    plot_options = "smooth, tension=.5, closed hobby"
+    plot = tikz.plot_coords(points, draw_options, plot_options)
+    plot.scale((20 - i) / 20)
+    plot.rotate(15 * i)
 ```
-The methods `.shift`, `.scale`, `.rotate` are more interestingly used on `PlotCoordinates` than on `Line`. 
+generates the image
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/PlotCoords_rotate_Example.png" height = 300/>
 
 
 ## Methods for Class: `Circle`
