@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import math
 import subprocess
 import webbrowser
@@ -28,6 +29,7 @@ class TikzPicture:
     def __init__(self, tikz_file="tikz_code/tikz-code.tex", center=False, options=""):
         # TODO: improve unit tests (verify shift and scale work, ...)
         # TODO: figure out a nice way to implement scope
+        # TODO: Raise typerror if user puts in a pair of numbers instead of a tuple
         global _N_TIKZs
         # Create a Tikz Environment
         self.tikz_file = Path(tikz_file)
@@ -42,8 +44,16 @@ class TikzPicture:
                 with open(self.tikz_file.resolve(), "w"):
                     pass
             except:
-                print(f"Could not find or create file at {self.tikz_file}")
+                print(f"Could not find or create file at {self.tikz_file}.")
+                answer = input("Want to make it? (Y/N)")
+                if answer == "y" or answer == "Y":
+                    # Make directory, then file
+                    self.tikz_file.parent.mkdir(parents=True)
+                    with open(self.tikz_file.resolve(), "w+"):
+                        pass
+                    print("Created!")
             else:
+                print("Not created.")
                 print(
                     f"File created at {str(self.tikz_file.resolve())}, tikz_code will output there"
                 )
@@ -66,17 +76,17 @@ class TikzPicture:
 
     @property
     def tex_file(self):
-        """Takes care of the TeX file, containing necessary \\usepackage{...} and \\usetikzlibrary{...} statements,
+        r"""Takes care of the TeX file, containing necessary \usepackage{...} and \usetikzlibrary{...} statements,
         which is used to call the Tikz code and compile it.
         * The TeX file is stored in a hidden folder "./tex", in the same directory as self.tikz_file.
             * This is to make everything easier for the user. They don't have to waste their time with the tedious task
               of sorting and connecting their files together, figuring out full paths, dealing with the stupid .aux, .log... files,
-              figuring our \\input{...}, etc. This process is automatic.
+              figuring our \input{...}, etc. This process is automatic.
             * When a PDF compiles, the pdf is moved to the same directory as self.tikz_file
               so the user can see it. (All those moronic .log, .aux files are left behind in the hidden folder,
               another benefit of this approach).
         Overall, the user doesn't really need to tamper with the file at all. They can still look at it
-        to see what \\usepackage{...} and \\usetikzlibrary{...} imports that we're using, though.
+        to see what \usepackage{...} and \usetikzlibrary{...} imports that we're using, though.
         """
         tikz_path = str(
             self.tikz_file.resolve().parents[0]
@@ -91,8 +101,10 @@ class TikzPicture:
             with open(str(tex_file.resolve()), "w+") as f:
                 pass
         # It's possible the user changed self.tikz_file. In that case we need to update self.tex_file
-        with open("template/tex_file.tex") as template:
-            lines = template.readlines()
+        # TODO: Don't forget, the user may have done something dumb with this file. In action, this needs to be in a safe place.
+        template_file = Path("/template/tex_file.tex")
+        with open(str(template_file.resolve())) as f:
+            lines = f.readlines()
         with open(tikz_path + "/.tex/tex_file.tex", "w") as f:
             for line in lines:
                 if line[:6] == "\\input":
@@ -135,10 +147,10 @@ class TikzPicture:
         """A method to remove a code statement from the Tikz environment, e.g., a line."""
         del self._statements[draw_obj]
 
-    # TODO: Manually add code to the Tikz Environment
-    def add_statement(self, statement):
-        """User can add their own Tikz Code to the environment."""
-        self._statements[len(self._statements)] = statement
+    def draw(self, *args):
+        """User can also manually add their drawing object. """
+        for draw_obj in args:
+            self._statements[draw_obj] = draw_obj.code
 
     def write(self, overwrite=True):
         """Our method to write the current recorded Tikz code into self.tikz_file, a .tex file somewhere.
@@ -206,7 +218,7 @@ class TikzPicture:
                     for line in lines[:begin_ind]:
                         f.write(line)
                     # Substitute in our updated code
-                    f.write(self.code)
+                    f.write(output_code)
                     # Write everything after our end statement
                     for line in lines[end_ind + 1 :]:
                         f.write(line)
@@ -262,383 +274,387 @@ class TikzPicture:
         Methods to code objects in the Tikz Environment
     """
 
-    def line(self, start, end, options="", to_options="--", control_pts=[]):
+    def line(self, start, end, draw_options="", to_options="--", control_pts=[]):
         """Draws a line by creating an instance of the Line class.
         Upon creation, we update self._statements with our new code.
         * Key feature: If we update any attributes of our line, the changes
           to the Tikz code are automatically reflected in self._statements.
         """
-        line = TikzPicture.Line(self, start, end, options, to_options, control_pts)
-        self._statements[line] = line.code
+        line = Line(start, end, draw_options, to_options, control_pts)
+        self.draw(line)
         return line
 
-    def plot_coords(self, points, draw_options, plot_options):
+    def plot_coords(self, points, draw_options="", plot_options=""):
         """Draws a plot coordinates statement by creating an instance of the PlotCoordinates class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        plot_coords = TikzPicture.PlotCoordinates(
-            self, points, draw_options, plot_options
-        )
-        self._statements[plot_coords] = plot_coords.code
+        plot_coords = PlotCoordinates(points, draw_options, plot_options)
+        self.draw(plot_coords)
         return plot_coords
 
     def circle(self, center, radius, options=""):
         """Draws a circle by creating an instance of the Circle class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        circle = TikzPicture.Circle(self, center, radius, options)
-        self._statements[circle] = circle.code
+        circle = Circle(center, radius, options)
+        self.draw(circle)
         return circle
 
     def node(self, position, options="", content=""):
         """Draws a node by creating an instance of the Node class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        node = TikzPicture.Node(self, position, options, content)
-        self._statements[node] = node.code
+        node = Node(position, options, content)
+        self.draw(node)
         return node
 
     def rectangle(self, left_corner, right_corner, options=""):
         """Draws a rectangle by creating an instance of the Rectangle class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        rectangle = TikzPicture.Rectangle(self, left_corner, right_corner, options)
-        self._statements[rectangle] = rectangle.code
+        rectangle = Rectangle(left_corner, right_corner, options)
+        self.draw(rectangle)
         return rectangle
 
     def ellipse(self, center, horiz_axis, vert_axis, options=""):
         """Draws an ellipse by creating an instance of the Ellipse class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        ellipse = TikzPicture.Ellipse(self, center, horiz_axis, vert_axis, options)
-        self._statements[ellipse] = ellipse.code
+        ellipse = Ellipse(center, horiz_axis, vert_axis, options)
+        self.draw(ellipse)
         return ellipse
 
     def arc(self, center, start_angle, end_angle, radius, options="", radians=False):
         """Draws an arc by creating an instance of the Arc class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        arc = TikzPicture.Arc(
-            self, center, start_angle, end_angle, radius, options, radians
-        )
-        self._statements[arc] = arc.code
+        arc = Arc(center, start_angle, end_angle, radius, options, radians)
+        self.draw(arc)
         return arc
 
     """
         Classes for drawing
     """
 
-    # Class for Lines
-    class Line:
-        """
-        A subclass of TikzPicture to create lines in the tikz environment
 
-        Attributes :
-            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-            start (tuple) : Pair of floats representing the start of the line
-            end (tuple) : Pair of floats representing the end of the line
-            options (str) : String containing Tikz drawing options, e.g. "Blue"
-            control_pts (list): List of control points for the line
-        """
+# Class for Lines
+class Line:
+    """
+    A subclass of TikzPicture to create lines in the tikz environment
 
-        def __init__(
-            self, tikz_inst, start, end, draw_options, to_options, control_pts
-        ):
-            self.tikz_inst = tikz_inst
-            self.start = start
-            self.end = end
-            self.draw_options = draw_options
-            self.to_options = to_options
-            self.control_pts = control_pts
+    Attributes :
+        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+        start (tuple) : Pair of floats representing the start of the line
+        end (tuple) : Pair of floats representing the end of the line
+        options (str) : String containing Tikz drawing options, e.g. "Blue"
+        control_pts (list): List of control points for the line
+    """
 
-        @property
-        def code(self):
-            if len(self.control_pts) == 0:
-                tikz_cmd = f"\draw{options(self.draw_options)} {self.start} {self.to_options} {self.end};"
-            else:
-                control_stmt = ".. controls "
-                for pt in self.control_pts:
-                    control_stmt += f"{pt[0], pt[1]}" + " and "
-                control_stmt = control_stmt[:-4] + " .."
-                tikz_cmd = f"\draw[{self.draw_options}] {self.start} {control_stmt} {self.end};"
-            return tikz_cmd
+    def __init__(self, start, end, draw_options="", to_options="--", control_pts=[]):
+        self.start = start
+        self.end = end
+        self.draw_options = draw_options
+        self.to_options = to_options
+        self.control_pts = control_pts
 
-        @property
-        def midpoint(self):
-            mid_x = round((self.start[0] + self.end[0]) / 2, 7)
-            mid_y = round((self.start[1] + self.end[1]) / 2, 7)
-            return (mid_x, mid_y)
-
-        def shift(self, xshift, yshift):
-            shifted_start_end = shift_coords([self.start, self.end], xshift, yshift)
-            shifted_control_pts = shift_coords(self.control_pts, xshift, yshift)
-
-            self.start, self.end = shifted_start_end[0], shifted_start_end[1]
-            self.control_pts = shifted_control_pts
-
-        def scale(self, scale):
-            scaled = scale_coords([self.start, self.end], scale)
-            self.start, self.end = scaled[0], scaled[1]
-
-        def rotate(self, angle, about_pt=None, radians=False):
-            if about_pt == None:
-                about_pt = self.midpoint
-            rotated = rotate_coords([self.start, self.end], angle, about_pt, radians)
-            self.start, self.end = rotated[0], rotated[1]
-
-        def __repr__(self):
-            return self.code
-
-    # Class for Plotting
-    class PlotCoordinates:
-        """
-        A subclass of TikzPicture to create plots in the tikz environment
-
-        Attributes :
-            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-            draw_options (str) : String containing drawing options (e.g., "Blue")
-            plot_options (str) : String containing the plot options (e.g., "smooth cycle")
-            points (list) : A list of points to be drawn
-
-        """
-
-        def __init__(self, tikz_inst, points, draw_options, plot_options):
-            self.points = points
-            self.draw_options = draw_options
-            self.plot_options = plot_options
-
-        @property
-        def code(self):
-            tikz_cmd = f"\draw{options(self.draw_options)} plot{options(self.plot_options)} coordinates {{"
-            for pt in self.points:
-                tikz_cmd += str(pt) + " "
-            tikz_cmd += "};"
-            return tikz_cmd
-
-        @property
-        def center(self):
-            mean_x = 0
-            mean_y = 0
-            for pt in self.points:
-                mean_x += pt[0]
-                mean_y += pt[1]
-            mean_x = round(mean_x / len(self.points), 7)
-            mean_y = round(mean_y / len(self.points), 7)
-            return (mean_x, mean_y)
-
-        def shift(self, xshift, yshift):
-            self.points = shift_coords(self.points, xshift, yshift)
-
-        def scale(self, scale):
-            self.points = scale_coords(self.points, scale)
-
-        def rotate(self, angle, about_pt=None, radians=False):
-            if about_pt == None:
-                about_pt = self.center
-            self.points = rotate_coords(self.points, angle, about_pt, radians)
-
-        def __repr__(self):
-            return self.code
-
-    # Class for Circles
-    class Circle:
-        """
-        A subclass of TikzPicture to create circles in the tikz environment
-
-        Attributes :
-            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-            position (tuple) : Pair of floats representing the center of the circle
-            radius (float) : Length (in cm) of the radius
-            options (str) : String containing the drawing options (e.g, "Blue")
-        """
-
-        def __init__(self, tikz_inst, center, radius, options):
-            self.center = center
-            self.radius = radius
-            self.options = options
-
-        @property
-        def code(self):
+    @property
+    def code(self):
+        if len(self.control_pts) == 0:
+            tikz_cmd = f"\draw{options(self.draw_options)} {self.start} {self.to_options} {self.end};"
+        else:
+            control_stmt = ".. controls "
+            for pt in self.control_pts:
+                control_stmt += f"{pt[0], pt[1]}" + " and "
+            control_stmt = control_stmt[:-4] + " .."
             tikz_cmd = (
-                f"\draw{options(self.options)} {self.center} circle ({self.radius}cm);"
+                f"\draw[{self.draw_options}] {self.start} {control_stmt} {self.end};"
             )
-            return tikz_cmd
+        return tikz_cmd
 
-        def shift(self, xshift, yshift):
-            self.center = shift_coords([self.center], xshift, yshift)[0]
+    @property
+    def midpoint(self):
+        mid_x = round((self.start[0] + self.end[0]) / 2, 7)
+        mid_y = round((self.start[1] + self.end[1]) / 2, 7)
+        return (mid_x, mid_y)
 
-        def scale(self, scale):
-            self.center = scale_coords([self.center], scale)
+    def shift(self, xshift, yshift):
+        shifted_start_end = shift_coords([self.start, self.end], xshift, yshift)
+        shifted_control_pts = shift_coords(self.control_pts, xshift, yshift)
 
-        def rotate(self, angle, about_pt, radians=False):
-            self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
+        self.start, self.end = shifted_start_end[0], shifted_start_end[1]
+        self.control_pts = shifted_control_pts
 
-        def __repr__(self):
-            return self.code
+    def scale(self, scale):
+        scaled = scale_coords([self.start, self.end], scale)
+        self.start, self.end = scaled[0], scaled[1]
 
-    # Class for Nodes
-    class Node:
-        """
-        A subclass of TikzPicture to create lines in the tikz environment
+    def rotate(self, angle, about_pt=None, radians=False):
+        if about_pt == None:
+            about_pt = self.midpoint
+        rotated = rotate_coords([self.start, self.end], angle, about_pt, radians)
+        self.start, self.end = rotated[0], rotated[1]
 
-        Attributes :
-            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-            position (tuple) : Pair of floats representing the location of the node
-            content (str): Text that will be displayed with the node; can use dollar signs $ for LaTeX
-            options (str) : String containing node options (e.g., "above")
-        """
+    def __repr__(self):
+        return self.code
 
-        def __init__(self, tikz_inst, position, options, content):
-            self.position = position
-            self.content = content
-            self.options = options
 
-        @property
-        def code(self):
-            tikz_cmd = f"\\node{options(self.options)} at {self.position} {{ {self.content} }};"
-            return tikz_cmd
+# Class for Plotting
+class PlotCoordinates:
+    """
+    A subclass of TikzPicture to create plots in the tikz environment
 
-        def shift(self, xshift, yshift):
-            self.position = shift_coords([self.position], xshift, yshift)[0]
+    Attributes :
+        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+        draw_options (str) : String containing drawing options (e.g., "Blue")
+        plot_options (str) : String containing the plot options (e.g., "smooth cycle")
+        points (list) : A list of points to be drawn
 
-        def scale(self, scale):
-            self.position = scale_coords([self.position], scale)[0]
+    """
 
-        def rotate(self, angle, about_pt, radians=False):
-            self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
+    def __init__(self, points, draw_options="", plot_options=""):
+        self.points = points
+        self.draw_options = draw_options
+        self.plot_options = plot_options
 
-        def __repr__(self):
-            return self.code
+    @property
+    def code(self):
+        tikz_cmd = f"\draw{options(self.draw_options)} plot{options(self.plot_options)} coordinates {{"
+        for pt in self.points:
+            tikz_cmd += str(pt) + " "
+        tikz_cmd += "};"
+        return tikz_cmd
 
-    class Rectangle:
-        """
-        A subclass of TikzPicture to create lines in the tikz environment
+    @property
+    def center(self):
+        mean_x = 0
+        mean_y = 0
+        for pt in self.points:
+            mean_x += pt[0]
+            mean_y += pt[1]
+        mean_x = round(mean_x / len(self.points), 7)
+        mean_y = round(mean_y / len(self.points), 7)
+        return (mean_x, mean_y)
 
-        Attributes :
-            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-            left_corner (tuple) : Pair of floats representing the position of the bottom left corner
-            right_corner (tuple) : Pair of floats representing the position of the upper right corner
-            options (str) : String containing the drawing options, e.g, ("Blue")
-        """
+    def shift(self, xshift, yshift):
+        self.points = shift_coords(self.points, xshift, yshift)
 
-        def __init__(self, tikz_inst, left_corner, right_corner, options):
-            self.left_corner = left_corner
-            self.right_corner = right_corner
-            self.options = options
+    def scale(self, scale):
+        self.points = scale_coords(self.points, scale)
 
-        @property
-        def code(self):
-            tikz_cmd = f"\draw{options(self.options)} {self.left_corner} rectangle {self.right_corner};"
-            return tikz_cmd
+    def rotate(self, angle, about_pt=None, radians=False):
+        if about_pt == None:
+            about_pt = self.center
+        self.points = rotate_coords(self.points, angle, about_pt, radians)
 
-        def shift(self, xshift, yshift):
-            shifted_corners = shift_coords(
-                [self.left_corner, self.right_corner], xshift, yshift
-            )
-            self.left_corner = shifted_corners[0]
-            self.right_corner = shifted_corners[1]
+    def __repr__(self):
+        return self.code
 
-        def scale(self, scale):
-            scaled_corners = scale_coords([self.left_corner, self.right_corner], scale)
-            self.left_corner = scaled_corners[0]
-            self.right_corner = scaled_corners[1]
 
-        def rotate(self, angle, about_pt, radians=False):
-            rotated_corners = rotate_coords(
-                [self.left_corner, self.right_corner], angle, about_pt, radians
-            )
-            self.left_corner = rotated_corners[0]
-            self.right_corner = rotated_corners[1]
+# Class for Circles
+class Circle:
+    """
+    A subclass of TikzPicture to create circles in the tikz environment
 
-        def __repr__(self):
-            return self.code
+    Attributes :
+        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+        position (tuple) : Pair of floats representing the center of the circle
+        radius (float) : Length (in cm) of the radius
+        options (str) : String containing the drawing options (e.g, "Blue")
+    """
 
-    class Ellipse:
-        """
-        A subclass of TikzPicture to create lines in the tikz environment
+    def __init__(self, center, radius, options=""):
+        self.center = center
+        self.radius = radius
+        self.options = options
 
-        Attributes :
-            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-            center (tuple) : Pair of floats representing the center of the ellipse
-            horiz_axis (float): The length (in cm) of the horizontal axis of the ellipse
-            vert_axis (float): The length (in cm) of the vertical axis of the ellipse
-        """
+    @property
+    def code(self):
+        tikz_cmd = (
+            f"\draw{options(self.options)} {self.center} circle ({self.radius}cm);"
+        )
+        return tikz_cmd
 
-        def __init__(self, tikz_inst, center, horiz_axis, vert_axis, options):
-            self.center = center
-            self.horiz_axis = horiz_axis
-            self.vert_axis = vert_axis
-            self.options = options
+    def shift(self, xshift, yshift):
+        self.center = shift_coords([self.center], xshift, yshift)[0]
 
-        @property
-        def code(self):
-            tikz_cmd = f"\draw{options(self.options)} {self.center} ellipse ({self.horiz_axis}cm and {self.vert_axis}cm);"
-            return tikz_cmd
+    def scale(self, scale):
+        self.center = scale_coords([self.center], scale)
 
-        def shift(self, xshift, yshift):
-            self.center = shift_coords([self.center], xshift, yshift)[0]
+    def rotate(self, angle, about_pt, radians=False):
+        self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
-        def scale(self, scale):
-            scaled_center = scale_coords([self.center], scale)[0]
-            scaled_h = round(self.horiz_axis * scale, 7)
-            scaled_v = round(self.vert_axis * scale, 7)
+    def __repr__(self):
+        return self.code
 
-            self.center = scaled_center
-            self.horiz_axis = scaled_h
-            self.vert_axis = scaled_v
 
-        def rotate(self, angle, about_pt, radians=False):
-            self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
+# Class for Nodes
+class Node:
+    """
+    A subclass of TikzPicture to create lines in the tikz environment
 
-        def __repr__(self):
-            return self.code
+    Attributes :
+        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+        position (tuple) : Pair of floats representing the location of the node
+        content (str): Text that will be displayed with the node; can use dollar signs $ for LaTeX
+        options (str) : String containing node options (e.g., "above")
+    """
 
-    class Arc:
-        """
-        A subclass of TikzPicture to create lines in the tikz environment
+    def __init__(self, position, options="", content=""):
+        self.position = position
+        self.content = content
+        self.options = options
 
-        Attributes :
-            tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-            center (tuple) : Pair of points representing the relative center of the arc
-            start_angle (float) : The angle of the start of the arc
-            end_angle (float) : The angle of the end of the arc
-            radius (float) : The radius (in cm) of the arc
-            radians (bool) : Set true if inputting radians. Default behavior is for degrees.
-        """
+    @property
+    def code(self):
+        tikz_cmd = (
+            f"\\node{options(self.options)} at {self.position} {{ {self.content} }};"
+        )
+        return tikz_cmd
 
-        def __init__(
-            self, tikz_inst, center, start_angle, end_angle, radius, options, radians
-        ):
-            self.center = center
-            self.start_angle = start_angle
-            self.end_angle = end_angle
-            self.radius = radius
-            self.options = options
+    def shift(self, xshift, yshift):
+        self.position = shift_coords([self.position], xshift, yshift)[0]
 
-            if radians:
-                self.start_angle = round(self.start_angle, 180 / math.pi, 7)
-                self.end_angle = round(self.end_angle, 180 / math.pi, 7)
+    def scale(self, scale):
+        self.position = scale_coords([self.position], scale)[0]
 
-        @property
-        def code(self):
-            tikz_cmd = f"\draw{options(self.options)} {self.center} arc ({self.start_angle}:{self.end_angle}:{self.radius}cm);"
-            return tikz_cmd
+    def rotate(self, angle, about_pt, radians=False):
+        self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
 
-        def shift(self, xshift, yshift):
-            self.center = shift_coords([self.center], xshift, yshift)[0]
+    def __repr__(self):
+        return self.code
 
-        def scale(self, scale):
-            scaled_center = scale_coords([self.center], scale)
-            scaled_radius = round(self.radius * scale, 7)
 
-            self.center = scaled_center[0]
-            self.radius = scaled_radius
+class Rectangle:
+    """
+    A subclass of TikzPicture to create lines in the tikz environment
 
-        def rotate(self, angle, about_pt, radians=False):
-            self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
+    Attributes :
+        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+        left_corner (tuple) : Pair of floats representing the position of the bottom left corner
+        right_corner (tuple) : Pair of floats representing the position of the upper right corner
+        options (str) : String containing the drawing options, e.g, ("Blue")
+    """
 
-        def __repr__(self):
-            return self.code
+    def __init__(self, left_corner, right_corner, options=""):
+        self.left_corner = left_corner
+        self.right_corner = right_corner
+        self.options = options
+
+    @property
+    def code(self):
+        tikz_cmd = f"\draw{options(self.options)} {self.left_corner} rectangle {self.right_corner};"
+        return tikz_cmd
+
+    def shift(self, xshift, yshift):
+        shifted_corners = shift_coords(
+            [self.left_corner, self.right_corner], xshift, yshift
+        )
+        self.left_corner = shifted_corners[0]
+        self.right_corner = shifted_corners[1]
+
+    def scale(self, scale):
+        scaled_corners = scale_coords([self.left_corner, self.right_corner], scale)
+        self.left_corner = scaled_corners[0]
+        self.right_corner = scaled_corners[1]
+
+    def rotate(self, angle, about_pt, radians=False):
+        rotated_corners = rotate_coords(
+            [self.left_corner, self.right_corner], angle, about_pt, radians
+        )
+        self.left_corner = rotated_corners[0]
+        self.right_corner = rotated_corners[1]
+
+    def __repr__(self):
+        return self.code
+
+
+class Ellipse:
+    """
+    A subclass of TikzPicture to create lines in the tikz environment
+
+    Attributes :
+        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+        center (tuple) : Pair of floats representing the center of the ellipse
+        horiz_axis (float): The length (in cm) of the horizontal axis of the ellipse
+        vert_axis (float): The length (in cm) of the vertical axis of the ellipse
+    """
+
+    def __init__(self, center, horiz_axis, vert_axis, options=""):
+        self.center = center
+        self.horiz_axis = horiz_axis
+        self.vert_axis = vert_axis
+        self.options = options
+
+    @property
+    def code(self):
+        tikz_cmd = f"\draw{options(self.options)} {self.center} ellipse ({self.horiz_axis}cm and {self.vert_axis}cm);"
+        return tikz_cmd
+
+    def shift(self, xshift, yshift):
+        self.center = shift_coords([self.center], xshift, yshift)[0]
+
+    def scale(self, scale):
+        scaled_center = scale_coords([self.center], scale)[0]
+        scaled_h = round(self.horiz_axis * scale, 7)
+        scaled_v = round(self.vert_axis * scale, 7)
+
+        self.center = scaled_center
+        self.horiz_axis = scaled_h
+        self.vert_axis = scaled_v
+
+    def rotate(self, angle, about_pt, radians=False):
+        self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
+
+    def __repr__(self):
+        return self.code
+
+
+class Arc:
+    """
+    A subclass of TikzPicture to create lines in the tikz environment
+
+    Attributes :
+        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
+        center (tuple) : Pair of points representing the relative center of the arc
+        start_angle (float) : The angle of the start of the arc
+        end_angle (float) : The angle of the end of the arc
+        radius (float) : The radius (in cm) of the arc
+        radians (bool) : Set true if inputting radians. Default behavior is for degrees.
+    """
+
+    def __init__(
+        self, center, start_angle, end_angle, radius, options="", radians=False
+    ):
+        self.center = center
+        self.start_angle = start_angle
+        self.end_angle = end_angle
+        self.radius = radius
+        self.options = options
+
+        if radians:
+            self.start_angle = round(self.start_angle, 180 / math.pi, 7)
+            self.end_angle = round(self.end_angle, 180 / math.pi, 7)
+
+    @property
+    def code(self):
+        tikz_cmd = f"\draw{options(self.options)} {self.center} arc ({self.start_angle}:{self.end_angle}:{self.radius}cm);"
+        return tikz_cmd
+
+    def shift(self, xshift, yshift):
+        self.center = shift_coords([self.center], xshift, yshift)[0]
+
+    def scale(self, scale):
+        scaled_center = scale_coords([self.center], scale)
+        scaled_radius = round(self.radius * scale, 7)
+
+        self.center = scaled_center[0]
+        self.radius = scaled_radius
+
+    def rotate(self, angle, about_pt, radians=False):
+        self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
+
+    def __repr__(self):
+        return self.code
 
 
 """ Shifting, Scaling, and Rotating calculations called by above methods
@@ -859,7 +875,10 @@ if __name__ == "__main__":
     tikz = TikzPicture()
     # Line
     line = tikz.line(
-        (0, 0), (1, 1), options="thick, blue", control_pts=[(0.25, 0.25), (0.75, 0.75)]
+        (0, 0),
+        (1, 1),
+        draw_options="thick, blue",
+        control_pts=[(0.25, 0.25), (0.75, 0.75)],
     )
     # Plot
     plot = tikz.plot_coords(
