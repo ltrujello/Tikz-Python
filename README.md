@@ -35,6 +35,8 @@ Ellipse       | `\draw (0,0) ellipse (2cm and 4cm)`      | `tikz.ellipse((0,0), 
 Arc           | `\draw (1,1) arc (45:90:5cm)`            | `tikz.arc((1,1), 45, 90, 5)`
 Node          | `\node[above] at (0,0) {I am a node!};`  | `tikz.node((0,0), "I am a node!", "above")`
 Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.plot_coords(draw_options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`|	
+Scope| `\begin{scope} ... \end{scope}` | `tikz.scope()`|
+Clip | `\clip[draw] (0,0) circle (5cm)`| `tikz.scope.clip(circle((0,0), 2), draw = True)`
 
 Again: The difference with TikZ, and with other Python-Tikz mashups, is that the above python calls are class instances that we can subject to further manipulations.
 
@@ -118,10 +120,10 @@ One can also create a function to perform the n-th barycentric subdivision of a 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 250/>
 
-# Methods for Class: `TikzPicture`
+# Class: `TikzPicture`
 Initialize an object of the class as below:
 ```python
-tikz = TikzPicture(tikz_file = "tikz_code/tikz-code.tex", center = False, options = "")
+tikz = TikzPicture(tikz_file, center , options)
 ```
 We describe the methods for this class as below. 
 
@@ -158,13 +160,17 @@ Even though I called `tikz.write()`, I can still add code, and make changes to m
 >>> another_circle = tikz.circle((1,1), 2, options = "Red") # I want another circle...
 >>> circle.center = (2,2) # I want to change my other circle's center...
 >>> tikz.write() 
->>> tikz # same code as before, with the new red circle added
+>>> tikz # We get what we'd expect  
 ... \begin{tikzpicture}[]% TikzPython id = (1) 
 	\draw[Blue] (2, 2) circle (2cm);
 	\draw[Red] (1, 1) circle (2cm);
 \end{tikzpicture}
 ```
 This feature, in combination with `.remove()` and `.show()` (see below), allows you to gradually build and view a tikzpicture quite painlessly.
+
+### `TikzPicture.add_statement(str)`
+Manually add a valid line of Tikz code to the environment. This is for the off-chance that the user would rather manually type something into their tikzpicture.
+
 
 ### `TikzPicture.remove(draw_obj)`
 Removes a drawing object, such as a line, from a TikzPicture. 
@@ -197,8 +203,6 @@ Below, we create a line and two circles, and then add them later.
 ```
 
 
-
-
 ### `TikzPicture.show()`
 Pulls up a PDF of the current drawing to the user in your browser (may default to your PDF viewer). Of course, execute `TikzPicture.write()` prior in order to view your latest changes. 
 
@@ -223,8 +227,8 @@ Coloring Tikz pictures in TeX tends to be annoying. A goal of this has been to m
 ```
 
 
-# Methods for Class: `Line`
-There  are two ways to initalize a line object. We've already seen this way:
+# Class: `Line`
+There are two ways to initalize a line object. We've already seen this way:
 ```python
 tikz = TikzPicture()
 line = tikz.line(start, end, options, to_options, control_pts) # A line is created and drawn
@@ -268,7 +272,7 @@ Scales a line by an amount `scale`, usually a python float.
 Rotates a line counterclockwise by angle `angle` relative to the point `about_pt`. One can specify their angle units via the boolean `radians`. If `about_pt` is not specified, the default is to rotate the line about its midpoint.
 
 
-## Methods for Class: `PlotCoordinates`
+# Class: `PlotCoordinates`
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
@@ -314,7 +318,7 @@ generates the image
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/PlotCoords_rotate_Example.png" height = 300/>
 
 
-## Methods for Class: `Circle`
+# Class: `Circle`
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
@@ -337,7 +341,7 @@ Parameter    | Description | Default|
 `Circle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
 
-## Methods for Class: `Node`
+# Class: `Node`
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
@@ -358,7 +362,7 @@ Parameter    | Description | Default|
 
 `Node` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
-## Methods for Class: `Rectangle`
+# Class: `Rectangle`
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
@@ -378,7 +382,7 @@ Parameter    | Description | Default|
 
 `Rectangle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
-## Methods for Class: `Ellipse`
+# Class: `Ellipse`
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
@@ -399,7 +403,7 @@ Parameter    | Description | Default|
 `Ellipse` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
 
-## Methods for Class: `Arc`
+# Class: `Arc`
 Initialize an object of the class as below:
 
 ```python
@@ -421,3 +425,43 @@ Parameter    | Description | Default|
 `radius` (float) | The radius (in cm) of the arc |
 
 `Arc` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
+
+# Class: Scope
+Initialize a Tikz scope environment as follows:
+```python
+tikz = TikzPicture()
+scope = Scope(options)
+```
+Or more directly as 
+```python
+scope = Scope(options)
+```
+As one may guess, `options` is any string of valid Tikz scoping options (i.e., options which become applied to the elements within the scoping evnironment). 
+
+### `Scope.append(draw_obj)`
+Appends any drawing object `draw_obj` to the scope environment. If one updates an attribute of a drawing object even after it has been appended, the updates are reflected in scope. 
+
+### `Scope.remove(draw_obj)`
+Removes a drawing object `draw_obj` which has been appended to the scoping environment.
+
+### `Scope.clip(draw_obj, draw)`
+Clips the drawing object `draw_obj` from the scope environment by creating an instance of the class `Clip`. Here, `draw` is a boolean regarding whether or not you want to actually draw what you are clipping. It is set to `False` by default. 
+
+The class `Scope` also as access to methods `.shift()`, `.scale()`, `.rotate()`. In this case, such operations are applied to every single member of the scoping environment, made possible by the fact that every drawing object itself has access to these methods. These work as one would expect, which is unlike Tikz, since sometimes applying transformations to scoping environments in Tikz does not behave intuitively. 
+
+# Class: Clip
+A class to clip a single drawing object `draw_obj`.
+One can initialize an instance of this class via an instance of `Scope`:
+```python
+tikz = TikzPicture()
+scope = tikz.scope()
+clip = scope.clip(draw_obj, draw)
+```
+or more directly as 
+```python
+clip = Clip(draw_obj, draw).
+```
+As before, `draw` is a boolean set to `False` by default.
+
+The class `Clip` has access to methods `.shift()`, `.scale()`, `.rotate()`, 
+although this is more for consistency (e.g., in case a `Scope` environment changes) and less for direct use of the user. 

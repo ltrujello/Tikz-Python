@@ -3,6 +3,7 @@ import math
 import subprocess
 import webbrowser
 from pathlib import Path
+from copy import copy, deepcopy
 
 """ _N_TIKZs: records the number of TikZ environments created.
 
@@ -27,9 +28,6 @@ class TikzPicture:
     """
 
     def __init__(self, tikz_file="tikz_code/tikz-code.tex", center=False, options=""):
-        # TODO: improve unit tests (verify shift and scale work, ...)
-        # TODO: figure out a nice way to implement scope
-        # TODO: Raise typerror if user puts in a pair of numbers instead of a tuple
         global _N_TIKZs
         # Create a Tikz Environment
         self.tikz_file = Path(tikz_file)
@@ -44,19 +42,18 @@ class TikzPicture:
                 with open(self.tikz_file.resolve(), "w"):
                     pass
             except:
-                print(f"Could not find or create file at {self.tikz_file}.")
+                print(f"Could not find file at {self.tikz_file}.")
                 answer = input("Want to make it? (Y/N)")
                 if answer == "y" or answer == "Y":
                     # Make directory, then file
                     self.tikz_file.parent.mkdir(parents=True)
                     with open(self.tikz_file.resolve(), "w+"):
                         pass
-                    print("Created!")
-            else:
-                print("Not created.")
                 print(
                     f"File created at {str(self.tikz_file.resolve())}, tikz_code will output there"
                 )
+            else:
+                print("Not created.")
         # Upon successful creation of an object, we create increase the counter
         _N_TIKZs += 1
 
@@ -67,7 +64,7 @@ class TikzPicture:
           Such an ID is of the form of a TeX comment " % TikzPython id = ({self._id}) "
         * This is to ensure safe, efficient file update and deletion processes.
         """
-        return f"\\begin{{tikzpicture}}{options(self.options)}% TikzPython id = ({self._id}) \n"
+        return f"\\begin{{tikzpicture}}{braces(self.options)}% TikzPython id = ({self._id}) \n"
 
     @property
     def end(self):
@@ -78,39 +75,35 @@ class TikzPicture:
     def tex_file(self):
         r"""Takes care of the TeX file, containing necessary \usepackage{...} and \usetikzlibrary{...} statements,
         which is used to call the Tikz code and compile it.
-        * The TeX file is stored in a hidden folder "./tex", in the same directory as self.tikz_file.
+        * The TeX file is stored in a folder "/tex", in the same directory as self.tikz_file.
             * This is to make everything easier for the user. They don't have to waste their time with the tedious task
               of sorting and connecting their files together, figuring out full paths, dealing with the stupid .aux, .log... files,
               figuring our \input{...}, etc. This process is automatic.
             * When a PDF compiles, the pdf is moved to the same directory as self.tikz_file
               so the user can see it. (All those moronic .log, .aux files are left behind in the hidden folder,
               another benefit of this approach).
-        Overall, the user doesn't really need to tamper with the file at all. They can still look at it
-        to see what \usepackage{...} and \usetikzlibrary{...} imports that we're using, though.
+        * The only reason the user will need to change the TeX file is if they change the file name of self.tikz_file.
+        Ideally, the program could take care of this. But there isn't a robust way of updating the \input{...} statement in the
+        TeX file without risking the user's TeX contents from being wiped (e.g., they may remove some comments that helps the program
+        find what line to update). Alternatively, I could warn the user of this, but an
+        unwise user could nevertheless put their hard work into such a file and then risk it being wiped.
         """
-        tikz_path = str(
-            self.tikz_file.resolve().parents[0]
-        )  # Full path for self.tikz_file
-        tex_file = Path(
-            tikz_path + "/.tex/tex_file.tex"
-        )  # Full path for the hidden tex_file
-        # Check if the folder exists. If so, create the hidden folder .tex/
+        # Full paths for self.tikz_file and the tex_file
+        tikz_path = str(self.tikz_file.resolve().parents[0])
+        # Full path for the hidden tex_file
+        tex_file = Path(tikz_path + "/tex/tex_file.tex")
+        # Check if the folder exists. If so, create the hidden folder tex/ and populate it with appropriate code using our template
         if not tex_file.exists():
             tex_file.parent.mkdir(parents=True)
-            # Create the tex file in the hiden folder
-            with open(str(tex_file.resolve()), "w+") as f:
-                pass
-        # It's possible the user changed self.tikz_file. In that case we need to update self.tex_file
-        # TODO: Don't forget, the user may have done something dumb with this file. In action, this needs to be in a safe place.
-        template_file = Path("/template/tex_file.tex")
-        with open(str(template_file.resolve())) as f:
-            lines = f.readlines()
-        with open(tikz_path + "/.tex/tex_file.tex", "w") as f:
-            for line in lines:
-                if line[:6] == "\\input":
-                    f.write(f"\\input{{{str(self.tikz_file.resolve())}}}")
-                else:
-                    f.write(line)
+            template_file = Path("/template/tex_file.tex")
+            with open(str(template_file.resolve())) as f:
+                lines = f.readlines()
+            with open(tikz_path + "/tex/tex_file.tex", "w") as f:
+                for line in lines:
+                    if line[:6] == "\\input":
+                        f.write(f"\\input{{{str(self.tikz_file.resolve())}}}")
+                    else:
+                        f.write(line)
         return tex_file
 
     @property
@@ -118,6 +111,7 @@ class TikzPicture:
         """A dictionary to keep track of the current Tikz code we've commanded. This is for the program.
         keys : instances of subclasses created (e.g, Line)
         values : the Tikz code of the instance (e.g., Line.code)
+        This makes sure we reflect the changes to the drawing objects the user has made externally.
         """
         statement_dict = {}
         for draw_obj in self._statements:
@@ -140,8 +134,7 @@ class TikzPicture:
         return code
 
     def __repr__(self):
-        print(self.code)
-        return ""
+        return self.code
 
     def remove(self, draw_obj):
         """A method to remove a code statement from the Tikz environment, e.g., a line."""
@@ -151,6 +144,13 @@ class TikzPicture:
         """User can also manually add their drawing object. """
         for draw_obj in args:
             self._statements[draw_obj] = draw_obj.code
+
+    # TODO: Test if this works
+    def add_command(self, tikz_statement):
+        """Manually add a string of valid Tikz code into the Tikz environment."""
+        command = TikzCommand(tikz_statement)
+        self.draw(command)
+        return command
 
     def write(self, overwrite=True):
         """Our method to write the current recorded Tikz code into self.tikz_file, a .tex file somewhere.
@@ -195,7 +195,6 @@ class TikzPicture:
                     break
 
             # If we found our begin statement, then we know we've written in the file before.
-            # In this case, we carefully update the file.
             if begin_ind != -1:
                 assert (
                     end_ind != -1
@@ -240,10 +239,8 @@ class TikzPicture:
             _N_TIKZs += 1
 
         # Finally, we move onto compiling our PDF.
-        # First we get the full path and filename.
         tex_file_parents = str(self.tex_file.resolve().parents[0])
         tex_filename = self.tex_file.stem
-        # Now we have our tex file paths.
         tex_file = tex_file_parents + "/" + tex_filename + ".tex"
         # We now compile the PDF
         subprocess.run(
@@ -257,38 +254,35 @@ class TikzPicture:
     # Display the current tikz drawing
     def show(self):
         """Displays the pdf of the TikzPicture to the user."""
-        # Location of the PDF
         pdf_file_path = (
             str(self.tex_file.parents[1]) + "/" + self.tex_file.stem + ".pdf"
         )
         pdf = Path(pdf_file_path).resolve()
-        # Check if the PDF exists
         if not pdf.is_file():
             print(
                 f"\nCouldn't find the PDF in {pdf_file_path}. Perhaps you forgot to compile it with .write() first? \n"
             )
-        # Use webbrowser to open it
         webbrowser.open_new("file://" + pdf_file_path)
 
     """
         Methods to code objects in the Tikz Environment
     """
 
-    def line(self, start, end, draw_options="", to_options="--", control_pts=[]):
+    def line(self, start, end, options="", to_options="--", control_pts=[]):
         """Draws a line by creating an instance of the Line class.
         Upon creation, we update self._statements with our new code.
         * Key feature: If we update any attributes of our line, the changes
           to the Tikz code are automatically reflected in self._statements.
         """
-        line = Line(start, end, draw_options, to_options, control_pts)
+        line = Line(start, end, options, to_options, control_pts)
         self.draw(line)
         return line
 
-    def plot_coords(self, points, draw_options="", plot_options=""):
+    def plot_coords(self, points, options="", plot_options=""):
         """Draws a plot coordinates statement by creating an instance of the PlotCoordinates class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        plot_coords = PlotCoordinates(points, draw_options, plot_options)
+        plot_coords = PlotCoordinates(points, options, plot_options)
         self.draw(plot_coords)
         return plot_coords
 
@@ -332,15 +326,65 @@ class TikzPicture:
         self.draw(arc)
         return arc
 
-    """
-        Classes for drawing
-    """
+    def scope(self, options=""):
+        scope = Scope(options)
+        self.draw(scope)
+        return scope
+
+
+"""
+    Classes for drawing
+"""
+
+# TODO: Test if this class works
+class TikzCommand:
+    """A class to handle manually typed Tikz code. """
+
+    def __init__(self, code):
+        self.code = code
+
+    def __repr__(self):
+        return self.code
+
+
+class _DrawingObject:
+    """A generic class for our drawing objects to inherit properties from.
+    This class serveees"""
+
+    def __init__(self, action, options="", command=""):  # action is usually "draw"
+        self.action = action
+        self.options = options
+        self.command = ""
+
+    @property
+    def code(self):
+        """Full Tikz code for this drawing object."""
+        return f"\{self.action}{braces(self.options)} {self._command}"
+
+    def __deepcopy__(self, memo):
+        """Creates a deep copy of a class object. This is useful since in our classes, we chose to set
+        our methods to modify objects, but not return anything.
+        """
+        print("Copied!")
+        cls = self.__class__
+        draw_obj = cls.__new__(cls)
+        memo[id(self)] = draw_obj
+        for k, v in self.__dict__.items():
+            setattr(draw_obj, k, deepcopy(v, memo))
+        return draw_obj
+
+    def copy(self):
+        """Wrapper for deepcopy."""
+        return deepcopy(self)
+
+    def __repr__(self):
+        return self.code
 
 
 # Class for Lines
-class Line:
+class Line(_DrawingObject):
     """
-    A subclass of TikzPicture to create lines in the tikz environment
+    A class to create lines in the tikz environment
 
     Attributes :
         tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
@@ -350,26 +394,37 @@ class Line:
         control_pts (list): List of control points for the line
     """
 
-    def __init__(self, start, end, draw_options="", to_options="--", control_pts=[]):
+    def __init__(
+        self,
+        start,
+        end,
+        options="",
+        to_options="to",
+        control_pts=[],
+        action="draw",
+    ):
         self.start = start
         self.end = end
-        self.draw_options = draw_options
+        self.options = options
         self.to_options = to_options
         self.control_pts = control_pts
 
+        super().__init__(action, self.options, self._command)
+
     @property
-    def code(self):
+    def _command(self):
+        """The Tikz code for a line that comes after \draw[self.options]. It is useful for
+        us to do this breaking-up of the Tikz code, especially for clipping. However, this
+        serves no use to the user, so we make it private (well, it's just bells and whistles).
+        """
         if len(self.control_pts) == 0:
-            tikz_cmd = f"\draw{options(self.draw_options)} {self.start} {self.to_options} {self.end};"
+            return f"{self.start} to{braces(self.to_options)} {self.end};"
         else:
             control_stmt = ".. controls "
             for pt in self.control_pts:
                 control_stmt += f"{pt[0], pt[1]}" + " and "
             control_stmt = control_stmt[:-4] + " .."
-            tikz_cmd = (
-                f"\draw[{self.draw_options}] {self.start} {control_stmt} {self.end};"
-            )
-        return tikz_cmd
+            return f"{self.start} {control_stmt} {self.end};"
 
     @property
     def midpoint(self):
@@ -378,6 +433,7 @@ class Line:
         return (mid_x, mid_y)
 
     def shift(self, xshift, yshift):
+        """Shift start, end, and control_pts"""
         shifted_start_end = shift_coords([self.start, self.end], xshift, yshift)
         shifted_control_pts = shift_coords(self.control_pts, xshift, yshift)
 
@@ -385,44 +441,49 @@ class Line:
         self.control_pts = shifted_control_pts
 
     def scale(self, scale):
-        scaled = scale_coords([self.start, self.end], scale)
+        """Scale start, end, and control_pts."""
+        scaled_start_end = scale_coords([self.start, self.end], scale)
         self.start, self.end = scaled[0], scaled[1]
+        self.control_pts = scale_coords(self.control_pts, scale)
 
     def rotate(self, angle, about_pt=None, radians=False):
+        """Rotate start, end, and control_pts"""
         if about_pt == None:
             about_pt = self.midpoint
-        rotated = rotate_coords([self.start, self.end], angle, about_pt, radians)
-        self.start, self.end = rotated[0], rotated[1]
+        rotated_start_end = rotate_coords(
+            [self.start, self.end], angle, about_pt, radians
+        )
 
-    def __repr__(self):
-        return self.code
+        self.start, self.end = rotated_start_end[0], rotated_start_end[1]
+        self.control_pts = rotate_coords(self.control_pts, angle, about_pt, radians)
 
 
 # Class for Plotting
-class PlotCoordinates:
+class PlotCoordinates(_DrawingObject):
     """
-    A subclass of TikzPicture to create plots in the tikz environment
+    A class to create plots in the tikz environment
 
     Attributes :
         tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
-        draw_options (str) : String containing drawing options (e.g., "Blue")
+        options (str) : String containing drawing options (e.g., "Blue")
         plot_options (str) : String containing the plot options (e.g., "smooth cycle")
         points (list) : A list of points to be drawn
 
     """
 
-    def __init__(self, points, draw_options="", plot_options=""):
+    def __init__(self, points, options="", plot_options="", action="draw"):
         self.points = points
-        self.draw_options = draw_options
+        self.options = options
         self.plot_options = plot_options
+        super().__init__(action, self.options, self._command)
 
     @property
-    def code(self):
-        tikz_cmd = f"\draw{options(self.draw_options)} plot{options(self.plot_options)} coordinates {{"
+    def _command(self):
+        cmd = f"plot{braces(self.plot_options)} coordinates {{"
         for pt in self.points:
-            tikz_cmd += str(pt) + " "
-        tikz_cmd += "};"
-        return tikz_cmd
+            cmd += str(pt) + " "
+        cmd += "};"
+        return cmd
 
     @property
     def center(self):
@@ -446,14 +507,11 @@ class PlotCoordinates:
             about_pt = self.center
         self.points = rotate_coords(self.points, angle, about_pt, radians)
 
-    def __repr__(self):
-        return self.code
-
 
 # Class for Circles
-class Circle:
+class Circle(_DrawingObject):
     """
-    A subclass of TikzPicture to create circles in the tikz environment
+    A class to create circles in the tikz environment
 
     Attributes :
         tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
@@ -462,17 +520,15 @@ class Circle:
         options (str) : String containing the drawing options (e.g, "Blue")
     """
 
-    def __init__(self, center, radius, options=""):
+    def __init__(self, center, radius, options="", action="draw"):
         self.center = center
         self.radius = radius
         self.options = options
+        super().__init__(action, self.options, self._command)
 
     @property
-    def code(self):
-        tikz_cmd = (
-            f"\draw{options(self.options)} {self.center} circle ({self.radius}cm);"
-        )
-        return tikz_cmd
+    def _command(self):
+        return f"{self.center} circle ({self.radius}cm);"
 
     def shift(self, xshift, yshift):
         self.center = shift_coords([self.center], xshift, yshift)[0]
@@ -483,33 +539,28 @@ class Circle:
     def rotate(self, angle, about_pt, radians=False):
         self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
-    def __repr__(self):
-        return self.code
-
 
 # Class for Nodes
-class Node:
+class Node(_DrawingObject):
     """
-    A subclass of TikzPicture to create lines in the tikz environment
+    A class to create lines in the tikz environment
 
     Attributes :
         tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
         position (tuple) : Pair of floats representing the location of the node
-        content (str): Text that will be displayed with the node; can use dollar signs $ for LaTeX
+        text (str): Text that will be displayed with the node; can use dollar signs $ for LaTeX
         options (str) : String containing node options (e.g., "above")
     """
 
-    def __init__(self, position, options="", content=""):
+    def __init__(self, position, options="", text=""):
         self.position = position
-        self.content = content
+        self.text = text
         self.options = options
+        super().__init__("node", self.options, self._command)
 
     @property
-    def code(self):
-        tikz_cmd = (
-            f"\\node{options(self.options)} at {self.position} {{ {self.content} }};"
-        )
-        return tikz_cmd
+    def _command(self):
+        return f"at {self.position} {{ {self.text} }};"
 
     def shift(self, xshift, yshift):
         self.position = shift_coords([self.position], xshift, yshift)[0]
@@ -520,13 +571,10 @@ class Node:
     def rotate(self, angle, about_pt, radians=False):
         self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
 
-    def __repr__(self):
-        return self.code
 
-
-class Rectangle:
+class Rectangle(_DrawingObject):
     """
-    A subclass of TikzPicture to create lines in the tikz environment
+    A class to create lines in the tikz environment
 
     Attributes :
         tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
@@ -535,15 +583,15 @@ class Rectangle:
         options (str) : String containing the drawing options, e.g, ("Blue")
     """
 
-    def __init__(self, left_corner, right_corner, options=""):
+    def __init__(self, left_corner, right_corner, options="", action="draw"):
         self.left_corner = left_corner
         self.right_corner = right_corner
         self.options = options
+        super().__init__(action, self.options, self._command)
 
     @property
-    def code(self):
-        tikz_cmd = f"\draw{options(self.options)} {self.left_corner} rectangle {self.right_corner};"
-        return tikz_cmd
+    def _command(self):
+        return f"{self.left_corner} rectangle {self.right_corner};"
 
     def shift(self, xshift, yshift):
         shifted_corners = shift_coords(
@@ -564,13 +612,10 @@ class Rectangle:
         self.left_corner = rotated_corners[0]
         self.right_corner = rotated_corners[1]
 
-    def __repr__(self):
-        return self.code
 
-
-class Ellipse:
+class Ellipse(_DrawingObject):
     """
-    A subclass of TikzPicture to create lines in the tikz environment
+    A class to create lines in the tikz environment
 
     Attributes :
         tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
@@ -579,16 +624,16 @@ class Ellipse:
         vert_axis (float): The length (in cm) of the vertical axis of the ellipse
     """
 
-    def __init__(self, center, horiz_axis, vert_axis, options=""):
+    def __init__(self, center, horiz_axis, vert_axis, options="", action="draw"):
         self.center = center
         self.horiz_axis = horiz_axis
         self.vert_axis = vert_axis
         self.options = options
+        super().__init__(action, self.options, self._command)
 
     @property
-    def code(self):
-        tikz_cmd = f"\draw{options(self.options)} {self.center} ellipse ({self.horiz_axis}cm and {self.vert_axis}cm);"
-        return tikz_cmd
+    def _command(self):
+        return f"{self.center} ellipse ({self.horiz_axis}cm and {self.vert_axis}cm);"
 
     def shift(self, xshift, yshift):
         self.center = shift_coords([self.center], xshift, yshift)[0]
@@ -605,13 +650,10 @@ class Ellipse:
     def rotate(self, angle, about_pt, radians=False):
         self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
-    def __repr__(self):
-        return self.code
 
-
-class Arc:
+class Arc(_DrawingObject):
     """
-    A subclass of TikzPicture to create lines in the tikz environment
+    A class to create lines in the tikz environment
 
     Attributes :
         tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
@@ -623,7 +665,14 @@ class Arc:
     """
 
     def __init__(
-        self, center, start_angle, end_angle, radius, options="", radians=False
+        self,
+        center,
+        start_angle,
+        end_angle,
+        radius,
+        options="",
+        radians=False,
+        action="draw",
     ):
         self.center = center
         self.start_angle = start_angle
@@ -635,10 +684,13 @@ class Arc:
             self.start_angle = round(self.start_angle, 180 / math.pi, 7)
             self.end_angle = round(self.end_angle, 180 / math.pi, 7)
 
+        super().__init__(action, self.options, self._command)
+
     @property
-    def code(self):
-        tikz_cmd = f"\draw{options(self.options)} {self.center} arc ({self.start_angle}:{self.end_angle}:{self.radius}cm);"
-        return tikz_cmd
+    def _command(self):
+        return (
+            f"{self.center} arc ({self.start_angle}:{self.end_angle}:{self.radius}cm);"
+        )
 
     def shift(self, xshift, yshift):
         self.center = shift_coords([self.center], xshift, yshift)[0]
@@ -653,8 +705,109 @@ class Arc:
     def rotate(self, angle, about_pt, radians=False):
         self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
+
+"""
+    End of Drawing Object classes
+"""
+
+
+# TODO: Test if this class works
+class Scope:
+    """A class to create a scope environment."""
+
+    def __init__(self, options=""):
+        self.options = ""
+        self._scope_statements = {}
+
+    @property
+    def begin(self):
+        return f"\\begin{{scope}}{braces(self.options)}\n"
+
+    @property
+    def end(self):
+        return "\\end{scope}\n"
+
+    @property
+    def scope_statements(self):
+        """A dictionary to keep track of the current scope statements.
+        keys : instances of subclasses created (e.g, Line)
+        values : the Tikz code of the instance (e.g., Line.code)
+        This makes sure we reflect the changes to the drawing objects the user has made externally.
+        """
+        statement_dict = {}
+        for draw_obj in self._scope_statements:
+            statement_dict[draw_obj] = draw_obj.code
+        return statement_dict
+
+    @property
+    def code(self):
+        """A string contaning the statements in the scope."""
+        code = self.begin
+        for draw_obj in self.scope_statements:
+            code += "\t" + draw_obj.code + "\n"
+        code += self.end
+        return code
+
     def __repr__(self):
         return self.code
+
+    def remove(self, draw_obj):
+        """Remove a statement from the scope environment"""
+        del self._scope_statements[draw_obj]
+
+    def append(self, *args):
+        """Append a drawing object to the scope statement"""
+        for draw_obj in args:
+            self._scope_statements[draw_obj] = draw_obj.code
+
+    def clip(self, draw_obj, draw=False):
+        """Clip a drawing object in the scope environment"""
+        clip = Clip(draw_obj, draw=draw)
+        self.append(clip)
+
+    # TODO: Test if these three methods work.
+    def shift(self, xshift, yshift):
+        for draw_obj in self._scope_statements:
+            draw_obj.shift(xshift, yshift)
+
+    def scale(self, scale):
+        for draw_obj in self._scope_statements:
+            draw_obj.scale(scale)
+
+    def rotate(self, angle, about_pt, radians=False):
+        for draw_obj in self._scope_statements:
+            draw_obj.rotate(angle, about_pt, radians)
+
+
+class Clip:
+    """A class for a clipping code statement."""
+
+    def __init__(self, draw_obj, draw=False):
+        if isinstance(
+            draw_obj, (Line, PlotCoordinates, Circle, Node, Rectangle, Ellipse, Arc)
+        ):
+            self.draw_obj = draw_obj
+            self.draw = draw
+        else:
+            raise TypeError(
+                f"Clip argument {draw_obj} must be an instance of a drawing class."
+            )
+
+    @property
+    def code(self):
+        if self.draw == True:
+            return f"\clip[preaction = {{draw, {self.draw_obj.options}}}] {self.draw_obj._command}"
+        else:
+            return f"\clip {self.draw_obj._command}"
+
+    def shift(self, xshift, yshift):
+        self.draw_obj.shift(xshift, yshift)
+
+    def scale(self, scale):
+        self.draw_obj.scale(scale)
+
+    def rotate(self, angle, about_pt, radians=False):
+        self.draw_obj.rotate(angle, about_pt, radians)
 
 
 """ Shifting, Scaling, and Rotating calculations called by above methods
@@ -730,7 +883,10 @@ def rotate_coords(coords, angle, about_pt, radians=False):  # rotate countercloc
 
 
 def recenter_to_origin(coords):
-    """Shifts a set of 2D points such that their center corresponds to the origin."""
+    """Shifts a set of 2D points such that their centroid corresponds to the origin.
+    This is useful for scaling: One may notice that scaling changes their (x,y) coordinates. Running this before
+    scaling can allow them to relatively scale their figure such that the position of the figure does not change.
+    """
     x_mean = 0
     y_mean = 0
     for point in coords:
@@ -771,7 +927,7 @@ def rainbow_colors(i):
 """
 
 
-def options(string):
+def braces(string):
     """A helper function for creating tikz code.
     Basically, if the string is empty, we don't obtain brackets [].
     """
@@ -877,12 +1033,12 @@ if __name__ == "__main__":
     line = tikz.line(
         (0, 0),
         (1, 1),
-        draw_options="thick, blue",
+        options="thick, blue",
         control_pts=[(0.25, 0.25), (0.75, 0.75)],
     )
     # Plot
     plot = tikz.plot_coords(
-        draw_options="green",
+        options="green",
         plot_options="smooth ",
         points=[(1, 1), (2, 2), (3, 3), (2, -4)],
     )
@@ -905,14 +1061,14 @@ if __name__ == "__main__":
         # Test Line
         assert line.start == (0, 0)
         assert line.end == (1, 1)
-        assert line.draw_options == "thick, blue"
+        assert line.options == "thick, blue"
         assert line.control_pts == [(0.25, 0.25), (0.75, 0.75)]
         assert (
             line.code
             == "\\draw[thick, blue] (0, 0) .. controls (0.25, 0.25) and (0.75, 0.75)  .. (1, 1);"
         )
         # Test Plot
-        assert plot.draw_options == "green"
+        assert plot.options == "green"
         assert plot.plot_options == "smooth "
         assert plot.points == [(1, 1), (2, 2), (3, 3), (2, -4)]
         assert (
@@ -926,7 +1082,7 @@ if __name__ == "__main__":
         assert circle.code == "\\draw[fill = purple] (1, 1) circle (1cm);"
         # Test Node
         assert node.position == (3, 3)
-        assert node.content == "I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !"
+        assert node.text == "I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !"
         assert node.options == "above"
         assert (
             node.code
