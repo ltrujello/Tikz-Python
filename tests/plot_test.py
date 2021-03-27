@@ -17,18 +17,16 @@ points = [
 ]
 
 for i in range(0, 5):
-    draw_options = f"fill = {rainbow_colors(i)}, opacity = 0.7"
+    options = f"fill = {rainbow_colors(i)}, opacity = 0.7"
     plot_options = "smooth, tension=.5, closed hobby"
 
     # Make a plot, but don't draw it yet
-    plot = PlotCoordinates(points, draw_options, plot_options)
+    plot = PlotCoordinates(points, options, plot_options)
     center_before = plot.center
     plot.shift(i % 2, 1.5 * i)
     center_after = plot.center
 
     tikz.draw(plot)  # Now draw it
-    tikz.line(
-        center_before, center_after, draw_options="->", to_options="to[bend left = 30]"
-    )
+    tikz.line(center_before, center_after, options="->", to_options="bend left = 30")
 
     points = shift_coords(points, i % 2, 1.5 * i)  # Shift the points for the next loop

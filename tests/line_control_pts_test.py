@@ -10,8 +10,8 @@ BRAID_HEIGHT = 5
 SEP = 2
 
 # Top and bottom bars
-tikz.line((0, BRAID_HEIGHT), (12, BRAID_HEIGHT), draw_options="thick")
-tikz.line((0, 0), (12, 0), draw_options="thick")
+tikz.line((0, BRAID_HEIGHT), (12, BRAID_HEIGHT), options="thick")
+tikz.line((0, 0), (12, 0), options="thick")
 
 # Draw circles on the top and bottom bars
 for i in range(1, 6 * SEP, SEP):

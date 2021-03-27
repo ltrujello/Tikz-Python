@@ -78,9 +78,9 @@ class TikzPicture:
         * The TeX file is stored in a folder "/tex", in the same directory as self.tikz_file.
             * This is to make everything easier for the user. They don't have to waste their time with the tedious task
               of sorting and connecting their files together, figuring out full paths, dealing with the stupid .aux, .log... files,
-              figuring our \input{...}, etc. This process is automatic.
+              figuring out \input{...}, etc. This process is automatic.
             * When a PDF compiles, the pdf is moved to the same directory as self.tikz_file
-              so the user can see it. (All those moronic .log, .aux files are left behind in the hidden folder,
+              so the user can see it. (All those moronic .log, .aux files are left behind in the folder,
               another benefit of this approach).
         * The only reason the user will need to change the TeX file is if they change the file name of self.tikz_file.
         Ideally, the program could take care of this. But there isn't a robust way of updating the \input{...} statement in the
@@ -268,29 +268,31 @@ class TikzPicture:
         Methods to code objects in the Tikz Environment
     """
 
-    def line(self, start, end, options="", to_options="--", control_pts=[]):
+    def line(
+        self, start, end, options="", to_options="", control_pts=[], action="draw"
+    ):
         """Draws a line by creating an instance of the Line class.
         Upon creation, we update self._statements with our new code.
         * Key feature: If we update any attributes of our line, the changes
           to the Tikz code are automatically reflected in self._statements.
         """
-        line = Line(start, end, options, to_options, control_pts)
+        line = Line(start, end, options, to_options, control_pts, action)
         self.draw(line)
         return line
 
-    def plot_coords(self, points, options="", plot_options=""):
+    def plot_coords(self, points, options="", plot_options="", action="draw"):
         """Draws a plot coordinates statement by creating an instance of the PlotCoordinates class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        plot_coords = PlotCoordinates(points, options, plot_options)
+        plot_coords = PlotCoordinates(points, options, plot_options, action)
         self.draw(plot_coords)
         return plot_coords
 
-    def circle(self, center, radius, options=""):
+    def circle(self, center, radius, options="", action="draw"):
         """Draws a circle by creating an instance of the Circle class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        circle = Circle(center, radius, options)
+        circle = Circle(center, radius, options, action)
         self.draw(circle)
         return circle
 
@@ -302,23 +304,32 @@ class TikzPicture:
         self.draw(node)
         return node
 
-    def rectangle(self, left_corner, right_corner, options=""):
+    def rectangle(self, left_corner, right_corner, options="", action="draw"):
         """Draws a rectangle by creating an instance of the Rectangle class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        rectangle = Rectangle(left_corner, right_corner, options)
+        rectangle = Rectangle(left_corner, right_corner, options, action)
         self.draw(rectangle)
         return rectangle
 
-    def ellipse(self, center, horiz_axis, vert_axis, options=""):
+    def ellipse(self, center, horiz_axis, vert_axis, options="", action="draw"):
         """Draws an ellipse by creating an instance of the Ellipse class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        ellipse = Ellipse(center, horiz_axis, vert_axis, options)
+        ellipse = Ellipse(center, horiz_axis, vert_axis, options, action)
         self.draw(ellipse)
         return ellipse
 
-    def arc(self, center, start_angle, end_angle, radius, options="", radians=False):
+    def arc(
+        self,
+        center,
+        start_angle,
+        end_angle,
+        radius,
+        options="",
+        radians=False,
+        action="draw",
+    ):
         """Draws an arc by creating an instance of the Arc class.
         Updates self._statements when necessary; see above comment under line function above.
         """
@@ -369,13 +380,18 @@ class _DrawingObject:
         cls = self.__class__
         draw_obj = cls.__new__(cls)
         memo[id(self)] = draw_obj
-        for k, v in self.__dict__.items():
-            setattr(draw_obj, k, deepcopy(v, memo))
+        for attr, value in self.__dict__.items():
+            setattr(draw_obj, attr, deepcopy(value, memo))
         return draw_obj
 
-    def copy(self):
-        """Wrapper for deepcopy."""
-        return deepcopy(self)
+    def copy(self, **kwargs):
+        """Allows one to simultaneously make a (deep) copy of a drawing object and modify
+        attributes of the drawing object in one step.
+        """
+        new_copy = deepcopy(self)
+        for attr, val in kwargs.items():
+            setattr(new_copy, attr, val)
+        return new_copy
 
     def __repr__(self):
         return self.code
@@ -399,7 +415,7 @@ class Line(_DrawingObject):
         start,
         end,
         options="",
-        to_options="to",
+        to_options="",
         control_pts=[],
         action="draw",
     ):
@@ -419,6 +435,7 @@ class Line(_DrawingObject):
         """
         if len(self.control_pts) == 0:
             return f"{self.start} to{braces(self.to_options)} {self.end};"
+
         else:
             control_stmt = ".. controls "
             for pt in self.control_pts:
@@ -922,6 +939,13 @@ def rainbow_colors(i):
     return rainbow_cols[i % len(rainbow_cols)]
 
 
+def xcolors(i):
+    """A wrapper function to obtain xcolors.
+    Any integer is valid.
+    """
+    return xcols[i % len(xcols)]
+
+
 """
     Miscellaneous Helpers
 """
@@ -938,7 +962,7 @@ def braces(string):
 
 
 # Collect xcolor names
-xcolors = [
+xcols = [
     "Apricot",
     "Aquamarine",
     "Bittersweet",

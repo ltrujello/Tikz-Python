@@ -31,7 +31,6 @@ for theta in range(0, 540, 5):
         plot_options="smooth, tension=.5, closed hobby",
         points=points,
     )
-    # plot.rotate(theta, radians=True)
     # Rotate them
     plot.rotate(theta, about_pt=(0, 0))
     # Scale them

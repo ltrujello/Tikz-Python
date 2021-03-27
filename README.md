@@ -34,7 +34,7 @@ Rectangle     | `\draw[blue] (0,0) rectangle (5, 6);`    | `tikz.rectangle((0,0)
 Ellipse       | `\draw (0,0) ellipse (2cm and 4cm)`      | `tikz.ellipse((0,0), 2, 4)`
 Arc           | `\draw (1,1) arc (45:90:5cm)`            | `tikz.arc((1,1), 45, 90, 5)`
 Node          | `\node[above] at (0,0) {I am a node!};`  | `tikz.node((0,0), "I am a node!", "above")`
-Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.plot_coords(draw_options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`|	
+Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.plot_coords(options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`|	
 Scope| `\begin{scope} ... \end{scope}` | `tikz.scope()`|
 Clip | `\clip[draw] (0,0) circle (5cm)`| `tikz.scope.clip(circle((0,0), 2), draw = True)`
 
@@ -64,7 +64,9 @@ Running our previous python code, we obtain
 
 
 ### Example: Circles
-Python's flexibility can also allow us to easily create more complicated figures which would require way too much time and effort to do in TeX alone. The following example code generates the figure below.
+Pythons `for` loop is a lot less messier and much more powerful than the `\foreach` loop provided in Tikz via TeX. (For example, Tikz with TeX alone guesses your step size, and hence it cannot effectively [loop over two different sequences at the same time](https://tex.stackexchange.com/questions/171426/increments-in-foreach-loop-with-two-variables-tikz)).
+
+In this example, we see that looping is pretty clean. 
 ```python
 tikz = TikzPicture()
 
@@ -84,15 +86,18 @@ tikz.write()
 
 
 ### Example: Roots of Unity 
-Suppose I want to talk about [roots of unity](https://en.wikipedia.org/wiki/Root_of_unity). The corresponding code would be
+Suppose I want to talk about [roots of unity](https://en.wikipedia.org/wiki/Root_of_unity). Normally, I would have to spend 30 minutes reading some manual about how TeX handles basic math. With Python, I know I can `import math` and make intuitive computations to quickly build a function that displays the nth roots of unity.
 ```python
-tikz = TikzPicture()
+import math
 
-n = 13
+tikz = TikzPicture()
+n = 13 # Let's see the 13 roots of unity
+
 for i in range(n):
-    # Find the angle/location of the nth root on the unity circle
+    # Find the angle/location of the nth root on the unit circle
     theta = (2 * math.pi * i) / n
-    x, y = scale * math.cos(theta), scale * math.sin(theta)
+    x = scale * math.cos(theta) 
+    y = scale * math.sin(theta)
     
     # A label for our node
     root_label = f"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$"
@@ -111,19 +116,31 @@ for i in range(n):
 tikz.write()
 ```
 Which generates: 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/roots_of_unity.png" height = 300/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/roots_of_unity.png" height = 350/>
 
 
 
-### Barycentric subdivision
+### Example: Barycentric subdivision
 One can also create a function to perform the n-th barycentric subdivision of a triangle. The source [here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric.py) generates the following pictures. 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 250/>
 
+### Example: Arbitrary Intersections 
+Python has access to many libraries that help one efficiently build very complex functions. Such libraries are simply not possible to implement in TeX (well, not impossible, but it'd be ridiculous). 
+[This code](), which uses `itertools.combinations`, takes in an arbitrary number of 2D Tikz figures and colors each and every single intersection. For example, here is what all of the intersections of nine circles in a 3 x 3 grid looks like.
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_circles.png" height = 250/>
+
+Here's what the intersections of three random blobs looks like:
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_blobs.png" height = 250/>
+
+As one might guess, this is useful for creating topological figures, as manually writing all of the `\scope` and `\clip` commands to create such images is pretty tedious.
+
 # Class: `TikzPicture`
 Initialize an object of the class as below:
 ```python
-tikz = TikzPicture(tikz_file, center , options)
+tikz = TikzPicture(tikz_file, center, options)
 ```
 We describe the methods for this class as below. 
 
@@ -133,19 +150,19 @@ Parameter    | Description | Default|
 `center` (bool) | True if you would like your tikzpicture to be centered, false otherwise. | `False`|
 `options` (str) | A string containing valid Tikz options. | `""`|
 
-If `tikz_file` is blank, the directory `tikz/tikz_file.tex` is created automatically. Thus, it is actually less work for the user to leave this variable unspecified and let the program organize the file for you.
+If `tikz_file` is not specified, the directory `tikz/tikz_file.tex` is created automatically. Thus, it is actually less work for the user to leave this variable unspecified and let the program organize the file for you.
 
 ### `TikzPicture.write()`
 This method does three things.
 1. Writes the current Tikz code into the .tex file located at `my_tikz_file`.
 
-2. Links the Tikz code to a TeX file `tex_file.tex`, hidden in a folder `.tex/` (which you can access). This folder can be found in the same directory as `my_tikz_file`. The TeX file is then compiled.
+2. Links the Tikz code to a TeX file `tex_file.tex` placed in a folder `./tex` in the same directory as `my_tikz_file`. The TeX file is then compiled.
 
-3. Moves the compiled PDF into the same directory as `my_tikz_file` for viewing. All the silly `.aux` and `.log` files are left behind in the hidden folder.
+3. Moves the compiled PDF into the same directory as `my_tikz_file` for viewing. All the silly `.aux` and `.log` files are left behind in the `/tex` folder.
 
 The program uses `latexmk`, which comes on most installations, to compile the TeX document.
 
-Note: You can continue editing your tikzpicture even after you've executed `.write()`. And you won't add duplicate code (i.e., code you've already written) by executing `.write()` twice. For example, if I create a circle
+And now the key feature: You can continue editing your tikzpicture even after you've executed `.write()`. And you won't add duplicate code (i.e., code you've already written) by executing `.write()` twice. For example, I can create a circle
 ```python
 >>> tikz = TikzPicture()
 >>> circle = tikz.circle((0,0), 2, options = "Blue") # Draws a blue circle 
@@ -155,7 +172,7 @@ Note: You can continue editing your tikzpicture even after you've executed `.wri
 	\draw[Blue] (0, 0) circle (2cm);
 \end{tikzpicture}
 ```
-Even though I called `tikz.write()`, I can still add code, and make changes to my previous drawings as well.
+and even though I called `tikz.write()`, I can still add code, and make changes to my previous drawings as well.
 ```python
 >>> another_circle = tikz.circle((1,1), 2, options = "Red") # I want another circle...
 >>> circle.center = (2,2) # I want to change my other circle's center...
@@ -182,11 +199,11 @@ Example:
 >>> arc = tikz.arc((0,0), 45, 90, 3) # Draws an arc
 >>> tikz 
 ... \begin{tikzpicture}[]% TikzPython id = (1)
-    \draw[Blue] (0, 0) -- (1,1);
+    \draw[Blue] (0, 0) -- (1,1); # The line
     \draw (0, 0) arc (45:90:3cm);
 \end{tikzpicture}
->>> tikz.remove(line) 
->>> tikz # The line is no longer in the environment
+>>> tikz.remove(line) # The line is removed
+>>> tikz 
 ... \begin{tikzpicture}[]% TikzPython id = (1) 
 	\draw (0, 0) arc (45:90:3cm);
 \end{tikzpicture}
@@ -231,12 +248,12 @@ Coloring Tikz pictures in TeX tends to be annoying. A goal of this has been to m
 There are two ways to initalize a line object. We've already seen this way:
 ```python
 tikz = TikzPicture()
-line = tikz.line(start, end, options, to_options, control_pts) # A line is created and drawn
+line = tikz.line(start, end, options, to_options, control_pts, action) # A line is created and drawn
 ```
 This is a "quick draw": we simultaneously create a line instance *and* draw it. 
 But we can also initailize a line in its own right:
 ```python
-line = Line(start, end, options, to_options, control_pts) # We create a line
+line = Line(start, end, options, to_options, control_pts, action) # We create a line
 ```
 We can add this line in later to see it whenever we like via `tikz.draw(line)`. 
 
@@ -251,6 +268,7 @@ Parameter    | Description | Default|
 `options` (str) | String containing valid Tikz drawing options, e.g. "Blue" | `""`
 `to_options` (str) | String containing Tikz specifications for connecting the start to the end (e.g. `"to [bend right = 45]"`) | "--"
 `control_pts` (list) | List of control points for the line | `[]`
+`action` (str) | An action to perform with plot (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
 
 We can also call some useful methods on instances of this class.
 
@@ -276,11 +294,11 @@ Rotates a line counterclockwise by angle `angle` relative to the point `about_pt
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
-plot = tikz.plot_coords(points, draw_options, plot_options)
+plot = tikz.plot_coords(points, options, plot_options, action)
 ```
 which simultaneously creates and draws a `PlotCoordinates` object. Or more simply, we can create an instance as:
 ```python
-plot = PlotCoordinates(points, draw_options, plot_options)
+plot = PlotCoordinates(points, options, plot_options, action)
 ```
 which we can add to our picture later via `tikz.draw(plot)`.
 We explain the parameters.
@@ -288,14 +306,15 @@ We explain the parameters.
 Parameter    | Description | Default|
 -------------|-------------|-------------|
 `points` (list) | A list of tuples (x, y) representing coordinates that one wishes to create a plot for. |
-`draw_options` (str) | A string of valid Tikz drawing options. | `""`
+`options` (str) | A string of valid Tikz drawing options. | `""`
 `plot_options` (str) | A string of valid Tikz plotting options | `""`
+`action` (str) | An action to perform with the line (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
 
 This method is analagous to the Tikz command `\draw plot coordinates{...};`. For example, the code
 ```python
 >>> tikz = TikzPicture()
 >>> points = [(2,2), (4,0), (1,-3), (-2, -1), (-1, 3)]
->>> plot = tikz.plot_coords(points, draw_options = "Blue", plot_options = "smooth cycle, tension = 0.5")
+>>> plot = tikz.plot_coords(points, options = "Blue", plot_options = "smooth cycle, tension = 0.5")
 ```
 corresponds to the Tikz command `\draw[Blue] plot[smooth cycle, tension = 0.5] coordinates{(2,2), (4,0), (1,-3) (-2, -1), (-1, 3)};`.
 
@@ -306,10 +325,10 @@ tikz = TikzPicture()
 points = [(14.4, 3.2), (16.0, 3.6), (16.8, 4.8), (16.0, 6.8), (16.4, 8.8), (13.6, 8.8), (12.4, 7.6), (12.8, 5.6), (12.4, 3.6)]
 
 for i in range(0, 20):
-    draw_options = f"fill = {rainbow_colors(i)}, opacity = 0.7"
+    options = f"fill = {rainbow_colors(i)}, opacity = 0.7"
     # Requires \usetikzlibrary{hobby} here
     plot_options = "smooth, tension=.5, closed hobby"
-    plot = tikz.plot_coords(points, draw_options, plot_options)
+    plot = tikz.plot_coords(points, options, plot_options)
     plot.scale((20 - i) / 20) # Shrink it 
     plot.rotate(15 * i) # Rotate it
 ```
@@ -322,11 +341,11 @@ generates the image
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
-circle = tikz.circle(center, radius, options)
+circle = tikz.circle(center, radius, options, action)
 ```
 which creates a `Circle` object and draws it. Alternatively, we can initalize more simply as 
 ```python
-circle = Circle(center, radius, options)
+circle = Circle(center, radius, options, action)
 ```
 and later draw this via `tikz.draw(circle)`.
 
@@ -337,6 +356,7 @@ Parameter    | Description | Default|
 `center` (tuple) | A tuple (x, y) of floats representing the coordinates of the center of the circle. |
 `radius` (float) | Length (in cm) of the radius. (By the way, all lengths are taken in cm). | 
 `options` (str) | String containing valid Tikz drawing options (e.g, "Blue") | `""`
+`action` (str) | An action to perform with the circle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
 
 `Circle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
@@ -366,11 +386,11 @@ Parameter    | Description | Default|
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
-rectangle = tikz.rectangle(left_corner, right_corner, options)
+rectangle = tikz.rectangle(left_corner, right_corner, options, action)
 ```
 which creates a `Rectangle` object and draws it. We can also write
 ```python
-rectangle = Rectangle(left_corner, right_corner, options)
+rectangle = Rectangle(left_corner, right_corner, options, action)
 ```
 to create an instance, and later draw via `tikz.draw(Rectangle)`.
 
@@ -379,6 +399,8 @@ Parameter    | Description | Default|
 `left_corner`  (tuple)| A tuple (x, y) of floats representing the position of the node. | 
 `right_corner` (str) | String containing valid Tikz node options (e.g., "above") | `""`
 `options` (str) | A string containing valid Tikz draw optins, (e.g, "fill = Blue"). | `""` 
+`action` (str) | An action to perform with the rectangle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
+
 
 `Rectangle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
@@ -386,11 +408,11 @@ Parameter    | Description | Default|
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
-ellipse = tikz.ellipse(center, horiz_axis, vert_axis)
+ellipse = tikz.ellipse(center, horiz_axis, vert_axis, action)
 ```
 which creates an `Ellipse` object and draws it. We can also write
 ```python
-ellipse = Ellipse(center, horiz_axis, vert_aixs)
+ellipse = Ellipse(center, horiz_axis, vert_aixs, action)
 ```
 and draw this later to the Tikz picture via `tikz.draw(ellipse)`.
 
@@ -399,6 +421,8 @@ Parameter    | Description | Default|
 `center` (tuple) | Pair of floats representing the center of the ellipse |
 `horiz_axis` (float)| The length (in cm) of the horizontal axis of the ellipse | 
 `vert_axis` (float)| The length (in cm) of the vertical axis of the ellipse |
+`action` (str) | An action to perform with the ellipse (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
+
 
 `Ellipse` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
@@ -408,12 +432,12 @@ Initialize an object of the class as below:
 
 ```python
 tikz = TikzPicture()
-arc = tikz.arc(start, end, options, control_pts)
+arc = tikz.arc(start, end, options, control_pts, action)
 ```
 which creates an `Arc` object and draws it. Again, we can 
 also initalize an instance with
 ```python
-arc = Arc(start, end, options, control_pts)
+arc = Arc(start, end, options, control_pts, action)
 ```
 which we can draw later via `tikz.draw(arc)`.
 
@@ -423,10 +447,12 @@ Parameter    | Description | Default|
 `start_angle` (float) | The angle (in degrees) of the start of the arc |
 `end_angle` (float) | The angle (in degrees) of the end of the arc |
 `radius` (float) | The radius (in cm) of the arc |
+`action` (str) | An action to perform with the arc (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
+
 
 `Arc` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
 
-# Class: Scope
+# `Class: Scope`
 Initialize a Tikz scope environment as follows:
 ```python
 tikz = TikzPicture()
@@ -449,7 +475,7 @@ Clips the drawing object `draw_obj` from the scope environment by creating an in
 
 The class `Scope` also as access to methods `.shift()`, `.scale()`, `.rotate()`. In this case, such operations are applied to every single member of the scoping environment, made possible by the fact that every drawing object itself has access to these methods. These work as one would expect, which is unlike Tikz, since sometimes applying transformations to scoping environments in Tikz does not behave intuitively. 
 
-# Class: Clip
+# `Class: Clip`
 A class to clip a single drawing object `draw_obj`.
 One can initialize an instance of this class via an instance of `Scope`:
 ```python

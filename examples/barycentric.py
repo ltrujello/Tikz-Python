@@ -5,31 +5,30 @@ import sys
 sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
 from tikz_methods import *
 
-tikz = TikzPicture(new_file=True)
-
 
 def nth_subdivision(n):
-    new_tikz = TikzPicture()
     iters = 0
-    if n > 0:
-        for i in range(n):
+    for i in range(n):
+        if n > 0:
             iters += 6 ** (i)
-            barycentric_subdivision(iters, new_tikz)
-    else:
-        barycentric_subdivision(0, new_tikz)
+            tikz = TikzPicture()
+            barycentric_subdivision(iters, tikz)
+            tikz.write()
+        else:
+            tikz = TikzPicture()
+            barycentric_subdivision(0, tikz)
+            tikz.write()
 
-    new_tikz.write()
 
-
-def barycentric_subdivision(iterations, new_tikz):
+def barycentric_subdivision(iterations, tikz):
     pt_one = (0, 0)
     pt_two = (6, 0)
     pt_three = (3, 4.24)
     init_coords = [pt_one, pt_two, pt_three]
 
-    new_tikz.line(pt_one, pt_two)
-    new_tikz.line(pt_two, pt_three)
-    new_tikz.line(pt_three, pt_one)
+    tikz.line(pt_one, pt_two)
+    tikz.line(pt_two, pt_three)
+    tikz.line(pt_three, pt_one)
 
     triangles = queue.Queue()  # queue of lists of tuples
     triangles.put(init_coords)  # Put goes to the end [... {]}
@@ -37,12 +36,12 @@ def barycentric_subdivision(iterations, new_tikz):
     while not triangles.empty() and iterations > 0:
         iterations -= 1
         coords = triangles.get()  # Grabs from the front {[} ...]
-        new = medians(coords, new_tikz, iterations)
+        new = medians(coords, tikz, iterations)
         for tri in new:
             triangles.put(tri)
 
 
-def medians(coords, new_tikz, iteration):
+def medians(coords, tikz, iteration):
     centroid = (
         statistics.mean([x[0] for x in coords]),
         statistics.mean([x[1] for x in coords]),
@@ -59,7 +58,11 @@ def medians(coords, new_tikz, iteration):
         # get median coords, draw median
         x = statistics.mean([bx, cx])
         y = statistics.mean([by, cy])
-        new_tikz.line((ax, ay), (x, y), colors[iteration % len(colors)])  # tikz
+        tikz.line(
+            (ax, ay),
+            (x, y),
+            options=f"color={xcolors(iteration)}, line width=0.1mm",
+        )
         midpts.append((x, y))
 
     # get coords of all new triangles created
