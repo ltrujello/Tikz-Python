@@ -38,8 +38,6 @@ Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) 
 Scope| `\begin{scope} ... \end{scope}` | `tikz.scope()`|
 Clip | `\clip[draw] (0,0) circle (5cm)`| `tikz.scope.clip(circle((0,0), 2), draw = True)`
 
-Again: The difference with TikZ, and with other Python-Tikz mashups, is that the above python calls are class instances that we can subject to further manipulations.
-
 
 ### Example: Line and two nodes
 Suppose I want to create a line and two labels at the ends:
@@ -82,7 +80,7 @@ for i in range(30):
 
 tikz.write()
 ```
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/circles.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/circles.png" height = 350/>
 
 
 ### Example: Roots of Unity 
@@ -123,17 +121,17 @@ Which generates:
 ### Example: Barycentric subdivision
 One can also create a function to perform the n-th barycentric subdivision of a triangle. The source [here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric.py) generates the following pictures. 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 350/>
 
 ### Example: General Ven Diagrams 
 Python has access to many libraries that help one efficiently build very complex functions. Such libraries are simply not possible to implement in TeX (well, not impossible, but it'd be ridiculous). 
 Tikz-Python offers [this function](https://github.com/ltrujello/Tikz-Python/blob/main/tests/intersections_scope_clip.py), which uses `itertools.combinations`, to take in an arbitrary number of 2D Tikz figures and colors each and every single intersection. For example, here is what all of the intersections of nine circles in a 3 x 3 grid looks like.
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_circles.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_circles.png" height = 350/>
 
 Here's what the intersections of three random blobs looks like:
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_blobs.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_blobs.png" height = 350/>
 
 As one might guess, this is useful for creating topological figures, as manually writing all of the `\scope` and `\clip` commands to create such images is pretty tedious.
 
@@ -148,49 +146,41 @@ Parameter    | Description | Default|
 `center` (bool) | True if you would like your tikzpicture to be centered, false otherwise. | `False`|
 `options` (str) | A string containing valid Tikz options. | `""`|
 
-If `tikz_file` is not specified, the directory `tikz/tikz_file.tex` is created automatically. Thus, it is actually less work for the user to leave this variable unspecified and let the program organize the file for you.
 
+## Methods 
 ### `TikzPicture.write()`
-This method does three things.
-1. Writes the current Tikz code into the .tex file located at `my_tikz_file`.
+Writes the currently recorded Tikz code into the .tex file located at `my_tikz_file`. If `my_tikz_file` is not specified, the directory `tikz/tikz_file.tex` is created automatically and the code is stored there.
 
-2. Links the Tikz code to a TeX file `tex_file.tex` placed in a folder `./tex` in the same directory as `my_tikz_file`. The TeX file is then compiled.
-
-3. Moves the compiled PDF into the same directory as `my_tikz_file` for viewing. All the silly `.aux` and `.log` files are left behind in the `/tex` folder.
-
-The program uses `latexmk`, which comes on most installations, to compile the TeX document.
-
-And now the key feature: You can continue editing your tikzpicture even after you've executed `.write()`. And you won't add duplicate code (i.e., code you've already written) by executing `.write()` twice. For example, I can create a circle
+**Question:** If I call `tikz.write()` twice on accident, won't that accidentally add duplicate code? No! (You can, however, if you want). This is the key feature of `write()`. In fact, you can continue editing even after you call `write` so that you may periodically view your Tikz picture while you build it.
 ```python
 >>> tikz = TikzPicture()
->>> circle = tikz.circle((0,0), 2, options = "Blue") # Draws a blue circle 
->>> tikz.write()
+>>> circle_1 = tikz.circle((0,0), 2, options = "fill=Blue, opacity=0.5") # Draws a blue circle 
+>>> tikz.write() # Write it 
 >>> tikz 
-... \begin{tikzpicture}[]% TikzPython id = (1) 
+... \begin{tikzpicture}[]% TikzPython id = (1) # Current code
 	\draw[Blue] (0, 0) circle (2cm);
 \end{tikzpicture}
 ```
-and even though I called `tikz.write()`, I can still add code, and make changes to my previous drawings as well.
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/tikz_write_ex_1.png" height = 300/>
+
+Now we add `circle_2` to the picture, and change the center `circle_1`
 ```python
->>> another_circle = tikz.circle((1,1), 2, options = "Red") # I want another circle...
->>> circle.center = (2,2) # I want to change my other circle's center...
->>> tikz.write() 
+>>> circle_2 = tikz.circle((1,1), 2, options = "fill=red, opacity=0.5") # I want another circle...
+>>> circle_1.center = (2,2) # I want to change my other circle's center...
+>>> tikz.write() # Write it 
 >>> tikz # We get what we'd expect  
 ... \begin{tikzpicture}[]% TikzPython id = (1) 
 	\draw[Blue] (2, 2) circle (2cm);
 	\draw[Red] (1, 1) circle (2cm);
 \end{tikzpicture}
 ```
-This feature, in combination with `.remove()` and `.show()` (see below), allows you to gradually build and view a tikzpicture quite painlessly.
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/tikz_write_ex_2.png" height = 300/>
 
-### `TikzPicture.add_statement(str)`
-Manually add a valid line of Tikz code to the environment. This is for the off-chance that the user would rather manually type something into their tikzpicture.
-
+This feature, in combination with `.remove()` and `.show()` (see below), allows you to gradually build and view a TikzPicture quite painlessly.
 
 ### `TikzPicture.remove(draw_obj)`
 Removes a drawing object, such as a line, from a TikzPicture. 
 
-Example:
 ```python
 >>> tikz = TikzPicture()
 >>> line = tikz.line((0,0), (1,1), options = "Blue") # Draws a line 
@@ -208,8 +198,7 @@ Example:
 ```
 
 ### `TikzPicture.draw(draw_obj)`
-Draws a drawing object, such as a line, onto the TikzPicture. This is useful because sometimes we define drawing objects outside of any reference to a TikzPicture, but we want to add it later.
-Below, we create a line and two circles, and then add them later.
+Draws a drawing object, such as a line, onto the TikzPicture. 
 ```python
 >>> line = Line((0,0) (1,0), to_options = "to[bend right = 30]")
 >>> end_c = Circle(line.start, radius = 0.2)
@@ -219,7 +208,11 @@ Below, we create a line and two circles, and then add them later.
 
 
 ### `TikzPicture.show()`
-Pulls up a PDF of the current drawing to the user in your browser (may default to your PDF viewer). Of course, execute `TikzPicture.write()` prior in order to view your latest changes. 
+Compiles the tikz code and pulls up a PDF of the current drawing to the user in your browser (may default to your PDF viewer). Of course, execute `TikzPicture.write()` prior in order to view your latest changes. 
+
+### `TikzPicture.add_statement(str)`
+Manually add a valid string of Tikz code to the environment. This is for the off-chance that the user would rather manually type something into their tikzpicture.
+
 
 # Colors
 Coloring Tikz pictures in TeX tends to be annoying. A goal of this has been to make it as easy as possible to color Tikz pictures.
@@ -531,7 +524,7 @@ n_nodes = 7
 nodes = []
 # Draw the nodes
 for i in range(1, n_nodes + 1):
-    angle = 2 * math.pi * i / n_nodes  # Clockwise
+    angle = 2 * math.pi * i / n_nodes 
     x = r * math.cos(angle)
     y = r * math.sin(angle)
     node = tikz.node((x, y), text=f"$A_{{{i}}}$")

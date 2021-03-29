@@ -1,14 +1,11 @@
-import sys
 import pytest
-
-sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
-from tikz_methods import *
+import tikz_py
 
 """ We test that the construction of self.action returns the correct Tikz code. 
     We also test that reassigning class attributes returns the correct Tikz code. 
 """
 
-tikz = TikzPicture()
+tikz = tikz_py.TikzPicture()
 
 # Line : \fill
 line_fill = tikz.line(

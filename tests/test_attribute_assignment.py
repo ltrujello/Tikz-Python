@@ -1,13 +1,10 @@
-import sys
 import pytest
-
-sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
-from tikz_methods import *
+import tikz_py
 
 """ We test that reassignment of attributes returns the correct Tikz code.
 """
 
-tikz = TikzPicture()
+tikz = tikz_py.TikzPicture()
 # Line
 line = tikz.line((0, 0), (1, 1))
 line.start = (-1, 2)
