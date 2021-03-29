@@ -138,11 +138,9 @@ Here's what the intersections of three random blobs looks like:
 As one might guess, this is useful for creating topological figures, as manually writing all of the `\scope` and `\clip` commands to create such images is pretty tedious.
 
 # Class: `TikzPicture`
-Initialize an object of the class as below:
 ```python
 tikz = TikzPicture(tikz_file, center, options)
 ```
-We describe the methods for this class as below. 
 
 Parameter    | Description | Default|
 -------------|-------------|-------------|
@@ -259,8 +257,6 @@ We can add this line in later to see it whenever we like via `tikz.draw(line)`.
 
 Note: A natural question is: Why the two ways? This is because sometimes we want to obtain information from a drawing object to perform some calculations *before* we decide to actually draw it. One familiar with Tikz will realize that this is analagous to the `\path` command in Tikz, which is often very useful. 
 
-We explain the parameters for our class `Line`. 
-
 Parameter    | Description | Default|
 -------------|-------------|-------------|
 `start` (tuple) | Pair of floats representing the start of the line | 
@@ -319,7 +315,6 @@ which simultaneously creates and draws a `PlotCoordinates` object. Or more simpl
 plot = PlotCoordinates(points, options, plot_options, action)
 ```
 which we can add to our picture later via `tikz.draw(plot)`.
-We explain the parameters.
 
 Parameter    | Description | Default|
 -------------|-------------|-------------|
@@ -365,7 +360,7 @@ plot.options = "fill=ProcessBlue!50"
 plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 which produces. 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/plotcoordinates_ex_3 .png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/plotcoordinates_ex_3.png" height = 250/>
 
 Finally, we can set `action = "path"` (analogous to `\path` in Tikz), but as one would expect this doesn't draw anything. 
 
@@ -401,8 +396,6 @@ circle = Circle(center, radius, options, action)
 ```
 and later draw this via `tikz.draw(circle)`.
 
-We explain the parameters. 
-
 Parameter    | Description | Default|
 -------------|-------------|-------------|
 `center` (tuple) | A tuple (x, y) of floats representing the coordinates of the center of the circle. |
@@ -421,7 +414,8 @@ tikz.line((0, 0), (0, 1.25), options="dashed")
 tikz.circle((3, 0), 1, options="thick, fill=red!60", action="filldraw")
 tikz.circle((6, 0), 1.25, options="Green!50", action="fill")
 ```
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/circle_ex_1.png" height = 250/>
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/circle_ex_1.png"/>
 
 We can also use circles to create the [Hawaiian Earing](https://en.wikipedia.org/wiki/Hawaiian_earring).
 
@@ -498,7 +492,7 @@ row_1.node((5, 0.3), text="output")
 row_1.node((7.3, 0), text="$f(x_1, \dots, x_n)$")
 ```
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/node_ex_2.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/node_ex_2.png"/>
 
 ## Methods
 
@@ -635,7 +629,7 @@ for i in range(1, 10):
 ```
 which generates the image
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/arc_ex_1.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/arc_ex_1.png"/>
 
 ## Methods 
 `Arc` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
