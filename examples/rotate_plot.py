@@ -26,7 +26,7 @@ points = [
 
 for theta in range(0, 540, 5):
     # Plot the points
-    plot = tikz.plot_coords(
+    plot = tikz.plot_coordinates(
         draw_options=f"fill = {rainbow_colors(theta)}",
         plot_options="smooth, tension=.5, closed hobby",
         points=points,

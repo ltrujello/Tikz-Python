@@ -26,7 +26,8 @@ class TikzPicture:
         options (str) : A list of options for the Tikz picture
         statements (dict) : See docstring for statements below
     """
-
+    # TODO: Document should not compile at .write().
+    # TODO: Center keeps adding because it never gets removed.
     def __init__(self, tikz_file="tikz_code/tikz-code.tex", center=False, options=""):
         global _N_TIKZs
         # Create a Tikz Environment
@@ -95,7 +96,7 @@ class TikzPicture:
         # Check if the folder exists. If so, create the hidden folder tex/ and populate it with appropriate code using our template
         if not tex_file.exists():
             tex_file.parent.mkdir(parents=True)
-            template_file = Path("/template/tex_file.tex")
+            template_file = Path("template/tex_file.tex")
             with open(str(template_file.resolve())) as f:
                 lines = f.readlines()
             with open(tikz_path + "/tex/tex_file.tex", "w") as f:
@@ -280,13 +281,13 @@ class TikzPicture:
         self.draw(line)
         return line
 
-    def plot_coords(self, points, options="", plot_options="", action="draw"):
+    def plot_coordinates(self, points, options="", plot_options="", action="draw"):
         """Draws a plot coordinates statement by creating an instance of the PlotCoordinates class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        plot_coords = PlotCoordinates(points, options, plot_options, action)
-        self.draw(plot_coords)
-        return plot_coords
+        plot = PlotCoordinates(points, options, plot_options, action)
+        self.draw(plot)
+        return plot
 
     def circle(self, center, radius, options="", action="draw"):
         """Draws a circle by creating an instance of the Circle class.
@@ -296,11 +297,11 @@ class TikzPicture:
         self.draw(circle)
         return circle
 
-    def node(self, position, options="", content=""):
+    def node(self, position, options="", text=""):
         """Draws a node by creating an instance of the Node class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        node = Node(position, options, content)
+        node = Node(position, options, text)
         self.draw(node)
         return node
 
@@ -333,7 +334,7 @@ class TikzPicture:
         """Draws an arc by creating an instance of the Arc class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        arc = Arc(center, start_angle, end_angle, radius, options, radians)
+        arc = Arc(center, start_angle, end_angle, radius, options, radians, action)
         self.draw(arc)
         return arc
 
@@ -370,7 +371,7 @@ class _DrawingObject:
     @property
     def code(self):
         """Full Tikz code for this drawing object."""
-        return f"\{self.action}{braces(self.options)} {self._command}"
+        return fr"\{self.action}{braces(self.options)} {self._command}"
 
     def __deepcopy__(self, memo):
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set
@@ -429,12 +430,12 @@ class Line(_DrawingObject):
 
     @property
     def _command(self):
-        """The Tikz code for a line that comes after \draw[self.options]. It is useful for
+        r"""The Tikz code for a line that comes after \draw[self.options]. It is useful for
         us to do this breaking-up of the Tikz code, especially for clipping. However, this
         serves no use to the user, so we make it private (well, it's just bells and whistles).
         """
         if len(self.control_pts) == 0:
-            return f"{self.start} to{braces(self.to_options)} {self.end};"
+            return fr"{self.start} to{braces(self.to_options)} {self.end};"
 
         else:
             control_stmt = ".. controls "
@@ -460,7 +461,7 @@ class Line(_DrawingObject):
     def scale(self, scale):
         """Scale start, end, and control_pts."""
         scaled_start_end = scale_coords([self.start, self.end], scale)
-        self.start, self.end = scaled[0], scaled[1]
+        self.start, self.end = scaled_start_end[0], scaled_start_end[1]
         self.control_pts = scale_coords(self.control_pts, scale)
 
     def rotate(self, angle, about_pt=None, radians=False):
@@ -496,7 +497,7 @@ class PlotCoordinates(_DrawingObject):
 
     @property
     def _command(self):
-        cmd = f"plot{braces(self.plot_options)} coordinates {{"
+        cmd = fr"plot{braces(self.plot_options)} coordinates {{"
         for pt in self.points:
             cmd += str(pt) + " "
         cmd += "};"
@@ -577,7 +578,7 @@ class Node(_DrawingObject):
 
     @property
     def _command(self):
-        return f"at {self.position} {{ {self.text} }};"
+        return fr"at {self.position} {{ {self.text} }};"
 
     def shift(self, xshift, yshift):
         self.position = shift_coords([self.position], xshift, yshift)[0]
@@ -813,9 +814,9 @@ class Clip:
     @property
     def code(self):
         if self.draw == True:
-            return f"\clip[preaction = {{draw, {self.draw_obj.options}}}] {self.draw_obj._command}"
+            return fr"\clip[preaction = {{draw, {self.draw_obj.options}}}] {self.draw_obj._command}"
         else:
-            return f"\clip {self.draw_obj._command}"
+            return fr"\clip {self.draw_obj._command}"
 
     def shift(self, xshift, yshift):
         self.draw_obj.shift(xshift, yshift)
@@ -832,8 +833,7 @@ class Clip:
 
 
 def shift_coords(coords, xshift, yshift):
-    """Shift a list of 2D-coordinates by "xshift", "yshift".
-        Accuracy to 7 decimal places for readability.
+    """Shift a list of 2D-coordinates by "xshift", "yshift". Accuracy to 7 decimal places for readability.
     coords (list) : A list of tuples (x, y) with x, y floats
     xshift (float) : An amount to shift the x values
     yshift (float) : An amount to shift the y values
@@ -851,8 +851,7 @@ def shift_coords(coords, xshift, yshift):
 
 
 def scale_coords(coords, scale):
-    """Scale a list of 2D-coordinates by "scale".
-        Accuracy to 7 decimal places for readability.
+    """Scale a list of 2D-coordinates by "scale". Accuracy to 7 decimal places for readability.
     coords (list) : A list of tuples (x, y) with x, y floats
     scale (float) : An amount to scale the x and y values
     """
@@ -868,8 +867,7 @@ def scale_coords(coords, scale):
 
 
 def rotate_coords(coords, angle, about_pt, radians=False):  # rotate counterclockwise
-    """Rotate in degrees (or radians) a list of 2D-coordinates about the point "about_pt".
-        Accuracy to 7 decimal places for readability.
+    """Rotate in degrees (or radians) a list of 2D-coordinates about the point "about_pt". Accuracy to 7 decimal places for readability.
     coords (list) : A list of tuples (x, y) with x, y floats
     angle (float) : The angle to rotate the coordinates
     about_pt (tuple) : A point (x,y) of reference for rotation
@@ -1050,8 +1048,7 @@ rainbow_cols = [
 
 
 if __name__ == "__main__":
-    """Quick sanity tests for our classes."""
-
+    """Basic Examples"""
     tikz = TikzPicture()
     # Line
     line = tikz.line(
@@ -1061,7 +1058,7 @@ if __name__ == "__main__":
         control_pts=[(0.25, 0.25), (0.75, 0.75)],
     )
     # Plot
-    plot = tikz.plot_coords(
+    plot = tikz.plot_coordinates(
         options="green",
         plot_options="smooth ",
         points=[(1, 1), (2, 2), (3, 3), (2, -4)],
@@ -1071,7 +1068,7 @@ if __name__ == "__main__":
     # Node
     node = tikz.node(
         position=(3, 3),
-        content="I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !",
+        text=r"I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !",
         options="above",
     )
     # Rectangle
@@ -1080,52 +1077,3 @@ if __name__ == "__main__":
     ellipse = tikz.ellipse((0, 0), 3, 4)
     # Arc
     arc = tikz.arc((0, 0), 20, 90, 4)
-
-    def test():
-        # Test Line
-        assert line.start == (0, 0)
-        assert line.end == (1, 1)
-        assert line.options == "thick, blue"
-        assert line.control_pts == [(0.25, 0.25), (0.75, 0.75)]
-        assert (
-            line.code
-            == "\\draw[thick, blue] (0, 0) .. controls (0.25, 0.25) and (0.75, 0.75)  .. (1, 1);"
-        )
-        # Test Plot
-        assert plot.options == "green"
-        assert plot.plot_options == "smooth "
-        assert plot.points == [(1, 1), (2, 2), (3, 3), (2, -4)]
-        assert (
-            plot.code
-            == "\\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };"
-        )
-        # Test Circle
-        assert circle.center == (1, 1)
-        assert circle.radius == 1
-        assert circle.options == "fill = purple"
-        assert circle.code == "\\draw[fill = purple] (1, 1) circle (1cm);"
-        # Test Node
-        assert node.position == (3, 3)
-        assert node.text == "I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !"
-        assert node.options == "above"
-        assert (
-            node.code
-            == "\\node[above] at (3, 3) { I love $ \\sum_{x \\in \\mathbb{R}} f(x^2)$ ! };"
-        )
-        # Rectangle
-        assert rectangle.left_corner == (2, 2)
-        assert rectangle.right_corner == (3, 4)
-        assert rectangle.options == "Blue"
-        assert rectangle.code == "\\draw[Blue] (2, 2) rectangle (3, 4);"
-        # Ellipse
-        assert ellipse.center == (0, 0)
-        assert ellipse.horiz_axis == 3
-        assert ellipse.vert_axis == 4
-        assert ellipse.code == "\\draw (0, 0) ellipse (3cm and 4cm);"
-        # Arc
-        assert arc.center == (0, 0)
-        assert arc.start_angle == 20
-        assert arc.end_angle == 90
-        assert arc.radius == 4
-        assert arc.code == "\\draw (0, 0) arc (20:90:4cm);"
-        print("flying colors!")

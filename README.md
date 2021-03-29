@@ -34,7 +34,7 @@ Rectangle     | `\draw[blue] (0,0) rectangle (5, 6);`    | `tikz.rectangle((0,0)
 Ellipse       | `\draw (0,0) ellipse (2cm and 4cm)`      | `tikz.ellipse((0,0), 2, 4)`
 Arc           | `\draw (1,1) arc (45:90:5cm)`            | `tikz.arc((1,1), 45, 90, 5)`
 Node          | `\node[above] at (0,0) {I am a node!};`  | `tikz.node((0,0), "I am a node!", "above")`
-Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.plot_coords(options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`|	
+Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.plot_coordinates(options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`|	
 Scope| `\begin{scope} ... \end{scope}` | `tikz.scope()`|
 Clip | `\clip[draw] (0,0) circle (5cm)`| `tikz.scope.clip(circle((0,0), 2), draw = True)`
 
@@ -46,8 +46,8 @@ Suppose I want to create a line and two labels at the ends:
 ```python
 tikz = TikzPicture()
 line = tikz.line((0,0), (1,1), options = "thick, blue, o-o")
-start_node = tikz.node(line.start, options = "below", content = "Start!")
-end_node = tikz.node(line.end, options = "above", content = "End!")
+start_node = tikz.node(line.start, options = "below", text = "Start!")
+end_node = tikz.node(line.end, options = "above", text = "End!")
 ```
 Saving the line as a variable `line` allows us to pass in `line.start` and `line.end` into the node positions, so we don't have to type out the exact coordinates. 
 This is because lines, nodes, etc. are class instances with useful attributes: 
@@ -56,7 +56,7 @@ This is because lines, nodes, etc. are class instances with useful attributes:
 (0,0)
 >>> line.end
 (1,1)
->>> start_node.contents
+>>> start_node.text
 "Start!"
 ```
 Running our previous python code, we obtain
@@ -68,16 +68,16 @@ Pythons `for` loop is a lot less messier and much more powerful than the `\forea
 
 In this example, we see that looping is pretty clean. 
 ```python
-tikz = TikzPicture()
+tikz = TikzPicture(center=True)
 
 for i in range(30):
     # i/30-th point on the unit circle
     point = (math.sin(2 * math.pi * i / 30), math.cos(2 * math.pi * i / 30))
-    
+
     # Create four circles of different radii with center located at point
-    tikz.circle(point, 2, "Blue") 
-    tikz.circle(point, 2.2, "Green")
-    tikz.circle(point, 2.4, "Red")
+    tikz.circle(point, 2, "ProcessBlue")
+    tikz.circle(point, 2.2, "ForestGreen")
+    tikz.circle(point, 2.4, "red") 
     tikz.circle(point, 2.6, "Purple")
 
 tikz.write()
@@ -86,7 +86,7 @@ tikz.write()
 
 
 ### Example: Roots of Unity 
-Suppose I want to talk about [roots of unity](https://en.wikipedia.org/wiki/Root_of_unity). Normally, I would have to spend 30 minutes reading some manual about how TeX handles basic math. With Python, I know I can `import math` and make intuitive computations to quickly build a function that displays the nth roots of unity.
+Suppose I want to draw the [roots of unity](https://en.wikipedia.org/wiki/Root_of_unity). Normally, I would have to spend 30 minutes reading some manual about how TeX handles basic math. With Python, I know I can `import math` and make intuitive computations to quickly build a function that displays the nth roots of unity.
 ```python
 import math
 
@@ -111,7 +111,7 @@ for i in range(n):
         node_option = "below"
 
     # Label the nth root of unity
-    tikz.node((x, y), options=node_option, content=root_label)
+    tikz.node((x, y), options=node_option, text=root_label)
 
 tikz.write()
 ```
@@ -125,9 +125,9 @@ One can also create a function to perform the n-th barycentric subdivision of a 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 250/>
 
-### Example: Arbitrary Intersections 
+### Example: General Ven Diagrams 
 Python has access to many libraries that help one efficiently build very complex functions. Such libraries are simply not possible to implement in TeX (well, not impossible, but it'd be ridiculous). 
-[This code](), which uses `itertools.combinations`, takes in an arbitrary number of 2D Tikz figures and colors each and every single intersection. For example, here is what all of the intersections of nine circles in a 3 x 3 grid looks like.
+Tikz-Python offers [this function](https://github.com/ltrujello/Tikz-Python/blob/main/tests/intersections_scope_clip.py), which uses `itertools.combinations`, to take in an arbitrary number of 2D Tikz figures and colors each and every single intersection. For example, here is what all of the intersections of nine circles in a 3 x 3 grid looks like.
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_circles.png" height = 250/>
 
@@ -270,18 +270,33 @@ Parameter    | Description | Default|
 `control_pts` (list) | List of control points for the line | `[]`
 `action` (str) | An action to perform with plot (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
 
-We can also call some useful methods on instances of this class.
-
-### `Line.shift(xshift, yshift)`
-Shifts the current line by amount `xshift` in the x-direction and `yshift` in the y-direction.
+## Examples
+We've already seen an example of this class. Here's another.
 ```python
->>> line = tikz.line((0,0), (1,1), options = "Blue", control_pts = [(0.5, 0.5), (0.75, -2)])
->>> line 
-... \draw[Blue] (0, 0) .. controls (0.5, 0.5) and (0.75, -2)  .. (1, 1);
->>> line.shift(2, 2) # Shift!
->>> line
-... \draw[Blue] (2, 2) .. controls (2.5, 2.5) and (2.75, 0)  .. (3, 3);
+tikz = TikzPicture()
+
+tikz.line((0, 0), (4, 0), options="o->", control_pts=[(1, 1), (3, -1)])
 ```
+produces the line 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_ex_1.png" height = 250/> 
+
+## Methods 
+### `Line.shift(xshift, yshift)`
+Shifts the current line by amount `xshift` in the x-direction and `yshift` in the y-direction. For example, we can shift in a for loop as below
+```python
+tikz = TikzPicture(center=True)
+
+line_template = Line((0, 0), (4, 0), control_pts=[(1, 1), (3, -1)])
+for i in range(0, 10):
+    line = line_template.copy() # Make a copy 
+    line.shift(0, (5 - i) / 4) # Shift the copy
+    line.options = f"color={rainbow_colors(i)}, o->" #Specify options
+    tikz.draw(line)
+```
+which produces the set of lines 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_ex_2.png" height = 250/>
 
 ### `Line.scale(scale)`
 Scales a line by an amount `scale`, usually a python float. 
@@ -289,12 +304,15 @@ Scales a line by an amount `scale`, usually a python float.
 ### `Line.rotate(angle, about_pt = None, radians = True)`
 Rotates a line counterclockwise by angle `angle` relative to the point `about_pt`. One can specify their angle units via the boolean `radians`. If `about_pt` is not specified, the default is to rotate the line about its midpoint.
 
+Here's an example of both `.scale` and `rotate` being used.
+
+
 
 # Class: `PlotCoordinates`
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
-plot = tikz.plot_coords(points, options, plot_options, action)
+plot = tikz.plot_coordinates(points, options, plot_options, action)
 ```
 which simultaneously creates and draws a `PlotCoordinates` object. Or more simply, we can create an instance as:
 ```python
@@ -310,17 +328,51 @@ Parameter    | Description | Default|
 `plot_options` (str) | A string of valid Tikz plotting options | `""`
 `action` (str) | An action to perform with the line (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
 
-This method is analagous to the Tikz command `\draw plot coordinates{...};`. For example, the code
+This class is analagous to the Tikz command `\draw plot coordinates{...};`.
+
+## Examples
+Introducing examples of `PlotCoordinates` gives us an opportunity to illustrate the optional parameter `action`. By default, `action` is `"draw"` (analogous to `\draw` in Tikz) so the code below
 ```python
->>> tikz = TikzPicture()
->>> points = [(2,2), (4,0), (1,-3), (-2, -1), (-1, 3)]
->>> plot = tikz.plot_coords(points, options = "Blue", plot_options = "smooth cycle, tension = 0.5")
+tikz = TikzPicture()
+
+points = [(2, 2), (4, 0), (1, -3), (-2, -1), (-1, 3)]
+plot = tikz.plot_coordinates(points) # action="draw" by default
+plot.plot_options = "smooth cycle, tension = 0.5"
 ```
-corresponds to the Tikz command `\draw[Blue] plot[smooth cycle, tension = 0.5] coordinates{(2,2), (4,0), (1,-3) (-2, -1), (-1, 3)};`.
+produces the image 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/plotcoordinates_ex_1.png" height = 250/>
+
+Alternatively we can set `action = "fill"` (analogous to `\fill` in Tikz) as in the code below
+```python
+tikz = TikzPicture()
+
+points = [(2, 2), (4, 0), (1, -3), (-2, -1), (-1, 3)]
+plot = tikz.plot_coordinates(points, options="Blue", action="fill")
+plot.plot_options = "smooth cycle, tension = 0.5"
+```
+to produce the image
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/plotcoordinates_ex_2.png" height = 250/>
+
+If we want both, we can set `action = "filldraw"` (analogous to `\filldraw` in Tikz)
+```python
+tikz = TikzPicture()
+
+points = [(2, 2), (4, 0), (1, -3), (-2, -1), (-1, 3)]
+plot = tikz.plot_coordinates(points, options="Blue", action="filldraw")
+plot.options = "fill=ProcessBlue!50"
+plot.plot_options = "smooth cycle, tension = 0.5"
+```
+which produces. 
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/plotcoordinates_ex_3 .png" height = 250/>
+
+Finally, we can set `action = "path"` (analogous to `\path` in Tikz), but as one would expect this doesn't draw anything. 
+
+## Methods
 
 `PlotCoordinates` has methods `.shift()`, `.scale`, and `.rotate`, similar to the class `Line`, and the parameters behave similarly. These methods are more interestingly used on `PlotCoordinates` than on `Line`. For example, the code
 ```python
-tikz = TikzPicture()
 tikz = TikzPicture()
 points = [(14.4, 3.2), (16.0, 3.6), (16.8, 4.8), (16.0, 6.8), (16.4, 8.8), (13.6, 8.8), (12.4, 7.6), (12.8, 5.6), (12.4, 3.6)]
 
@@ -328,7 +380,7 @@ for i in range(0, 20):
     options = f"fill = {rainbow_colors(i)}, opacity = 0.7"
     # Requires \usetikzlibrary{hobby} here
     plot_options = "smooth, tension=.5, closed hobby"
-    plot = tikz.plot_coords(points, options, plot_options)
+    plot = tikz.plot_coordinates(points, options, plot_options)
     plot.scale((20 - i) / 20) # Shrink it 
     plot.rotate(15 * i) # Rotate it
 ```
@@ -358,19 +410,46 @@ Parameter    | Description | Default|
 `options` (str) | String containing valid Tikz drawing options (e.g, "Blue") | `""`
 `action` (str) | An action to perform with the circle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
 
-`Circle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
+
+## Examples
+Here we create several circles, making use of the `action` parameter. 
+```python
+tikz = TikzPicture()
+
+tikz.circle((0, 0), 1.25) #action="draw" by default
+tikz.line((0, 0), (0, 1.25), options="dashed")
+tikz.circle((3, 0), 1, options="thick, fill=red!60", action="filldraw")
+tikz.circle((6, 0), 1.25, options="Green!50", action="fill")
+```
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/circle_ex_1.png" height = 250/>
+
+We can also use circles to create the [Hawaiian Earing](https://en.wikipedia.org/wiki/Hawaiian_earring).
+
+```python
+tikz = TikzPicture()
+
+radius = 5
+for i in range(1, 60):
+    n = radius / i
+    tikz.circle((n, 0), n)
+```
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/circle_ex_2.png" height = 250/>
+
+
+## Methods
+`Circle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
 
 
 # Class: `Node`
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
-node = tikz.node(position, options, content)
+node = tikz.node(position, options, text)
 ```
 which creates a `Node` object and draws it. We can also intiailize a 
 node object directly with
 ```python
-node = Node(position, options, content)
+node = Node(position, options, text)
 ```
 We can then add the node later via `tikz.draw(node)`.
 
@@ -378,9 +457,52 @@ Parameter    | Description | Default|
 -------------|-------------|-------------|
 `position` (tuple) | A tuple (x, y) of floats representing the position of the node |
 `options` (str) | String containing valid Tikz node options (e.g., "Above") | `""`
-`content` (str) | A string containing content, such as text or LaTeX code, to be displayed with the node | `""`
+`text` (str) | A string containing content, such as text or LaTeX code, to be displayed with the node | `""`
 
-`Node` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
+## Examples
+Here we use some nodes to label a figure explaining the logarithm branch cut
+```python
+tikz = TikzPicture()
+# x,y axes
+tikz.line((-4, 0), (4, 0), options="Gray!40, ->")
+tikz.line((0, -4), (0, 4), options="Gray!40, ->")
+# Cut
+tikz.line((-4, 0), (0, 0), options="thick")
+# Line out
+tikz.line((0, 0), (1.414, 1.414), options="-o")
+tikz.arc((1, 0), 0, 45, radius=1, options="dashed")
+
+# Labels
+tikz.node((3.6, -0.2), text="$x$")
+tikz.node((-0.24, 3.53), text="$iy$")
+tikz.node((1.3, 0.4), text="$\\theta$")
+tikz.node((2.1, 1.7), text="$z = re^{i\\theta}$")
+tikz.node((-2, 0.3), text="Cut")
+```
+which produces
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/node_ex_1.png" height = 250/>
+
+Here's another example of usings nodes to illustrate the concept of a multivariable function.
+```python
+row_1 = TikzPicture()
+
+# Lines and rectangles
+row_1.line((0, 0), (2, 0), options="->")
+row_1.rectangle((2, -0.5), (4, 0.5))
+row_1.line((4, 0), (6, 0), options="->")
+# Labels
+row_1.node((-1.2, 0), text="$(x_1, \dots, x_n)$")
+row_1.node((1, 0.3), text="input")
+row_1.node((3, 0), text="$f$")
+row_1.node((5, 0.3), text="output")
+row_1.node((7.3, 0), text="$f(x_1, \dots, x_n)$")
+```
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/node_ex_2.png" height = 250/>
+
+## Methods
+
+`Node` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
 
 # Class: `Rectangle`
 Initialize an object of the class as below:
@@ -401,18 +523,48 @@ Parameter    | Description | Default|
 `options` (str) | A string containing valid Tikz draw optins, (e.g, "fill = Blue"). | `""` 
 `action` (str) | An action to perform with the rectangle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
 
+## Example
+Rectangles are often used as a background to many figures; in this case, 
+we create a fancy colored background.
 
-`Rectangle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
+```python
+tikz = TikzPicture()
+
+tikz.rectangle((-3.5, -2.5), (4.5, 2.5), options="rounded corners, Yellow!30",action="filldraw")
+# Params
+r = 2
+n_nodes = 7
+nodes = []
+# Draw the nodes
+for i in range(1, n_nodes + 1):
+    angle = 2 * math.pi * i / n_nodes  # Clockwise
+    x = r * math.cos(angle)
+    y = r * math.sin(angle)
+    node = tikz.node((x, y), text=f"$A_{{{i}}}$")
+    nodes.append(node)
+
+# Draw the lines between the nodes
+for i in range(len(nodes)):
+    start = nodes[i].position
+    end = nodes[(i + 1) % len(nodes)].position
+    tikz.line(start, end, options="->, shorten >= 10pt, shorten <=10pt")
+```
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/rectangle_ex_1.png" height = 250/>
+
+
+## Methods
+`Rectangle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
 
 # Class: `Ellipse`
 Initialize an object of the class as below:
 ```python
 tikz = TikzPicture()
-ellipse = tikz.ellipse(center, horiz_axis, vert_axis, action)
+ellipse = tikz.ellipse(center, horiz_axis, vert_axis, options, action)
 ```
 which creates an `Ellipse` object and draws it. We can also write
 ```python
-ellipse = Ellipse(center, horiz_axis, vert_aixs, action)
+ellipse = Ellipse(center, horiz_axis, vert_axis, options, action)
 ```
 and draw this later to the Tikz picture via `tikz.draw(ellipse)`.
 
@@ -424,7 +576,30 @@ Parameter    | Description | Default|
 `action` (str) | An action to perform with the ellipse (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
 
 
-`Ellipse` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
+## Example
+Here we draw and ellipse and define the major and minors axes.
+```python
+tikz = TikzPicture()
+
+# x,y axes
+tikz.line((-5, 0), (5, 0), options="Gray!40, ->")
+tikz.line((0, -5), (0, 5), options="Gray!40, ->")
+# Ellipse
+ellipse = tikz.ellipse(
+    (0, 0), 4, 3, options="fill=ProcessBlue!70, opacity=0.4", action="filldraw"
+)
+# Labels
+h_line = tikz.line((0, 0), (ellipse.horiz_axis, 0), options="thick, dashed, ->")
+v_line = tikz.line((0, 0), (0, ellipse.vert_axis), options="thick, dashed, ->")
+tikz.node(h_line.midpoint, options="below", text="Major")
+tikz.node(v_line.midpoint, options="left", text="Minor")
+```
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/ellipse_ex_1.png" height = 250/>
+
+
+## Methods
+`Ellipse` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
 
 
 # Class: `Arc`
@@ -432,12 +607,12 @@ Initialize an object of the class as below:
 
 ```python
 tikz = TikzPicture()
-arc = tikz.arc(start, end, options, control_pts, action)
+arc = tikz.arc(center, start_angle, end_angle, radius, options, radians, action)
 ```
 which creates an `Arc` object and draws it. Again, we can 
 also initalize an instance with
 ```python
-arc = Arc(start, end, options, control_pts, action)
+arc = Arc(center, start_angle, end_angle, radius, options, radians, action)
 ```
 which we can draw later via `tikz.draw(arc)`.
 
@@ -447,10 +622,23 @@ Parameter    | Description | Default|
 `start_angle` (float) | The angle (in degrees) of the start of the arc |
 `end_angle` (float) | The angle (in degrees) of the end of the arc |
 `radius` (float) | The radius (in cm) of the arc |
+`options` (str) | A string of containing valid Tikz arc options | `""`
+`radians` (bool) | `True` if angles are in radians, `False` otherwise | `False`
 `action` (str) | An action to perform with the arc (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
 
+## Example
+Here we draw and fill a sequence of arcs
+```python
+for i in range(1, 10):
+    t = 4 / i
+    arc = tikz.arc((0, 0), 0, 180, radius=t, options=f"fill={rainbow_colors(i)}")
+```
+which generates the image
 
-`Arc` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and take in parameters as described before.
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/arc_ex_1.png" height = 250/>
+
+## Methods 
+`Arc` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
 
 # `Class: Scope`
 Initialize a Tikz scope environment as follows:

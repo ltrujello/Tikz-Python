@@ -3,14 +3,17 @@ import sys
 sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
 from tikz_methods import *
 
-tikz = TikzPicture(new_file=True)
+tikz = TikzPicture(center=True)
 
 for i in range(30):
+    # i/30-th point on the unit circle
     point = (math.sin(2 * math.pi * i / 30), math.cos(2 * math.pi * i / 30))
 
-    tikz.circle(point, 2, "Blue")
-    tikz.circle(point, 2.2, "Green")
-    tikz.circle(point, 2.4, "Red")
+    # Create four circles of different radii with center located at point
+    tikz.circle(point, 2, "ProcessBlue")
+    tikz.circle(point, 2.2, "ForestGreen")
+    tikz.circle(point, 2.4, "red")  # xcolor Red is very ugly
     tikz.circle(point, 2.6, "Purple")
 
 tikz.write()
+tikz.show()

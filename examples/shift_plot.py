@@ -25,7 +25,7 @@ points = [
 ]
 
 for i in range(1, 20):
-    plot = tikz.plot_coords(
+    plot = tikz.plot_coordinates(
         draw_options=f"fill = {rainbow_colors(i)}, opacity = 0.5",
         plot_options="smooth, tension=.5, closed hobby",
         points=points,
