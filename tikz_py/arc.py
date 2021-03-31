@@ -1,4 +1,4 @@
-from tikz_py.drawing_object import _DrawingObject as _DrawingObject
+from tikz_py.drawing_object import _DrawingObject
 
 
 class Arc(_DrawingObject):
@@ -6,7 +6,6 @@ class Arc(_DrawingObject):
     A class to create lines in the tikz environment
 
     Attributes :
-        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
         center (tuple) : Pair of points representing the relative center of the arc
         start_angle (float) : The angle of the start of the arc
         end_angle (float) : The angle of the end of the arc

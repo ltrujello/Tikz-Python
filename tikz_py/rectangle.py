@@ -1,4 +1,4 @@
-from tikz_py.drawing_object import _DrawingObject as _DrawingObject
+from tikz_py.drawing_object import _DrawingObject
 
 
 class Rectangle(_DrawingObject):
@@ -6,7 +6,6 @@ class Rectangle(_DrawingObject):
     A class to create lines in the tikz environment
 
     Attributes :
-        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
         left_corner (tuple) : Pair of floats representing the position of the bottom left corner
         right_corner (tuple) : Pair of floats representing the position of the upper right corner
         options (str) : String containing the drawing options, e.g, ("Blue")

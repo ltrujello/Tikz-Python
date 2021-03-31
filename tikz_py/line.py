@@ -1,4 +1,4 @@
-from tikz_py.drawing_object import _DrawingObject as _DrawingObject
+from tikz_py.drawing_object import _DrawingObject
 from tikz_py.utils import brackets
 
 # Class for Lines
@@ -7,7 +7,6 @@ class Line(_DrawingObject):
     A class to create lines in the tikz environment
 
     Attributes :
-        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
         start (tuple) : Pair of floats representing the start of the line
         end (tuple) : Pair of floats representing the end of the line
         options (str) : String containing Tikz drawing options, e.g. "Blue"

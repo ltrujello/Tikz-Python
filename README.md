@@ -1,14 +1,13 @@
 # Tikz-Python
-This an object-oriented approach via Python towards providing a giant wrapper for Tikz code, with the goal of streamling the process of creating complex figures for TeX documents.
+An object-oriented Python approach towards providing a giant wrapper for Tikz code, with the goal of streamlining the process of creating complex figures for TeX documents.
 
-## Why
-This is for people who know basic Python and TikZ, but who have realized that while TikZ is amazing, it is *really* annoying to use. 
- 
 
 ## How to Use: Basics
-A typical example of this module in action is below. 
+Am example of this module in action is below. 
 ```python
-import tikz_python
+import tikz_py  
+from sympy import integrate
+
 
 tikz = TikzPicture(tikz_file = "my_tikz_code.tex")
 tikz.line((0,0), (1,1), options = "thick, blue")
@@ -22,22 +21,6 @@ We explain line-by-line what this means.
 In TeX, this code would be `\draw[thick, blue] (0,0) -- (1,1);`.
 
 * Finally, `tikz.write()` writes all of our code into the file `my_tikz_code.tex`.
-
-## What Else?
-One can do more than just draw lines. The following table lists three things: Some objects one might want to draw in TikZ, an example of TikZ code on drawing such an object, and the code for how this module would write such commands.
-
-Object        | Raw Tikz Code   | Tikz-Python Code |
- -------------| -------------   | ------------- |
-Line          | `\draw[blue] (0,0) -- (1,1);`             | `tikz.line((0,0), (1,1), options = "blue")` 
-Circle        | `\draw[fill = blue] (0,0) circle (2cm);` | `tikz.circle((0,0), 2, options = "fill = blue")`  |
-Rectangle     | `\draw[blue] (0,0) rectangle (5, 6);`    | `tikz.rectangle((0,0), (5,6), options = "Blue")`  |
-Ellipse       | `\draw (0,0) ellipse (2cm and 4cm)`      | `tikz.ellipse((0,0), 2, 4)`
-Arc           | `\draw (1,1) arc (45:90:5cm)`            | `tikz.arc((1,1), 45, 90, 5)`
-Node          | `\node[above] at (0,0) {I am a node!};`  | `tikz.node((0,0), "I am a node!", "above")`
-Plot Coordinates   | `\draw plot[smooth cycle] coordinates {(4.9, 9) (3.7, 8.3) (2.3, 8.5) };` | `tikz.plot_coordinates(options = "Red", plot_options = "smooth cycle", points = [(4.9, 9), (3.7, 8.3), (2.3, 8.5)])`|	
-Scope| `\begin{scope} ... \end{scope}` | `tikz.scope()`|
-Clip | `\clip[draw] (0,0) circle (5cm)`| `tikz.scope.clip(circle((0,0), 2), draw = True)`
-
 
 ### Example: Line and two nodes
 Suppose I want to create a line and two labels at the ends:
@@ -116,13 +99,6 @@ tikz.write()
 Which generates: 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/roots_of_unity.png" height = 350/>
 
-
-
-### Example: Barycentric subdivision
-One can also create a function to perform the n-th barycentric subdivision of a triangle. The source [here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric.py) generates the following pictures. 
-
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 350/>
-
 ### Example: General Ven Diagrams 
 Python has access to many libraries that help one efficiently build very complex functions. Such libraries are simply not possible to implement in TeX (well, not impossible, but it'd be ridiculous). 
 Tikz-Python offers [this function](https://github.com/ltrujello/Tikz-Python/blob/main/tests/intersections_scope_clip.py), which uses `itertools.combinations`, to take in an arbitrary number of 2D Tikz figures and colors each and every single intersection. For example, here is what all of the intersections of nine circles in a 3 x 3 grid looks like.
@@ -134,6 +110,18 @@ Here's what the intersections of three random blobs looks like:
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_blobs.png" height = 350/>
 
 As one might guess, this is useful for creating topological figures, as manually writing all of the `\scope` and `\clip` commands to create such images is pretty tedious.
+
+### Example: Barycentric subdivision
+Another example of using simple python libraries is the following. [The source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric.py) allows us to generate the the n-th barycentric subdivision of a triangle. 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 350/>
+
+### Example 
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the integrals of a polynoimal. For example, the output of `x**2` (the polymoial x^2) generates the image below. 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/integration_ex.png"/>
+
+
 
 # Class: `TikzPicture`
 ```python
@@ -161,7 +149,7 @@ Writes the currently recorded Tikz code into the .tex file located at `my_tikz_f
 	\draw[Blue] (0, 0) circle (2cm);
 \end{tikzpicture}
 ```
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/tikz_write_ex_1.png" height = 300/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/tikz_write_ex_1.png"/>
 
 Now we add `circle_2` to the picture, and change the center `circle_1`
 ```python
@@ -174,7 +162,7 @@ Now we add `circle_2` to the picture, and change the center `circle_1`
 	\draw[Red] (1, 1) circle (2cm);
 \end{tikzpicture}
 ```
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/tikz_write_ex_2.png" height = 300/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/tikz_write_ex_2.png"/>
 
 This feature, in combination with `.remove()` and `.show()` (see below), allows you to gradually build and view a TikzPicture quite painlessly.
 

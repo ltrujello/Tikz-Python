@@ -1,10 +1,7 @@
-import sys
+import tikz_py
 from sympy import *
 
-sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
-from tikz_methods import *
-
-tikz = TikzPicture()
+tikz = tikz_py.TikzPicture()
 
 BRAID_HEIGHT = 5
 SEP = 2
@@ -21,9 +18,6 @@ for i in range(1, 6 * SEP, SEP):
 tikz.circle((2, 2 * 5 / 3), radius=0.05, options="fill=red")
 tikz.circle((2, 5 / 3), radius=0.05, options="fill=red")
 
-##################################################################
-# force = FORCE
-# alpha = 2 * 5 / 3
 
 t = Symbol("t")
 

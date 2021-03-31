@@ -1,4 +1,4 @@
-from tikz_py.drawing_object import _DrawingObject as _DrawingObject
+from tikz_py.drawing_object import _DrawingObject
 
 # Class for Nodes
 class Node(_DrawingObject):
@@ -6,7 +6,6 @@ class Node(_DrawingObject):
     A class to create lines in the tikz environment
 
     Attributes :
-        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
         position (tuple) : Pair of floats representing the location of the node
         text (str): Text that will be displayed with the node; can use dollar signs $ for LaTeX
         options (str) : String containing node options (e.g., "above")

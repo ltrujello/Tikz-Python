@@ -1,4 +1,4 @@
-from tikz_py.drawing_object import _DrawingObject as _DrawingObject
+from tikz_py.drawing_object import _DrawingObject
 from tikz_py.utils import brackets
 
 # Class for Plotting
@@ -7,7 +7,6 @@ class PlotCoordinates(_DrawingObject):
     A class to create plots in the tikz environment
 
     Attributes :
-        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
         options (str) : String containing drawing options (e.g., "Blue")
         plot_options (str) : String containing the plot options (e.g., "smooth cycle")
         points (list) : A list of points to be drawn

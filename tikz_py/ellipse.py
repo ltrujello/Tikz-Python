@@ -1,4 +1,4 @@
-from tikz_py.drawing_object import _DrawingObject as _DrawingObject
+from tikz_py.drawing_object import _DrawingObject
 
 
 class Ellipse(_DrawingObject):
@@ -6,7 +6,6 @@ class Ellipse(_DrawingObject):
     A class to create lines in the tikz environment
 
     Attributes :
-        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
         center (tuple) : Pair of floats representing the center of the ellipse
         horiz_axis (float): The length (in cm) of the horizontal axis of the ellipse
         vert_axis (float): The length (in cm) of the vertical axis of the ellipse

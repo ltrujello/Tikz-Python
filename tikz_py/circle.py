@@ -1,4 +1,4 @@
-from tikz_py.drawing_object import _DrawingObject as _DrawingObject
+from tikz_py.drawing_object import _DrawingObject
 
 # Class for Circles
 class Circle(_DrawingObject):
@@ -6,7 +6,6 @@ class Circle(_DrawingObject):
     A class to create circles in the tikz environment
 
     Attributes :
-        tikz_inst (TikzPicture) : An instance of the class TikzPicture so that we may call methods on an instance
         position (tuple) : Pair of floats representing the center of the circle
         radius (float) : Length (in cm) of the radius
         options (str) : String containing the drawing options (e.g, "Blue")
@@ -26,7 +25,7 @@ class Circle(_DrawingObject):
         self.center = shift_coords([self.center], xshift, yshift)[0]
 
     def scale(self, scale):
-        self.center = scale_coords([self.center], scale)
+        self.center = scale_coords([self.center], scale)[0]
 
     def rotate(self, angle, about_pt, radians=False):
         self.center = rotate_coords([self.center], angle, about_pt, radians)[0]

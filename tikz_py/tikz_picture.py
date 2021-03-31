@@ -252,7 +252,7 @@ class TikzPicture:
         tex_file = tex_file_parents + "/" + tex_filename + ".tex"
         # We now compile the PDF
         subprocess.run(
-            f"latexmk -pdf -quiet -output-directory='{tex_file_parents}' {tex_file}",
+            f"latexmk -pdf -output-directory='{tex_file_parents}' {tex_file}",
             shell=True,
         )
         # We move the PDF up one directory, our of the hidden folder, so the viewer can see it.

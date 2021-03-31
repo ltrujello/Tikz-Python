@@ -148,7 +148,7 @@ xcols = [
 rainbow_cols = [
     "{rgb,255:red, 255; green, 0; blue, 0 }",  # red
     "{rgb,255:red, 255; green, 125; blue, 0 }",  # orange
-    "{rgb,255:red, 255; green, 255; blue, 0 }",  # yellow
+    "{rgb,255:red, 255; green, 240; blue, 105 }",  # yellow
     "{rgb,255:red, 125; green, 255; blue, 0 }",  # spring
     "{rgb,255:red, 0; green, 255; blue, 0 }",  # green
     "{rgb,255:red, 0; green, 255; blue, 125 }",  # turquoise
