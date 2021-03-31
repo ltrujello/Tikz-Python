@@ -6,8 +6,6 @@ An object-oriented Python approach towards providing a giant wrapper for Tikz co
 Am example of this module in action is below. 
 ```python
 import tikz_py  
-from sympy import integrate
-
 
 tikz = TikzPicture(tikz_file = "my_tikz_code.tex")
 tikz.line((0,0), (1,1), options = "thick, blue")
@@ -135,7 +133,7 @@ Parameter    | Description | Default|
 `options` (str) | A string containing valid Tikz options. | `""`|
 
 
-## Methods 
+## Methods  
 ### `TikzPicture.write()`
 Writes the currently recorded Tikz code into the .tex file located at `my_tikz_file`. If `my_tikz_file` is not specified, the directory `tikz/tikz_file.tex` is created automatically and the code is stored there.
 
@@ -256,7 +254,7 @@ tikz.line((0, 0), (4, 0), options="o->", control_pts=[(1, 1), (3, -1)])
 ```
 produces the line 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_ex_1.png" height = 250/> 
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_ex_1.png"/> 
 
 ## Methods 
 ### `Line.shift(xshift, yshift)`
