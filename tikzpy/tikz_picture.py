@@ -3,17 +3,17 @@ import webbrowser
 import pkgutil
 from pathlib import Path
 
-from tikz_py.line import Line
-from tikz_py.plotcoordinates import PlotCoordinates
-from tikz_py.circle import Circle
-from tikz_py.node import Node
-from tikz_py.rectangle import Rectangle
-from tikz_py.ellipse import Ellipse
-from tikz_py.arc import Arc
-from tikz_py.scope import Scope
-from tikz_py.clip import Clip
-from tikz_py.tikz_command import TikzCommand
-from tikz_py.utils import brackets
+from tikzpy.line import Line
+from tikzpy.plotcoordinates import PlotCoordinates
+from tikzpy.circle import Circle
+from tikzpy.node import Node
+from tikzpy.rectangle import Rectangle
+from tikzpy.ellipse import Ellipse
+from tikzpy.arc import Arc
+from tikzpy.scope import Scope
+from tikzpy.clip import Clip
+from tikzpy.tikz_command import TikzCommand
+from tikzpy.utils import brackets
 
 """ _N_TIKZs: records the number of TikZ environments created.
 
@@ -44,7 +44,7 @@ class TikzPicture:
         self.options = options
         self.center = center
         self._statements = {}
-        self._id = f"@TikzPy__#id__==__({_N_TIKZs})"  # Cannot have spaces
+        self._id = f"@TikzPy__#id__==__({_N_TIKZs})"  # Cannot have spaces. We later scan and look for this string.
 
         # Check if the tikz_file exists. If not, create it.
         if not self.tikz_file.is_file():
@@ -123,12 +123,12 @@ class TikzPicture:
                     __name__, "template/tex_file.tex"
                 )
                 f.write(template_file_bytes)
-            # Replace the \input linein tex_file.tex
+            # Replace the \\input linein tex_file.tex
             with open(tex_file_path, "r") as f:
                 lines = f.readlines()
             with open(tex_file_path, "w") as f:
                 for line in lines:
-                    if line == "\input{fillme}\n":
+                    if line == "\\input{fillme}\n":
                         f.write(
                             f"\\input{{{tikz_file_path}}}"
                         )  # This is what connects the Tikz code to our tex file

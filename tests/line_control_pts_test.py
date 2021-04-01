@@ -1,7 +1,7 @@
-import tikz_py
+import tikzpy
 from sympy import *
 
-tikz = tikz_py.TikzPicture()
+tikz = tikzpy.TikzPicture()
 
 BRAID_HEIGHT = 5
 SEP = 2

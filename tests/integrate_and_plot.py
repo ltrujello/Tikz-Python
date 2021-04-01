@@ -1,10 +1,10 @@
-import tikz_py
+import tikzpy
 import numpy as np
 from sympy import integrate, poly, latex
 from sympy.abc import x
 
 # Create a TikzPicture
-tikz = tikz_py.TikzPicture(center=True)
+tikz = tikzpy.TikzPicture(center=True)
 # x- and y- axis
 tikz.line((-4, 0), (4, 0), options="Gray!40, thick, <->")
 tikz.line((0, -4), (0, 4), options="Gray!40, thick, <->")
@@ -25,7 +25,7 @@ def integrate_n_times(func, n_integrals):
 
     for i, integ in enumerate(integrals):
         tikz.plot_coordinates(
-            integ[1], options=f"<->, color= {tikz_py.rainbow_colors(3*i)}"
+            integ[1], options=f"<->, color= {tikzpy.rainbow_colors(3*i)}"
         )
         if i % 2:
             tikz.node(

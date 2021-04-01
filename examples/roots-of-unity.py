@@ -1,12 +1,9 @@
-import sys
-
-sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
-from tikz_methods import *
+import tikzpy
 
 
 def roots_of_unity(n, scale):
     """Creates a diagram for the n-th roots of unity."""
-    tikz = TikzPicture()
+    tikz = tikzpy.TikzPicture()
 
     for i in range(n):
         theta = (2 * math.pi * i) / n

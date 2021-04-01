@@ -1,4 +1,4 @@
-from tikz_py.drawing_object import _DrawingObject
+from tikzpy.drawing_object import _DrawingObject
 
 # Class for Circles
 class Circle(_DrawingObject):

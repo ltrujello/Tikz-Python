@@ -1,5 +1,5 @@
 import pytest
-import tikz_py
+import tikzpy
 
 """ We test that our basic class constructors returns the correct Tikz code. 
 
@@ -10,7 +10,7 @@ import tikz_py
 """
 
 # Initalize via a TikzPicture Class instance
-tikz = tikz_py.TikzPicture()
+tikz = tikzpy.TikzPicture()
 # Line
 tikz_line = tikz.line(
     (0, 0),
@@ -41,32 +41,32 @@ tikz_arc = tikz.arc((0, 0), 20, 90, 4)
 
 
 # Initalize via class constructors directly
-line = tikz_py.Line(
+line = tikzpy.Line(
     (0, 0),
     (1, 1),
     options="thick, blue",
     control_pts=[(0.25, 0.25), (0.75, 0.75)],
 )
 # Plot
-plot = tikz_py.PlotCoordinates(
+plot = tikzpy.PlotCoordinates(
     options="green",
     plot_options="smooth ",
     points=[(1, 1), (2, 2), (3, 3), (2, -4)],
 )
 # Circle
-circle = tikz_py.Circle((1, 1), 1, options="fill = purple")
+circle = tikzpy.Circle((1, 1), 1, options="fill = purple")
 # Node
-node = tikz_py.Node(
+node = tikzpy.Node(
     position=(3, 3),
     text=r"I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !",
     options="above",
 )
 # Rectangle
-rectangle = tikz_py.Rectangle((2, 2), (3, 4), options="Blue")
+rectangle = tikzpy.Rectangle((2, 2), (3, 4), options="Blue")
 # Ellipse
-ellipse = tikz_py.Ellipse((0, 0), 3, 4)
+ellipse = tikzpy.Ellipse((0, 0), 3, 4)
 # Arc
-arc = tikz_py.Arc((0, 0), 20, 90, 4)
+arc = tikzpy.Arc((0, 0), 20, 90, 4)
 
 
 @pytest.mark.order(1)

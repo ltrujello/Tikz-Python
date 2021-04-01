@@ -1,9 +1,7 @@
 import statistics
 import queue
 import sys
-
-sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
-from tikz_methods import *
+import tikzpy
 
 
 def nth_subdivision(n):
@@ -11,11 +9,11 @@ def nth_subdivision(n):
     for i in range(n):
         if n > 0:
             iters += 6 ** (i)
-            tikz = TikzPicture()
+            tikz = tikzpy.TikzPicture()
             barycentric_subdivision(iters, tikz)
             tikz.write()
         else:
-            tikz = TikzPicture()
+            tikz = tikzpy.TikzPicture()
             barycentric_subdivision(0, tikz)
             tikz.write()
 

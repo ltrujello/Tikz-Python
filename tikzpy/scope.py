@@ -1,4 +1,4 @@
-from tikz_py.utils import brackets
+from tikzpy.utils import brackets
 
 # TODO: Test if this class works
 class Scope:

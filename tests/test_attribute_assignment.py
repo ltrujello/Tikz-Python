@@ -1,10 +1,10 @@
 import pytest
-import tikz_py
+import tikzpy
 
 """ We test that reassignment of attributes returns the correct Tikz code.
 """
 
-tikz = tikz_py.TikzPicture()
+tikz = tikzpy.TikzPicture()
 # Line
 line = tikz.line((0, 0), (1, 1))
 line.start = (-1, 2)

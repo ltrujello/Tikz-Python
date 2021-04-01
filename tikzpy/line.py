@@ -1,5 +1,5 @@
-from tikz_py.drawing_object import _DrawingObject
-from tikz_py.utils import brackets
+from tikzpy.drawing_object import _DrawingObject
+from tikzpy.utils import brackets
 
 # Class for Lines
 class Line(_DrawingObject):

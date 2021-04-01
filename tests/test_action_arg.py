@@ -1,11 +1,11 @@
 import pytest
-import tikz_py
+import tikzpy
 
 """ We test that the construction of self.action returns the correct Tikz code. 
     We also test that reassigning class attributes returns the correct Tikz code. 
 """
 
-tikz = tikz_py.TikzPicture()
+tikz = tikzpy.TikzPicture()
 
 # Line : \fill
 line_fill = tikz.line(

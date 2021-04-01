@@ -1,9 +1,6 @@
-import sys
+import tikzpy
 
-sys.path.append("/Users/luketrujillo/Desktop/github/tikz-python")
-from tikz_methods import *
-
-tikz = TikzPicture(center=True)
+tikz = tikzpy.TikzPicture(center=True)
 
 for i in range(30):
     # i/30-th point on the unit circle
