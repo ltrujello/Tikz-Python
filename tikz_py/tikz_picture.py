@@ -1,5 +1,6 @@
 import subprocess
 import webbrowser
+import pkgutil
 from pathlib import Path
 
 from tikz_py.line import Line
@@ -43,7 +44,7 @@ class TikzPicture:
         self.options = options
         self.center = center
         self._statements = {}
-        self._id = _N_TIKZs
+        self._id = f"@TikzPy__#id__==__({_N_TIKZs})"  # Cannot have spaces
 
         # Check if the tikz_file exists. If not, create it.
         if not self.tikz_file.is_file():
@@ -51,18 +52,18 @@ class TikzPicture:
                 with open(self.tikz_file.resolve(), "w"):
                     pass
             except:
-                print(f"Could not find file at {self.tikz_file}.")
-                answer = input("Want to make it? (Y/N)")
+                print(f"Could not find file at {self.tikz_file}.\n")
+                answer = input("Want to make it? (Y/N) ")
                 if answer == "y" or answer == "Y":
                     # Make directory, then file
                     self.tikz_file.parent.mkdir(parents=True)
                     with open(self.tikz_file.resolve(), "w+"):
                         pass
                 print(
-                    f"File created at {str(self.tikz_file.resolve())}, tikz_code will output there"
+                    f"File created at {str(self.tikz_file.resolve())}, tikz_code will output there \n"
                 )
             else:
-                print("Not created.")
+                print("Not created. \n")
         # Upon successful creation of an object, we create increase the counter
         _N_TIKZs += 1
 
@@ -73,17 +74,19 @@ class TikzPicture:
           Such an ID is of the form of a TeX comment " % TikzPython id = ({self._id}) "
         * This is to ensure safe, efficient file update and deletion processes.
         """
-        begin = f"\\begin{{tikzpicture}}{brackets(self.options)}% @TikzPython #id = ({self._id}) \n"
+        begin = [f"%__begin__{self._id}\n"]  # Cannot have spaces
         if self.center:
-            begin = f"\\begin{{center}}\n" + begin
+            begin.append("\\begin{center}\n")
+        begin.append(f"\\begin{{tikzpicture}}{brackets(self.options)}\n")
         return begin
 
     @property
     def end(self):
         """ End statement for the TikzPicture."""
-        end = "\\end{tikzpicture}\n"
+        end = ["\\end{tikzpicture}\n"]
         if self.center:
-            end = end + "\\end{center}\n"
+            end.append("\\end{center}\n")
+        end.append(f"%__end__{self._id}\n")  # Cannot have spaces
         return end
 
     @property
@@ -104,19 +107,31 @@ class TikzPicture:
         unwise user could nevertheless put their hard work into such a file and then risk it being wiped.
         """
         # Full paths for self.tikz_file and the tex_file
-        tikz_path = str(self.tikz_file.resolve().parents[0])
-        # Full path for the hidden tex_file
-        tex_file = Path(tikz_path + "/tex/tex_file.tex")
-        # Check if the folder exists. If so, create the hidden folder tex/ and populate it with appropriate code using our template
+        tikz_file_dir = str(self.tikz_file.resolve().parents[0])
+        # Full path for the tex_file
+        tex_file_path = tikz_file_dir + "/tex/tex_file.tex"
+        tex_file = Path(tex_file_path)
+        # Check if the TeX file exists
         if not tex_file.exists():
-            tex_file.parent.mkdir(parents=True)
-            template_file = Path("template/tex_file.tex")
-            with open(str(template_file.resolve())) as f:
+            tikz_file_path = str(self.tikz_file.resolve())
+            # Check if the folder exists
+            if not tex_file.parents[0].exists():
+                tex_file.parent.mkdir(parents=True)
+            # The folder has been created. We now gather our template contents and write it into the new tex_file.tex
+            with open(tex_file_path, "wb") as f:
+                template_file_bytes = pkgutil.get_data(
+                    __name__, "template/tex_file.tex"
+                )
+                f.write(template_file_bytes)
+            # Replace the \input linein tex_file.tex
+            with open(tex_file_path, "r") as f:
                 lines = f.readlines()
-            with open(tikz_path + "/tex/tex_file.tex", "w") as f:
+            with open(tex_file_path, "w") as f:
                 for line in lines:
-                    if line[:6] == "\\input":
-                        f.write(f"\\input{{{str(self.tikz_file.resolve())}}}")
+                    if line == "\input{fillme}\n":
+                        f.write(
+                            f"\\input{{{tikz_file_path}}}"
+                        )  # This is what connects the Tikz code to our tex file
                     else:
                         f.write(line)
         return tex_file
@@ -138,14 +153,25 @@ class TikzPicture:
         """A string contaning our Tikz code. This uses self._statements, and self.code
         gets passed to __repr__.
         """
-        code = self.begin
+        code = ""
+        # Add the beginning statement
+        for stmt in self.begin:
+            code += stmt
+        # Add the main tikz code
         for draw_obj in self.statements:
             code += "\t" + draw_obj.code + "\n"
-        code += self.end
+        # Add the ending statement
+        for stmt in self.end:
+            code += stmt
         return code
 
     def __repr__(self):
-        return self.code
+        """Return a readable string of the current tikz code"""
+        readable_code = self.begin[-1]
+        for draw_obj in self.statements:
+            readable_code += "\t" + draw_obj.code + "\n"
+        readable_code += self.end[0]
+        return readable_code
 
     def remove(self, draw_obj):
         """A method to remove a code statement from the Tikz environment, e.g., a line."""
@@ -181,8 +207,7 @@ class TikzPicture:
 
         # If we want to overwrite and update our last TikzPicture environment (in most cases, we do)
         if overwrite:
-            begin_ind = -1
-            end_ind = -1
+            begin_ind, end_ind = -1, -1
             # open the tikz_file and obtain its contents
             with open(tikz_file_path, "r") as tikz_file:
                 lines = tikz_file.readlines()
@@ -192,10 +217,14 @@ class TikzPicture:
                 * For each line, we check if it is our begin statement.
                 * If so, we look ahead and search for our end statement.
                 """
-                if line == self.begin:
+                if (
+                    line.replace(" ", "") == self.begin[0]
+                ):  # Search for start of code statement, we remove spaces for comparison
                     begin_ind = i
                     for j, later_lines in enumerate(lines[i:]):
-                        if later_lines == self.end:
+                        if (
+                            later_lines.replace(" ", "") == self.end[-1]
+                        ):  # Search for end of code statement, we remove spaces for comparison
                             end_ind = i + j
                             break
                     break
@@ -204,7 +233,7 @@ class TikzPicture:
             if begin_ind != -1:
                 assert (
                     end_ind != -1
-                ), "Found code statement at line {begin_ind}, but never found end statement"
+                ), f"Found code statement at line {begin_ind}, but never found end statement"
                 print("Updating Tikz environment with new code")
 
                 # Transfer the text, excluding our old \begin{tikzpicture}\end{tikzpicture} statement.

@@ -3,17 +3,17 @@ An object-oriented Python approach towards providing a giant wrapper for Tikz co
 
 
 ## How to Use: Basics
-Am example of this module in action is below. 
+Am example of this package in action is below. 
 ```python
 import tikz_py  
 
-tikz = TikzPicture(tikz_file = "my_tikz_code.tex")
+tikz = tikz_py.TikzPicture(tikz_file = "my_tikz_code.tex")
 tikz.line((0,0), (1,1), options = "thick, blue")
 tikz.write()
 ```
 We explain line-by-line what this means.
 
-* When we begin a TikZ drawing in LaTeX, we write `\begin{tikzpicture}` and `\end{tikzpicture}`. This is analagous to the code `tikz = TikzPicture(tikz_file = "my_tikz_code.tex")`. The variable `tikz` is now a tikz environment that we can append drawings to. `TikzPicture` is a class to create such tikz environments. And `tikz_file` is the file (or more generally, any file path) where our tikz code will be stored.
+* The code TikzPicture `tikz_py.TikzPicture(tikz_file = "my_tikz_code.tex")` is analagous to the TeX code `\begin{tikzpicture}` and `\end{tikzpicture}`. The variable `tikz` is now a tikz environment, specifically an instance of the class `TikzPicture`, and we can now append drawings to it. And `tikz_file` is the file (or more generally, any file path) where our tikz code will be stored.
 
 * The line `tikz.line((0,0), (1,1), options = "thick, blue")` draws a blue line in the tikz environment `tikz`. 
 In TeX, this code would be `\draw[thick, blue] (0,0) -- (1,1);`.
@@ -115,7 +115,7 @@ Another example of using simple python libraries is the following. [The source h
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 350/>
 
 ### Example 
-In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the integrals of a polynoimal. For example, the output of `x**2` (the polymoial x^2) generates the image below. 
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/tests/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the integrals of a polynoimal. For example, the output of `x**2` (the polymoial x^2) generates the image below. 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/integration_ex.png"/>
 
