@@ -1,7 +1,8 @@
 import pytest
 import tikzpy
 
-""" We test that our basic class constructors returns the correct Tikz code. 
+""" #1 
+    We test that our basic class constructors returns the correct Tikz code. 
 
     We can intialize classes via an instance of TikzPicture, or directly by using 
     a class constructor. Making sure that these are in sync relies on remembering to pair update 

@@ -274,16 +274,21 @@ class TikzPicture:
             _N_TIKZs += 1
 
     # Display the current tikz drawing
-    def show(self):
+    def show(self, quiet=False):
         """ Compiles the PDF and displays it to the user."""
         tex_file_parents = str(self.tex_file.resolve().parents[0])
         tex_filename = self.tex_file.stem
         tex_file = tex_file_parents + "/" + tex_filename + ".tex"
         # We now compile the PDF
-        subprocess.run(
-            f"latexmk -pdf -output-directory='{tex_file_parents}' {tex_file}",
-            shell=True,
-        )
+        if quiet:
+            compile_cmd = (
+                f"latexmk -pdf -quiet -output-directory='{tex_file_parents}' {tex_file}"
+            )
+        else:
+            compile_cmd = (
+                f"latexmk -pdf -output-directory='{tex_file_parents}' {tex_file}"
+            )
+        subprocess.run(compile_cmd, shell=True)
         # We move the PDF up one directory, our of the hidden folder, so the viewer can see it.
         pdf_file = Path(tex_file_parents + "/" + tex_filename + ".pdf")
         pdf_file_path = str(
@@ -350,18 +355,32 @@ class TikzPicture:
 
     def arc(
         self,
-        center,
+        position,
         start_angle,
         end_angle,
-        radius,
+        radius=None,
+        x_radius=None,
+        y_radius=None,
         options="",
         radians=False,
+        draw_from_start=True,
         action="draw",
     ):
         """Draws an arc by creating an instance of the Arc class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        arc = Arc(center, start_angle, end_angle, radius, options, radians, action)
+        arc = Arc(
+            position,
+            start_angle,
+            end_angle,
+            radius,
+            x_radius,
+            y_radius,
+            options,
+            radians,
+            draw_from_start,
+            action,
+        )
         self.draw(arc)
         return arc
 

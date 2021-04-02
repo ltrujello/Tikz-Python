@@ -1,7 +1,8 @@
 import pytest
 import tikzpy
 
-""" We test that reassignment of attributes returns the correct Tikz code.
+""" #2
+    We test that reassignment of attributes returns the correct Tikz code.
 """
 
 tikz = tikzpy.TikzPicture()

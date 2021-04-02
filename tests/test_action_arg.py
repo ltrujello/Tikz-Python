@@ -1,8 +1,10 @@
 import pytest
 import tikzpy
 
-""" We test that the construction of self.action returns the correct Tikz code. 
-    We also test that reassigning class attributes returns the correct Tikz code. 
+""" #3
+    We test that the construction of self.action returns the correct Tikz code. 
+    #4, #5, #6, #7
+    We also test that reassigning class attributes returns the correct Tikz code.
 """
 
 tikz = tikzpy.TikzPicture()
