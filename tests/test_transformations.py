@@ -1,7 +1,11 @@
 import pytest
 import tikzpy
 import math
-from tikzpy.transformations import shift_coords, scale_coords, rotate_coords
+from tikzpy.utils.transformations import (
+    shift_coords,
+    scale_coords,
+    rotate_coords,
+)
 
 tikz = tikzpy.TikzPicture()
 # Line
@@ -51,9 +55,9 @@ transformed_drawing_objects = []
 for draw_obj in drawing_objects:
     transformed = {}
     shifted = draw_obj.copy()
-    shifted.shift_coords(-2, 3)
+    shifted.shift(-2, 3)
     scaled = draw_obj.copy()
     scaled.scale(2)
     rotated = draw_obj.copy()
-    rotated.rotate_coords(3 * math.pi / 2, about_pt=(0, 0), radians=True)
+    rotated.rotate(3 * math.pi / 2, about_pt=(0, 0), radians=True)
     transformed[draw_obj] = [shifted, scaled, rotated]

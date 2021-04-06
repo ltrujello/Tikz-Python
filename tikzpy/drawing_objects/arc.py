@@ -1,8 +1,8 @@
 from math import sin, cos, tan, atan, atan2, pi, sqrt
 from math import radians as degs_2_rads
 from math import degrees as rads_2_degs
-import numpy
-from tikzpy.drawing_object import _DrawingObject
+from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
+from tikzpy.drawing_objects.drawing_object import _DrawingObject
 
 
 class Arc(_DrawingObject):
@@ -96,6 +96,10 @@ class Arc(_DrawingObject):
             )
         return start_pos
 
+    @_position.setter
+    def _position(self, new_pos):
+        return self.position
+
     @property
     def _command(self):
         if self.arc_type == "circle":
@@ -106,8 +110,7 @@ class Arc(_DrawingObject):
             t_end = self.atan2_for_ellipse(self._end_angle)
 
             start_angle, end_angle = rads_2_degs(t_start), rads_2_degs(t_end)
-            print(start_angle, end_angle)
-        return f"{self._position} arc [start angle = {start_angle}, end angle={end_angle}, {self.radius_statement}];"
+        return f"{self._position} arc [start angle = {start_angle}, end angle = {end_angle}, {self.radius_statement}];"
 
     def start_pos_circle(self):
         """Calculates the point at which the CIRCLE arc should begin
@@ -152,7 +155,9 @@ class Arc(_DrawingObject):
         self.center = scaled_center[0]
         self.radius = scaled_radius
 
-    def rotate(self, angle, about_pt, radians=False):
+    def rotate(self, angle, about_pt=None, radians=False):
+        if about_pt == None:
+            self._position
         self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
     def atan2_for_ellipse(self, angle):

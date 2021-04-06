@@ -1,6 +1,7 @@
-from tikzpy.utils import brackets
+from tikzpy.utils.helpers import brackets
+from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 
-# TODO: Test if this class works
+
 class Scope:
     """A class to create a scope environment."""
 

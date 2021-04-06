@@ -3,17 +3,18 @@ import webbrowser
 import pkgutil
 from pathlib import Path
 
-from tikzpy.line import Line
-from tikzpy.plotcoordinates import PlotCoordinates
-from tikzpy.circle import Circle
-from tikzpy.node import Node
-from tikzpy.rectangle import Rectangle
-from tikzpy.ellipse import Ellipse
-from tikzpy.arc import Arc
-from tikzpy.scope import Scope
-from tikzpy.clip import Clip
-from tikzpy.tikz_command import TikzCommand
-from tikzpy.utils import brackets
+from tikzpy.drawing_objects.line import Line
+from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
+from tikzpy.drawing_objects.circle import Circle
+from tikzpy.drawing_objects.node import Node
+from tikzpy.drawing_objects.rectangle import Rectangle
+from tikzpy.drawing_objects.ellipse import Ellipse
+from tikzpy.drawing_objects.arc import Arc
+
+from tikzpy.tikz_environments.scope import Scope
+from tikzpy.tikz_environments.tikz_command import TikzCommand
+
+from tikzpy.utils.helpers import brackets
 
 """ _N_TIKZs: records the number of TikZ environments created.
 
@@ -42,9 +43,11 @@ class TikzPicture:
         # Create a Tikz Environment
         self.tikz_file = Path(tikz_file)
         self.options = options
-        self.center = center
+        self._center = center
         self._statements = {}
         self._id = f"@TikzPy__#id__==__({_N_TIKZs})"  # Cannot have spaces. We later scan and look for this string.
+        self.preamble = {"begin_id": f"%__begin__{self._id}\n"}
+        self.postamble = {"end_ind": f"%__end__{self._id}\n"}
 
         # Check if the tikz_file exists. If not, create it.
         if not self.tikz_file.is_file():
@@ -54,7 +57,7 @@ class TikzPicture:
             except:
                 print(f"Could not find file at {self.tikz_file}.\n")
                 answer = input("Want to make it? (Y/N) ")
-                if answer == "y" or answer == "Y":
+                if answer.replace(" ", "") == "y" or answer.replace(" ", "") == "Y":
                     # Make directory, then file
                     self.tikz_file.parent.mkdir(parents=True)
                     with open(self.tikz_file.resolve(), "w+"):
@@ -68,15 +71,32 @@ class TikzPicture:
         _N_TIKZs += 1
 
     @property
+    def center(self):
+        return self._center
+
+    @center.setter
+    def center(self, bool):
+        self._center = bool
+        self.center_code()
+
+    def center_code(self):
+        if self.center:
+            self.preamble["center"] = "\\begin{center}\n"
+            self.postamble["center"] = "\\end{center}\n"
+        else:
+            self.preamble["center"] = ""
+            self.postamble["center"] = ""
+
+    @property
     def begin(self):
         """The beginning code of our tikz environment.
         * For each environment we create, we assign an ID that our program can later identify.
           Such an ID is of the form of a TeX comment " % TikzPython id = ({self._id}) "
         * This is to ensure safe, efficient file update and deletion processes.
         """
-        begin = [f"%__begin__{self._id}\n"]  # Cannot have spaces
-        if self.center:
-            begin.append("\\begin{center}\n")
+        begin = []
+        for statement in self.preamble.values():
+            begin.append(statement)
         begin.append(f"\\begin{{tikzpicture}}{brackets(self.options)}\n")
         return begin
 
@@ -84,9 +104,8 @@ class TikzPicture:
     def end(self):
         """ End statement for the TikzPicture."""
         end = ["\\end{tikzpicture}\n"]
-        if self.center:
-            end.append("\\end{center}\n")
-        end.append(f"%__end__{self._id}\n")  # Cannot have spaces
+        for statement in list(reversed(self.postamble.values())):
+            end.append(statement)
         return end
 
     @property
@@ -187,6 +206,18 @@ class TikzPicture:
         command = TikzCommand(tikz_statement)
         self.draw(command)
         return command
+
+    def tdplotsetmaincoords(self, theta, phi):
+        """Specifies the viewing angle for 3D.
+        theta: The angle (in degrees) through which the coordinate frame is rotated about the x axis.
+        phi: The angle (in degrees) through which the coordinate frame is rotated about the z axis.
+        """
+        self.tdplotsetmaincoords = (theta, phi)
+        if "tdplot_main_coords" not in self.options:
+            self.options += "tdplot_main_coords"
+        self.preamble[
+            "tdplotsetmaincoords"
+        ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
 
     def write(self, overwrite=True):
         """Our method to write the current recorded Tikz code into self.tikz_file, a .tex file somewhere.

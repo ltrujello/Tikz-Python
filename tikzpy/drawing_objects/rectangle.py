@@ -1,4 +1,5 @@
-from tikzpy.drawing_object import _DrawingObject
+from tikzpy.drawing_objects.drawing_object import _DrawingObject
+from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 
 
 class Rectangle(_DrawingObject):

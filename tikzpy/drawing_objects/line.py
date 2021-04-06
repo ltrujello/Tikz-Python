@@ -1,5 +1,6 @@
-from tikzpy.drawing_object import _DrawingObject
-from tikzpy.utils import brackets
+from tikzpy.drawing_objects.drawing_object import _DrawingObject
+from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
+from tikzpy.utils.helpers import brackets
 
 # Class for Lines
 class Line(_DrawingObject):

@@ -1,10 +1,3 @@
-import re
-
-"""
-    Functions for colors
-"""
-
-
 def rgb(r, g, b):
     """A wrapper function that outputs xcolor/Tikz code for coloring via rgb values.
 
@@ -28,49 +21,6 @@ def xcolors(i):
     Any integer is valid.
     """
     return xcols[i % len(xcols)]
-
-
-"""
-    Miscellaneous Helpers
-"""
-
-
-def brackets(string):
-    """A helper function for creating tikz code.
-    Basically, if the string is empty, we don't obtain brackets [].
-    """
-    if len(string) != 0:
-        return "[" + string + "]"
-    else:
-        return ""
-
-
-def tex_escape(text):
-    """
-    :param text: a plain text message
-    :return: the message escaped to appear correctly in LaTeX
-    """
-    conv = {
-        "&": r"\&",
-        "%": r"\%",
-        "$": r"\$",
-        "#": r"\#",
-        "_": r"\_",
-        "{": r"\{",
-        "}": r"\}",
-        "~": r"\textasciitilde{}",
-        "^": r"\^{}",
-        "\\": r"\textbackslash{}",
-        "<": r"\textless{}",
-        ">": r"\textgreater{}",
-    }
-    regex = re.compile(
-        "|".join(
-            re.escape(str(key))
-            for key in sorted(conv.keys(), key=lambda item: -len(item))
-        )
-    )
-    return regex.sub(lambda match: conv[match.group()], text)
 
 
 # Collect xcolor names

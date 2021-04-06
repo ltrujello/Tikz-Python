@@ -1,5 +1,5 @@
 from copy import copy, deepcopy
-from tikzpy.utils import brackets
+from tikzpy.utils.helpers import brackets
 
 
 class _DrawingObject:

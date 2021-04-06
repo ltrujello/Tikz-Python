@@ -1,3 +1,6 @@
+from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
+
+
 class Clip:
     """A class for a clipping code statement."""
 

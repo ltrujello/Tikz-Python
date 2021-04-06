@@ -3,7 +3,7 @@ An object-oriented Python approach towards providing a giant wrapper for Tikz co
 
 
 ## How to Use: Basics
-Am example of this package in action is below. 
+An example of this package in action is below. 
 ```python
 from tikzpy import TikzPicture  # Import the class TikzPicture
 
@@ -127,12 +127,15 @@ Another example of using simple python libraries is the following. [The source h
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 350/>
 
-### Example 
+### Example: Symbolic Intergation
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/tests/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the integrals of a polynoimal. For example, the output of `x**2` (the polymoial x^2) generates the image below. 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/integration_ex.png"/>
 
+### Example: Lorenz System
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/lorentz.py), we use `numpy` and `scipy` to solve ODEs and plot the Lorenz system. This is made possible since `tikz_py` also supports 3D. 
 
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/lorenz_ex.png"/>
 
 # Class: `TikzPicture`
 Initialize an object of this class as below

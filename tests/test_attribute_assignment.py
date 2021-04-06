@@ -45,7 +45,7 @@ arc.start_angle = 45
 arc.end_angle = 70
 arc.radius = 2
 arc.options = "fill = Blue!80"
-arc.radians = True
+arc.radians = False
 
 
 @pytest.mark.order(2)
@@ -95,5 +95,8 @@ def test_attribute_assignment():
     assert arc.end_angle == 70
     assert arc.radius == 2
     assert arc.options == "fill = Blue!80"
-    assert arc.radians == True
-    assert arc.code == r"\draw[fill = Blue!80] (1, 1) arc (45:70:2cm);"
+    assert arc.radians == False
+    assert (
+        arc.code
+        == r"\draw[fill = Blue!80] (0, 0) arc [start angle = 45, end angle = 70, radius = 2cm];"
+    )

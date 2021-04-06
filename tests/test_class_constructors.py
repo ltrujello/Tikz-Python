@@ -114,11 +114,14 @@ def test_attributes_assignments():
     assert tikz_ellipse.vert_axis == 4
     assert tikz_ellipse.code == r"\draw (0, 0) ellipse (3cm and 4cm);"
     # Arc
-    assert tikz_arc.center == (0, 0)
+    assert tikz_arc.position == (0, 0)
     assert tikz_arc.start_angle == 20
     assert tikz_arc.end_angle == 90
     assert tikz_arc.radius == 4
-    assert tikz_arc.code == r"\draw (0, 0) arc (20:90:4cm);"
+    assert (
+        tikz_arc.code
+        == r"\draw (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
 
     """ Test that directly using the class constructors works properly. 
     """
@@ -163,8 +166,11 @@ def test_attributes_assignments():
     assert ellipse.vert_axis == 4
     assert ellipse.code == r"\draw (0, 0) ellipse (3cm and 4cm);"
     # Arc
-    assert arc.center == (0, 0)
+    assert arc.position == (0, 0)
     assert arc.start_angle == 20
     assert arc.end_angle == 90
     assert arc.radius == 4
-    assert arc.code == r"\draw (0, 0) arc (20:90:4cm);"
+    assert (
+        arc.code
+        == r"\draw (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )

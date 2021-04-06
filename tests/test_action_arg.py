@@ -133,11 +133,20 @@ def test_action_construction():
     # Ellipse :path
     assert ellipse_path.code == "\\path (0, 0) ellipse (3cm and 4cm);"
     # Arc : \fill
-    assert arc_fill.code == "\\fill (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_fill.code
+        == "\\fill (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \filldraw
-    assert arc_filldraw.code == "\\filldraw (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_filldraw.code
+        == "\\filldraw (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \path
-    assert arc_path.code == "\\path (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_path.code
+        == "\\path (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
 
 
 fills = [line_fill, plot_fill, circle_fill, rectangle_fill, ellipse_fill, arc_fill]
@@ -205,11 +214,20 @@ def test_action_reset_to_draw():
     # Ellipse :path
     assert ellipse_path.code == "\\draw (0, 0) ellipse (3cm and 4cm);"
     # Arc : \fill
-    assert arc_fill.code == "\\draw (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_fill.code
+        == "\\draw (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \filldraw
-    assert arc_filldraw.code == "\\draw (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_filldraw.code
+        == "\\draw (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \path
-    assert arc_path.code == "\\draw (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_path.code
+        == "\\draw (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
 
 
 @pytest.mark.order(5)
@@ -265,11 +283,20 @@ def test_action_reset_to_fill():
     # Ellipse :path
     assert ellipse_path.code == "\\fill (0, 0) ellipse (3cm and 4cm);"
     # Arc : \fill
-    assert arc_fill.code == "\\fill (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_fill.code
+        == "\\fill (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \filldraw
-    assert arc_filldraw.code == "\\fill (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_filldraw.code
+        == "\\fill (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \path
-    assert arc_path.code == "\\fill (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_path.code
+        == "\\fill (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
 
 
 @pytest.mark.order(6)
@@ -325,11 +352,20 @@ def test_action_reset_to_filldraw():
     # Ellipse :path
     assert ellipse_path.code == "\\filldraw (0, 0) ellipse (3cm and 4cm);"
     # Arc : \fill
-    assert arc_fill.code == "\\filldraw (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_fill.code
+        == "\\filldraw (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \filldraw
-    assert arc_filldraw.code == "\\filldraw (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_filldraw.code
+        == "\\filldraw (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \path
-    assert arc_path.code == "\\filldraw (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_path.code
+        == "\\filldraw (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
 
 
 @pytest.mark.order(7)
@@ -385,8 +421,17 @@ def test_action_reset_to_path():
     # Ellipse :path
     assert ellipse_path.code == "\\path (0, 0) ellipse (3cm and 4cm);"
     # Arc : \fill
-    assert arc_fill.code == "\\path (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_fill.code
+        == "\\path (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \filldraw
-    assert arc_filldraw.code == "\\path (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_filldraw.code
+        == "\\path (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
     # Arc : \path
-    assert arc_path.code == "\\path (0, 0) arc (20:90:4cm);"
+    assert (
+        arc_path.code
+        == "\\path (0, 0) arc [start angle = 20, end angle = 90, radius = 4cm];"
+    )
