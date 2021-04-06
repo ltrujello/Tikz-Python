@@ -13,6 +13,7 @@ from tikzpy.drawing_objects.arc import Arc
 
 from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_command import TikzCommand
+from tikzpy.tikz_environments.tikz_style import TikzStyle
 
 from tikzpy.utils.helpers import brackets
 
@@ -139,7 +140,7 @@ class TikzPicture:
             # The folder has been created. We now gather our template contents and write it into the new tex_file.tex
             with open(tex_file_path, "wb") as f:
                 template_file_bytes = pkgutil.get_data(
-                    __name__, "template/tex_file.tex"
+                    __name__, "../template/tex_file.tex"
                 )
                 f.write(template_file_bytes)
             # Replace the \\input linein tex_file.tex
@@ -218,6 +219,15 @@ class TikzPicture:
         self.preamble[
             "tdplotsetmaincoords"
         ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
+
+    def tikzset(self, style_name, style_rules):
+        style = TikzStyle(style_name, style_rules)
+        self.preamble[f"tikz_style:{style_name}"] = style.code
+        return style
+
+    def add_styles(self, *styles):
+        for style in styles:
+            self.preamble[f"tikz_style:{style.style_name}"] = style.code
 
     def write(self, overwrite=True):
         """Our method to write the current recorded Tikz code into self.tikz_file, a .tex file somewhere.

@@ -9,3 +9,4 @@ from tikzpy.drawing_objects.arc import Arc as Arc
 from tikzpy.tikz_environments.scope import Scope as Scope
 from tikzpy.tikz_environments.clip import Clip as Clip
 from tikzpy.utils.colors import rgb, rainbow_colors, xcolors
+from tikzpy.styles.arrows_along_path import arrows_along_path_style

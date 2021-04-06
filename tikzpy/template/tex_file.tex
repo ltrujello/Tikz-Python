@@ -7,18 +7,20 @@
 %%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 \documentclass[12pt,letterpaper]{article}
-\usepackage[margin=0.9in]{geometry}
-\usepackage{graphicx}
 \usepackage{amsmath, amsfonts, amssymb, amsthm, thmtools}
 \usepackage[T1]{fontenc}
 \usepackage{fancyhdr}
 \usepackage[dvipsnames]{xcolor} % Colors, use dvipsnames for more color options
-\usepackage{framed} % Fancy leftbar
 \usepackage{tikz-cd} % Diagrams
-\usepackage{tikz, pgfplots} % General purpose graphics
+\usepackage{tikz} % General purpose graphics
+\usepackage{pgfplots}
 \usepackage{tikz-3dplot}
-\usepackage{enumitem} % Customize lists
-\usetikzlibrary{hobby}
+
+\usetikzlibrary{
+    hobby, 
+    decorations.pathreplacing,
+    decorations.markings
+}
 
 \begin{document} 
 

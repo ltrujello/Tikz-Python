@@ -30,7 +30,7 @@ We explain line-by-line the above code.
 * In the last two lines, `write()` writes all of our tikz code into a file which we can retrieve the code later. The call `show()` immediately displays the PDF of the drawing to the user.
 
 ### Example: Line and two nodes
-Suppose I want to create a line and two labels at the ends:
+Suppose I want to create a line and two labels at the ends. The code below achieves this
 ```python
 import tikzpy
 
@@ -39,6 +39,10 @@ line = tikz.line((0,0), (1,1), options = "thick, blue, o-o")
 start_node = tikz.node(line.start, options = "below", text = "Start!")
 end_node = tikz.node(line.end, options = "above", text = "End!")
 ```
+and produces
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_and_two_nodes.png" height = 200/> 
+
 Saving the line as a variable `line` allows us to pass in `line.start` and `line.end` into the node positions, so we don't have to type out the exact coordinates. 
 This is because lines, nodes, etc. are class instances with useful attributes: 
 ```python
@@ -50,7 +54,7 @@ This is because lines, nodes, etc. are class instances with useful attributes:
 "Start!"
 ```
 Running our previous python code, we obtain
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_and_two_nodes.png" height = 200/> 
+
 
 
 ### Example: Circles
@@ -108,6 +112,7 @@ for i in range(n):
 tikz.write()
 ```
 Which generates: 
+
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/roots_of_unity.png" height = 350/>
 
 ### Example: General Ven Diagrams 
@@ -133,9 +138,21 @@ In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/tests/in
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/integration_ex.png"/>
 
 ### Example: Lorenz System
-In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/lorentz.py), we use `numpy` and `scipy` to solve ODEs and plot the Lorenz system. This is made possible since `tikz_py` also supports 3D. 
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/lorenz.py), we use `numpy` and `scipy` to solve ODEs and plot the Lorenz system. This is made possible since `tikz_py` also supports 3D. 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/lorenz_ex.png"/>
+
+### Example: Tikz Styles
+`tikzpy` supports the creation of any `\tikzset` a feature of Tikz that saves users a great deal of time. You can save your tikz styles in a .py file instead of copying and pasting all the time. 
+
+Even if you don't want to make such settings, there are useful `\tikzset` styles that are preloaded in `tikzpy`. One particular is the very popular tikzset authored by Paul Gaborit [in this TeX stackexchange question](https://tex.stackexchange.com/questions/3161/tikz-how-to-draw-an-arrow-in-the-middle-of-the-line). Using such settings, we create these pictures, which illustrate Cauchy's Residue Theorem.
+[The source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm.py) produces 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/cauchy_residue_thm_ex.png"/>
+
+while [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm_arc.py) produces 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/cauchy_residue_thm_arc_ex.png"/>
 
 # Class: `TikzPicture`
 Initialize an object of this class as below
@@ -228,18 +245,24 @@ Manually add a valid string of Tikz code to the environment. This is for the off
 # Colors
 Coloring Tikz pictures in TeX tends to be annoying. A goal of this has been to make it as easy as possible to color Tikz pictures.
 
-- One is free to use whatever colors they like, but `\usepackage[dvipnames]{xcolor}` is loaded in the TeX document which compiles the Tikz code. Additionally, 68 xcolor dvipnames are stored within a global variable `xcolors`. (Hence, they can be looped over). 
+- One is free to use whatever colors they like, but `\usepackage[dvipnames]{xcolor}` is loaded in the TeX document which compiles the Tikz code. 
 
-- There is also a global function `rgb(r, g, b)` which can be called to color a Tikz object by RGB values. For example, 
+- There is also a global function `tikzpy.rgb(r, g, b)` which can be called to color a Tikz object by RGB values. For example, 
 ```python
->>> tikz = tikzpy.TikzPicture()
+from tikzpy import TikzPicture
+from tikzpy import rgb
+
+>>> tikz = TikzPicture()
 >>> line =  tikz.line((1,2), (4,3), options = "color=" + rgb(253, 0, 0))
 >>> rectangle = tikz.rectangle( (0,0), (5,5)), options = "fill=" + rgb(120, 0, 120))
 ```
 
-- A wrapper function `rainbow_colors` uses the above function to provide rainbow colors. The function takes in any integer, and grabs a rainbow color, computing a modulo operation if necessary  (hence, any integer is valid). 
+- A wrapper function `rainbow_colors` uses the `rgb` to provide rainbow colors. The function takes in any integer, and grabs a rainbow color, computing a modulo operation if necessary  (hence, any integer is valid). 
 ```python
->>> tikz = tikzpy.TikzPicture()
+from tikzpy import TikzPicture
+from tikzpy import rainbow_colors
+
+>>> tikz = TikzPicture()
 >>> for i in range(0, 20):
         circle = tikz.circle((i/20, 3 - i**2/20), 3)
         circle.options = "opacity = 0.7, fill = " + rainbow_colors(i)
