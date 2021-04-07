@@ -5,7 +5,7 @@ from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coor
 # Class for Plotting
 class PlotCoordinates(_DrawingObject):
     """
-    A class to create plots in the tikz environment
+    A class to create plots in the tikz environment.
 
     Attributes :
         options (str) : String containing drawing options (e.g., "Blue")
@@ -25,7 +25,7 @@ class PlotCoordinates(_DrawingObject):
         cmd = fr"plot{brackets(self.plot_options)} coordinates {{"
         for pt in self.points:
             cmd += str(pt) + " "
-        cmd += "};"
+        cmd += "}"
         return cmd
 
     @property
@@ -35,8 +35,8 @@ class PlotCoordinates(_DrawingObject):
         for pt in self.points:
             mean_x += pt[0]
             mean_y += pt[1]
-        mean_x = round(mean_x / len(self.points), 7)
-        mean_y = round(mean_y / len(self.points), 7)
+        mean_x = mean_x / len(self.points)
+        mean_y = mean_y / len(self.points)
         return (mean_x, mean_y)
 
     def shift(self, xshift, yshift):

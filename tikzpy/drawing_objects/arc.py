@@ -7,7 +7,7 @@ from tikzpy.drawing_objects.drawing_object import _DrawingObject
 
 class Arc(_DrawingObject):
     """
-    A class to create lines in the tikz environment
+    A class to create arcs in the tikz environment.
 
     Attributes :
         center (tuple) : Pair of points representing the relative center of the arc
@@ -110,7 +110,7 @@ class Arc(_DrawingObject):
             t_end = self.atan2_for_ellipse(self._end_angle)
 
             start_angle, end_angle = rads_2_degs(t_start), rads_2_degs(t_end)
-        return f"{self._position} arc [start angle = {start_angle}, end angle = {end_angle}, {self.radius_statement}];"
+        return f"{self._position} arc [start angle = {start_angle}, end angle = {end_angle}, {self.radius_statement}]"
 
     def start_pos_circle(self):
         """Calculates the point at which the CIRCLE arc should begin
@@ -150,7 +150,7 @@ class Arc(_DrawingObject):
 
     def scale(self, scale):
         scaled_center = scale_coords([self.center], scale)
-        scaled_radius = round(self.radius * scale, 7)
+        scaled_radius = self.radius * scale
 
         self.center = scaled_center[0]
         self.radius = scaled_radius

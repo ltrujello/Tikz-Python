@@ -4,7 +4,7 @@ from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coor
 
 class Ellipse(_DrawingObject):
     """
-    A class to create lines in the tikz environment
+    A class to create ellipses in the tikz environment.
 
     Attributes :
         center (tuple) : Pair of floats representing the center of the ellipse
@@ -21,15 +21,15 @@ class Ellipse(_DrawingObject):
 
     @property
     def _command(self):
-        return f"{self.center} ellipse ({self.horiz_axis}cm and {self.vert_axis}cm);"
+        return f"{self.center} ellipse ({self.horiz_axis}cm and {self.vert_axis}cm)"
 
     def shift(self, xshift, yshift):
         self.center = shift_coords([self.center], xshift, yshift)[0]
 
     def scale(self, scale):
         scaled_center = scale_coords([self.center], scale)[0]
-        scaled_h = round(self.horiz_axis * scale, 7)
-        scaled_v = round(self.vert_axis * scale, 7)
+        scaled_h = self.horiz_axis * scale
+        scaled_v = self.vert_axis * scale
 
         self.center = scaled_center
         self.horiz_axis = scaled_h

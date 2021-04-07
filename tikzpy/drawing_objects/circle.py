@@ -4,7 +4,7 @@ from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coor
 # Class for Circles
 class Circle(_DrawingObject):
     """
-    A class to create circles in the tikz environment
+    A class to create circles in the tikz environment.
 
     Attributes :
         position (tuple) : Pair of floats representing the center of the circle
@@ -20,7 +20,7 @@ class Circle(_DrawingObject):
 
     @property
     def _command(self):
-        return f"{self.center} circle ({self.radius}cm);"
+        return f"{self.center} circle ({self.radius}cm)"
 
     def shift(self, xshift, yshift):
         self.center = shift_coords([self.center], xshift, yshift)[0]

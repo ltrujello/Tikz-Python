@@ -53,9 +53,6 @@ This is because lines, nodes, etc. are class instances with useful attributes:
 >>> start_node.text
 "Start!"
 ```
-Running our previous python code, we obtain
-
-
 
 ### Example: Circles
 Pythons `for` loop is a lot less messier and much more powerful than the `\foreach` loop provided in Tikz via TeX. (For example, Tikz with TeX alone guesses your step size, and hence it cannot effectively [loop over two different sequences at the same time](https://tex.stackexchange.com/questions/171426/increments-in-foreach-loop-with-two-variables-tikz)).
@@ -143,7 +140,7 @@ In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/lorenz_ex.png"/>
 
 ### Example: Tikz Styles
-`tikzpy` supports the creation of any `\tikzset` a feature of Tikz that saves users a great deal of time. You can save your tikz styles in a .py file instead of copying and pasting all the time. 
+`tikzpy` supports the creation of any `\tikzset`, a feature of Tikz that saves users a great deal of time. You can save your tikz styles in a .py file instead of copying and pasting all the time. 
 
 Even if you don't want to make such settings, there are useful `\tikzset` styles that are preloaded in `tikzpy`. One particular is the very popular tikzset authored by Paul Gaborit [in this TeX stackexchange question](https://tex.stackexchange.com/questions/3161/tikz-how-to-draw-an-arrow-in-the-middle-of-the-line). Using such settings, we create these pictures, which illustrate Cauchy's Residue Theorem.
 [The source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm.py) produces 
@@ -153,6 +150,11 @@ Even if you don't want to make such settings, there are useful `\tikzset` styles
 while [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm_arc.py) produces 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/cauchy_residue_thm_arc_ex.png"/>
+
+### Example: Blowup at a point
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/blowup.py), we illustrate the blowup of a point, a construction in algebraic geometry. This picture was created in 5 minutes and in half the lines of code compared to [this popular TeX stackexchange answer](https://tex.stackexchange.com/a/158762/195136), which uses quite convoluted, C-like Asymptote code.
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/blowup_ex.png"/>
 
 # Class: `TikzPicture`
 Initialize an object of this class as below

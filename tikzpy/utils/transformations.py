@@ -16,8 +16,8 @@ def shift_coords(coords, xshift, yshift):
         x = coord[0]
         y = coord[1]
 
-        shifted_x = round(x + xshift, 7)
-        shifted_y = round(y + yshift, 7)
+        shifted_x = x + xshift
+        shifted_y = y + yshift
         shifted_coords.append((shifted_x, shifted_y))
     return shifted_coords
 
@@ -32,8 +32,8 @@ def scale_coords(coords, scale):
         x = coord[0]
         y = coord[1]
 
-        scale_x = round(scale * x, 7)
-        scale_y = round(scale * y, 7)
+        scale_x = scale * x
+        scale_y = scale * y
         scaled_coords.append((scale_x, scale_y))
     return scaled_coords
 
@@ -62,8 +62,8 @@ def rotate_coords(coords, angle, about_pt, radians=False):  # rotate countercloc
         rotated_y = x * math.sin(angle) + y * math.cos(angle)
 
         # Shift them back by about_pt, truncate the decimal places
-        rotated_x += round(about_pt[0], 7)
-        rotated_y += round(about_pt[1], 7)
+        rotated_x += about_pt[0]
+        rotated_y += about_pt[1]
 
         rotated_coords.append((rotated_x, rotated_y))
     return rotated_coords

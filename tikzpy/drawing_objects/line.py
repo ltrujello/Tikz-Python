@@ -5,7 +5,7 @@ from tikzpy.utils.helpers import brackets
 # Class for Lines
 class Line(_DrawingObject):
     """
-    A class to create lines in the tikz environment
+    A class to create lines in the tikz environment.
 
     Attributes :
         start (tuple) : Pair of floats representing the start of the line
@@ -38,19 +38,19 @@ class Line(_DrawingObject):
         serves no use to the user, so we make it private (well, it's just bells and whistles).
         """
         if len(self.control_pts) == 0:
-            return fr"{self.start} to{brackets(self.to_options)} {self.end};"
+            return fr"{self.start} to{brackets(self.to_options)} {self.end}"
 
         else:
             control_stmt = ".. controls "
             for pt in self.control_pts:
                 control_stmt += f"{pt[0], pt[1]}" + " and "
             control_stmt = control_stmt[:-4] + " .."
-            return f"{self.start} {control_stmt} {self.end};"
+            return f"{self.start} {control_stmt} {self.end}"
 
     @property
     def midpoint(self):
-        mid_x = round((self.start[0] + self.end[0]) / 2, 7)
-        mid_y = round((self.start[1] + self.end[1]) / 2, 7)
+        mid_x = (self.start[0] + self.end[0]) / 2
+        mid_y = (self.start[1] + self.end[1]) / 2
         return (mid_x, mid_y)
 
     def shift(self, xshift, yshift):

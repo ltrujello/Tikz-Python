@@ -4,7 +4,7 @@ from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coor
 
 class Rectangle(_DrawingObject):
     """
-    A class to create lines in the tikz environment
+    A class to create rectangles in the tikz environment
 
     Attributes :
         left_corner (tuple) : Pair of floats representing the position of the bottom left corner
@@ -20,7 +20,7 @@ class Rectangle(_DrawingObject):
 
     @property
     def _command(self):
-        return f"{self.left_corner} rectangle {self.right_corner};"
+        return f"{self.left_corner} rectangle {self.right_corner}"
 
     def shift(self, xshift, yshift):
         shifted_corners = shift_coords(

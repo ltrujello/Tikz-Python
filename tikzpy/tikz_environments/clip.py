@@ -18,9 +18,9 @@ class Clip:
     @property
     def code(self):
         if self.draw == True:
-            return fr"\clip[preaction = {{draw, {self.draw_obj.options}}}] {self.draw_obj._command}"
+            return fr"\clip[preaction = {{draw, {self.draw_obj.options}}}] {self.draw_obj._command};"
         else:
-            return fr"\clip {self.draw_obj._command}"
+            return fr"\clip {self.draw_obj._command};"
 
     def shift(self, xshift, yshift):
         self.draw_obj.shift(xshift, yshift)
