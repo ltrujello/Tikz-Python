@@ -7,17 +7,17 @@ An example of this package in action is below.
 ```python
 from tikzpy import TikzPicture  # Import the class TikzPicture
 
-tikz = tikzpy.TikzPicture()
+tikz = TikzPicture()
 tikz.circle((0, 0), 3, options="thin, fill=orange!15", action="draw")
 
 arc_one = tikz.arc((3, 0), 0, 180, x_radius=3, y_radius=1.5, options=f"dashed")
 arc_two = tikz.arc((-3, 0), 180, 360, x_radius=3, y_radius=1.5)
 
-tikz.write() # Writes the Tikz code into a file 
-tikz.show() # Displays a pdf of the drawing to the user
+tikz.write()  # Writes the Tikz code into a file
+tikz.show()  # Displays a pdf of the drawing to the user
 ```
 which produces
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/sphere.png" height = 300/> 
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/basic/basic.png" height = 300/> 
 
 We explain line-by-line the above code.
 
@@ -29,19 +29,22 @@ We explain line-by-line the above code.
 
 * In the last two lines, `write()` writes all of our tikz code into a file which we can retrieve the code later. The call `show()` immediately displays the PDF of the drawing to the user.
 
+## Examples
+We introduce more examples of `tikzpy`, starting from very basic to more complicated usages.
+
 ### Example: Line and two nodes
 Suppose I want to create a line and two labels at the ends. The code below achieves this
 ```python
-import tikzpy
+from tikzpy import TikzPicture
 
-tikz = tikzpy.TikzPicture()
-line = tikz.line((0,0), (1,1), options = "thick, blue, o-o")
-start_node = tikz.node(line.start, options = "below", text = "Start!")
-end_node = tikz.node(line.end, options = "above", text = "End!")
+tikz = TikzPicture()
+line = tikz.line((0, 0), (1, 1), options="thick, blue, o-o")
+start_node = tikz.node(line.start, options="below", text="Start!")
+end_node = tikz.node(line.end, options="above", text="End!")
 ```
 and produces
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_and_two_nodes.png" height = 200/> 
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/line_and_two_nodes/line_and_two_nodes.png" height = 200/> 
 
 Saving the line as a variable `line` allows us to pass in `line.start` and `line.end` into the node positions, so we don't have to type out the exact coordinates. 
 This is because lines, nodes, etc. are class instances with useful attributes: 
@@ -55,106 +58,119 @@ This is because lines, nodes, etc. are class instances with useful attributes:
 ```
 
 ### Example: Circles
-Pythons `for` loop is a lot less messier and much more powerful than the `\foreach` loop provided in Tikz via TeX. (For example, Tikz with TeX alone guesses your step size, and hence it cannot effectively [loop over two different sequences at the same time](https://tex.stackexchange.com/questions/171426/increments-in-foreach-loop-with-two-variables-tikz)).
+In this example, we use a for loop to draw a pattern of circles. 
 
-In this example, we see that looping is pretty clean. 
+This example 
+demonstates how Pythons `for` loop is a lot less messier than the `\foreach` loop provided in Tikz via TeX. (It is also more powerful; for example, Tikz with TeX alone guesses your step size, and hence it cannot effectively [loop over two different sequences at the same time](https://tex.stackexchange.com/questions/171426/increments-in-foreach-loop-with-two-variables-tikz)).
+
 ```python
-import tikzpy
+import numpy as np
+from tikzpy import TikzPicture
 
-tikz = tikzpy.TikzPicture(center=True)
-for i in range(30):
-    # i/30-th point on the unit circle
-    point = (math.sin(2 * math.pi * i / 30), math.cos(2 * math.pi * i / 30))
+tikz = TikzPicture(center=True)
+
+for i in np.linspace(0, 1, 30): # Grab 30 equidistant points in [0, 1]
+    point = (np.sin(2 * np.pi * i), np.cos(2 * np.pi * i))
 
     # Create four circles of different radii with center located at point
     tikz.circle(point, 2, "ProcessBlue")
     tikz.circle(point, 2.2, "ForestGreen")
-    tikz.circle(point, 2.4, "red") 
+    tikz.circle(point, 2.4, "red")  # xcolor Red is very ugly
     tikz.circle(point, 2.6, "Purple")
-
-tikz.write()
 ```
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/circles.png" height = 350/>
+The above code then produces
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/circles/circles.png" height = 350/>
 
 
 ### Example: Roots of Unity 
-Suppose I want to draw the [roots of unity](https://en.wikipedia.org/wiki/Root_of_unity). Normally, I would have to spend 30 minutes reading some manual about how TeX handles basic math. With Python, I know I can `import math` and make intuitive computations to quickly build a function that displays the nth roots of unity.
+In this example, we draw the 13 [roots of unity](https://en.wikipedia.org/wiki/Root_of_unity). 
+
+If we wanted to normally do this in TeX, we'd
+probably have to spend 30 minutes reading some manual about how TeX handles basic math. With Python, we can just use the `math` library and make intuitive computations to quickly build a function that displays the nth roots of unity.
 ```python
-import math
-import tikzpy
+from math import pi, sin, cos
+from tikzpy import TikzPicture
 
 tikz = tikzpy.TikzPicture()
 n = 13 # Let's see the 13 roots of unity
+scale = 5
 
 for i in range(n):
-    # Find the angle/location of the nth root on the unit circle
-    theta = (2 * math.pi * i) / n
-    x = scale * math.cos(theta) 
-    y = scale * math.sin(theta)
-    
-    # A label for our node
-    root_label = f"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$"
+    theta = (2 * pi * i) / n
+    x, y = scale * cos(theta), scale * sin(theta)
+    content = f"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$"
 
-    # Draw a line from the origin to our point 
+    # Draw line to nth root of unity
     tikz.line((0, 0), (x, y), options="-o")
 
-    if 0 <= theta <= math.pi:
+    if 0 <= theta <= pi:
         node_option = "above"
     else:
         node_option = "below"
 
     # Label the nth root of unity
-    tikz.node((x, y), options=node_option, text=root_label)
+    tikz.node((x, y), options=node_option, text=content)
 
-tikz.write()
 ```
 Which generates: 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/roots_of_unity.png" height = 350/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/roots_of_unity/roots_of_unity.png" height = 350/>
+
+We will see in the examples that follow how imported Python libraries can alllow us to quickly (and efficiently, this is really important) make more sophisticated Tikz pictures. 
 
 ### Example: General Ven Diagrams 
-Python has access to many libraries that help one efficiently build very complex functions. Such libraries are simply not possible to implement in TeX (well, not impossible, but it'd be ridiculous). 
-Tikz-Python offers [this function](https://github.com/ltrujello/Tikz-Python/blob/main/tests/intersections_scope_clip.py), which uses `itertools.combinations`, to take in an arbitrary number of 2D Tikz figures and colors each and every single intersection. For example, here is what all of the intersections of nine circles in a 3 x 3 grid looks like.
+In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py), we use the python library `itertools.combinations` to create a function which takes in an arbitrary number of 2D Tikz figures and colors each and every single intersection. 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_circles.png" height = 350/>
+For example, suppose arrange nine circles in a 3 x 3 grid. Plugging these nine circles in, we generate the image below.
 
-Here's what the intersections of three random blobs looks like:
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersection_circles.png" height = 350/>
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/intersection_blobs.png" height = 350/>
+As another example, we can create three different overlapping topological blobs and then plug them into the function to obtain
 
-As one might guess, this is useful for creating topological figures, as manually writing all of the `\scope` and `\clip` commands to create such images is pretty tedious.
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersection_blobs.png" height = 350/>
+
+(Both examples are initialized in [the source](https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py) for testing.)
+As one might guess, this function is useful for creating topological figures, as manually writing all of the `\scope` and `\clip` commands to create such images is pretty tedious.
 
 ### Example: Barycentric subdivision
-Another example of using simple python libraries is the following. [The source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric.py) allows us to generate the the n-th barycentric subdivision of a triangle. 
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric/barycentric.py), we create a function that allows us to generate the the n-th barycentric subdivision of a triangle. 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/barycentric.png" height = 350/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric/barycentric.png" height = 350/>
 
 ### Example: Symbolic Intergation
-In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/tests/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the integrals of a polynoimal. For example, the output of `x**2` (the polymoial x^2) generates the image below. 
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/symbolic_integration/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the n-order integrals of any function. For example, the output of `x**2` (the polymoial x^2) generates the image below. 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/integration_ex.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/symbolic_integration/integration_ex.png"/>
+
+### Example: Cone over a Projective Variety
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/projective_cone/projective_cone.py), we use `numpy` to illustarte the concept of an affine cone over a projective variety. In the case of a curve Y in P^2, the cone C(Y) is a surface in A^3. 
+
+The image that this drawing was modeled after appears in Exercise 2.10 of Hartshorne's Algebraic Geometry.
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/projective_cone/projective_cone.png"/>
 
 ### Example: Lorenz System
-In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/lorenz.py), we use `numpy` and `scipy` to solve ODEs and plot the Lorenz system. This is made possible since `tikz_py` also supports 3D. 
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/lorenz/lorenz.py), we use `numpy` and `scipy` to solve ODEs and plot the Lorenz system. This is made possible since `tikz_py` also supports 3D. 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/lorenz_ex.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/lorenz/lorenz_ex.png"/>
 
 ### Example: Tikz Styles
 `tikzpy` supports the creation of any `\tikzset`, a feature of Tikz that saves users a great deal of time. You can save your tikz styles in a .py file instead of copying and pasting all the time. 
 
 Even if you don't want to make such settings, there are useful `\tikzset` styles that are preloaded in `tikzpy`. One particular is the very popular tikzset authored by Paul Gaborit [in this TeX stackexchange question](https://tex.stackexchange.com/questions/3161/tikz-how-to-draw-an-arrow-in-the-middle-of-the-line). Using such settings, we create these pictures, which illustrate Cauchy's Residue Theorem.
-[The source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm.py) produces 
+[The source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm.py) produces 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/cauchy_residue_thm_ex.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm_ex.png"/>
 
-while [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm_arc.py) produces 
+while [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm_arc.py) produces 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/cauchy_residue_thm_arc_ex.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm_arc_ex.png"/>
 
 ### Example: Blowup at a point
-In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/blowup.py), we illustrate the blowup of a point, a construction in algebraic geometry. This picture was created in 5 minutes and in half the lines of code compared to [this popular TeX stackexchange answer](https://tex.stackexchange.com/a/158762/195136), which uses quite convoluted, C-like Asymptote code.
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/blowup/blowup.py), we illustrate the blowup of a point, a construction in algebraic geometry. This picture was created in 5 minutes and in half the lines of code compared to [this popular TeX stackexchange answer](https://tex.stackexchange.com/a/158762/195136), which uses quite convoluted, C-like Asymptote code.
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/blowup_ex.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/blowup/blowup_ex.png"/>
 
 # Class: `TikzPicture`
 Initialize an object of this class as below
@@ -190,7 +206,7 @@ For example, suppose I want to draw a blue circle.
 >>> circle_1 = tikz.circle((0,0), 2, options = "fill=Blue, opacity=0.5") # Draws a blue circle 
 >>> tikz.write() # Write it 
 ```
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/tikz_write_ex_1.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/tikz_write_ex_1.png"/>
 
 I called `.write()` which writes the code for a blue circle. In the same instance, I can add `circle_2`, a red circle, to the picture. I can also update the center of `circle_1`.
 ```python
@@ -203,7 +219,7 @@ I called `.write()` which writes the code for a blue circle. In the same instanc
 	\draw[fill=Red] (1, 1) circle (2cm);
 \end{tikzpicture}
 ```
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/tikz_write_ex_2.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/tikz_write_ex_2.png"/>
 
 This feature, in combination with `.remove()` and `.show()` (see below), allows you to gradually build and view a TikzPicture quite painlessly.
 
@@ -309,7 +325,7 @@ tikz.line((0, 0), (4, 0), options="->", control_pts=[(1, 1), (3, -1)])
 ```
 produces the line 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_ex_1.png"/> 
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/line_ex_1.png"/> 
 
 ## Methods 
 ### `Line.shift(xshift, yshift)`
@@ -328,7 +344,7 @@ for i in range(0, 10):
 ```
 which produces the set of lines 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/line_ex_2.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/line_ex_2.png" height = 250/>
 
 ### `Line.scale(scale)`
 Scales a line by an amount `scale`, usually a python float. 
@@ -377,7 +393,7 @@ plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 produces the image 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/plotcoordinates_ex_1.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/plotcoordinates_ex_1.png" height = 250/>
 
 Alternatively we can set `action = "fill"` (analogous to `\fill` in Tikz) as in the code below
 ```python
@@ -390,7 +406,7 @@ plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 to produce the image
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/plotcoordinates_ex_2.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/plotcoordinates_ex_2.png" height = 250/>
 
 If we want both, we can set `action = "filldraw"` (analogous to `\filldraw` in Tikz)
 ```python
@@ -403,7 +419,7 @@ plot.options = "fill=ProcessBlue!50"
 plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 which produces. 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/plotcoordinates_ex_3.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/plotcoordinates_ex_3.png" height = 250/>
 
 Finally, we can set `action = "path"` (analogous to `\path` in Tikz), but as one would expect this doesn't draw anything. 
 
@@ -426,7 +442,7 @@ for i in range(0, 20):
 ```
 generates the image
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/PlotCoords_rotate_Example.png" height = 300/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/PlotCoords_rotate_Example.png" height = 300/>
 
 
 # Class: `Circle`
@@ -465,7 +481,7 @@ tikz.circle((3, 0), 1, options="thick, fill=red!60", action="filldraw")
 tikz.circle((6, 0), 1.25, options="Green!50", action="fill")
 ```
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/circle_ex_1.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/circle_ex_1.png"/>
 
 We can also use circles to create the [Hawaiian Earing](https://en.wikipedia.org/wiki/Hawaiian_earring).
 
@@ -479,7 +495,7 @@ for i in range(1, 60):
     n = radius / i
     tikz.circle((n, 0), n)
 ```
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/circle_ex_2.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/circle_ex_2.png" height = 250/>
 
 
 ## Methods
@@ -532,7 +548,7 @@ tikz.node((2.1, 1.7), text="$z = re^{i\\theta}$")
 tikz.node((-2, 0.3), text="Cut")
 ```
 which produces
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/node_ex_1.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/node_ex_1.png" height = 250/>
 
 Here's another example of usings nodes to illustrate the concept of a multivariable function.
 ```python
@@ -552,7 +568,7 @@ row_1.node((5, 0.3), text="output")
 row_1.node((7.3, 0), text="$f(x_1, \dots, x_n)$")
 ```
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/node_ex_2.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/node_ex_2.png"/>
 
 ## Methods
 
@@ -610,7 +626,7 @@ for i in range(len(nodes)):
     tikz.line(start, end, options="->, shorten >= 10pt, shorten <=10pt")
 ```
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/rectangle_ex_1.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/rectangle_ex_1.png" height = 250/>
 
 
 ## Methods
@@ -661,7 +677,7 @@ tikz.node(h_line.midpoint, options="below", text="Major")
 tikz.node(v_line.midpoint, options="left", text="Minor")
 ```
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/ellipse_ex_1.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/ellipse_ex_1.png" height = 250/>
 
 
 ## Methods
@@ -723,11 +739,11 @@ for i in range(1, 10):
 ```
 This generates the image
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/arc_ex_1.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/arc_ex_1.png"/>
 
 If instead we would like these arcs sharing the same center, we can use the same code, but pass in `draw_from_start=False` to achieve 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/example_imgs/arc_ex_2.png"/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/arc_ex_2.png"/>
 
 Without this option, if we were forced to specify the point at which each arc should begin drawing, we would have to calculate the x-shift for every arc and apply such a shift to keep the centers aligned. That sounds inefficient and like a waste of time to achieve something so simple, right?
 

@@ -1,5 +1,6 @@
 from tikzpy.utils.helpers import brackets
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
+from tikzpy.tikz_environments.clip import Clip
 
 
 class Scope:

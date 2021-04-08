@@ -1,0 +1,47 @@
+%__begin__@TikzPy__#id__==__(0)
+\tikzset{ arrows_along_path/.style={ postaction={on each segment={mid arrow=#1}} } 
+ }
+\tikzset{ on each segment/.style={ decorate,
+    decoration={
+      show path construction,
+      moveto code={},
+      lineto code={
+        \path [#1]
+        (\tikzinputsegmentfirst) -- (\tikzinputsegmentlast);
+      },
+      curveto code={
+        \path [#1] (\tikzinputsegmentfirst)
+        .. controls
+        (\tikzinputsegmentsupporta) and (\tikzinputsegmentsupportb)
+        ..
+        (\tikzinputsegmentlast);
+      },
+      closepath code={
+        \path [#1]
+        (\tikzinputsegmentfirst) -- (\tikzinputsegmentlast);
+      },
+    }
+ } 
+ }
+\tikzset{ mid arrow/.style={ 
+    postaction={decorate,decoration={
+        markings,
+        mark=at position .5 with {\arrow[#1]{stealth}}
+    }}
+     } 
+ }
+\begin{tikzpicture}[thick]
+	\draw[->] (-4, 0) to (4, 0);
+	\draw[->] (0, -1) to (0, 4);
+	\node[below] at (4, 0) { $\mathbb{R}$ };
+	\node[left] at (0, 4) { $i$ };
+	\draw[arrows_along_path=red, red] (2.0, 0.0) arc [start angle = 0, end angle = 180, radius = 2cm];
+	\draw[blue, arrows_along_path=blue] (-2, 0) to (2, 0);
+	\node at (-2, -0.5) { $R$ };
+	\node at (2, -0.5) { $-R$ };
+	\fill (0.7, 0.7) circle (0.05cm);
+	\fill (-0.7, 0.7) circle (0.05cm);
+	\node[right] at (0.7, 0.7) { $z_1$ };
+	\node[left] at (-0.7, 0.7) { $z_2$ };
+\end{tikzpicture}
+%__end__@TikzPy__#id__==__(0)

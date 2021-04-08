@@ -64,7 +64,7 @@ class TikzPicture:
                     with open(self.tikz_file.resolve(), "w+"):
                         pass
                 print(
-                    f"File created at {str(self.tikz_file.resolve())}, tikz_code will output there \n"
+                    f"File created at {str(self.tikz_file.resolve())}.\n The tikz_code will output there. \n"
                 )
             else:
                 print("Not created. \n")
@@ -306,7 +306,6 @@ class TikzPicture:
                 print("Adding new Tikz environment")
                 with open(tikz_file_path, "a+") as tikz_file:
                     tikz_file.write(output_code)
-                _N_TIKZs += 1
 
         # If for some reason we do not want to overwrite our last TikzPicture
         else:

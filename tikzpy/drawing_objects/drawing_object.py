@@ -37,7 +37,8 @@ class _DrawingObject:
         else:
             return fr"\{self.action}{brackets(self.options)} {self._command} node{brackets(self.node.options)} {self.node._command};"
 
-    def add_node(self, position, options="", text=""):
+    # TODO: Allow one to not specify the position.
+    def add_node(self, position=(0, 0), options="", text=""):
         """A method to build a node on a drawing object directly.
         This bypasses having to (1) define a Node object and then (2) use node.setter.
         """
