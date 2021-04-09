@@ -122,7 +122,7 @@ We will see in the examples that follow how imported Python libraries can alllow
 ### Example: General Ven Diagrams 
 In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py), we use the python library `itertools.combinations` to create a function which takes in an arbitrary number of 2D Tikz figures and colors each and every single intersection. 
 
-For example, suppose arrange nine circles in a 3 x 3 grid. Plugging these nine circles in, we generate the image below.
+For example, suppose we arrange nine circles in a 3 x 3 grid. Plugging these nine circles in, we generate the image below.
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersection_circles.png" height = 350/>
 
@@ -139,12 +139,12 @@ In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric/barycentric.png" height = 350/>
 
 ### Example: Symbolic Intergation
-In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/symbolic_integration/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the n-order integrals of any function. For example, the output of `x**2` (the polymoial x^2) generates the image below. 
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/symbolic_integration/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the n-order integrals of any function. For example, the output of `x**2` (the polynomial x^2) generates the image below. 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/symbolic_integration/integration_ex.png"/>
 
 ### Example: Cone over a Projective Variety
-In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/projective_cone/projective_cone.py), we use `numpy` to illustarte the concept of an affine cone over a projective variety. In the case of a curve Y in P^2, the cone C(Y) is a surface in A^3. 
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/projective_cone/projective_cone.py), we use `numpy` to create an image which illustrates the concept of an affine cone over a projective variety. In the case of a curve Y in P^2, the cone C(Y) is a surface in A^3. 
 
 The image that this drawing was modeled after appears in Exercise 2.10 of Hartshorne's Algebraic Geometry.
 

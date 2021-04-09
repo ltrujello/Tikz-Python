@@ -16,8 +16,11 @@ from tikzpy.tikz_environments.tikz_command import TikzCommand
 from tikzpy.tikz_environments.tikz_style import TikzStyle
 
 from tikzpy.utils.helpers import brackets
+from tikzpy.utils.helpers import true_posix_path
 
-""" _N_TIKZs: records the number of TikZ environments created.
+from tikzpy import NUM_TIKZS
+
+""" NUM_TIKZS: records the number of TikZ environments created.
 
 This global variable is the simplest solution to (1) avoiding making a TeX class 
 and (2) designing deletion and update processes of files in such 
@@ -25,9 +28,8 @@ a way that even the most careless user will never delete anything
 important on their computer (e.g., a tex document).
 """
 
-_N_TIKZs = 0
-
 # TODO: Create a `clear` function which deletes all Tikz statements with an ID.
+# TODO: Create an undo() method which removes the most recently added object.
 class TikzPicture:
     """
     A class for a Tikz picture environment.
@@ -40,13 +42,13 @@ class TikzPicture:
     """
 
     def __init__(self, tikz_file="tikz_code/tikz-code.tex", center=False, options=""):
-        global _N_TIKZs
+        global NUM_TIKZS
         # Create a Tikz Environment
         self.tikz_file = Path(tikz_file)
         self.options = options
         self._center = center
         self._statements = {}
-        self._id = f"@TikzPy__#id__==__({_N_TIKZs})"  # Cannot have spaces. We later scan and look for this string.
+        self._id = f"@TikzPy__#id__==__({NUM_TIKZS})"  # Cannot have spaces. We later scan and look for this string.
         self.preamble = {"begin_id": f"%__begin__{self._id}\n"}
         self.postamble = {"end_ind": f"%__end__{self._id}\n"}
 
@@ -63,13 +65,11 @@ class TikzPicture:
                     self.tikz_file.parent.mkdir(parents=True)
                     with open(self.tikz_file.resolve(), "w+"):
                         pass
-                print(
-                    f"File created at {str(self.tikz_file.resolve())}.\n The tikz_code will output there. \n"
-                )
-            else:
-                print("Not created. \n")
-        # Upon successful creation of an object, we create increase the counter
-        _N_TIKZs += 1
+                    print(
+                        f"File created at {str(self.tikz_file.resolve())}.\nThe tikz_code will output there. \n"
+                    )
+                else:
+                    print("Not created. \n")
 
     @property
     def center(self):
@@ -105,7 +105,9 @@ class TikzPicture:
     def end(self):
         """ End statement for the TikzPicture."""
         end = ["\\end{tikzpicture}\n"]
-        for statement in list(reversed(self.postamble.values())):
+        for statement in list(
+            reversed(list(self.postamble.values()))
+        ):  # To accommodate older pythons
             end.append(statement)
         return end
 
@@ -120,11 +122,6 @@ class TikzPicture:
             * When a PDF compiles, the pdf is moved to the same directory as self.tikz_file
               so the user can see it. (All those moronic .log, .aux files are left behind in the folder,
               another benefit of this approach).
-        * The only reason the user will need to change the TeX file is if they change the file name of self.tikz_file.
-        Ideally, the program could take care of this. But there isn't a robust way of updating the \input{...} statement in the
-        TeX file without risking the user's TeX contents from being wiped (e.g., they may remove some comments that helps the program
-        find what line to update). Alternatively, I could warn the user of this, but an
-        unwise user could nevertheless put their hard work into such a file and then risk it being wiped.
         """
         # Full paths for self.tikz_file and the tex_file
         tikz_file_dir = str(self.tikz_file.resolve().parents[0])
@@ -133,7 +130,8 @@ class TikzPicture:
         tex_file = Path(tex_file_path)
         # Check if the TeX file exists
         if not tex_file.exists():
-            tikz_file_path = str(self.tikz_file.resolve())
+            tikz_file_path = self.tikz_file.resolve()
+            tikz_file_path_str = true_posix_path(tikz_file_path)
             # Check if the folder exists
             if not tex_file.parents[0].exists():
                 tex_file.parent.mkdir(parents=True)
@@ -143,14 +141,14 @@ class TikzPicture:
                     __name__, "../template/tex_file.tex"
                 )
                 f.write(template_file_bytes)
-            # Replace the \\input linein tex_file.tex
             with open(tex_file_path, "r") as f:
                 lines = f.readlines()
+            # Replace the "\\input{}"" line in tex_file.tex
             with open(tex_file_path, "w") as f:
                 for line in lines:
                     if line == "\\input{fillme}\n":
                         f.write(
-                            f"\\input{{{tikz_file_path}}}"
+                            f"\\input{{{tikz_file_path_str}}}"
                         )  # This is what connects the Tikz code to our tex file
                     else:
                         f.write(line)
@@ -242,7 +240,7 @@ class TikzPicture:
         Usually, a user won't want this. If for some weird reason they do want this, then they set
         overwrite = False.
         """
-        global _N_TIKZs  # Load in the global to update this variable, in the off chance overwrite = False.
+        global NUM_TIKZS  # Load in the global to update this variable, in the off chance overwrite = False.
         tikz_file_path = str(self.tikz_file.resolve())
         output_code = self.code
 
@@ -306,12 +304,13 @@ class TikzPicture:
                 print("Adding new Tikz environment")
                 with open(tikz_file_path, "a+") as tikz_file:
                     tikz_file.write(output_code)
+                NUM_TIKZS += 1
 
         # If for some reason we do not want to overwrite our last TikzPicture
         else:
             with open(tikz_file_path, "a+") as tikz_file:
                 tikz_file.write(output_code)
-            _N_TIKZs += 1
+            NUM_TIKZS += 1
 
     # Display the current tikz drawing
     def show(self, quiet=False):

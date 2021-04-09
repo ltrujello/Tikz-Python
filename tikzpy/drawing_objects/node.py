@@ -16,8 +16,8 @@ class Node:
 
     def __init__(self, position, options="", text=""):
         self.position = position
-        self.text = text
         self.options = options
+        self.text = text
 
     @property
     def _command(self):
@@ -36,15 +36,14 @@ class Node:
     def rotate(self, angle, about_pt, radians=False):
         self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
 
-    # TODO: test if this works
     def __deepcopy__(self, memo):
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set
         our methods to modify objects, but not return anything.
         """
         draw_obj = Node(
             deepcopy(self.position, memo),
-            deepcopy(self.text, memo),
             deepcopy(self.options, memo),
+            deepcopy(self.text, memo),
         )
         memo[id(self)] = draw_obj
         return draw_obj

@@ -1,3 +1,5 @@
+NUM_TIKZS = 0
+
 from tikzpy.tikz_environments.tikz_picture import TikzPicture as TikzPicture
 from tikzpy.tikz_environments.scope import Scope as Scope
 from tikzpy.tikz_environments.clip import Clip as Clip
