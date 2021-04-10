@@ -329,11 +329,11 @@ class TikzPicture:
             )
         subprocess.run(compile_cmd, shell=True)
         # We move the PDF up one directory, our of the hidden folder, so the viewer can see it.
-        pdf_file = Path(tex_file_parents + "/" + self.tex_file.stem + ".pdf")
+        pdf_file = Path(tex_file_parents, self.tex_file.stem + ".pdf")
         pdf_file_path = str(
             pdf_file.resolve().parents[1] / pdf_file.name
         )  # Desired pdf file path
-        pdf_file.rename(pdf_file_path)
+        pdf_file.replace(pdf_file_path)
         webbrowser.open_new("file://" + pdf_file_path)
 
     """
