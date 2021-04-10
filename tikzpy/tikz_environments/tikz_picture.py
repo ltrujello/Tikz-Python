@@ -315,21 +315,21 @@ class TikzPicture:
     # Display the current tikz drawing
     def show(self, quiet=False):
         """ Compiles the PDF and displays it to the user."""
-        tex_file_parents = str(self.tex_file.resolve().parents[0])
-        tex_filename = self.tex_file.stem
-        tex_file = tex_file_parents + "/" + tex_filename + ".tex"
+        tex_file_parents = true_posix_path(self.tex_file.resolve().parents[0])
+        tex_filename = Path(tex_file_parents, self.tex_file.stem + ".tex")
+        tex_file = true_posix_path(tex_filename)
         # We now compile the PDF
         if quiet:
             compile_cmd = (
-                f"latexmk -pdf -quiet -output-directory='{tex_file_parents}' {tex_file}"
+                f"latexmk -pdf -quiet -output-directory={tex_file_parents} {tex_file}"
             )
         else:
             compile_cmd = (
-                f"latexmk -pdf -output-directory='{tex_file_parents}' {tex_file}"
+                f"latexmk -pdf -output-directory={tex_file_parents} {tex_file}"
             )
         subprocess.run(compile_cmd, shell=True)
         # We move the PDF up one directory, our of the hidden folder, so the viewer can see it.
-        pdf_file = Path(tex_file_parents + "/" + tex_filename + ".pdf")
+        pdf_file = Path(tex_file_parents + "/" + self.tex_file.stem + ".pdf")
         pdf_file_path = str(
             pdf_file.resolve().parents[1] / pdf_file.name
         )  # Desired pdf file path

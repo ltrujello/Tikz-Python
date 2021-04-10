@@ -24,7 +24,9 @@ def true_posix_path(path_obj):
     full_path = path_obj.resolve()
     if isinstance(path_obj, WindowsPath):
         drive = full_path.drive  # C:, E:, etc.
-        return str(full_path.relative_to(f"{drive}/").as_posix())
+        return "/" + str(
+            full_path.relative_to(f"{drive}/").as_posix()
+        )  # Need / so we may obtain /Users/... not Users/...
     else:
         # Must be PosixPath (We use Path, and pathlib automatically uses either WindowsPath or PosixPath)
         return str(full_path.resolve())
