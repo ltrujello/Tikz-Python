@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 from tikzpy import TikzPicture
 
 """ Draws a line and two nodes.

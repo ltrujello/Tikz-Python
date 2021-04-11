@@ -14,24 +14,30 @@ class PlotCoordinates(_DrawingObject):
 
     """
 
-    def __init__(self, points, options="", plot_options="", action="draw"):
+    def __init__(
+        self,
+        points: list[tuple],
+        options: str = "",
+        plot_options: str = "",
+        action: str = "draw",
+    ):
         self.points = points
         self.options = options
         self.plot_options = plot_options
         super().__init__(action, self.options, self._command)
 
     @property
-    def _command(self):
-        cmd = fr"plot{brackets(self.plot_options)} coordinates {{"
+    def _command(self) -> str:
+        cmd: str = fr"plot{brackets(self.plot_options)} coordinates {{"
         for pt in self.points:
             cmd += str(pt) + " "
         cmd += "}"
         return cmd
 
     @property
-    def center(self):
-        mean_x = 0
-        mean_y = 0
+    def center(self) -> tuple[float, float]:
+        mean_x: float = 0
+        mean_y: float = 0
         for pt in self.points:
             mean_x += pt[0]
             mean_y += pt[1]
@@ -39,13 +45,15 @@ class PlotCoordinates(_DrawingObject):
         mean_y = mean_y / len(self.points)
         return (mean_x, mean_y)
 
-    def shift(self, xshift, yshift):
+    def shift(self, xshift: float, yshift: float) -> None:
         self.points = shift_coords(self.points, xshift, yshift)
 
-    def scale(self, scale):
+    def scale(self, scale: float) -> None:
         self.points = scale_coords(self.points, scale)
 
-    def rotate(self, angle, about_pt=None, radians=False):
+    def rotate(
+        self, angle: float, about_pt: tuple[float, float] = None, radians: bool = False
+    ) -> None:
         if about_pt == None:
             about_pt = self.center
         self.points = rotate_coords(self.points, angle, about_pt, radians)

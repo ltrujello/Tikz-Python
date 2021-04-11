@@ -1,3 +1,4 @@
+from __future__ import annotations
 from math import sin, cos, tan, atan, atan2, pi, sqrt
 from math import radians as degs_2_rads
 from math import degrees as rads_2_degs
@@ -21,16 +22,16 @@ class Arc(_DrawingObject):
 
     def __init__(
         self,
-        position,
-        start_angle,
-        end_angle,
-        radius=None,
-        x_radius=None,
-        y_radius=None,
-        options="",
-        radians=False,
-        draw_from_start=True,
-        action="draw",
+        position: tuple[float, float],
+        start_angle: float,
+        end_angle: float,
+        radius: float = None,
+        x_radius: float = None,
+        y_radius: float = None,
+        options: str = "",
+        radians: bool = False,
+        draw_from_start: bool = True,
+        action: str = "draw",
     ):
         self.position = position
         self.start_angle = start_angle
@@ -45,15 +46,15 @@ class Arc(_DrawingObject):
         super().__init__(action, self.options, self._command)
 
     @property
-    def _start_angle(self):
+    def _start_angle(self) -> Angle:
         return Angle(self.start_angle, self.radians)
 
     @property
-    def _end_angle(self):
+    def _end_angle(self) -> Angle:
         return Angle(self.end_angle, self.radians)
 
     @property
-    def arc_type(self):
+    def arc_type(self) -> str:
         if self.radius != None:
             if self.x_radius != None or self.y_radius != None:
                 raise ValueError(
@@ -79,7 +80,7 @@ class Arc(_DrawingObject):
                 return "ellipse"
 
     @property
-    def _position(self):
+    def _position(self) -> tuple[float, float]:
         """We return the point at which we should begin drawing the arc. This takes a
         bit of work since we allow the user to possibly specify the center of the
         arc of which they would like to see drawn.
@@ -97,11 +98,11 @@ class Arc(_DrawingObject):
         return start_pos
 
     @_position.setter
-    def _position(self, new_pos):
+    def _position(self, new_pos: tuple[float, float]) -> tuple[float, float]:
         return self.position
 
     @property
-    def _command(self):
+    def _command(self) -> str:
         if self.arc_type == "circle":
             start_angle, end_angle = self._start_angle.degs(), self._end_angle.degs()
         else:  # This is for the case the ellipse.
@@ -112,7 +113,7 @@ class Arc(_DrawingObject):
             start_angle, end_angle = rads_2_degs(t_start), rads_2_degs(t_end)
         return f"{self._position} arc [start angle = {start_angle}, end angle = {end_angle}, {self.radius_statement}]"
 
-    def start_pos_circle(self):
+    def start_pos_circle(self) -> tuple[float, float]:
         """Calculates the point at which the CIRCLE arc should begin
         drawing, given that the user specified what the center, radius,
         start, and end angles of the desired circular arc.
@@ -126,7 +127,7 @@ class Arc(_DrawingObject):
 
         return (start_pt_x, start_pt_y)
 
-    def start_pos_ellipse(self):
+    def start_pos_ellipse(self) -> tuple[float, float]:
         """Calculates the point at which the ELLIPSE arc should begin
         drawing, given that the user specified what the center, x_radius, y_radius,
         start, and end angles of the desired elliptic arc.
@@ -145,22 +146,24 @@ class Arc(_DrawingObject):
 
         return (start_pt_x, start_pt_y)
 
-    def shift(self, xshift, yshift):
+    def shift(self, xshift: float, yshift: float) -> None:
         self.center = shift_coords([self.center], xshift, yshift)[0]
 
-    def scale(self, scale):
+    def scale(self, scale: float) -> None:
         scaled_center = scale_coords([self.center], scale)
         scaled_radius = self.radius * scale
 
         self.center = scaled_center[0]
         self.radius = scaled_radius
 
-    def rotate(self, angle, about_pt=None, radians=False):
+    def rotate(
+        self, angle: float, about_pt: tuple = None, radians: bool = False
+    ) -> None:
         if about_pt == None:
             self._position
         self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
-    def atan2_for_ellipse(self, angle):
+    def atan2_for_ellipse(self, angle: Angle) -> float:
         """We need to perform a tangent inverse operation which returns values between
         0 and 2pi. Built in functions only do -pi/2 -- pi/2 (atan) or -pi -- pi (atan2).
         Further, we need to maintain arithmetic precision. We use the .quadrant attribute to
@@ -180,27 +183,27 @@ class Arc(_DrawingObject):
 
 
 class Angle:
-    def __init__(self, angle, radians):
+    def __init__(self, angle: float, radians: bool) -> None:
         self.angle = angle
         self.radians = radians
-        self.quadrant = self.quadrant(angle)
+        self.quadrant = self.set_quadrant(angle)
 
-    def degs(self):
+    def degs(self) -> float:
         if self.radians:
             angle = rads_2_degs(self.angle)
         else:
             angle = self.angle
         return angle
 
-    def rads(self):
+    def rads(self) -> float:
         if not self.radians:
             angle = degs_2_rads(self.angle)
         else:
-            angle = self.start_angle
+            angle = self.angle
 
         return angle
 
-    def quadrant(self, angle):
+    def set_quadrant(self, angle) -> int:
         if self.radians:
             if 0 <= angle <= pi / 2:
                 return 0

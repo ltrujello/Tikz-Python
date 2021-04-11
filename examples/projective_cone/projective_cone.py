@@ -1,8 +1,9 @@
+#!/bin/bash/python3
 import numpy as np
 from tikzpy import TikzPicture, PlotCoordinates
 
 tikz = TikzPicture(center=True)
-tikz.tdplotsetmaincoords(75, 120)
+tikz.set_tdplotsetmaincoords(75, 120)
 tikz.options = "tdplot_main_coords, scale=1.5"
 
 

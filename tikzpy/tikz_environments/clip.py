@@ -1,3 +1,4 @@
+from __future__ import annotations
 from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
 from tikzpy.drawing_objects.circle import Circle
@@ -5,13 +6,14 @@ from tikzpy.drawing_objects.node import Node
 from tikzpy.drawing_objects.rectangle import Rectangle
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
+from tikzpy.drawing_objects.drawing_object import _DrawingObject
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 
 
 class Clip:
     """A class for a clipping code statement."""
 
-    def __init__(self, draw_obj, draw=False):
+    def __init__(self, draw_obj: _DrawingObject, draw: bool = False) -> None:
         if isinstance(
             draw_obj, (Line, PlotCoordinates, Circle, Node, Rectangle, Ellipse, Arc)
         ):
@@ -23,17 +25,19 @@ class Clip:
             )
 
     @property
-    def code(self):
+    def code(self) -> str:
         if self.draw == True:
             return fr"\clip[preaction = {{draw, {self.draw_obj.options}}}] {self.draw_obj._command};"
         else:
             return fr"\clip {self.draw_obj._command};"
 
-    def shift(self, xshift, yshift):
+    def shift(self, xshift: float, yshift: float) -> None:
         self.draw_obj.shift(xshift, yshift)
 
-    def scale(self, scale):
+    def scale(self, scale: float) -> None:
         self.draw_obj.scale(scale)
 
-    def rotate(self, angle, about_pt, radians=False):
+    def rotate(
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
+    ) -> None:
         self.draw_obj.rotate(angle, about_pt, radians)

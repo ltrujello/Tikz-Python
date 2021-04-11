@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 from itertools import combinations
 from tikzpy import TikzPicture, Circle, Rectangle, PlotCoordinates
 from tikzpy.colors import rainbow_colors

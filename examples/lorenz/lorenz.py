@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 import numpy as np
 from scipy.integrate import odeint
 from tikzpy import TikzPicture
@@ -13,7 +14,7 @@ from tikzpy import TikzPicture
 """
 
 tikz = TikzPicture(center=True)
-tikz.tdplotsetmaincoords(60, 45)
+tikz.set_tdplotsetmaincoords(60, 45)
 tikz.options = "tdplot_main_coords"
 
 # lorenz parameters

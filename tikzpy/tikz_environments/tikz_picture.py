@@ -2,7 +2,6 @@ import subprocess
 import webbrowser
 import pkgutil
 from pathlib import Path
-
 from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
 from tikzpy.drawing_objects.circle import Circle
@@ -10,25 +9,16 @@ from tikzpy.drawing_objects.node import Node
 from tikzpy.drawing_objects.rectangle import Rectangle
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
-
+from tikzpy.drawing_objects.arc import _DrawingObject
 from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_command import TikzCommand
 from tikzpy.tikz_environments.tikz_style import TikzStyle
-
 from tikzpy.utils.helpers import brackets
 from tikzpy.utils.helpers import true_posix_path
 
-from tikzpy import NUM_TIKZS
+# from tikzpy import
 
-""" NUM_TIKZS: records the number of TikZ environments created.
-
-This global variable is the simplest solution to (1) avoiding making a TeX class 
-and (2) designing deletion and update processes of files in such 
-a way that even the most careless user will never delete anything 
-important on their computer (e.g., a tex document).
-"""
-
-# TODO: Create a `clear` function which deletes all Tikz statements with an ID.
+# TODO: Create a clear() function which deletes all Tikz statements with an ID.
 # TODO: Create an undo() method which removes the most recently added object.
 class TikzPicture:
     """
@@ -41,78 +31,67 @@ class TikzPicture:
         statements (dict) : See docstring for statements below
     """
 
-    def __init__(self, tikz_file="tikz_code/tikz-code.tex", center=False, options=""):
-        global NUM_TIKZS
-        # Create a Tikz Environment
-        self.tikz_file = Path(tikz_file)
-        self.options = options
-        self._center = center
-        self._statements = {}
-        self._id = f"@TikzPy__#id__==__({NUM_TIKZS})"  # Cannot have spaces. We later scan and look for this string.
-        self.preamble = {"begin_id": f"%__begin__{self._id}\n"}
-        self.postamble = {"end_ind": f"%__end__{self._id}\n"}
+    NUM_TIKZS = 0
 
-        # Check if the tikz_file exists. If not, create it.
-        if not self.tikz_file.is_file():
-            try:
-                with open(self.tikz_file.resolve(), "w"):
-                    pass
-            except:
-                print(f"Could not find file at {self.tikz_file}.\n")
-                answer = input("Want to make it? (Y/N) ")
-                if answer.replace(" ", "") == "y" or answer.replace(" ", "") == "Y":
-                    # Make directory, then file
-                    self.tikz_file.parent.mkdir(parents=True)
-                    with open(self.tikz_file.resolve(), "w+"):
-                        pass
-                    print(
-                        f"File created at {str(self.tikz_file.resolve())}.\nThe tikz_code will output there. \n"
-                    )
-                else:
-                    print("Not created. \n")
+    def __init__(
+        self,
+        tikz_file: str = "tikz_code/tikz-code.tex",
+        center: bool = False,
+        options: str = "",
+    ) -> None:
+        # Create a Tikz Environment
+
+        self.tikz_file: Path = Path(tikz_file)
+        self.options: str = options
+        self._center: bool = center
+        self._statements: dict = {}
+        self._id: str = f"@TikzPy__#id__==__({self.NUM_TIKZS})"
+        self._preamble: dict = {"begin_id": f"%__begin__{self._id}\n"}
+        self._postamble: dict = {"end_ind": f"%__end__{self._id}\n"}
 
     @property
-    def center(self):
+    def center(self) -> bool:
         return self._center
 
     @center.setter
-    def center(self, bool):
-        self._center = bool
+    def center(self, centering) -> None:
+        self._center = centering
         self.center_code()
 
-    def center_code(self):
+    def center_code(self) -> None:
         if self.center:
-            self.preamble["center"] = "\\begin{center}\n"
-            self.postamble["center"] = "\\end{center}\n"
+            self._preamble["center"], self._postamble["center"] = (
+                "\\begin{center}\n",
+                "\\end{center}\n",
+            )
         else:
-            self.preamble["center"] = ""
-            self.postamble["center"] = ""
+            self._preamble["center"], self._postamble["center"] = "", ""
 
     @property
-    def begin(self):
+    def begin(self) -> list:
         """The beginning code of our tikz environment.
         * For each environment we create, we assign an ID that our program can later identify.
           Such an ID is of the form of a TeX comment " % TikzPython id = ({self._id}) "
         * This is to ensure safe, efficient file update and deletion processes.
         """
         begin = []
-        for statement in self.preamble.values():
+        for statement in self._preamble.values():
             begin.append(statement)
         begin.append(f"\\begin{{tikzpicture}}{brackets(self.options)}\n")
         return begin
 
     @property
-    def end(self):
+    def end(self) -> list:
         """ End statement for the TikzPicture."""
         end = ["\\end{tikzpicture}\n"]
         for statement in list(
-            reversed(list(self.postamble.values()))
+            reversed(list(self._postamble.values()))
         ):  # To accommodate older pythons
             end.append(statement)
         return end
 
     @property
-    def tex_file(self):
+    def tex_file(self) -> Path:
         r"""Takes care of the TeX file, containing necessary \usepackage{...} and \usetikzlibrary{...} statements,
         which is used to call the Tikz code and compile it.
         * The TeX file is stored in a folder "/tex", in the same directory as self.tikz_file.
@@ -155,7 +134,7 @@ class TikzPicture:
         return tex_file
 
     @property
-    def statements(self):
+    def statements(self) -> dict:
         """A dictionary to keep track of the current Tikz code we've commanded. This is for the program.
         keys : instances of subclasses created (e.g, Line)
         values : the Tikz code of the instance (e.g., Line.code)
@@ -167,7 +146,7 @@ class TikzPicture:
         return statement_dict
 
     @property
-    def code(self):
+    def code(self) -> str:
         """A string contaning our Tikz code. This uses self._statements, and self.code
         gets passed to __repr__.
         """
@@ -183,30 +162,30 @@ class TikzPicture:
             code += stmt
         return code
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return a readable string of the current tikz code"""
-        readable_code = self.begin[-1]
+        readable_code = self.begin[-1]  # Only return \begin{tikzpicture}[...]
         for draw_obj in self.statements:
             readable_code += "\t" + draw_obj.code + "\n"
-        readable_code += self.end[0]
+        readable_code += self.end[0]  # Only return \end{tikzpicture}
         return readable_code
 
-    def remove(self, draw_obj):
+    def remove(self, draw_obj: _DrawingObject) -> None:
         """A method to remove a code statement from the Tikz environment, e.g., a line."""
         del self._statements[draw_obj]
 
-    def draw(self, *args):
+    def draw(self, *args: list[_DrawingObject]) -> None:
         """User can also manually add their drawing object. """
         for draw_obj in args:
             self._statements[draw_obj] = draw_obj.code
 
-    def add_command(self, tikz_statement):
+    def add_command(self, tikz_statement: str) -> TikzCommand:
         """Manually add a string of valid Tikz code into the Tikz environment."""
         command = TikzCommand(tikz_statement)
         self.draw(command)
         return command
 
-    def tdplotsetmaincoords(self, theta, phi):
+    def set_tdplotsetmaincoords(self, theta: float, phi: float) -> None:
         """Specifies the viewing angle for 3D.
         theta: The angle (in degrees) through which the coordinate frame is rotated about the x axis.
         phi: The angle (in degrees) through which the coordinate frame is rotated about the z axis.
@@ -214,20 +193,20 @@ class TikzPicture:
         self.tdplotsetmaincoords = (theta, phi)
         if "tdplot_main_coords" not in self.options:
             self.options += "tdplot_main_coords"
-        self.preamble[
+        self._preamble[
             "tdplotsetmaincoords"
         ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
 
-    def tikzset(self, style_name, style_rules):
+    def tikzset(self, style_name: str, style_rules: TikzStyle) -> TikzStyle:
         style = TikzStyle(style_name, style_rules)
-        self.preamble[f"tikz_style:{style_name}"] = style.code
+        self._preamble[f"tikz_style:{style_name}"] = style.code
         return style
 
-    def add_styles(self, *styles):
+    def add_styles(self, *styles: list[TikzStyle]) -> None:
         for style in styles:
-            self.preamble[f"tikz_style:{style.style_name}"] = style.code
+            self._preamble[f"tikz_style:{style.style_name}"] = style.code
 
-    def write(self, overwrite=True):
+    def write(self, overwrite: bool = True) -> None:
         """Our method to write the current recorded Tikz code into self.tikz_file, a .tex file somewhere.
         There are two main cases:
         A. This is our first time calling write().
@@ -240,9 +219,27 @@ class TikzPicture:
         Usually, a user won't want this. If for some weird reason they do want this, then they set
         overwrite = False.
         """
-        global NUM_TIKZS  # Load in the global to update this variable, in the off chance overwrite = False.
         tikz_file_path = str(self.tikz_file.resolve())
         output_code = self.code
+
+        # Check if the tikz_file exists. If not, create it.
+        if not self.tikz_file.is_file():
+            try:
+                with open(self.tikz_file.resolve(), "w"):
+                    pass
+            except:
+                print(f"Could not find file at {self.tikz_file}.\n")
+                answer = input("Want to make it? (Y/N) ")
+                if answer.replace(" ", "") == "y" or answer.replace(" ", "") == "Y":
+                    # Make directory, then file
+                    self.tikz_file.parent.mkdir(parents=True)
+                    with open(self.tikz_file.resolve(), "w+"):
+                        pass
+                    print(
+                        f"File created at {str(self.tikz_file.resolve())}.\nThe tikz_code will output there. \n"
+                    )
+                else:
+                    print("Not created. \n")
 
         # If we want to overwrite and update our last TikzPicture environment (in most cases, we do)
         if overwrite:
@@ -280,10 +277,7 @@ class TikzPicture:
 
                 # We create a new file with our desired file contents
                 tikz_file_temp = Path(
-                    str(self.tikz_file.parents[0])
-                    + "/"
-                    + self.tikz_file.stem
-                    + "_temp.tex"
+                    str(self.tikz_file.parents[0]), self.tikz_file.stem + "_temp.tex"
                 )
                 tikz_file_temp_path = str(tikz_file_temp.resolve())
                 with open(tikz_file_temp_path, "w") as f:
@@ -304,16 +298,16 @@ class TikzPicture:
                 print("Adding new Tikz environment")
                 with open(tikz_file_path, "a+") as tikz_file:
                     tikz_file.write(output_code)
-                NUM_TIKZS += 1
+                self.NUM_TIKZS += 1
 
         # If for some reason we do not want to overwrite our last TikzPicture
         else:
             with open(tikz_file_path, "a+") as tikz_file:
                 tikz_file.write(output_code)
-            NUM_TIKZS += 1
+            self.NUM_TIKZS += 1
 
     # Display the current tikz drawing
-    def show(self, quiet=False):
+    def show(self, quiet: bool = False) -> None:
         """ Compiles the PDF and displays it to the user."""
         tex_file_parents = true_posix_path(self.tex_file.resolve().parents[0])
         tex_filename = Path(tex_file_parents, self.tex_file.stem + ".tex")
@@ -328,7 +322,7 @@ class TikzPicture:
                 f"latexmk -pdf -output-directory={tex_file_parents} {tex_file}"
             )
         subprocess.run(compile_cmd, shell=True)
-        # We move the PDF up one directory, our of the hidden folder, so the viewer can see it.
+        # We move the PDF up one directory, out of the tex/ folder, so the viewer can see it.
         pdf_file = Path(tex_file_parents, self.tex_file.stem + ".pdf")
         pdf_file_path = str(
             pdf_file.resolve().parents[1] / pdf_file.name
@@ -341,8 +335,14 @@ class TikzPicture:
     """
 
     def line(
-        self, start, end, options="", to_options="", control_pts=[], action="draw"
-    ):
+        self,
+        start: tuple[float, float],
+        end: tuple[float, float],
+        options: str = "",
+        to_options: str = "",
+        control_pts: list = [],
+        action: str = "draw",
+    ) -> Line:
         """Draws a line by creating an instance of the Line class.
         Upon creation, we update self._statements with our new code.
         * Key feature: If we update any attributes of our line, the changes
@@ -352,7 +352,13 @@ class TikzPicture:
         self.draw(line)
         return line
 
-    def plot_coordinates(self, points, options="", plot_options="", action="draw"):
+    def plot_coordinates(
+        self,
+        points: tuple,
+        options: str = "",
+        plot_options: str = "",
+        action: str = "draw",
+    ) -> PlotCoordinates:
         """Draws a plot coordinates statement by creating an instance of the PlotCoordinates class.
         Updates self._statements when necessary; see above comment under line function above.
         """
@@ -360,7 +366,13 @@ class TikzPicture:
         self.draw(plot)
         return plot
 
-    def circle(self, center, radius, options="", action="draw"):
+    def circle(
+        self,
+        center: tuple[float, float],
+        radius: float,
+        options: str = "",
+        action: str = "draw",
+    ) -> Circle:
         """Draws a circle by creating an instance of the Circle class.
         Updates self._statements when necessary; see above comment under line function above.
         """
@@ -368,7 +380,9 @@ class TikzPicture:
         self.draw(circle)
         return circle
 
-    def node(self, position, options="", text=""):
+    def node(
+        self, position: tuple[float, float], options: str = "", text: str = ""
+    ) -> Node:
         """Draws a node by creating an instance of the Node class.
         Updates self._statements when necessary; see above comment under line function above.
         """
@@ -376,7 +390,13 @@ class TikzPicture:
         self.draw(node)
         return node
 
-    def rectangle(self, left_corner, right_corner, options="", action="draw"):
+    def rectangle(
+        self,
+        left_corner: tuple[float, float],
+        right_corner: tuple[float, float],
+        options: str = "",
+        action: str = "draw",
+    ) -> Rectangle:
         """Draws a rectangle by creating an instance of the Rectangle class.
         Updates self._statements when necessary; see above comment under line function above.
         """
@@ -384,7 +404,14 @@ class TikzPicture:
         self.draw(rectangle)
         return rectangle
 
-    def ellipse(self, center, horiz_axis, vert_axis, options="", action="draw"):
+    def ellipse(
+        self,
+        center: tuple[float, float],
+        horiz_axis: float,
+        vert_axis: float,
+        options: str = "",
+        action: str = "draw",
+    ) -> Ellipse:
         """Draws an ellipse by creating an instance of the Ellipse class.
         Updates self._statements when necessary; see above comment under line function above.
         """
@@ -394,17 +421,17 @@ class TikzPicture:
 
     def arc(
         self,
-        position,
-        start_angle,
-        end_angle,
-        radius=None,
-        x_radius=None,
-        y_radius=None,
-        options="",
-        radians=False,
-        draw_from_start=True,
-        action="draw",
-    ):
+        position: tuple[float, float],
+        start_angle: float,
+        end_angle: float,
+        radius: float = None,
+        x_radius: float = None,
+        y_radius: float = None,
+        options: str = "",
+        radians: bool = False,
+        draw_from_start: bool = True,
+        action: str = "draw",
+    ) -> Arc:
         """Draws an arc by creating an instance of the Arc class.
         Updates self._statements when necessary; see above comment under line function above.
         """
@@ -423,7 +450,7 @@ class TikzPicture:
         self.draw(arc)
         return arc
 
-    def scope(self, options=""):
+    def scope(self, options: str = "") -> Scope:
         scope = Scope(options)
         self.draw(scope)
         return scope

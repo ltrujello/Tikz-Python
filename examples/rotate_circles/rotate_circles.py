@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 from math import pi, sin, cos
 from tikzpy import TikzPicture
 from tikzpy.colors import rainbow_colors
@@ -14,4 +15,4 @@ for i in range(n):
         )
 
 tikz.write()
-tikz.show()
+#tikz.show()

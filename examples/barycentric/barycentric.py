@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 import statistics
 import queue
 from tikzpy import TikzPicture

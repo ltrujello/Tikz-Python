@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 from math import pi, sin, cos
 from tikzpy import TikzPicture
 

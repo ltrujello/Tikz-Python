@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 from math import pi, cos, sin, tan, atan
 import numpy as np
 from tikzpy import TikzPicture
@@ -6,7 +7,7 @@ from tikzpy import TikzPicture
 """
 
 tikz = TikzPicture(center=True)
-tikz.tdplotsetmaincoords(65, 25)
+tikz.set_tdplotsetmaincoords(65, 25)
 tikz.options = "tdplot_main_coords"
 
 # The blowup

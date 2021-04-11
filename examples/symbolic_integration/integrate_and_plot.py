@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 import numpy as np
 from sympy import *  # Without caution, import * can become a very stupid idea. Here it is okay.
 from sympy.abc import x  # Don't name any function, variable, etc, as 'x'.

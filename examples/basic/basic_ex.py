@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 from tikzpy import TikzPicture  # Import the class TikzPicture
 
 """ Draws a circle and two ellipses to create the illusion of sphere.

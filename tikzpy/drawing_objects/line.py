@@ -1,3 +1,4 @@
+from __future__ import annotations
 from tikzpy.drawing_objects.drawing_object import _DrawingObject
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from tikzpy.utils.helpers import brackets
@@ -16,13 +17,14 @@ class Line(_DrawingObject):
 
     def __init__(
         self,
-        start,
-        end,
-        options="",
-        to_options="",
-        control_pts=[],
-        action="draw",
-    ):
+        start: tuple[float, float],
+        end: tuple[float, float],
+        options: str = "",
+        to_options: str = "",
+        control_pts: list[tuple] = [],
+        action: str = "draw",
+    ) -> None:
+
         self.start = start
         self.end = end
         self.options = options
@@ -32,7 +34,7 @@ class Line(_DrawingObject):
         super().__init__(action, self.options, self._command)
 
     @property
-    def _command(self):
+    def _command(self) -> str:
         r"""The Tikz code for a line that comes after \draw[self.options]. It is useful for
         us to do this breaking-up of the Tikz code, especially for clipping. However, this
         serves no use to the user, so we make it private (well, it's just bells and whistles).
@@ -48,12 +50,12 @@ class Line(_DrawingObject):
             return f"{self.start} {control_stmt} {self.end}"
 
     @property
-    def midpoint(self):
+    def midpoint(self) -> tuple[float, float]:
         mid_x = (self.start[0] + self.end[0]) / 2
         mid_y = (self.start[1] + self.end[1]) / 2
         return (mid_x, mid_y)
 
-    def shift(self, xshift, yshift):
+    def shift(self, xshift: float, yshift: float) -> None:
         """Shift start, end, and control_pts"""
         shifted_start_end = shift_coords([self.start, self.end], xshift, yshift)
         shifted_control_pts = shift_coords(self.control_pts, xshift, yshift)
@@ -61,13 +63,15 @@ class Line(_DrawingObject):
         self.start, self.end = shifted_start_end[0], shifted_start_end[1]
         self.control_pts = shifted_control_pts
 
-    def scale(self, scale):
+    def scale(self, scale: float) -> None:
         """Scale start, end, and control_pts."""
         scaled_start_end = scale_coords([self.start, self.end], scale)
         self.start, self.end = scaled_start_end[0], scaled_start_end[1]
         self.control_pts = scale_coords(self.control_pts, scale)
 
-    def rotate(self, angle, about_pt=None, radians=False):
+    def rotate(
+        self, angle: float, about_pt: tuple[float, float] = None, radians: bool = False
+    ) -> None:
         """Rotate start, end, and control_pts"""
         if about_pt == None:
             about_pt = self.midpoint

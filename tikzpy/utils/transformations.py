@@ -4,7 +4,9 @@ import math
 """
 
 
-def shift_coords(coords, xshift, yshift):
+def shift_coords(
+    coords: list[tuple[float, float]], xshift: float, yshift: float
+) -> list:
     """Shift a list of 2D-coordinates by "xshift", "yshift". Accuracy to 7 decimal places for readability.
     coords (list) : A list of tuples (x, y) with x, y floats
     xshift (float) : An amount to shift the x values
@@ -22,7 +24,7 @@ def shift_coords(coords, xshift, yshift):
     return shifted_coords
 
 
-def scale_coords(coords, scale):
+def scale_coords(coords: list[tuple[float, float]], scale: float) -> list:
     """Scale a list of 2D-coordinates by "scale". Accuracy to 7 decimal places for readability.
     coords (list) : A list of tuples (x, y) with x, y floats
     scale (float) : An amount to scale the x and y values
@@ -38,7 +40,12 @@ def scale_coords(coords, scale):
     return scaled_coords
 
 
-def rotate_coords(coords, angle, about_pt, radians=False):  # rotate counterclockwise
+def rotate_coords(
+    coords: list[tuple[float, float]],
+    angle: float,
+    about_pt: tuple[float, float],
+    radians: bool = False,
+) -> list:  # rotate counterclockwise
     """Rotate in degrees (or radians) a list of 2D-coordinates about the point "about_pt". Accuracy to 7 decimal places for readability.
     coords (list) : A list of tuples (x, y) with x, y floats
     angle (float) : The angle to rotate the coordinates
@@ -69,13 +76,13 @@ def rotate_coords(coords, angle, about_pt, radians=False):  # rotate countercloc
     return rotated_coords
 
 
-def recenter_to_origin(coords):
+def recenter_to_origin(coords: list[tuple[float, float]]) -> list:
     """Shifts a set of 2D points such that their centroid corresponds to the origin.
     This is useful for scaling: One may notice that scaling changes their (x,y) coordinates. Running this before
     scaling can allow them to relatively scale their figure such that the position of the figure does not change.
     """
-    x_mean = 0
-    y_mean = 0
+    x_mean: float = 0
+    y_mean: float = 0
     for point in coords:
         x_mean += point[0]
         y_mean += point[1]

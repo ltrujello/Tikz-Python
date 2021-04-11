@@ -1,3 +1,4 @@
+from __future__ import annotations
 from tikzpy.drawing_objects.drawing_object import _DrawingObject
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 
@@ -12,21 +13,29 @@ class Circle(_DrawingObject):
         options (str) : String containing the drawing options (e.g, "Blue")
     """
 
-    def __init__(self, center, radius, options="", action="draw"):
+    def __init__(
+        self,
+        center: tuple[float, float],
+        radius: float,
+        options: str = "",
+        action: str = "draw",
+    ) -> None:
         self.center = center
         self.radius = radius
         self.options = options
         super().__init__(action, self.options, self._command)
 
     @property
-    def _command(self):
+    def _command(self) -> str:
         return f"{self.center} circle ({self.radius}cm)"
 
-    def shift(self, xshift, yshift):
+    def shift(self, xshift: float, yshift: float) -> None:
         self.center = shift_coords([self.center], xshift, yshift)[0]
 
-    def scale(self, scale):
+    def scale(self, scale: float) -> None:
         self.center = scale_coords([self.center], scale)[0]
 
-    def rotate(self, angle, about_pt, radians=False):
+    def rotate(
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
+    ) -> None:
         self.center = rotate_coords([self.center], angle, about_pt, radians)[0]

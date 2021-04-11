@@ -1,7 +1,8 @@
+from pathlib import Path
 from pathlib import WindowsPath
 
 
-def brackets(string):
+def brackets(string: str) -> str:
     """A helper function for creating tikz code.
     Basically, if the string is empty, we don't obtain brackets [].
     """
@@ -11,7 +12,7 @@ def brackets(string):
         return ""
 
 
-def true_posix_path(path_obj):
+def true_posix_path(path_obj: Path) -> str:
     r"""Given a path_obj, we return a string which represents the "true posix" file path
     of the path_obj.
 

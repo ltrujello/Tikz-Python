@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 from tikzpy import TikzPicture
 from tikzpy.styles import arrows_along_path_style
 

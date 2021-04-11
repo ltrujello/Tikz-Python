@@ -1,10 +1,12 @@
+from __future__ import annotations
 from copy import copy, deepcopy
 from tikzpy.utils.helpers import brackets
 from tikzpy.drawing_objects.node import Node
 
 
 class _DrawingObject:
-    r"""A generic class for our drawing objects to inherit properties from.
+    r"""A generic class for our drawing objects to inherit properties from. This class is meant to
+        be used only as a super class, and never directly used independently.
 
     Attributes :
         action (str) : A string containing either "draw", "filldraw", "fill", or "path". This controls
@@ -15,10 +17,11 @@ class _DrawingObject:
         node (Node object) : A Node object which can be appended to the end of the statement.
     """
 
-    def __init__(self, action="draw", options="", command=""):
+    def __init__(
+        self, action: str = "draw", options: str = "", command: str = ""
+    ) -> None:
         self.action = action
         self.options = options
-        self.command = ""
         self.node = None
 
         if not isinstance(self.action, str):
@@ -30,22 +33,24 @@ class _DrawingObject:
             )
 
     @property
-    def code(self):
+    def code(self) -> str:
         """Full Tikz code for this drawing object."""
         if self.node is None:
-            return fr"\{self.action}{brackets(self.options)} {self._command};"
+            return f"\\{self.action}{brackets(self.options)} {self._command};"
         else:
-            return fr"\{self.action}{brackets(self.options)} {self._command} node{brackets(self.node.options)} {self.node._command};"
+            return f"\\{self.action}{brackets(self.options)} {self._command} node{brackets(self.node.options)} {self.node._command};"
 
     # TODO: Allow one to not specify the position.
-    def add_node(self, position=(0, 0), options="", text=""):
+    def add_node(
+        self, position: tuple = (0, 0), options: str = "", text: str = ""
+    ) -> None:
         """A method to build a node on a drawing object directly.
         This bypasses having to (1) define a Node object and then (2) use node.setter.
         """
         new_node = Node(position, options, text)
         self.node = new_node
 
-    def __deepcopy__(self, memo):
+    def __deepcopy__(self, memo: dict) -> _DrawingObject:
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set
         our methods to modify objects, but not return anything.
         """
@@ -57,7 +62,7 @@ class _DrawingObject:
             setattr(draw_obj, attr, deepcopy(value, memo))
         return draw_obj
 
-    def copy(self, **kwargs):
+    def copy(self, **kwargs: dict) -> _DrawingObject:
         """Allows one to simultaneously make a (deep) copy of a drawing object and modify
         attributes of the drawing object in one step.
         """
@@ -66,5 +71,5 @@ class _DrawingObject:
             setattr(new_copy, attr, val)
         return new_copy
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.code

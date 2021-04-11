@@ -1,3 +1,4 @@
+#!/bin/bash/python3
 import numpy as np
 from tikzpy import TikzPicture
 
