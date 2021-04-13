@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Tuple
 from math import sin, cos, tan, atan, atan2, pi, sqrt
 from math import radians as degs_2_rads
 from math import degrees as rads_2_degs
@@ -22,7 +23,7 @@ class Arc(_DrawingObject):
 
     def __init__(
         self,
-        position: tuple[float, float],
+        position: Tuple[float, float],
         start_angle: float,
         end_angle: float,
         radius: float = None,
@@ -80,7 +81,7 @@ class Arc(_DrawingObject):
                 return "ellipse"
 
     @property
-    def _position(self) -> tuple[float, float]:
+    def _position(self) -> Tuple[float, float]:
         """We return the point at which we should begin drawing the arc. This takes a
         bit of work since we allow the user to possibly specify the center of the
         arc of which they would like to see drawn.
@@ -98,7 +99,7 @@ class Arc(_DrawingObject):
         return start_pos
 
     @_position.setter
-    def _position(self, new_pos: tuple[float, float]) -> tuple[float, float]:
+    def _position(self, new_pos: Tuple[float, float]) -> Tuple[float, float]:
         return self.position
 
     @property
@@ -113,7 +114,7 @@ class Arc(_DrawingObject):
             start_angle, end_angle = rads_2_degs(t_start), rads_2_degs(t_end)
         return f"{self._position} arc [start angle = {start_angle}, end angle = {end_angle}, {self.radius_statement}]"
 
-    def start_pos_circle(self) -> tuple[float, float]:
+    def start_pos_circle(self) -> Tuple[float, float]:
         """Calculates the point at which the CIRCLE arc should begin
         drawing, given that the user specified what the center, radius,
         start, and end angles of the desired circular arc.
@@ -127,7 +128,7 @@ class Arc(_DrawingObject):
 
         return (start_pt_x, start_pt_y)
 
-    def start_pos_ellipse(self) -> tuple[float, float]:
+    def start_pos_ellipse(self) -> Tuple[float, float]:
         """Calculates the point at which the ELLIPSE arc should begin
         drawing, given that the user specified what the center, x_radius, y_radius,
         start, and end angles of the desired elliptic arc.

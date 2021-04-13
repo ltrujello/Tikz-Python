@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import List, Tuple
 from tikzpy.drawing_objects.drawing_object import _DrawingObject
 from tikzpy.tikz_environments.clip import Clip
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
@@ -48,7 +49,7 @@ class Scope:
         """Remove a statement from the scope environment"""
         del self._scope_statements[draw_obj]
 
-    def append(self, *args: list[_DrawingObject]) -> None:
+    def append(self, *args: List[_DrawingObject]) -> None:
         """Append a drawing object to the scope statement"""
         for draw_obj in args:
             self._scope_statements[draw_obj] = draw_obj.code
@@ -68,7 +69,7 @@ class Scope:
             draw_obj.scale(scale)
 
     def rotate(
-        self, angle: float, about_pt: tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
         for draw_obj in self._scope_statements:
             draw_obj.rotate(angle, about_pt, radians)

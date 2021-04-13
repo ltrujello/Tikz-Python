@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Tuple
 from copy import copy, deepcopy
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from tikzpy.utils.helpers import brackets
@@ -16,7 +17,7 @@ class Node:
     """
 
     def __init__(
-        self, position: tuple[float, float], options: str = "", text: str = ""
+        self, position: Tuple[float, float], options: str = "", text: str = ""
     ) -> None:
         self.position = position
         self.options = options
@@ -37,7 +38,7 @@ class Node:
         self.position = scale_coords([self.position], scale)[0]
 
     def rotate(
-        self, angle: float, about_pt: tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
         self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
 

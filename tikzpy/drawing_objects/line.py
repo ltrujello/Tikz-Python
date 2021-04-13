@@ -1,7 +1,9 @@
 from __future__ import annotations
+from typing import List, Tuple
 from tikzpy.drawing_objects.drawing_object import _DrawingObject
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from tikzpy.utils.helpers import brackets
+from typing import List, Tuple
 
 # Class for Lines
 class Line(_DrawingObject):
@@ -17,11 +19,11 @@ class Line(_DrawingObject):
 
     def __init__(
         self,
-        start: tuple[float, float],
-        end: tuple[float, float],
+        start: Tuple[float, float],
+        end: Tuple[float, float],
         options: str = "",
         to_options: str = "",
-        control_pts: list[tuple] = [],
+        control_pts: List[Tuple] = [],
         action: str = "draw",
     ) -> None:
 
@@ -50,7 +52,7 @@ class Line(_DrawingObject):
             return f"{self.start} {control_stmt} {self.end}"
 
     @property
-    def midpoint(self) -> tuple[float, float]:
+    def midpoint(self) -> Tuple[float, float]:
         mid_x = (self.start[0] + self.end[0]) / 2
         mid_y = (self.start[1] + self.end[1]) / 2
         return (mid_x, mid_y)
@@ -70,7 +72,7 @@ class Line(_DrawingObject):
         self.control_pts = scale_coords(self.control_pts, scale)
 
     def rotate(
-        self, angle: float, about_pt: tuple[float, float] = None, radians: bool = False
+        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
     ) -> None:
         """Rotate start, end, and control_pts"""
         if about_pt == None:

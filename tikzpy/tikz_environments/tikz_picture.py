@@ -2,6 +2,7 @@ import subprocess
 import webbrowser
 import pkgutil
 from pathlib import Path
+from typing import List, Tuple
 from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
 from tikzpy.drawing_objects.circle import Circle
@@ -9,14 +10,12 @@ from tikzpy.drawing_objects.node import Node
 from tikzpy.drawing_objects.rectangle import Rectangle
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
-from tikzpy.drawing_objects.arc import _DrawingObject
+from tikzpy.drawing_objects.drawing_object import _DrawingObject
 from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_command import TikzCommand
 from tikzpy.tikz_environments.tikz_style import TikzStyle
 from tikzpy.utils.helpers import brackets
 from tikzpy.utils.helpers import true_posix_path
-
-# from tikzpy import
 
 # TODO: Create a clear() function which deletes all Tikz statements with an ID.
 # TODO: Create an undo() method which removes the most recently added object.
@@ -39,8 +38,6 @@ class TikzPicture:
         center: bool = False,
         options: str = "",
     ) -> None:
-        # Create a Tikz Environment
-
         self.tikz_file: Path = Path(tikz_file)
         self.options: str = options
         self._center: bool = center
@@ -71,7 +68,7 @@ class TikzPicture:
     def begin(self) -> list:
         """The beginning code of our tikz environment.
         * For each environment we create, we assign an ID that our program can later identify.
-          Such an ID is of the form of a TeX comment " % TikzPython id = ({self._id}) "
+          Such an ID is of the form of a TeX comment.
         * This is to ensure safe, efficient file update and deletion processes.
         """
         begin = []
@@ -174,7 +171,7 @@ class TikzPicture:
         """A method to remove a code statement from the Tikz environment, e.g., a line."""
         del self._statements[draw_obj]
 
-    def draw(self, *args: list[_DrawingObject]) -> None:
+    def draw(self, *args: List[_DrawingObject]) -> None:
         """User can also manually add their drawing object. """
         for draw_obj in args:
             self._statements[draw_obj] = draw_obj.code
@@ -202,7 +199,7 @@ class TikzPicture:
         self._preamble[f"tikz_style:{style_name}"] = style.code
         return style
 
-    def add_styles(self, *styles: list[TikzStyle]) -> None:
+    def add_styles(self, *styles: List[TikzStyle]) -> None:
         for style in styles:
             self._preamble[f"tikz_style:{style.style_name}"] = style.code
 
@@ -336,8 +333,8 @@ class TikzPicture:
 
     def line(
         self,
-        start: tuple[float, float],
-        end: tuple[float, float],
+        start: Tuple[float, float],
+        end: Tuple[float, float],
         options: str = "",
         to_options: str = "",
         control_pts: list = [],
@@ -368,7 +365,7 @@ class TikzPicture:
 
     def circle(
         self,
-        center: tuple[float, float],
+        center: Tuple[float, float],
         radius: float,
         options: str = "",
         action: str = "draw",
@@ -381,7 +378,7 @@ class TikzPicture:
         return circle
 
     def node(
-        self, position: tuple[float, float], options: str = "", text: str = ""
+        self, position: Tuple[float, float], options: str = "", text: str = ""
     ) -> Node:
         """Draws a node by creating an instance of the Node class.
         Updates self._statements when necessary; see above comment under line function above.
@@ -392,8 +389,8 @@ class TikzPicture:
 
     def rectangle(
         self,
-        left_corner: tuple[float, float],
-        right_corner: tuple[float, float],
+        left_corner: Tuple[float, float],
+        right_corner: Tuple[float, float],
         options: str = "",
         action: str = "draw",
     ) -> Rectangle:
@@ -406,7 +403,7 @@ class TikzPicture:
 
     def ellipse(
         self,
-        center: tuple[float, float],
+        center: Tuple[float, float],
         horiz_axis: float,
         vert_axis: float,
         options: str = "",
@@ -421,7 +418,7 @@ class TikzPicture:
 
     def arc(
         self,
-        position: tuple[float, float],
+        position: Tuple[float, float],
         start_angle: float,
         end_angle: float,
         radius: float = None,

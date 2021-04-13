@@ -1,6 +1,7 @@
 from tikzpy.drawing_objects.drawing_object import _DrawingObject
 from tikzpy.utils.helpers import brackets
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
+from typing import List, Tuple
 
 # Class for Plotting
 class PlotCoordinates(_DrawingObject):
@@ -16,7 +17,7 @@ class PlotCoordinates(_DrawingObject):
 
     def __init__(
         self,
-        points: list[tuple],
+        points: List[Tuple],
         options: str = "",
         plot_options: str = "",
         action: str = "draw",
@@ -35,7 +36,7 @@ class PlotCoordinates(_DrawingObject):
         return cmd
 
     @property
-    def center(self) -> tuple[float, float]:
+    def center(self) -> Tuple[float, float]:
         mean_x: float = 0
         mean_y: float = 0
         for pt in self.points:
@@ -52,7 +53,7 @@ class PlotCoordinates(_DrawingObject):
         self.points = scale_coords(self.points, scale)
 
     def rotate(
-        self, angle: float, about_pt: tuple[float, float] = None, radians: bool = False
+        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
     ) -> None:
         if about_pt == None:
             about_pt = self.center

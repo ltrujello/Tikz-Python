@@ -4,14 +4,11 @@ from tikzpy import TikzPicture, PlotCoordinates
 
 tikz = TikzPicture(center=True)
 tikz.set_tdplotsetmaincoords(75, 120)
-tikz.options = "tdplot_main_coords, scale=1.5"
-
 
 HEIGHT = 3.75  # Height of the surace (from the floor)
 O = (1, 2, HEIGHT / 2)  # The origin
 
 # Draw the rectangle
-
 floor = tikz.plot_coordinates([(0, 0, 0), (5, 0, 0), (5, 5, 0), (0, 5, 0), (0, 0, 0)])
 floor.options = "shade, left color = NavyBlue!30, right color = NavyBlue, opacity = 0.3"
 

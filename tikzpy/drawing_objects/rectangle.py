@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Tuple
 from tikzpy.drawing_objects.drawing_object import _DrawingObject
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 
@@ -15,8 +16,8 @@ class Rectangle(_DrawingObject):
 
     def __init__(
         self,
-        left_corner: tuple[float, float],
-        right_corner: tuple[float, float],
+        left_corner: Tuple[float, float],
+        right_corner: Tuple[float, float],
         options: str = "",
         action: str = "draw",
     ) -> None:
@@ -43,7 +44,7 @@ class Rectangle(_DrawingObject):
         self.right_corner = scaled_corners[1]
 
     def rotate(
-        self, angle: float, about_pt: tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
         rotated_corners = rotate_coords(
             [self.left_corner, self.right_corner], angle, about_pt, radians

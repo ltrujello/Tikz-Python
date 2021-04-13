@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Tuple
 from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
 from tikzpy.drawing_objects.circle import Circle
@@ -38,6 +39,6 @@ class Clip:
         self.draw_obj.scale(scale)
 
     def rotate(
-        self, angle: float, about_pt: tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
         self.draw_obj.rotate(angle, about_pt, radians)

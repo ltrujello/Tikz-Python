@@ -1,4 +1,4 @@
-def rgb(r, g, b):
+def rgb(r: float, g: float, b: float) -> str:
     """A wrapper function that outputs xcolor/Tikz code for coloring via rgb values.
 
     When calling rgb, it is necessary to specify "color = " or "fill =" right before.
@@ -9,14 +9,14 @@ def rgb(r, g, b):
     return f"{{ rgb,255:red, {r}; green, {g}; blue, {b} }}"
 
 
-def rainbow_colors(i):
+def rainbow_colors(i: int) -> str:
     """A wrapper function for obtaining rainbow colors.
     Any integer can be passed in.
     """
     return rainbow_cols[i % len(rainbow_cols)]
 
 
-def xcolors(i):
+def xcolors(i: int) -> str:
     """A wrapper function to obtain xcolors.
     Any integer is valid.
     """

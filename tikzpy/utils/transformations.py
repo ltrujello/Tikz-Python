@@ -1,3 +1,5 @@
+from __future__ import annotations
+from typing import List, Tuple
 import math
 
 """ Shifting, Scaling, and Rotating calculations called by above methods
@@ -5,8 +7,8 @@ import math
 
 
 def shift_coords(
-    coords: list[tuple[float, float]], xshift: float, yshift: float
-) -> list:
+    coords: List[Tuple], xshift: float, yshift: float
+) -> List[Tuple[float, float]]:
     """Shift a list of 2D-coordinates by "xshift", "yshift". Accuracy to 7 decimal places for readability.
     coords (list) : A list of tuples (x, y) with x, y floats
     xshift (float) : An amount to shift the x values
@@ -24,7 +26,9 @@ def shift_coords(
     return shifted_coords
 
 
-def scale_coords(coords: list[tuple[float, float]], scale: float) -> list:
+def scale_coords(
+    coords: List[Tuple[float, float]], scale: float
+) -> List[Tuple[float, float]]:
     """Scale a list of 2D-coordinates by "scale". Accuracy to 7 decimal places for readability.
     coords (list) : A list of tuples (x, y) with x, y floats
     scale (float) : An amount to scale the x and y values
@@ -41,11 +45,11 @@ def scale_coords(coords: list[tuple[float, float]], scale: float) -> list:
 
 
 def rotate_coords(
-    coords: list[tuple[float, float]],
+    coords: List[Tuple[float, float]],
     angle: float,
-    about_pt: tuple[float, float],
+    about_pt: Tuple[float, float],
     radians: bool = False,
-) -> list:  # rotate counterclockwise
+) -> List[Tuple[float, float]]:  # rotate counterclockwise
     """Rotate in degrees (or radians) a list of 2D-coordinates about the point "about_pt". Accuracy to 7 decimal places for readability.
     coords (list) : A list of tuples (x, y) with x, y floats
     angle (float) : The angle to rotate the coordinates
@@ -76,7 +80,7 @@ def rotate_coords(
     return rotated_coords
 
 
-def recenter_to_origin(coords: list[tuple[float, float]]) -> list:
+def recenter_to_origin(coords: List[Tuple[float, float]]) -> List[Tuple[float, float]]:
     """Shifts a set of 2D points such that their centroid corresponds to the origin.
     This is useful for scaling: One may notice that scaling changes their (x,y) coordinates. Running this before
     scaling can allow them to relatively scale their figure such that the position of the figure does not change.
