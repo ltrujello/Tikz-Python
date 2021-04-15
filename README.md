@@ -1,6 +1,11 @@
 # Tikz-Python
 An object-oriented Python approach towards providing a giant wrapper for Tikz code, with the goal of streamlining the process of creating complex figures for TeX documents.
 
+## Requirements 
+Python 3.7+ and any relatively up-to-date version of a LaTeX that can process `tikz` and its libraries (which you probably already have if you're looking at this). 
+
+## Installation 
+Run `git clone https://github.com/ltrujello/Tikz-Python` and place `tikzpy` within your python `site-packages`. 
 
 ## How to Use: Basics
 An example of this package in action is below. 
@@ -21,7 +26,7 @@ which produces
 
 We explain line-by-line the above code.
 
-* `from tikzpy import TikzPicture` imports the `TikzPicture` class from the `tikzpy` package. For this to work, simply put the repository `tikzpy` with your other python packages.
+* `from tikzpy import TikzPicture` imports the `TikzPicture` class from the `tikzpy` package. 
 
 * The second line of code is analagous to the TeX code `\begin{tikzpicture}` and `\end{tikzpicture}`. The variable `tikz` is now a tikz environment, specifically an instance of the class `TikzPicture`, and we can now append drawings to it. And `tikz_file` is the file (or more generally, any file path) where our tikz code will be stored.
 
@@ -187,11 +192,11 @@ tikz = TikzPicture(tikz_file, center, options)
 ```
 
 
-Parameter    | Description | Default|
--------------|-------------|-------------|
-`tikz_file` (str) | The desired file path for Tikz code output. Can be a relative or full path. | `tikz_code/tikz_code.tex`|
-`center` (bool) | True if you would like your tikzpicture to be centered, false otherwise. | `False`|
-`options` (str) | A string containing valid Tikz options. | `""`|
+| Parameter         | Description                                                                 | Default                   |
+| ----------------- | --------------------------------------------------------------------------- | ------------------------- |
+| `tikz_file` (str) | The desired file path for Tikz code output. Can be a relative or full path. | `tikz_code/tikz_code.tex` |
+| `center` (bool)   | True if you would like your tikzpicture to be centered, false otherwise.    | `False`                   |
+| `options` (str)   | A string containing valid Tikz options.                                     | `""`                      |
 
 
 ## Methods  
@@ -306,14 +311,14 @@ We can add this line in later to see it whenever we like via `tikz.draw(line)`.
 
 Note: A natural question is: Why the two ways? This is because sometimes we want to obtain information from a drawing object to perform some calculations *before* we decide to actually draw it. One familiar with Tikz will realize that this is analagous to the `\path` command in Tikz, which is often very useful. 
 
-Parameter    | Description | Default|
--------------|-------------|-------------|
-`start` (tuple) | Pair of floats representing the start of the line | 
-`end` (tuple) | Pair of floats representing the end of the line |
-`options` (str) | String containing valid Tikz drawing options, e.g. "Blue" | `""`
-`to_options` (str) | String containing Tikz specifications for connecting the start to the end (e.g. `"to [bend right = 45]"`) | "--"
-`control_pts` (list) | List of control points for the line | `[]`
-`action` (str) | An action to perform with plot (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
+| Parameter            | Description                                                                                               | Default   |
+| -------------------- | --------------------------------------------------------------------------------------------------------- | --------- |
+| `start` (tuple)      | Pair of floats representing the start of the line                                                         |
+| `end` (tuple)        | Pair of floats representing the end of the line                                                           |
+| `options` (str)      | String containing valid Tikz drawing options, e.g. "Blue"                                                 | `""`      |
+| `to_options` (str)   | String containing Tikz specifications for connecting the start to the end (e.g. `"to [bend right = 45]"`) | "--"      |
+| `control_pts` (list) | List of control points for the line                                                                       | `[]`      |
+| `action` (str)       | An action to perform with plot (e.g., `\draw`, `\fill`, `\filldraw`, `\path`)                             | `"\draw"` |
 
 ## Examples
 We've already seen an example of this class. Here's another.
@@ -372,12 +377,12 @@ plot = PlotCoordinates(points, options, plot_options, action)
 ```
 which we can add to our picture later via `tikz.draw(plot)`.
 
-Parameter    | Description | Default|
--------------|-------------|-------------|
-`points` (list) | A list of tuples (x, y) representing coordinates that one wishes to create a plot for. |
-`options` (str) | A string of valid Tikz drawing options. | `""`
-`plot_options` (str) | A string of valid Tikz plotting options | `""`
-`action` (str) | An action to perform with the line (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
+| Parameter            | Description                                                                            | Default   |
+| -------------------- | -------------------------------------------------------------------------------------- | --------- |
+| `points` (list)      | A list of tuples (x, y) representing coordinates that one wishes to create a plot for. |
+| `options` (str)      | A string of valid Tikz drawing options.                                                | `""`      |
+| `plot_options` (str) | A string of valid Tikz plotting options                                                | `""`      |
+| `action` (str)       | An action to perform with the line (e.g., `\draw`, `\fill`, `\filldraw`, `\path`)      | `"\draw"` |
 
 This class is analagous to the Tikz command `\draw plot coordinates{...};`.
 
@@ -461,12 +466,12 @@ circle = Circle(center, radius, options, action)
 ```
 and later draw this via `tikz.draw(circle)`.
 
-Parameter    | Description | Default|
--------------|-------------|-------------|
-`center` (tuple) | A tuple (x, y) of floats representing the coordinates of the center of the circle. |
-`radius` (float) | Length (in cm) of the radius. (By the way, all lengths are taken in cm). | 
-`options` (str) | String containing valid Tikz drawing options (e.g, "Blue") | `""`
-`action` (str) | An action to perform with the circle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
+| Parameter        | Description                                                                         | Default   |
+| ---------------- | ----------------------------------------------------------------------------------- | --------- |
+| `center` (tuple) | A tuple (x, y) of floats representing the coordinates of the center of the circle.  |
+| `radius` (float) | Length (in cm) of the radius. (By the way, all lengths are taken in cm).            |
+| `options` (str)  | String containing valid Tikz drawing options (e.g, "Blue")                          | `""`      |
+| `action` (str)   | An action to perform with the circle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"` |
 
 
 ## Examples
@@ -519,11 +524,11 @@ node = Node(position, options, text)
 ```
 We can then add the node later via `tikz.draw(node)`.
 
-Parameter    | Description | Default|
--------------|-------------|-------------|
-`position` (tuple) | A tuple (x, y) of floats representing the position of the node |
-`options` (str) | String containing valid Tikz node options (e.g., "Above") | `""`
-`text` (str) | A string containing content, such as text or LaTeX code, to be displayed with the node | `""`
+| Parameter          | Description                                                                            | Default |
+| ------------------ | -------------------------------------------------------------------------------------- | ------- |
+| `position` (tuple) | A tuple (x, y) of floats representing the position of the node                         |
+| `options` (str)    | String containing valid Tikz node options (e.g., "Above")                              | `""`    |
+| `text` (str)       | A string containing content, such as text or LaTeX code, to be displayed with the node | `""`    |
 
 ## Examples
 Here we use some nodes to label a figure explaining the logarithm branch cut
@@ -590,12 +595,12 @@ rectangle = Rectangle(left_corner, right_corner, options, action)
 ```
 to create an instance, and later draw via `tikz.draw(Rectangle)`.
 
-Parameter    | Description | Default|
--------------|-------------|-------------|
-`left_corner`  (tuple)| A tuple (x, y) of floats representing the position of the node. | 
-`right_corner` (str) | String containing valid Tikz node options (e.g., "above") | `""`
-`options` (str) | A string containing valid Tikz draw optins, (e.g, "fill = Blue"). | `""` 
-`action` (str) | An action to perform with the rectangle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
+| Parameter              | Description                                                                            | Default   |
+| ---------------------- | -------------------------------------------------------------------------------------- | --------- |
+| `left_corner`  (tuple) | A tuple (x, y) of floats representing the position of the node.                        |
+| `right_corner` (str)   | String containing valid Tikz node options (e.g., "above")                              | `""`      |
+| `options` (str)        | A string containing valid Tikz draw optins, (e.g, "fill = Blue").                      | `""`      |
+| `action` (str)         | An action to perform with the rectangle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"` |
 
 ## Example
 Rectangles are often used as a background to many figures; in this case, 
@@ -648,12 +653,12 @@ ellipse = Ellipse(center, horiz_axis, vert_axis, options, action)
 ```
 and draw this later to the Tikz picture via `tikz.draw(ellipse)`.
 
-Parameter    | Description | Default|
--------------|-------------|-------------|
-`center` (tuple) | Pair of floats representing the center of the ellipse |
-`horiz_axis` (float)| The length (in cm) of the horizontal axis of the ellipse | 
-`vert_axis` (float)| The length (in cm) of the vertical axis of the ellipse |
-`action` (str) | An action to perform with the ellipse (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
+| Parameter            | Description                                                                          | Default   |
+| -------------------- | ------------------------------------------------------------------------------------ | --------- |
+| `center` (tuple)     | Pair of floats representing the center of the ellipse                                |
+| `horiz_axis` (float) | The length (in cm) of the horizontal axis of the ellipse                             |
+| `vert_axis` (float)  | The length (in cm) of the vertical axis of the ellipse                               |
+| `action` (str)       | An action to perform with the ellipse (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"` |
 
 
 ## Example
@@ -702,18 +707,18 @@ arc = Arc(center, start_angle, end_angle, radius, options, radians, action)
 ```
 which we can draw later via `tikz.draw(arc)`.
 
-Parameter    | Description | Default|
--------------|-------------|-------------|
-`position` (tuple) | Pair of points representing either the center of the arc or the point at which it should begin drawing (see `draw_from_start`|
-`start_angle` (float) | The angle (relative to the horizontal) of the start of the arc |
-`end_angle` (float) | The angle (relative to the horizontal) of the end of the arc |
-`radius` (float) | The radius (in cm) of the arc. If specified, `x_radius` and `y_radius` cannot be specified. |
-`x_radius` (float) | The x radius (in cm) of the arc. In this case, `y_radius` must also be specified. |
-`y_radius` (float) | The y radius (in cm) of the arc. In this case, the `x_radius` must also be specified. |
-`options` (str) | A string of containing valid Tikz arc options | `""`
-`radians` (bool) | `True` if angles are in radians, `False` otherwise | `False`
-`draw_from_start` (bool) | `True` if `position` represents the point at which the arc should begin drawing. `False` if `position` represents the center of the desired arc.| `True`
-`action` (str) | An action to perform with the arc (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"`
+| Parameter                | Description                                                                                                                                      | Default   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| `position` (tuple)       | Pair of points representing either the center of the arc or the point at which it should begin drawing (see `draw_from_start`                    |
+| `start_angle` (float)    | The angle (relative to the horizontal) of the start of the arc                                                                                   |
+| `end_angle` (float)      | The angle (relative to the horizontal) of the end of the arc                                                                                     |
+| `radius` (float)         | The radius (in cm) of the arc. If specified, `x_radius` and `y_radius` cannot be specified.                                                      |
+| `x_radius` (float)       | The x radius (in cm) of the arc. In this case, `y_radius` must also be specified.                                                                |
+| `y_radius` (float)       | The y radius (in cm) of the arc. In this case, the `x_radius` must also be specified.                                                            |
+| `options` (str)          | A string of containing valid Tikz arc options                                                                                                    | `""`      |
+| `radians` (bool)         | `True` if angles are in radians, `False` otherwise                                                                                               | `False`   |
+| `draw_from_start` (bool) | `True` if `position` represents the point at which the arc should begin drawing. `False` if `position` represents the center of the desired arc. | `True`    |
+| `action` (str)           | An action to perform with the arc (e.g., `\draw`, `\fill`, `\filldraw`, `\path`)                                                                 | `"\draw"` |
 
 ## A few comments...
 This class not only provides a wrapper to draw arcs, but it also fixes a few things that Tikz's `\draw arc` command simply gets wrong and confuses users with.
