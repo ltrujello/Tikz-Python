@@ -35,14 +35,19 @@ class _DrawingObject:
     @property
     def code(self) -> str:
         """Full Tikz code for this drawing object."""
+        draw_cmd = f"\\{self.action}{brackets(self.options)} {self._command}"
         if self.node is None:
-            return f"\\{self.action}{brackets(self.options)} {self._command};"
+            return f"{draw_cmd};"
         else:
-            return f"\\{self.action}{brackets(self.options)} {self._command} node{brackets(self.node.options)} {self.node._command};"
+            return f"{draw_cmd} node{brackets(self.node.options)} {self.node._command};"
+            # if self.node.position is None:
+            #     return f"{draw_cmd} node{brackets(self.node.options)} {self.node._command};"
+            # else:
+            #     return f"{draw_cmd} node{brackets(self.node.options)} {self.node.position} {self.node._command};"
 
     # TODO: Allow one to not specify the position.
     def add_node(
-        self, position: tuple = (0, 0), options: str = "", text: str = ""
+        self, position: tuple = None, options: str = "", text: str = ""
     ) -> None:
         """A method to build a node on a drawing object directly.
         This bypasses having to (1) define a Node object and then (2) use node.setter.
@@ -54,7 +59,6 @@ class _DrawingObject:
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set
         our methods to modify objects, but not return anything.
         """
-        print("Copied!")
         cls = self.__class__
         draw_obj = cls.__new__(cls)
         memo[id(self)] = draw_obj

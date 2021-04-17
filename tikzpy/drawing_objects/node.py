@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Tuple
-from copy import copy, deepcopy
+from copy import deepcopy
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from tikzpy.utils.helpers import brackets
 
@@ -25,22 +25,28 @@ class Node:
 
     @property
     def _command(self) -> str:
-        return fr"at {self.position} {{ {self.text} }}"
+        if self.position is not None:
+            return fr"at {self.position} {{ {self.text} }}"
+        else:
+            return fr"{{ {self.text} }}"
 
     @property
     def code(self) -> str:
         return fr"\node{brackets(self.options)} {self._command};"
 
     def shift(self, xshift: float, yshift: float) -> None:
-        self.position = shift_coords([self.position], xshift, yshift)[0]
+        if self.position is not None:
+            self.position = shift_coords([self.position], xshift, yshift)[0]
 
     def scale(self, scale: float) -> None:
-        self.position = scale_coords([self.position], scale)[0]
+        if self.position is not None:
+            self.position = scale_coords([self.position], scale)[0]
 
     def rotate(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
-        self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
+        if self.position is not None:
+            self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
 
     def __deepcopy__(self, memo: dict) -> Node:
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set

@@ -64,10 +64,10 @@ class TikzPicture:
 
     @property
     def begin(self) -> list:
-        """The beginning code of our tikz environment.
-        * For each environment we create, we assign an ID that our program can later identify.
-          Such an ID is of the form of a TeX comment.
-        * This is to ensure safe, efficient file update and deletion processes.
+        """A list of strings containing the beginning code of our tikz environment.
+
+        For each environment we assign an ID that our program can later identify.
+        Such an ID is of the form of a TeX comment. This is to ensure safe, efficient file update and deletion processes.
         """
         begin = []
         for statement in self._preamble.values():
@@ -77,7 +77,7 @@ class TikzPicture:
 
     @property
     def end(self) -> list:
-        """ End statement for the TikzPicture."""
+        """ A list of strings containing the ending code of our tikz environment."""
         end = ["\\end{tikzpicture}\n"]
         for statement in list(
             reversed(list(self._postamble.values()))
@@ -87,19 +87,11 @@ class TikzPicture:
 
     @property
     def tex_file(self) -> Path:
-        r"""Takes care of the TeX file, containing necessary \usepackage{...} and \usetikzlibrary{...} statements,
-        which is used to call the Tikz code and compile it.
-        * The TeX file is stored in a folder "/tex", in the same directory as self.tikz_file.
-            * This is to make everything easier for the user. They don't have to waste their time with the tedious task
-              of sorting and connecting their files together, figuring out full paths, dealing with the stupid .aux, .log... files,
-              figuring out \input{...}, etc. This process is automatic.
-            * When a PDF compiles, the pdf is moved to the same directory as self.tikz_file
-              so the user can see it. (All those moronic .log, .aux files are left behind in the folder,
-              another benefit of this approach).
+        r"""A pathlib.Path object representing the path to our tex file, which
+        contains our necessary \usepackage{...} and \usetikzlibrary{...} statements and is used for compiling.
         """
         # Full paths for self.tikz_file and the tex_file
         tikz_file_dir = str(self.tikz_file.resolve().parents[0])
-        # Full path for the tex_file
         tex_file_path = tikz_file_dir + "/tex/tex_file.tex"
         tex_file = Path(tex_file_path)
         # Check if the TeX file exists
@@ -121,9 +113,8 @@ class TikzPicture:
             with open(tex_file_path, "w") as f:
                 for line in lines:
                     if line == "\\input{fillme}\n":
-                        f.write(
-                            f"\\input{{{tikz_file_path_str}}}"
-                        )  # This is what connects the Tikz code to our tex file
+                        # This is what connects the Tikz code to our tex file
+                        f.write(f"\\input{{{tikz_file_path_str}}}")
                     else:
                         f.write(line)
         return tex_file
@@ -133,7 +124,6 @@ class TikzPicture:
         """A dictionary to keep track of the current Tikz code we've commanded. This is for the program.
         keys : instances of subclasses created (e.g, Line)
         values : the Tikz code of the instance (e.g., Line.code)
-        This makes sure we reflect the changes to the drawing objects the user has made externally.
         """
         statement_dict = {}
         for draw_obj in self._statements:
@@ -142,9 +132,7 @@ class TikzPicture:
 
     @property
     def code(self) -> str:
-        """A string contaning our Tikz code. This uses self._statements, and self.code
-        gets passed to __repr__.
-        """
+        """A string contaning our Tikz code."""
         code = ""
         # Add the beginning statement
         for stmt in self.begin:
@@ -170,37 +158,37 @@ class TikzPicture:
         del self._statements[draw_obj]
 
     def draw(self, *args: List[_DrawingObject]) -> None:
-        """Adds an arbitrary sequence of drawing objects. """
+        """Add an arbitrary sequence of drawing objects. """
         for draw_obj in args:
             self._statements[draw_obj] = draw_obj.code
 
     def undo(self) -> None:
-        """ Removes the last added drawing object from the tikz environment. """
+        """ Remove the last added drawing object from the tikz environment. """
         last_obj = list(self._statements.keys())[-1]
         self.remove(last_obj)
 
     def add_command(self, tikz_statement: str) -> TikzCommand:
-        """Adds a string of valid Tikz code into the Tikz environment."""
+        """Add a string of valid Tikz code into the Tikz environment."""
         command = TikzCommand(tikz_statement)
         self.draw(command)
         return command
 
     def tikzset(self, style_name: str, style_rules: TikzStyle) -> TikzStyle:
-        """Creates and adds a TikzStyle object with name "style_name" and tikzset synatx "style_rules" """
+        """Create and add a TikzStyle object with name "style_name" and tikzset syntax "style_rules" """
         style = TikzStyle(style_name, style_rules)
-        self._preamble[f"tikz_style:{style_name}"] = style.code
+        add_styles(style)
         return style
 
     def add_styles(self, *styles: List[TikzStyle]) -> None:
+        """Add a TikzStyle object to the environment. """
         for style in styles:
             self._preamble[f"tikz_style:{style.style_name}"] = style.code
 
     def clear(self) -> None:
-        """Clears the file contents of self.tikz_file. Specifically, Tikz environments that are
-        autogenerated by Tikz-Python (i.e., those which have an ID) are deleted, but other contents are left alone.
+        """Clear the file contents of the file self.tikz_file.
 
-        Note: The TikzPicture object self is not cleared. It does not really make sense since the user can just
-        create/overwrite a new TikzPicture object.
+        Specifically, the function scans the tikz_file for Tikz environments which are autogenerated by Tikz-Python (i.e.,
+        those which have an ID) and deletes them. Other contents are left alone.
         """
         tikz_file_path = str(self.tikz_file.resolve())
         with open(tikz_file_path) as tikz_file:
@@ -225,7 +213,8 @@ class TikzPicture:
             tikz_file.writelines(new_lines)
 
     def set_tdplotsetmaincoords(self, theta: float, phi: float) -> None:
-        """Specifies the viewing angle for 3D.
+        """Specify the viewing angle for 3D.
+
         theta: The angle (in degrees) through which the coordinate frame is rotated about the x axis.
         phi: The angle (in degrees) through which the coordinate frame is rotated about the z axis.
         """
@@ -237,17 +226,11 @@ class TikzPicture:
         ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
 
     def write(self, overwrite: bool = True) -> None:
-        """Our method to write the current recorded Tikz code into self.tikz_file, a .tex file somewhere.
-        There are two main cases:
-        A. This is our first time calling write().
-            In this case, we just write into the file.
-        B. We've already called .write() before, and we have a TikzPicture environment matching our current ID
-        in self.tikz_file.
-            In this case, we carefully delete the contents of the old TikzPicture environment. We do this
-            by finding our ID. Then we update the environment with our new code.
-        If we don't do (2), then we will potentially write duplicate TikzPicture code over and over again.
-        Usually, a user won't want this. If for some weird reason they do want this, then they set
-        overwrite = False.
+        """Write the currently recorded Tikz code into self.tikz_file.
+
+        One might suspect that calling .write() twice will write down tikz source code twice. Since this is on
+        average undesirable behavior, this is not the default behavior. Thus overwrite = True by default.
+        If for some weird reason one wishes to literally write code twice, then they can set overwrite = False.
         """
         tikz_file_path = str(self.tikz_file.resolve())
         output_code = self.code
@@ -280,20 +263,14 @@ class TikzPicture:
             # open the tikz_file and obtain its contents
             with open(tikz_file_path) as tikz_file:
                 lines = tikz_file.readlines()
+            # We look for our old TikzPicture code in the file.
             for i, line in enumerate(lines):
-                """We look for our old TikzPicture code in the file as follows.
-                * Loop over the file lines.
-                * For each line, we check if it is our begin statement.
-                * If so, we look ahead and search for our end statement.
-                """
-                if (
-                    line.replace(" ", "") == self.begin[0]
-                ):  # Search for start of code statement, we remove spaces for comparison
+                # Search for start of code statement, we remove spaces for comparison
+                if line.replace(" ", "") == self.begin[0]:
                     begin_ind = i
                     for j, later_lines in enumerate(lines[i:]):
-                        if (
-                            later_lines.replace(" ", "") == self.end[-1]
-                        ):  # Search for end of code statement, we remove spaces for comparison
+                        # Search for end of code statement. We remove spaces for comparison
+                        if later_lines.replace(" ", "") == self.end[-1]:
                             end_ind = i + j
                             break
                     break
@@ -305,10 +282,8 @@ class TikzPicture:
                 ), f"Found code statement at line {begin_ind}, but never found end statement"
                 print("Updating Tikz environment with new code")
 
-                # Transfer the text, excluding our old \begin{tikzpicture}\end{tikzpicture} statement.
-                new_lines = lines[:begin_ind] + lines[end_ind + 1 :]
-
                 # We create a new file with our desired file contents
+                new_lines = lines[:begin_ind] + lines[end_ind + 1 :]
                 tikz_file_temp = Path(
                     str(self.tikz_file.parents[0]), self.tikz_file.stem + "_temp.tex"
                 )
@@ -330,7 +305,7 @@ class TikzPicture:
             else:
                 print("Adding new Tikz environment")
                 with open(tikz_file_path, "a+") as tikz_file:
-                    # Very important: Always guarantee Tikz-Python ID is on its own new line.
+                    # Always guarantee Tikz-Python ID is on its own new line.
                     last_char = self.tikz_file.read_text()[-1]
                     if last_char != "\n":
                         tikz_file.write("\n")
@@ -343,9 +318,11 @@ class TikzPicture:
                 tikz_file.write(output_code)
             self.NUM_TIKZS += 1
 
-    # Display the current tikz drawing
     def show(self, quiet: bool = False) -> None:
-        """ Compiles the PDF and displays it to the user."""
+        """Compiles the PDF and displays it to the user.
+
+        Set quiet=True to shut up latexmk, false otherwise.
+        """
         tex_file_parents = true_posix_path(self.tex_file.resolve().parents[0])
         tex_filename = Path(tex_file_parents, self.tex_file.stem + ".tex")
         tex_file = true_posix_path(tex_filename)
@@ -359,11 +336,9 @@ class TikzPicture:
                 f"latexmk -pdf -output-directory={tex_file_parents} {tex_file}"
             )
         subprocess.run(compile_cmd, shell=True)
-        # We move the PDF up one directory, out of the tex/ folder, so the viewer can see it.
+        # We move the compiled PDF up one directory, out of the tex/ folder, so the viewer can see it.
         pdf_file = Path(tex_file_parents, self.tex_file.stem + ".pdf")
-        pdf_file_path = str(
-            pdf_file.resolve().parents[1] / pdf_file.name
-        )  # Desired pdf file path
+        pdf_file_path = str(pdf_file.resolve().parents[1] / pdf_file.name)
         pdf_file.replace(pdf_file_path)
         webbrowser.open_new("file://" + pdf_file_path)
 
