@@ -1,10 +1,10 @@
-from tikzpy.drawing_objects.drawing_object import _DrawingObject
+from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.utils.helpers import brackets
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from typing import List, Tuple
 
 # Class for Plotting
-class PlotCoordinates(_DrawingObject):
+class PlotCoordinates(DrawingObject):
     """
     A class to create plots in the tikz environment.
 

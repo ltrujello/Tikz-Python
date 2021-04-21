@@ -1,10 +1,10 @@
 from __future__ import annotations
 from typing import Tuple
-from tikzpy.drawing_objects.drawing_object import _DrawingObject
+from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 
 
-class Ellipse(_DrawingObject):
+class Ellipse(DrawingObject):
     """
     A class to create ellipses in the tikz environment.
 

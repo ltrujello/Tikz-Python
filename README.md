@@ -13,7 +13,7 @@ An example of this package in action is below.
 from tikzpy import TikzPicture  # Import the class TikzPicture
 
 tikz = TikzPicture()
-tikz.circle((0, 0), 3, options="thin, fill=orange!15", action="draw")
+tikz.circle((0, 0), 3, options="thin, fill=orange!15")
 
 arc_one = tikz.arc((3, 0), 0, 180, x_radius=3, y_radius=1.5, options=f"dashed")
 arc_two = tikz.arc((-3, 0), 180, 360, x_radius=3, y_radius=1.5)
@@ -32,7 +32,7 @@ We explain line-by-line the above code.
 
 * The third, fourth, and fifth lines draw a filled circle and two elliptic arcs, which give the illusion of a sphere.
 
-* In the last two lines, `write()` writes all of our tikz code into a file which we can retrieve the code later. The call `show()` immediately displays the PDF of the drawing to the user.
+* In the last two lines, `write()` writes all of our tikz code into a file which we can retrieve the code from later. The call `show()` immediately displays the PDF of the drawing to the user.
 
 ## Examples
 We introduce more examples of `tikzpy`, starting from very basic to more complicated usages.
@@ -182,26 +182,25 @@ Initialize an object of this class as below
 ```python
 import tikzpy
 
-tikz = tikzpy.TikzPicture(tikz_file, center, options)
+tikz = tikzpy.TikzPicture(center, options)
 ```
 or more simply as 
 ```python
 from tikzpy import TikzPicture
 
-tikz = TikzPicture(tikz_file, center, options)
+tikz = TikzPicture(center, options)
 ```
 
 
-| Parameter         | Description                                                                 | Default                   |
-| ----------------- | --------------------------------------------------------------------------- | ------------------------- |
-| `tikz_file` (str) | The desired file path for Tikz code output. Can be a relative or full path. | `tikz_code/tikz_code.tex` |
-| `center` (bool)   | True if you would like your tikzpicture to be centered, false otherwise.    | `False`                   |
-| `options` (str)   | A string containing valid Tikz options.                                     | `""`                      |
+| Parameter       | Description                                                              | Default |
+| --------------- | ------------------------------------------------------------------------ | ------- |
+| `center` (bool) | True if you would like your tikzpicture to be centered, false otherwise. | `False` |
+| `options` (str) | A string containing valid Tikz options.                                  | `""`    |
 
 
 ## Methods  
 ### `TikzPicture.write()`
-Writes the currently recorded Tikz code into the .tex file located at `my_tikz_file`. If `my_tikz_file` is not specified, the directory `tikz/tikz_file.tex` is created automatically and the code is stored there.
+Writes the currently recorded Tikz code into the .tex file located in the relative directory `tikz_code/tikz_code.tex`. If it does not exist, it is automatically created. 
 
 **Question:** If I call `tikz.write()` twice on accident, won't that accidentally add duplicate code? No! (You can, however, if you want). This is the key feature of `write()`. In fact, you can continue editing even after you call `write` so that you may periodically view your Tikz picture while you build it.
 
@@ -261,8 +260,11 @@ Here we use `tikzpy.Line` and `tikzpy.Circle` to construct a line and circle. Th
 ### `TikzPicture.show()`
 Compiles the tikz code and pulls up a PDF of the current drawing to the user in your browser (may default to your PDF viewer). Of course, execute `TikzPicture.write()` prior in order to view your latest changes. 
 
-### `TikzPicture.add_statement(str)`
+### `TikzPicture.add_command(str)`
 Manually add a valid string of Tikz code to the environment. This is for the off-chance that the user would rather manually type something into their tikzpicture.
+
+### `TikzPicture.drawing_objects()`
+Returns a list of the currently appended drawing objects in the TikzPicture object. The list is ordered chronologically from oldest to most recently added.
 
 
 # Colors

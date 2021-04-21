@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List, Tuple
-from tikzpy.drawing_objects.drawing_object import _DrawingObject
+from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.tikz_environments.clip import Clip
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from tikzpy.utils.helpers import brackets
@@ -45,16 +45,16 @@ class Scope:
     def __repr__(self) -> str:
         return self.code
 
-    def remove(self, draw_obj: _DrawingObject) -> None:
+    def remove(self, draw_obj: DrawingObject) -> None:
         """Remove a statement from the scope environment"""
         del self._scope_statements[draw_obj]
 
-    def append(self, *args: List[_DrawingObject]) -> None:
+    def append(self, *args: List[DrawingObject]) -> None:
         """Append a drawing object to the scope statement"""
         for draw_obj in args:
             self._scope_statements[draw_obj] = draw_obj.code
 
-    def clip(self, draw_obj: _DrawingObject, draw: bool = False) -> None:
+    def clip(self, draw_obj: DrawingObject, draw: bool = False) -> None:
         """Clip a drawing object in the scope environment"""
         clip = Clip(draw_obj, draw=draw)
         self.append(clip)

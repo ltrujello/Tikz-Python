@@ -7,14 +7,14 @@ from tikzpy.drawing_objects.node import Node
 from tikzpy.drawing_objects.rectangle import Rectangle
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
-from tikzpy.drawing_objects.drawing_object import _DrawingObject
+from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 
 
 class Clip:
     """A class for a clipping code statement."""
 
-    def __init__(self, draw_obj: _DrawingObject, draw: bool = False) -> None:
+    def __init__(self, draw_obj: DrawingObject, draw: bool = False) -> None:
         if isinstance(
             draw_obj, (Line, PlotCoordinates, Circle, Node, Rectangle, Ellipse, Arc)
         ):

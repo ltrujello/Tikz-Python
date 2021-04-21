@@ -15,4 +15,4 @@ for i in range(n):
         )
 
 tikz.write()
-#tikz.show()
+tikz.show()

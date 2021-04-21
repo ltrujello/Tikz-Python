@@ -1,12 +1,13 @@
 from __future__ import annotations
-from copy import copy, deepcopy
+from abc import ABC, abstractmethod
+from typing import List, Tuple
+from copy import deepcopy
 from tikzpy.utils.helpers import brackets
 from tikzpy.drawing_objects.node import Node
 
 
-class _DrawingObject:
-    r"""A generic class for our drawing objects to inherit properties from. This class is meant to
-        be used only as a super class, and never directly used independently.
+class DrawingObject(ABC):
+    r"""A generic class for our drawing objects to inherit properties from.
 
     Attributes :
         action (str) : A string containing either "draw", "filldraw", "fill", or "path". This controls
@@ -22,15 +23,38 @@ class _DrawingObject:
     ) -> None:
         self.action = action
         self.options = options
-        self.node = None
+        self.node: Node = None
 
         if not isinstance(self.action, str):
-            raise TypeError(f"The action argument {self.action} is not a string")
+            raise TypeError(f"The action argument {self.action} is not of type str")
 
         if self.action.replace(" ", "") not in ["draw", "fill", "filldraw", "path"]:
             raise ValueError(
-                f"The action {self.action} is not a valid action (draw, fill, filldraw, path). Perhaps you mispelled it."
+                f"The action {self.action} is not a valid action ('draw', 'fill', 'filldraw', 'path'). Perhaps you mispelled it."
             )
+
+    @property
+    @abstractmethod
+    def _command(self) -> str:
+        r"""The latter half of the Tikz Code for the drawing object.
+        E.g.: For a Line with code "\draw (0,0) to (1,1), _command corresponds to "(0,0) to (1,1)".
+        """
+
+    @abstractmethod
+    def shift(self, xshift: float, yshift: float) -> None:
+        """Shift the coordinates of the drawing object by (xshift, yshift)"""
+
+    @abstractmethod
+    def scale(self, scale: float) -> None:
+        """Scale the coordinates of the drawing object by amount "scale". """
+
+    @abstractmethod
+    def rotate(
+        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
+    ) -> None:
+        """Rotate the coordinates of the drawing object (counterclockwise) by "angle" about the
+        point "about_pt".
+        """
 
     @property
     def code(self) -> str:
@@ -40,12 +64,7 @@ class _DrawingObject:
             return f"{draw_cmd};"
         else:
             return f"{draw_cmd} node{brackets(self.node.options)} {self.node._command};"
-            # if self.node.position is None:
-            #     return f"{draw_cmd} node{brackets(self.node.options)} {self.node._command};"
-            # else:
-            #     return f"{draw_cmd} node{brackets(self.node.options)} {self.node.position} {self.node._command};"
 
-    # TODO: Allow one to not specify the position.
     def add_node(
         self, position: tuple = None, options: str = "", text: str = ""
     ) -> None:
@@ -55,7 +74,7 @@ class _DrawingObject:
         new_node = Node(position, options, text)
         self.node = new_node
 
-    def __deepcopy__(self, memo: dict) -> _DrawingObject:
+    def __deepcopy__(self, memo: dict) -> DrawingObject:
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set
         our methods to modify objects, but not return anything.
         """
@@ -66,7 +85,7 @@ class _DrawingObject:
             setattr(draw_obj, attr, deepcopy(value, memo))
         return draw_obj
 
-    def copy(self, **kwargs: dict) -> _DrawingObject:
+    def copy(self, **kwargs: dict) -> DrawingObject:
         """Allows one to simultaneously make a (deep) copy of a drawing object and modify
         attributes of the drawing object in one step.
         """

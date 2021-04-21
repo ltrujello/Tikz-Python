@@ -4,10 +4,10 @@ from math import sin, cos, tan, atan, atan2, pi, sqrt
 from math import radians as degs_2_rads
 from math import degrees as rads_2_degs
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
-from tikzpy.drawing_objects.drawing_object import _DrawingObject
+from tikzpy.drawing_objects.drawing_object import DrawingObject
 
 
-class Arc(_DrawingObject):
+class Arc(DrawingObject):
     """
     A class to create arcs in the tikz environment.
 

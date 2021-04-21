@@ -10,7 +10,7 @@ from tikzpy.drawing_objects.node import Node
 from tikzpy.drawing_objects.rectangle import Rectangle
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
-from tikzpy.drawing_objects.drawing_object import _DrawingObject
+from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_command import TikzCommand
 from tikzpy.tikz_environments.tikz_style import TikzStyle
@@ -30,13 +30,8 @@ class TikzPicture:
 
     NUM_TIKZS = 0
 
-    def __init__(
-        self,
-        tikz_file: str = "tikz_code/tikz_code.tex",
-        center: bool = False,
-        options: str = "",
-    ) -> None:
-        self.tikz_file: Path = Path(tikz_file)
+    def __init__(self, center: bool = False, options: str = "") -> None:
+        self.tikz_file: Path = Path("tikz_code/tikz_code.tex")
         self.options: str = options
         self._center: bool = center
         self._statements: dict = {}
@@ -153,14 +148,18 @@ class TikzPicture:
         readable_code += self.end[0]  # Only return \end{tikzpicture}
         return readable_code
 
-    def remove(self, draw_obj: _DrawingObject) -> None:
+    def remove(self, draw_obj: DrawingObject) -> None:
         """Remove a drawing_object from the Tikz environment, e.g., an instance of Line."""
         del self._statements[draw_obj]
 
-    def draw(self, *args: List[_DrawingObject]) -> None:
+    def draw(self, *args: List[DrawingObject]) -> None:
         """Add an arbitrary sequence of drawing objects. """
         for draw_obj in args:
             self._statements[draw_obj] = draw_obj.code
+
+    def drawing_objects(self) -> list:
+        """Returns a list of the currently appended drawing objects in the TikzPicture."""
+        return list(self._statements.keys())
 
     def undo(self) -> None:
         """ Remove the last added drawing object from the tikz environment. """
@@ -306,9 +305,10 @@ class TikzPicture:
                 print("Adding new Tikz environment")
                 with open(tikz_file_path, "a+") as tikz_file:
                     # Always guarantee Tikz-Python ID is on its own new line.
-                    last_char = self.tikz_file.read_text()[-1]
-                    if last_char != "\n":
-                        tikz_file.write("\n")
+                    if self.NUM_TIKZS > 0:
+                        last_char = self.tikz_file.read_text()[-1]
+                        if last_char != "\n":
+                            tikz_file.write("\n")
                     tikz_file.write(output_code)
                 self.NUM_TIKZS += 1
 
