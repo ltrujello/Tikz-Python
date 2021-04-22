@@ -22,7 +22,7 @@ tikz.write()  # Writes the Tikz code into a file
 tikz.show()  # Displays a pdf of the drawing to the user
 ```
 which produces
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/basic/basic.png" height = 300/> 
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/basic/basic.png"/> 
 
 We explain line-by-line the above code.
 
@@ -49,7 +49,7 @@ end_node = tikz.node(line.end, options="above", text="End!")
 ```
 and produces
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/line_and_two_nodes/line_and_two_nodes.png" height = 200/> 
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/line_and_two_nodes/line_and_two_nodes.png"/> 
 
 Saving the line as a variable `line` allows us to pass in `line.start` and `line.end` into the node positions, so we don't have to type out the exact coordinates. 
 This is because lines, nodes, etc. are class instances with useful attributes: 
@@ -85,7 +85,7 @@ for i in np.linspace(0, 1, 30): # Grab 30 equidistant points in [0, 1]
 ```
 The above code then produces
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/circles/circles.png" height = 350/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/circles/circles.png"/>
 
 
 ### Example: Roots of Unity 
@@ -120,7 +120,7 @@ for i in range(n):
 ```
 Which generates: 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/roots_of_unity/roots_of_unity.png" height = 350/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/roots_of_unity/roots_of_unity.png"/>
 
 We will see in the examples that follow how imported Python libraries can alllow us to quickly (and efficiently, this is really important) make more sophisticated Tikz pictures. 
 
@@ -129,11 +129,11 @@ In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples
 
 For example, suppose we arrange nine circles in a 3 x 3 grid. Plugging these nine circles in, we generate the image below.
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersection_circles.png" height = 350/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersection_circles.png"/>
 
 As another example, we can create three different overlapping topological blobs and then plug them into the function to obtain
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersection_blobs.png" height = 350/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersection_blobs.png"/>
 
 (Both examples are initialized in [the source](https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py) for testing.)
 As one might guess, this function is useful for creating topological figures, as manually writing all of the `\scope` and `\clip` commands to create such images is pretty tedious.
@@ -141,7 +141,7 @@ As one might guess, this function is useful for creating topological figures, as
 ### Example: Barycentric subdivision
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric/barycentric.py), we create a function that allows us to generate the the n-th barycentric subdivision of a triangle. 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric/barycentric.png" height = 350/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric/barycentric.png"/>
 
 ### Example: Symbolic Intergation
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/symbolic_integration/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the n-order integrals of any function. For example, the output of `x**2` (the polynomial x^2) generates the image below. 
@@ -173,7 +173,7 @@ while [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examp
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm_arc_ex.png"/>
 
 ### Example: Linear Transformations
-Recall a 3x2 matrix is a linear transformation from R^2 to R^3. Using such an interpretation, we create a function in [the source here]() which plots the image of a 3x2 matrix. The input is in the form of a `numpy.array`. 
+Recall a 3x2 matrix is a linear transformation from R^2 to R^3. Using such an interpretation, we create a function in [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/linear_transformations/linear_transformations.py) which plots the image of a 3x2 matrix. The input is in the form of a `numpy.array`. 
 
 For example, plugging the array `np.array([[0, 1], [1, 1], [0, 1]])` into the source produces 
 
@@ -362,7 +362,7 @@ for i in range(0, 10):
 ```
 which produces the set of lines 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/line_ex_2.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/line_ex_2.png"/>
 
 ### `Line.scale(scale)`
 Scales a line by an amount `scale`, usually a python float. 
@@ -411,7 +411,7 @@ plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 produces the image 
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/plotcoordinates_ex_1.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/plotcoordinates_ex_1.png"/>
 
 Alternatively we can set `action = "fill"` (analogous to `\fill` in Tikz) as in the code below
 ```python
@@ -424,7 +424,7 @@ plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 to produce the image
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/plotcoordinates_ex_2.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/plotcoordinates_ex_2.png"/>
 
 If we want both, we can set `action = "filldraw"` (analogous to `\filldraw` in Tikz)
 ```python
@@ -437,7 +437,7 @@ plot.options = "fill=ProcessBlue!50"
 plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 which produces. 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/plotcoordinates_ex_3.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/plotcoordinates_ex_3.png"/>
 
 Finally, we can set `action = "path"` (analogous to `\path` in Tikz), but as one would expect this doesn't draw anything. 
 
@@ -460,7 +460,7 @@ for i in range(0, 20):
 ```
 generates the image
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/PlotCoords_rotate_Example.png" height = 300/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/PlotCoords_rotate_Example.png"/>
 
 
 # Class: `Circle`
@@ -513,7 +513,7 @@ for i in range(1, 60):
     n = radius / i
     tikz.circle((n, 0), n)
 ```
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/circle_ex_2.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/circle_ex_2.png"/>
 
 
 ## Methods
@@ -566,7 +566,7 @@ tikz.node((2.1, 1.7), text="$z = re^{i\\theta}$")
 tikz.node((-2, 0.3), text="Cut")
 ```
 which produces
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/node_ex_1.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/node_ex_1.png"/>
 
 Here's another example of usings nodes to illustrate the concept of a multivariable function.
 ```python
@@ -644,7 +644,7 @@ for i in range(len(nodes)):
     tikz.line(start, end, options="->, shorten >= 10pt, shorten <=10pt")
 ```
 
-<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/rectangle_ex_1.png" height = 250/>
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/documentation_imgs/rectangle_ex_1.png"/>
 
 
 ## Methods
