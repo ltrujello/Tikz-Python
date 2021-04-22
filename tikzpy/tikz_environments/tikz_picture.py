@@ -3,21 +3,14 @@ import webbrowser
 import pkgutil
 from pathlib import Path
 from typing import List, Tuple
-from tikzpy.drawing_objects.line import Line
-from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
-from tikzpy.drawing_objects.circle import Circle
-from tikzpy.drawing_objects.node import Node
-from tikzpy.drawing_objects.rectangle import Rectangle
-from tikzpy.drawing_objects.ellipse import Ellipse
-from tikzpy.drawing_objects.arc import Arc
-from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.tikz_environments.scope import Scope
-from tikzpy.tikz_environments.tikz_command import TikzCommand
+from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.tikz_style import TikzStyle
 from tikzpy.utils.helpers import brackets, true_posix_path
 
-
-class TikzPicture:
+# TODO: Make Scope class behave more like TikzPicture. Perhaps start with an abstract base class.
+# TODO: Create a "add option" method that acts as a wrapper for tikz_picture.options += "new_options"
+class TikzPicture(TikzEnvironment):
     """
     A class for a Tikz picture environment.
 
@@ -31,13 +24,12 @@ class TikzPicture:
     NUM_TIKZS = 0
 
     def __init__(self, center: bool = False, options: str = "") -> None:
+        super().__init__(options)
         self.tikz_file: Path = Path("tikz_code/tikz_code.tex")
-        self.options: str = options
         self._center: bool = center
-        self._statements: dict = {}
         self._id: str = f"@TikzPy__#id__==__({self.NUM_TIKZS})"
         self._preamble: dict = {"begin_id": f"%__begin__{self._id}\n"}
-        self._postamble: dict = {"end_ind": f"%__end__{self._id}\n"}
+        self._postamble: dict = {"end_id": f"%__end__{self._id}\n"}
 
     @property
     def center(self) -> bool:
@@ -115,17 +107,6 @@ class TikzPicture:
         return tex_file
 
     @property
-    def statements(self) -> dict:
-        """A dictionary to keep track of the current Tikz code we've commanded. This is for the program.
-        keys : instances of subclasses created (e.g, Line)
-        values : the Tikz code of the instance (e.g., Line.code)
-        """
-        statement_dict = {}
-        for draw_obj in self._statements:
-            statement_dict[draw_obj] = draw_obj.code
-        return statement_dict
-
-    @property
     def code(self) -> str:
         """A string contaning our Tikz code."""
         code = ""
@@ -148,29 +129,29 @@ class TikzPicture:
         readable_code += self.end[0]  # Only return \end{tikzpicture}
         return readable_code
 
-    def remove(self, draw_obj: DrawingObject) -> None:
-        """Remove a drawing_object from the Tikz environment, e.g., an instance of Line."""
-        del self._statements[draw_obj]
+    # def remove(self, draw_obj: DrawingObject) -> None:
+    #     """Remove a drawing_object from the Tikz environment, e.g., an instance of Line."""
+    #     del self._statements[draw_obj]
 
-    def draw(self, *args: List[DrawingObject]) -> None:
-        """Add an arbitrary sequence of drawing objects. """
-        for draw_obj in args:
-            self._statements[draw_obj] = draw_obj.code
+    # def draw(self, *args: List[DrawingObject]) -> None:
+    #     """Add an arbitrary sequence of drawing objects. """
+    #     for draw_obj in args:
+    #         self._statements[draw_obj] = draw_obj.code
 
-    def drawing_objects(self) -> list:
-        """Returns a list of the currently appended drawing objects in the TikzPicture."""
-        return list(self._statements.keys())
+    # def drawing_objects(self) -> list:
+    #     """Returns a list of the currently appended drawing objects in the TikzPicture."""
+    #     return list(self._statements.keys())
 
-    def undo(self) -> None:
-        """ Remove the last added drawing object from the tikz environment. """
-        last_obj = list(self._statements.keys())[-1]
-        self.remove(last_obj)
+    # def undo(self) -> None:
+    #     """ Remove the last added drawing object from the tikz environment. """
+    #     last_obj = list(self._statements.keys())[-1]
+    #     self.remove(last_obj)
 
-    def add_command(self, tikz_statement: str) -> TikzCommand:
-        """Add a string of valid Tikz code into the Tikz environment."""
-        command = TikzCommand(tikz_statement)
-        self.draw(command)
-        return command
+    # def add_command(self, tikz_statement: str) -> TikzCommand:
+    #     """Add a string of valid Tikz code into the Tikz environment."""
+    #     command = TikzCommand(tikz_statement)
+    #     self.draw(command)
+    #     return command
 
     def tikzset(self, style_name: str, style_rules: TikzStyle) -> TikzStyle:
         """Create and add a TikzStyle object with name "style_name" and tikzset syntax "style_rules" """
@@ -218,8 +199,6 @@ class TikzPicture:
         phi: The angle (in degrees) through which the coordinate frame is rotated about the z axis.
         """
         self.tdplotsetmaincoords = (theta, phi)
-        if "tdplot_main_coords" not in self.options:
-            self.options += "tdplot_main_coords"
         self._preamble[
             "tdplotsetmaincoords"
         ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
@@ -341,126 +320,6 @@ class TikzPicture:
         pdf_file_path = str(pdf_file.resolve().parents[1] / pdf_file.name)
         pdf_file.replace(pdf_file_path)
         webbrowser.open_new("file://" + pdf_file_path)
-
-    """
-        Methods to code objects in the Tikz Environment
-    """
-
-    def line(
-        self,
-        start: Tuple[float, float],
-        end: Tuple[float, float],
-        options: str = "",
-        to_options: str = "",
-        control_pts: list = [],
-        action: str = "draw",
-    ) -> Line:
-        """Draws a line by creating an instance of the Line class.
-        Upon creation, we update self._statements with our new code.
-        * Key feature: If we update any attributes of our line, the changes
-          to the Tikz code are automatically reflected in self._statements.
-        """
-        line = Line(start, end, options, to_options, control_pts, action)
-        self.draw(line)
-        return line
-
-    def plot_coordinates(
-        self,
-        points: tuple,
-        options: str = "",
-        plot_options: str = "",
-        action: str = "draw",
-    ) -> PlotCoordinates:
-        """Draws a plot coordinates statement by creating an instance of the PlotCoordinates class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
-        plot = PlotCoordinates(points, options, plot_options, action)
-        self.draw(plot)
-        return plot
-
-    def circle(
-        self,
-        center: Tuple[float, float],
-        radius: float,
-        options: str = "",
-        action: str = "draw",
-    ) -> Circle:
-        """Draws a circle by creating an instance of the Circle class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
-        circle = Circle(center, radius, options, action)
-        self.draw(circle)
-        return circle
-
-    def node(
-        self, position: Tuple[float, float], options: str = "", text: str = ""
-    ) -> Node:
-        """Draws a node by creating an instance of the Node class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
-        node = Node(position, options, text)
-        self.draw(node)
-        return node
-
-    def rectangle(
-        self,
-        left_corner: Tuple[float, float],
-        right_corner: Tuple[float, float],
-        options: str = "",
-        action: str = "draw",
-    ) -> Rectangle:
-        """Draws a rectangle by creating an instance of the Rectangle class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
-        rectangle = Rectangle(left_corner, right_corner, options, action)
-        self.draw(rectangle)
-        return rectangle
-
-    def ellipse(
-        self,
-        center: Tuple[float, float],
-        horiz_axis: float,
-        vert_axis: float,
-        options: str = "",
-        action: str = "draw",
-    ) -> Ellipse:
-        """Draws an ellipse by creating an instance of the Ellipse class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
-        ellipse = Ellipse(center, horiz_axis, vert_axis, options, action)
-        self.draw(ellipse)
-        return ellipse
-
-    def arc(
-        self,
-        position: Tuple[float, float],
-        start_angle: float,
-        end_angle: float,
-        radius: float = None,
-        x_radius: float = None,
-        y_radius: float = None,
-        options: str = "",
-        radians: bool = False,
-        draw_from_start: bool = True,
-        action: str = "draw",
-    ) -> Arc:
-        """Draws an arc by creating an instance of the Arc class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
-        arc = Arc(
-            position,
-            start_angle,
-            end_angle,
-            radius,
-            x_radius,
-            y_radius,
-            options,
-            radians,
-            draw_from_start,
-            action,
-        )
-        self.draw(arc)
-        return arc
 
     def scope(self, options: str = "") -> Scope:
         scope = Scope(options)

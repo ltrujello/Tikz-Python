@@ -1,17 +1,17 @@
 from __future__ import annotations
 from typing import List, Tuple
 from tikzpy.drawing_objects.drawing_object import DrawingObject
+from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.clip import Clip
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from tikzpy.utils.helpers import brackets
 
 
-class Scope:
+class Scope(TikzEnvironment):
     """A class to create a scope environment."""
 
     def __init__(self, options: str = "") -> None:
-        self.options = options
-        self._scope_statements: dict = {}
+        super().__init__(options)
 
     @property
     def begin(self) -> str:
@@ -22,37 +22,16 @@ class Scope:
         return "\\end{scope}\n"
 
     @property
-    def scope_statements(self) -> dict:
-        """A dictionary to keep track of the current scope statements.
-        keys : instances of subclasses created (e.g, Line)
-        values : the Tikz code of the instance (e.g., Line.code)
-        This makes sure we reflect the changes to the drawing objects the user has made externally.
-        """
-        statement_dict = {}
-        for draw_obj in self._scope_statements:
-            statement_dict[draw_obj] = draw_obj.code
-        return statement_dict
-
-    @property
     def code(self) -> str:
         """A string contaning the statements in the scope."""
         code = self.begin
-        for draw_obj in self.scope_statements:
+        for draw_obj in self.statements:
             code += "\t" + draw_obj.code + "\n"
         code += self.end
         return code
 
     def __repr__(self) -> str:
         return self.code
-
-    def remove(self, draw_obj: DrawingObject) -> None:
-        """Remove a statement from the scope environment"""
-        del self._scope_statements[draw_obj]
-
-    def append(self, *args: List[DrawingObject]) -> None:
-        """Append a drawing object to the scope statement"""
-        for draw_obj in args:
-            self._scope_statements[draw_obj] = draw_obj.code
 
     def clip(self, draw_obj: DrawingObject, draw: bool = False) -> None:
         """Clip a drawing object in the scope environment"""

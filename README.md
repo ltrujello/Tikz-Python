@@ -28,11 +28,11 @@ We explain line-by-line the above code.
 
 * `from tikzpy import TikzPicture` imports the `TikzPicture` class from the `tikzpy` package. 
 
-* The second line of code is analagous to the TeX code `\begin{tikzpicture}` and `\end{tikzpicture}`. The variable `tikz` is now a tikz environment, specifically an instance of the class `TikzPicture`, and we can now append drawings to it. And `tikz_file` is the file (or more generally, any file path) where our tikz code will be stored.
+* The second line of code is analagous to the TeX code `\begin{tikzpicture}` and `\end{tikzpicture}`. The variable `tikz` is now a tikz environment, specifically an instance of the class `TikzPicture`, and we can now append drawings to it.
 
 * The third, fourth, and fifth lines draw a filled circle and two elliptic arcs, which give the illusion of a sphere.
 
-* In the last two lines, `write()` writes all of our tikz code into a file which we can retrieve the code from later. The call `show()` immediately displays the PDF of the drawing to the user.
+* In the last two lines, `write()` writes all of our tikz code into a file located at `tikz_code/tikz_code.tex`. The call `show()` immediately displays the PDF of the drawing to the user.
 
 ## Examples
 We introduce more examples of `tikzpy`, starting from very basic to more complicated usages.
@@ -97,7 +97,7 @@ probably have to spend 30 minutes reading some manual about how TeX handles basi
 from math import pi, sin, cos
 from tikzpy import TikzPicture
 
-tikz = tikzpy.TikzPicture()
+tikz = TikzPicture()
 n = 13 # Let's see the 13 roots of unity
 scale = 5
 
@@ -171,6 +171,17 @@ Even if you don't want to make such settings, there are useful `\tikzset` styles
 while [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm_arc.py) produces 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm_arc_ex.png"/>
+
+### Example: Linear Transformations
+Recall a 3x2 matrix is a linear transformation from R^2 to R^3. Using such an interpretation, we create a function in [the source here]() which plots the image of a 3x2 matrix. The input is in the form of a `numpy.array`. 
+
+For example, plugging the array `np.array([[0, 1], [1, 1], [0, 1]])` into the source produces 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/linear_transformations/linear_transformation_ex_1.png"/>
+
+while plugging the array `np.array([[2, 0], [1, 1], [1, 1]])` into the source produces 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/linear_transformations/linear_transformation_ex_2.png"/>
 
 ### Example: Blowup at a point
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/blowup/blowup.py), we illustrate the blowup of a point, a construction in algebraic geometry. This picture was created in 5 minutes and in half the lines of code compared to [this popular TeX stackexchange answer](https://tex.stackexchange.com/a/158762/195136), which uses quite convoluted, C-like Asymptote code.
