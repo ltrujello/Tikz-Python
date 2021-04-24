@@ -35,7 +35,7 @@ class TikzEnvironment(ABC):
     @property
     @abstractmethod
     def end(self) -> list:
-        """A list of strings containing the beginning code of our tikz environment."""
+        """A list of strings containing the end code of our tikz environment."""
 
     @property
     @abstractmethod
@@ -143,15 +143,15 @@ class TikzEnvironment(ABC):
     def ellipse(
         self,
         center: Tuple[float, float],
-        horiz_axis: float,
-        vert_axis: float,
+        x_axis: float,
+        y_axis: float,
         options: str = "",
         action: str = "draw",
     ) -> Ellipse:
         """Draws an ellipse by creating an instance of the Ellipse class.
         Updates self._statements when necessary; see above comment under line function above.
         """
-        ellipse = Ellipse(center, horiz_axis, vert_axis, options, action)
+        ellipse = Ellipse(center, x_axis, y_axis, options, action)
         self.draw(ellipse)
         return ellipse
 

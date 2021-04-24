@@ -8,14 +8,13 @@ from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.tikz_style import TikzStyle
 from tikzpy.utils.helpers import brackets, true_posix_path
 
-# TODO: Make Scope class behave more like TikzPicture. Perhaps start with an abstract base class.
 # TODO: Create a "add option" method that acts as a wrapper for tikz_picture.options += "new_options"
 class TikzPicture(TikzEnvironment):
     """
     A class for a Tikz picture environment.
 
     Attributes:
-        tikz_file : A file path to a desired destination to output the tikz code
+        tikz_file : A file path to the destination of the output tikz code
         center : True/False if one wants to center their Tikz code
         options : A list of options for the Tikz picture
         statements : See docstring for "statements" below
@@ -36,7 +35,7 @@ class TikzPicture(TikzEnvironment):
         return self._center
 
     @center.setter
-    def center(self, centering) -> None:
+    def center(self, centering: bool) -> None:
         self._center = centering
         self.center_code()
 
@@ -128,30 +127,6 @@ class TikzPicture(TikzEnvironment):
             readable_code += "\t" + draw_obj.code + "\n"
         readable_code += self.end[0]  # Only return \end{tikzpicture}
         return readable_code
-
-    # def remove(self, draw_obj: DrawingObject) -> None:
-    #     """Remove a drawing_object from the Tikz environment, e.g., an instance of Line."""
-    #     del self._statements[draw_obj]
-
-    # def draw(self, *args: List[DrawingObject]) -> None:
-    #     """Add an arbitrary sequence of drawing objects. """
-    #     for draw_obj in args:
-    #         self._statements[draw_obj] = draw_obj.code
-
-    # def drawing_objects(self) -> list:
-    #     """Returns a list of the currently appended drawing objects in the TikzPicture."""
-    #     return list(self._statements.keys())
-
-    # def undo(self) -> None:
-    #     """ Remove the last added drawing object from the tikz environment. """
-    #     last_obj = list(self._statements.keys())[-1]
-    #     self.remove(last_obj)
-
-    # def add_command(self, tikz_statement: str) -> TikzCommand:
-    #     """Add a string of valid Tikz code into the Tikz environment."""
-    #     command = TikzCommand(tikz_statement)
-    #     self.draw(command)
-    #     return command
 
     def tikzset(self, style_name: str, style_rules: TikzStyle) -> TikzStyle:
         """Create and add a TikzStyle object with name "style_name" and tikzset syntax "style_rules" """
@@ -284,7 +259,7 @@ class TikzPicture(TikzEnvironment):
                 print("Adding new Tikz environment")
                 with open(tikz_file_path, "a+") as tikz_file:
                     # Always guarantee Tikz-Python ID is on its own new line.
-                    if self.NUM_TIKZS > 0:
+                    if len(self.tikz_file.read_text()) > 0:
                         last_char = self.tikz_file.read_text()[-1]
                         if last_char != "\n":
                             tikz_file.write("\n")
@@ -322,6 +297,6 @@ class TikzPicture(TikzEnvironment):
         webbrowser.open_new("file://" + pdf_file_path)
 
     def scope(self, options: str = "") -> Scope:
-        scope = Scope(options)
+        scope = Scope(options=options)
         self.draw(scope)
         return scope

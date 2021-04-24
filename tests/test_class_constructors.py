@@ -110,8 +110,8 @@ def test_attributes_assignments():
     assert tikz_rectangle.code == r"\draw[Blue] (2, 2) rectangle (3, 4);"
     # Ellipse
     assert tikz_ellipse.center == (0, 0)
-    assert tikz_ellipse.horiz_axis == 3
-    assert tikz_ellipse.vert_axis == 4
+    assert tikz_ellipse.x_axis == 3
+    assert tikz_ellipse.y_axis == 4
     assert tikz_ellipse.code == r"\draw (0, 0) ellipse (3cm and 4cm);"
     # Arc
     assert tikz_arc.position == (0, 0)
@@ -162,8 +162,8 @@ def test_attributes_assignments():
     assert rectangle.code == r"\draw[Blue] (2, 2) rectangle (3, 4);"
     # Ellipse
     assert ellipse.center == (0, 0)
-    assert ellipse.horiz_axis == 3
-    assert ellipse.vert_axis == 4
+    assert ellipse.x_axis == 3
+    assert ellipse.y_axis == 4
     assert ellipse.code == r"\draw (0, 0) ellipse (3cm and 4cm);"
     # Arc
     assert arc.position == (0, 0)

@@ -25,7 +25,7 @@ class Rectangle(DrawingObject):
         self.left_corner = left_corner
         self.right_corner = right_corner
         self.options = options
-        super().__init__(action, self.options, self._command)
+        super().__init__(action, self.options)
 
     @property
     def _command(self) -> str:

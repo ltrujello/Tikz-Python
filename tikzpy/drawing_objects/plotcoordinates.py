@@ -25,7 +25,7 @@ class PlotCoordinates(DrawingObject):
         self.points = points
         self.options = options
         self.plot_options = plot_options
-        super().__init__(action, self.options, self._command)
+        super().__init__(action, self.options)
 
     @property
     def _command(self) -> str:

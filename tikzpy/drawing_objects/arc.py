@@ -44,7 +44,7 @@ class Arc(DrawingObject):
         self.radians = radians
         self.draw_from_start = draw_from_start
 
-        super().__init__(action, self.options, self._command)
+        super().__init__(action, self.options)
 
     @property
     def _start_angle(self) -> Angle:

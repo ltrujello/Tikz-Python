@@ -24,7 +24,7 @@ class Circle(DrawingObject):
         self.center = center
         self.radius = radius
         self.options = options
-        super().__init__(action, self.options, self._command)
+        super().__init__(action, self.options)
 
     @property
     def _command(self) -> str:

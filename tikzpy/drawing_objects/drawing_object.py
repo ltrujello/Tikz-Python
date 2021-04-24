@@ -18,9 +18,7 @@ class DrawingObject(ABC):
         node (Node object) : A Node object which can be appended to the end of the statement.
     """
 
-    def __init__(
-        self, action: str = "draw", options: str = "", command: str = ""
-    ) -> None:
+    def __init__(self, action: str = "draw", options: str = "") -> None:
         self.action = action
         self.options = options
         self.node: Node = None

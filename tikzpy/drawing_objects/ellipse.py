@@ -10,40 +10,40 @@ class Ellipse(DrawingObject):
 
     Attributes :
         center (tuple) : Pair of floats representing the center of the ellipse
-        horiz_axis (float): The length (in cm) of the horizontal axis of the ellipse
-        vert_axis (float): The length (in cm) of the vertical axis of the ellipse
+        x_axis (float): The length (in cm) of the horizontal axis of the ellipse
+        y_axis (float): The length (in cm) of the vertical axis of the ellipse
     """
 
     def __init__(
         self,
         center: Tuple[float, float],
-        horiz_axis: float,
-        vert_axis: float,
+        x_axis: float,
+        y_axis: float,
         options: str = "",
         action: str = "draw",
     ) -> None:
 
         self.center = center
-        self.horiz_axis = horiz_axis
-        self.vert_axis = vert_axis
+        self.x_axis = x_axis
+        self.y_axis = y_axis
         self.options = options
-        super().__init__(action, self.options, self._command)
+        super().__init__(action, self.options)
 
     @property
     def _command(self) -> str:
-        return f"{self.center} ellipse ({self.horiz_axis}cm and {self.vert_axis}cm)"
+        return f"{self.center} ellipse ({self.x_axis}cm and {self.y_axis}cm)"
 
     def shift(self, xshift: float, yshift: float) -> None:
         self.center = shift_coords([self.center], xshift, yshift)[0]
 
     def scale(self, scale: float) -> None:
         scaled_center = scale_coords([self.center], scale)[0]
-        scaled_h = self.horiz_axis * scale
-        scaled_v = self.vert_axis * scale
+        scaled_h = self.x_axis * scale
+        scaled_v = self.y_axis * scale
 
         self.center = scaled_center
-        self.horiz_axis = scaled_h
-        self.vert_axis = scaled_v
+        self.x_axis = scaled_h
+        self.y_axis = scaled_v
 
     def rotate(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False

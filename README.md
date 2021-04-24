@@ -15,7 +15,7 @@ from tikzpy import TikzPicture  # Import the class TikzPicture
 tikz = TikzPicture()
 tikz.circle((0, 0), 3, options="thin, fill=orange!15")
 
-arc_one = tikz.arc((3, 0), 0, 180, x_radius=3, y_radius=1.5, options=f"dashed")
+arc_one = tikz.arc((3, 0), 0, 180, x_radius=3, y_radius=1.5, options="dashed")
 arc_two = tikz.arc((-3, 0), 180, 360, x_radius=3, y_radius=1.5)
 
 tikz.write()  # Writes the Tikz code into a file
@@ -182,6 +182,11 @@ For example, plugging the array `np.array([[0, 1], [1, 1], [0, 1]])` into the so
 while plugging the array `np.array([[2, 0], [1, 1], [1, 1]])` into the source produces 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/linear_transformations/linear_transformation_ex_2.png"/>
+
+### Example: Projecting R^1 onto S^1
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/spiral/spiral.py), we use `numpy` to illustrate the projection of R^1 onto S^1. Creating this figure in Tex alone is nontrivial, as one must create white space at self intersections to illustrate crossovers. Existing tikz solutions cannot take care of this, but the flexible logical operators of Python allow one to achieve it easily. 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/spiral/spiral.png"/>
 
 ### Example: Blowup at a point
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/blowup/blowup.py), we illustrate the blowup of a point, a construction in algebraic geometry. This picture was created in 5 minutes and in half the lines of code compared to [this popular TeX stackexchange answer](https://tex.stackexchange.com/a/158762/195136), which uses quite convoluted, C-like Asymptote code.
@@ -656,22 +661,22 @@ Initialize an object of the class as below:
 import tikzpy
 
 tikz = tikzpy.TikzPicture()
-ellipse = tikz.ellipse(center, horiz_axis, vert_axis, options, action)
+ellipse = tikz.ellipse(center, x_axis, y_axis, options, action)
 ```
 which creates an `Ellipse` object and draws it. We can also write
 ```python
 from tikzpy import Ellipse
 
-ellipse = Ellipse(center, horiz_axis, vert_axis, options, action)
+ellipse = Ellipse(center, x_axis, y_axis, options, action)
 ```
 and draw this later to the Tikz picture via `tikz.draw(ellipse)`.
 
-| Parameter            | Description                                                                          | Default   |
-| -------------------- | ------------------------------------------------------------------------------------ | --------- |
-| `center` (tuple)     | Pair of floats representing the center of the ellipse                                |
-| `horiz_axis` (float) | The length (in cm) of the horizontal axis of the ellipse                             |
-| `vert_axis` (float)  | The length (in cm) of the vertical axis of the ellipse                               |
-| `action` (str)       | An action to perform with the ellipse (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"` |
+| Parameter        | Description                                                                          | Default   |
+| ---------------- | ------------------------------------------------------------------------------------ | --------- |
+| `center` (tuple) | Pair of floats representing the center of the ellipse                                |
+| `x_axis` (float) | The length (in cm) of the horizontal axis of the ellipse                             |
+| `y_axis` (float) | The length (in cm) of the vertical axis of the ellipse                               |
+| `action` (str)   | An action to perform with the ellipse (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"` |
 
 
 ## Example
@@ -689,8 +694,8 @@ ellipse = tikz.ellipse(
     (0, 0), 4, 3, options="fill=ProcessBlue!70, opacity=0.4", action="filldraw"
 )
 # Labels
-h_line = tikz.line((0, 0), (ellipse.horiz_axis, 0), options="thick, dashed, ->")
-v_line = tikz.line((0, 0), (0, ellipse.vert_axis), options="thick, dashed, ->")
+h_line = tikz.line((0, 0), (ellipse.x_axis, 0), options="thick, dashed, ->")
+v_line = tikz.line((0, 0), (0, ellipse.y_axis), options="thick, dashed, ->")
 tikz.node(h_line.midpoint, options="below", text="Major")
 tikz.node(v_line.midpoint, options="left", text="Minor")
 ```

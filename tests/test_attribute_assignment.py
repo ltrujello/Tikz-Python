@@ -36,8 +36,8 @@ rectangle.options = "fill=purple!50"
 # Ellipse
 ellipse = tikz.ellipse((0, 0), 3, 4)
 ellipse.center = (-1, 2)
-ellipse.horiz_axis = 5
-ellipse.vert_axis = 3
+ellipse.x_axis = 5
+ellipse.y_axis = 3
 # Arc
 arc = tikz.arc((0, 0), 20, 90, 4)
 arc.center = (1, 1)
@@ -86,8 +86,8 @@ def test_attribute_assignment():
     assert rectangle.code == r"\draw[fill=purple!50] (1, 1) rectangle (5, 5);"
     # Ellipse
     assert ellipse.center == (-1, 2)
-    assert ellipse.horiz_axis == 5
-    assert ellipse.vert_axis == 3
+    assert ellipse.x_axis == 5
+    assert ellipse.y_axis == 3
     assert ellipse.code == r"\draw (-1, 2) ellipse (5cm and 3cm);"
     # Arc
     assert arc.center == (1, 1)

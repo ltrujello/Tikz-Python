@@ -32,7 +32,7 @@ class Line(DrawingObject):
         self.to_options = to_options
         self.control_pts = control_pts
 
-        super().__init__(action, self.options, self._command)
+        super().__init__(action, self.options)
 
     @property
     def _command(self) -> str:

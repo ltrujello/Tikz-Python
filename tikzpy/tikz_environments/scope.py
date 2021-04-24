@@ -38,17 +38,16 @@ class Scope(TikzEnvironment):
         clip = Clip(draw_obj, draw=draw)
         self.append(clip)
 
-    # TODO: Test if these three methods work.
     def shift(self, xshift: float, yshift: float) -> None:
-        for draw_obj in self._scope_statements:
+        for draw_obj in self._statements:
             draw_obj.shift(xshift, yshift)
 
     def scale(self, scale: float) -> None:
-        for draw_obj in self._scope_statements:
+        for draw_obj in self._statements:
             draw_obj.scale(scale)
 
     def rotate(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
-        for draw_obj in self._scope_statements:
+        for draw_obj in self._statements:
             draw_obj.rotate(angle, about_pt, radians)
