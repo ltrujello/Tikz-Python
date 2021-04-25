@@ -31,7 +31,7 @@ on_each_segment = TikzStyle(
         (\\tikzinputsegmentfirst) -- (\\tikzinputsegmentlast);
       },
     }
-""",
+    """,
 )
 
 mid_arrow = TikzStyle(

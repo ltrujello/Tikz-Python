@@ -58,3 +58,6 @@ class PlotCoordinates(DrawingObject):
         if about_pt == None:
             about_pt = self.center
         self.points = rotate_coords(self.points, angle, about_pt, radians)
+
+    def add_point(self, x, y):
+        self.points.append((x, y))

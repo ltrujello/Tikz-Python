@@ -52,7 +52,7 @@ def ven_diagram(*blobs, show_outlines=False):
                 scope.clip(blob_copy)
             else:
                 blob_copy.options = f"fill = {rainbow_colors(j)}, opacity = 0.7"
-                scope.append(blob_copy)
+                scope.draw(blob_copy)
 
     # We're done, draw the outline
     if show_outlines:

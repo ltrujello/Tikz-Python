@@ -20,15 +20,16 @@ class TikzPicture(TikzEnvironment):
         statements : See docstring for "statements" below
     """
 
-    NUM_TIKZS = 0
+    NUM_TIKZS = 0  # TODO: Make a rigorous test .py for this
 
     def __init__(self, center: bool = False, options: str = "") -> None:
         super().__init__(options)
         self.tikz_file: Path = Path("tikz_code/tikz_code.tex")
         self._center: bool = center
-        self._id: str = f"@TikzPy__#id__==__({self.NUM_TIKZS})"
+        self._id = f"@TikzPy__#id__==__({TikzPicture.NUM_TIKZS})"
         self._preamble: dict = {"begin_id": f"%__begin__{self._id}\n"}
         self._postamble: dict = {"end_id": f"%__end__{self._id}\n"}
+        TikzPicture.NUM_TIKZS += 1
 
     @property
     def center(self) -> bool:
@@ -210,67 +211,59 @@ class TikzPicture(TikzEnvironment):
                 else:
                     print("Not created. \n")
 
-        # If we want to overwrite and update our last TikzPicture environment (in most cases, we do)
-        if overwrite:
-            begin_ind, end_ind = -1, -1
-            # open the tikz_file and obtain its contents
-            with open(tikz_file_path) as tikz_file:
-                lines = tikz_file.readlines()
-            # We look for our old TikzPicture code in the file.
-            for i, line in enumerate(lines):
-                # Search for start of code statement, we remove spaces for comparison
-                if line.replace(" ", "") == self.begin[0]:
-                    begin_ind = i
-                    for j, later_lines in enumerate(lines[i:]):
-                        # Search for end of code statement. We remove spaces for comparison
-                        if later_lines.replace(" ", "") == self.end[-1]:
-                            end_ind = i + j
-                            break
-                    break
+        # Overwrite and update our last TikzPicture environment
+        begin_ind, end_ind = -1, -1
+        # open the tikz_file and obtain its contents
+        with open(tikz_file_path) as tikz_file:
+            lines = tikz_file.readlines()
+        # We look for our old TikzPicture code in the file.
+        for i, line in enumerate(lines):
+            # Search for start of code statement, we remove spaces for comparison
+            if line.replace(" ", "") == self.begin[0]:
+                begin_ind = i
+                for j, later_lines in enumerate(lines[i:]):
+                    # Search for end of code statement. We remove spaces for comparison
+                    if later_lines.replace(" ", "") == self.end[-1]:
+                        end_ind = i + j
+                        break
+                break
 
-            # If we found our begin statement, then we know we've written in the file before.
-            if begin_ind != -1:
-                assert (
-                    end_ind != -1
-                ), f"Found code statement at line {begin_ind}, but never found end statement"
-                print("Updating Tikz environment with new code")
+        # If we found our begin statement, then we know we've written in the file before.
+        if begin_ind != -1:
+            assert (
+                end_ind != -1
+            ), f"Found code statement at line {begin_ind}, but never found end statement"
+            print("Updating Tikz environment")
 
-                # We create a new file with our desired file contents
-                new_lines = lines[:begin_ind] + lines[end_ind + 1 :]
-                tikz_file_temp = Path(
-                    str(self.tikz_file.parents[0]), self.tikz_file.stem + "_temp.tex"
-                )
-                tikz_file_temp_path = str(tikz_file_temp.resolve())
-                with open(tikz_file_temp_path, "w") as f:
-                    # Write everything before our begin statement
-                    for line in lines[:begin_ind]:
-                        f.write(line)
-                    # Substitute in our updated code
-                    f.write(output_code)
-                    # Write everything after our end statement
-                    for line in lines[end_ind + 1 :]:
-                        f.write(line)
-                # Now rename the file
-                tikz_file_temp.replace(tikz_file_path)
-                print("Successful write")
+            # We create a new file with our desired file contents
+            new_lines = lines[:begin_ind] + lines[end_ind + 1 :]
+            tikz_file_temp = Path(
+                str(self.tikz_file.parents[0]), self.tikz_file.stem + "_temp.tex"
+            )
+            tikz_file_temp_path = str(tikz_file_temp.resolve())
+            with open(tikz_file_temp_path, "w") as f:
+                # Write everything before our begin statement
+                for line in lines[:begin_ind]:
+                    f.write(line)
+                # Substitute in our updated code
+                f.write(output_code)
+                # Write everything after our end statement
+                for line in lines[end_ind + 1 :]:
+                    f.write(line)
+            # Now rename the file
+            tikz_file_temp.replace(tikz_file_path)
+            print("Successful write")
 
-            # If we never found our old TikzPicture code, then it was never entered. We are safe to append.
-            else:
-                print("Adding new Tikz environment")
-                with open(tikz_file_path, "a+") as tikz_file:
-                    # Always guarantee Tikz-Python ID is on its own new line.
-                    if len(self.tikz_file.read_text()) > 0:
-                        last_char = self.tikz_file.read_text()[-1]
-                        if last_char != "\n":
-                            tikz_file.write("\n")
-                    tikz_file.write(output_code)
-                self.NUM_TIKZS += 1
-
-        # If for some reason we do not want to overwrite our last TikzPicture
+        # If we never found our old TikzPicture code, then it was never entered. We are safe to append.
         else:
+            print("Adding new Tikz environment")
             with open(tikz_file_path, "a+") as tikz_file:
+                # Always guarantee Tikz-Python ID is on its own new line.
+                if len(self.tikz_file.read_text()) > 0:
+                    last_char = self.tikz_file.read_text()[-1]
+                    if last_char != "\n":
+                        tikz_file.write("\n")
                 tikz_file.write(output_code)
-            self.NUM_TIKZS += 1
 
     def show(self, quiet: bool = False) -> None:
         """Compiles the PDF and displays it to the user.

@@ -184,9 +184,14 @@ while plugging the array `np.array([[2, 0], [1, 1], [1, 1]])` into the source pr
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/linear_transformations/linear_transformation_ex_2.png"/>
 
 ### Example: Projecting R^1 onto S^1
-In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/spiral/spiral.py), we use `numpy` to illustrate the projection of R^1 onto S^1. Creating this figure in Tex alone is nontrivial, as one must create white space at self intersections to illustrate crossovers. Existing tikz solutions cannot take care of this, but the flexible logical operators of Python allow one to achieve it easily. 
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/spiral/spiral.py), we use `numpy` to illustrate the projection of R^1 onto S^1. Creating this figure in Tex alone is nontrivial, as one must create white space at self intersections to illustrate crossovers. Existing tikz solutions cannot take care of this, but the flexible logical operators of Python allow one to achieve it. 
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/spiral/spiral.png"/>
+
+### Example: Polar Coordinates
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/polar/polar.py), we illustrate the concept of polar coordiantes by demonstrating how a sine curve is mapped into polar coordinates. This example should be compared to the more complex answers in this [TeX Stackexchange question](https://tex.stackexchange.com/questions/594231/make-rainbow-coloured-bullets-to-show-points) which seeks a similar result. 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/polar/polar.png"/>
 
 ### Example: Blowup at a point
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/blowup/blowup.py), we illustrate the blowup of a point, a construction in algebraic geometry. This picture was created in 5 minutes and in half the lines of code compared to [this popular TeX stackexchange answer](https://tex.stackexchange.com/a/158762/195136), which uses quite convoluted, C-like Asymptote code.

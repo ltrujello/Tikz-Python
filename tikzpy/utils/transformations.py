@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import List, Tuple
 import math
+import numpy as np
 
 """ Shifting, Scaling, and Rotating calculations called by above methods
 """
@@ -95,3 +96,8 @@ def recenter_to_origin(coords: List[Tuple[float, float]]) -> List[Tuple[float, f
     y_mean /= len(coords)
 
     return shift_coords(coords, -x_mean, -y_mean)
+
+def cartesian(r, ang):
+    x = r * np.cos(ang)
+    y = r * np.sin(ang)
+    return (x, y)
