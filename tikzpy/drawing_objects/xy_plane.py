@@ -5,7 +5,7 @@ from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.node import Node
 
 
-class R2_space:
+class R2_Space:
     def __init__(
         self,
         x_interval: Tuple[float, float],

@@ -143,6 +143,11 @@ In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples
 
 <img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric/barycentric.png"/>
 
+### Example: Cantor function
+In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cantor/cantor.py), we plot the Cantor function by performing recursion. It is clear from this [TeX Stackexchange question](https://tex.stackexchange.com/questions/241622/plotting-the-cantor-function) that TeX alone cannot do this, as most answers rely on external programs to generate the data. 
+
+<img src="https://github.com/ltrujello/Tikz-Python/blob/main/examples/cantor/cantor.png"/>
+
 ### Example: Symbolic Intergation
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/symbolic_integration/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the n-order integrals of any function. For example, the output of `x**2` (the polynomial x^2) generates the image below. 
 
