@@ -63,8 +63,7 @@ def ven_diagram(*blobs, show_outlines=False):
     tikz.show()
 
 
-""" Initalize some drawings that we can test the function with.
-"""
+" Initialize some drawings that we can test the function with."
 
 # Four specific circles
 circle1 = Circle((0, 0), 2, options="purple, opacity = 0.7", action="fill")

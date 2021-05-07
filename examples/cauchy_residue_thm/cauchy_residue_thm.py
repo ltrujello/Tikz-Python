@@ -31,10 +31,10 @@ plot = tikz.plot_coordinates(
 )
 
 # Draws the inner circles
-singlrty_1 = tikz.circle((3, -0.3), 0.7, "arrows_along_path=blue")
-singlrty_2 = tikz.circle((1.3, 1.3), 0.7, "arrows_along_path=blue")
-singlrty_3 = tikz.circle((-0.4, -0.2), 0.7, "arrows_along_path=blue")
-singlrty_4 = tikz.circle((-2, 1.1), 0.7, "arrows_along_path=blue")
+singularity_1 = tikz.circle((3, -0.3), 0.7, "arrows_along_path=blue")
+singularity_2 = tikz.circle((1.3, 1.3), 0.7, "arrows_along_path=blue")
+singularity_3 = tikz.circle((-0.4, -0.2), 0.7, "arrows_along_path=blue")
+singularity_4 = tikz.circle((-2, 1.1), 0.7, "arrows_along_path=blue")
 
 # Draws the paths that connect the circles
 tikz.line((3.7, -0.5), (4.6, -1), options="bend left, <-")
@@ -44,7 +44,9 @@ tikz.line((-1.29, 1.1), (-0.6, 0.46), options="bend left, <-")
 tikz.line((-2.5, 1.6), (-2.8, 2.15), options="bend left, ->")
 
 # Draws and labels the points a_1, a_2, a_3, and a_4.
-for ind, singularity in enumerate([singlrty_1, singlrty_2, singlrty_3, singlrty_4]):
+for ind, singularity in enumerate(
+    [singularity_1, singularity_2, singularity_3, singularity_4]
+):
     tikz.circle(singularity.center, 0.05, action="fill")
     tikz.node(singularity.center, options="right", text=f"$a_{ind+1}$")
 

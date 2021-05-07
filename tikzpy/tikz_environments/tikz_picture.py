@@ -9,6 +9,8 @@ from tikzpy.tikz_environments.tikz_style import TikzStyle
 from tikzpy.utils.helpers import brackets, true_posix_path
 
 # TODO: Create a "add option" method that acts as a wrapper for tikz_picture.options += "new_options"
+
+
 class TikzPicture(TikzEnvironment):
     """
     A class for a Tikz picture environment.
@@ -17,7 +19,7 @@ class TikzPicture(TikzEnvironment):
         tikz_file : A file path to the destination of the output tikz code
         center : True/False if one wants to center their Tikz code
         options : A list of options for the Tikz picture
-        statements : See docstring for "statements" below
+        _statements : See docstring for "statements" below
     """
 
     NUM_TIKZS = 0  # TODO: Make a rigorous test .py for this
@@ -29,25 +31,9 @@ class TikzPicture(TikzEnvironment):
         self._id = f"@TikzPy__#id__==__({TikzPicture.NUM_TIKZS})"
         self._preamble: dict = {"begin_id": f"%__begin__{self._id}\n"}
         self._postamble: dict = {"end_id": f"%__end__{self._id}\n"}
+
         TikzPicture.NUM_TIKZS += 1
-
-    @property
-    def center(self) -> bool:
-        return self._center
-
-    @center.setter
-    def center(self, centering: bool) -> None:
-        self._center = centering
         self.center_code()
-
-    def center_code(self) -> None:
-        if self.center:
-            self._preamble["center"], self._postamble["center"] = (
-                "\\begin{center}\n",
-                "\\end{center}\n",
-            )
-        else:
-            self._preamble["center"], self._postamble["center"] = "", ""
 
     @property
     def begin(self) -> list:
@@ -71,6 +57,25 @@ class TikzPicture(TikzEnvironment):
         ):  # To accommodate older pythons
             end.append(statement)
         return end
+
+    @property
+    def center(self) -> bool:
+        return self._center
+
+    @center.setter
+    def center(self, centering: bool) -> None:
+        self._center = centering
+        self.center_code()
+
+    def center_code(self) -> None:
+        if self.center:
+            print("Centering is true")
+            self._preamble["center"], self._postamble["center"] = (
+                "\\begin{center}\n",
+                "\\end{center}\n",
+            )
+        else:
+            self._preamble["center"], self._postamble["center"] = "", ""
 
     @property
     def tex_file(self) -> Path:

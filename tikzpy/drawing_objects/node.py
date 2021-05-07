@@ -48,14 +48,14 @@ class Node:
         if self.position is not None:
             self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
 
-    def __deepcopy__(self, memo: dict) -> Node:
+    def __deepcopy__(self, memo: dict) -> Node:  # TODO: Check this works
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set
         our methods to modify objects, but not return anything.
         """
         draw_obj = Node(
-            deepcopy(self.position, memo),
-            deepcopy(self.options, memo),
-            deepcopy(self.text, memo),
+            deepcopy(self.position),
+            deepcopy(self.options),
+            deepcopy(self.text),
         )
         memo[id(self)] = draw_obj
         return draw_obj

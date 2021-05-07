@@ -6,7 +6,7 @@ from tikzpy import TikzPicture
 def roots_of_unity(n, scale=5):
     """Creates a diagram for the n-th roots of unity.
     n (int) : The number of roots of unity we display
-    scale (float) : A paremeter which controls the size of the image. This should be >5 for larger roots of unity.
+    scale (float) : A parameter which controls the size of the image. This should be >5 for larger roots of unity.
     """
     tikz = TikzPicture(center=True)
 

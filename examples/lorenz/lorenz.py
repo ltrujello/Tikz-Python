@@ -22,8 +22,9 @@ rho = 28.0
 sigma = 10.0
 beta = 8.0 / 3.0
 
+
 # Next state according to the ODEs
-def next(state, t):
+def next(state):
     x, y, z = state
     return sigma * (y - x), x * (rho - z) - y, x * y - beta * z
 
@@ -47,7 +48,7 @@ for state in states:
 lorenz_plot = tikz.plot_coordinates(
     tuple_states, options="ProcessBlue!70", plot_options="smooth"
 )
-# Annnotate the initial state
+# Annotate the initial state
 tikz.circle(tuple_states[0], radius=0.1, action="fill")
 tikz.node(tuple_states[0], options="below", text="Initial: (1,1,1)")
 

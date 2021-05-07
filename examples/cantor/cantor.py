@@ -12,8 +12,8 @@ def subdivide(x_1, x_2, n):
     if n == 0:
         return []
 
-    new_x_1 = 2 * x_1 / 3 + x_2 / 3
-    new_x_2 = x_1 / 3 + 2 * x_2 / 3
+    new_x_1 = 2 * (x_1 / 3) + x_2 / 3
+    new_x_2 = x_1 / 3 + 2 * (x_2 / 3)
     return (
         subdivide(x_1, new_x_1, n - 1)
         + [new_x_1, new_x_2]

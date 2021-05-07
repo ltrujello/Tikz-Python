@@ -3,7 +3,7 @@ from tikzpy.utils.helpers import brackets
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from typing import List, Tuple
 
-# Class for Plotting
+
 class PlotCoordinates(DrawingObject):
     """
     A class to create plots in the tikz environment.
@@ -55,7 +55,7 @@ class PlotCoordinates(DrawingObject):
     def rotate(
         self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
     ) -> None:
-        if about_pt == None:
+        if about_pt is None:
             about_pt = self.center
         self.points = rotate_coords(self.points, angle, about_pt, radians)
 

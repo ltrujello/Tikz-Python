@@ -3,7 +3,7 @@ from typing import Tuple
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 
-# Class for Circles
+
 class Circle(DrawingObject):
     """
     A class to create circles in the tikz environment.
@@ -37,6 +37,6 @@ class Circle(DrawingObject):
         self.center = scale_coords([self.center], scale)[0]
 
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
     ) -> None:
         self.center = rotate_coords([self.center], angle, about_pt, radians)[0]

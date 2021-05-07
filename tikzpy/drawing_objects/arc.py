@@ -160,8 +160,8 @@ class Arc(DrawingObject):
     def rotate(
         self, angle: float, about_pt: tuple = None, radians: bool = False
     ) -> None:
-        if about_pt == None:
-            self._position
+        if about_pt is None:
+            about_pt = self._position
         self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
 
     def atan2_for_ellipse(self, angle: Angle) -> float:

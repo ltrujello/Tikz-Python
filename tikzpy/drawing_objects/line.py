@@ -54,7 +54,7 @@ class Line(DrawingObject):
     def midpoint(self) -> Tuple[float, float]:
         mid_x = (self.start[0] + self.end[0]) / 2
         mid_y = (self.start[1] + self.end[1]) / 2
-        return (mid_x, mid_y)
+        return mid_x, mid_y
 
     def shift(self, xshift: float, yshift: float) -> None:
         """Shift start, end, and control_pts"""

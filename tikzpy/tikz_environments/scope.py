@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple
+from typing import Tuple
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.clip import Clip

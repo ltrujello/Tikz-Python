@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import List, Tuple
 from abc import ABC, abstractmethod
 from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
@@ -40,7 +41,7 @@ class TikzEnvironment(ABC):
     @property
     @abstractmethod
     def code(self) -> str:
-        """A string contaning the Tikz code for the Tikz environment."""
+        """A string containing the Tikz code for the Tikz environment."""
 
     def remove(self, draw_obj: DrawingObject) -> None:
         """Remove a drawing_object from the Tikz environment, e.g., an instance of Line."""
@@ -90,7 +91,7 @@ class TikzEnvironment(ABC):
 
     def plot_coordinates(
         self,
-        points: tuple,
+        points: List[tuple],
         options: str = "",
         plot_options: str = "",
         action: str = "draw",

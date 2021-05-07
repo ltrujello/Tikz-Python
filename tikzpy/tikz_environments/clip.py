@@ -8,8 +8,6 @@ from tikzpy.drawing_objects.rectangle import Rectangle
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.drawing_object import DrawingObject
-from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
-
 
 class Clip:
     """A class for a clipping code statement."""
@@ -27,7 +25,7 @@ class Clip:
 
     @property
     def code(self) -> str:
-        if self.draw == True:
+        if self.draw:
             return fr"\clip[preaction = {{draw, {self.draw_obj.options}}}] {self.draw_obj._command};"
         else:
             return fr"\clip {self.draw_obj._command};"
