@@ -5,7 +5,12 @@ An object-oriented Python approach towards providing a giant wrapper for Tikz co
 Python 3.7+ and any relatively up-to-date version of a LaTeX that can process `tikz` and its libraries (which you probably already have if you're looking at this). 
 
 ## Installation 
-Run `git clone https://github.com/ltrujello/Tikz-Python` and place `tikzpy` within your python `site-packages`. 
+You can install Tikzpy as follows.
+```
+$ git clone https://github.com/ltrujello/Tikz-Python
+$ cd Tikz-Python
+$ pip install --use-feature=in-tree-build .
+```
 
 ## How to Use: Basics
 An example of this package in action is below. 

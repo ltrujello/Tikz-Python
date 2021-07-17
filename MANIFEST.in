@@ -1,0 +1,3 @@
+include tikzpy/templates/tex_file.tex
+include tikzpy/templates/tikz_code.tex
+
