@@ -11,6 +11,7 @@ $ git clone https://github.com/ltrujello/Tikz-Python
 $ cd Tikz-Python
 $ pip install --use-feature=in-tree-build .
 ```
+Note: If pip tries to tell you `no such option: --use-feature`, then that means you need to upgrade your pip which you can do via `pip install --upgrade pip`. If you don't want to upgrade your pip, then simply remove the `--use-feature` flag, at which point pip may scream a warning to you about in tree builds. 
 
 ## How to Use: Basics
 An example of this package in action is below. 
