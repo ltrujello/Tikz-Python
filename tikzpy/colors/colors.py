@@ -10,9 +10,7 @@ def rgb(r: float, g: float, b: float) -> str:
 
 
 def rainbow_colors(i: int) -> str:
-    """A wrapper function for obtaining rainbow colors.
-    Any integer can be passed in.
-    """
+    """A wrapper function for obtaining rainbow colors."""
     return rainbow_cols[i % len(rainbow_cols)]
 
 

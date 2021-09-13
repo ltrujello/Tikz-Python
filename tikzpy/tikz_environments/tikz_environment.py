@@ -13,9 +13,9 @@ from tikzpy.tikz_environments.tikz_command import TikzCommand
 
 
 class TikzEnvironment(ABC):
-    def __init__(self, options):
-        self.options: str = options
-        self._statements: dict = {}
+    def __init__(self, options: str) -> None:
+        self.options = options
+        self._statements = {}
 
     @property
     def statements(self) -> dict:
@@ -48,7 +48,7 @@ class TikzEnvironment(ABC):
         del self._statements[draw_obj]
 
     def draw(self, *args: List[DrawingObject]) -> None:
-        """Add an arbitrary sequence of drawing objects. """
+        """Add an arbitrary sequence of drawing objects."""
         for draw_obj in args:
             self._statements[draw_obj] = draw_obj.code
 
@@ -57,7 +57,7 @@ class TikzEnvironment(ABC):
         return list(self._statements.keys())
 
     def undo(self) -> None:
-        """ Remove the last added drawing object from the tikz environment. """
+        """Remove the last added drawing object from the tikz environment."""
         last_obj = list(self._statements.keys())[-1]
         self.remove(last_obj)
 

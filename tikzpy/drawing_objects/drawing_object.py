@@ -44,7 +44,7 @@ class DrawingObject(ABC):
 
     @abstractmethod
     def scale(self, scale: float) -> None:
-        """Scale the coordinates of the drawing object by amount "scale". """
+        """Scale the coordinates of the drawing object by amount "scale"."""
 
     @abstractmethod
     def rotate(

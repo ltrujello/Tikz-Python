@@ -1,11 +1,9 @@
-from pathlib import Path
-from pathlib import WindowsPath
+import re
+from pathlib import Path, WindowsPath
 
 
 def brackets(string: str) -> str:
-    """A helper function for creating tikz code.
-    Basically, if the string is empty, we don't obtain brackets [].
-    """
+    """Wraps a string with a pair of matching brackets."""
     if len(string) != 0:
         return "[" + string + "]"
     else:
@@ -29,5 +27,16 @@ def true_posix_path(path_obj: Path) -> str:
             full_path.relative_to(f"{drive}/").as_posix()
         )  # Need / so we may obtain /Users/... not Users/...
     else:
-        # Must be PosixPath (We use Path, and pathlib automatically uses either WindowsPath or PosixPath)
         return str(full_path.resolve())
+
+
+def replace_code(begin_delim, end_delim, content, new_code) -> tuple[str, int]:
+    """Replaces text delimited by `begin_delim` and `end_delim` appearing in `content`, with `new_code`.
+    Returns new string and number of matches made."""
+    return re.subn(
+        fr"{re.escape(begin_delim)}([\s\S]*?){re.escape(end_delim)}",
+        new_code.replace(
+            "\\", "\\\\"
+        ),  # Need to escape backslashes twice for re package
+        content,
+    )
