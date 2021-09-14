@@ -109,7 +109,7 @@ class TikzPicture(TikzEnvironment):
             code += stmt
         # Add the main tikz code
         for draw_obj in self.statements:
-            code += "\t" + draw_obj.code + "\n"
+            code += "    " + draw_obj.code + "\n"
         # Add the ending statement
         for stmt in self.end:
             code += stmt
@@ -119,7 +119,7 @@ class TikzPicture(TikzEnvironment):
         """Return a readable string of the current tikz code"""
         readable_code = self.begin[-1]  # Only return \begin{tikzpicture}[...]
         for draw_obj in self.statements:
-            readable_code += "\t" + draw_obj.code + "\n"
+            readable_code += "    " + draw_obj.code + "\n"
         readable_code += self.end[0]  # Only return \end{tikzpicture}
         return readable_code
 
@@ -160,31 +160,23 @@ class TikzPicture(TikzEnvironment):
             "tdplotsetmaincoords"
         ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
 
-    def write(self, overwrite: bool = True) -> None:
+    def write(self) -> None:
         """Write the currently recorded Tikz code into self.tikz_file.
 
-        One might suspect that calling .write() twice will write down tikz source code twice. Since this is on
-        average undesirable behavior, this is not the default behavior. Thus overwrite = True by default.
-        If for some weird reason one wishes to literally write code twice, then they can set overwrite = False.
+        One might suspect that calling .write() twice will write down tikz source code twice. Since this
+        would make editing pictures very annoying, this is not the default behavior.
         """
         # Check if the tikz_file exists. If not, create it.
         if not self.tikz_file.exists():
-            print(f"Could not find file at {self.tikz_file}.\n")
-            answer = input("Want to make it? (Y/N) ").strip()
-            if answer == "y" or answer == "Y":
-                # Make directory, then file
-                self.tikz_file.parent.mkdir(parents=True)
-                # Get the template for new tikz code
-                template_file_bytes = pkgutil.get_data(
-                    "tikzpy", "templates/tikz_code.tex"
-                )
-                with open(self.tikz_file, "wb") as f:
-                    f.write(template_file_bytes)
-                print(
-                    f"File created at {str(self.tikz_file.resolve())}.\nThe tikz_code will output there. \n"
-                )
-            else:
-                print("Not created. \n")
+            # Make directory, then file
+            self.tikz_file.parent.mkdir(parents=True, exist_ok=True)
+            # Get the template for new tikz code
+            template_file_bytes = pkgutil.get_data("tikzpy", "templates/tikz_code.tex")
+            with open(self.tikz_file, "wb") as f:
+                f.write(template_file_bytes)
+            print(
+                f"File created at {str(self.tikz_file.resolve())}.\nThe tikz_code will output there. \n"
+            )
 
         with open(self.tikz_file) as f:
             content = f.read()
