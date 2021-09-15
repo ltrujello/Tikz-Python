@@ -15,36 +15,6 @@ def clear_test_code():
         shutil.rmtree(tikz_code_dir)
 
 
-def test_replace_code():
-    """Test the function replace_code and its update functionality. Check that it correctly replaces text surrounded
-    by delimiters."""
-    delimiter_pairs = [
-        ("start", "end"),
-        ("<", ">"),
-        ("%__begin__@TikzPy__#id__==__(0)", "%__end__@TikzPy__#id__==__(0)"),
-        ("%__begin__@TikzPy__#id__==__(10)", "%__end__@TikzPy__#id__==__(10)"),
-    ]
-    for delimiter_pair in delimiter_pairs:
-        begin, end = delimiter_pair
-        content = f"""
-        {begin} This ! @ is $ % a 
-        ^ test, & * I'm 
-        going to ( ~ ` 
-        get ) = _ - replaced.
-        {end}
-        It doesn't grab this end, right?
-        """
-        replacement_text = f"{begin} Hi! {end}"
-        updated_text, num_matches = replace_code(begin, end, content, replacement_text)
-        assert (
-            updated_text
-            == f"""
-        {begin} Hi! {end}
-        It doesn't grab this end, right?
-        """
-        )
-
-
 def test_updating_environment():
     """Test that making a second change to a Tikz environment, after initially compiling, works correctly."""
     clear_test_code()
@@ -63,6 +33,7 @@ def test_updating_environment():
     after_code = code_dir / "after.tex"
 
     assert tikz.tikz_file.read_text() == after_code.read_text()
+    clear_test_code()
 
 
 def test_creating_multiple_environments():
@@ -96,6 +67,7 @@ def test_creating_multiple_environments():
 
     assert third_tikz._id == "@TikzPy__#id__==__(2)"
     assert third_tikz.tikz_file.read_text() == third_environment.read_text()
+    clear_test_code()
 
 
 def test_updating_multiple_environments():
@@ -144,3 +116,4 @@ def test_updating_multiple_environments():
     first_tikz.write()
     third_update = code_dir / "third_update.tex"
     assert first_tikz.tikz_file.read_text() == third_update.read_text()
+    clear_test_code()

@@ -52,6 +52,13 @@ class TikzEnvironment(ABC):
         for draw_obj in args:
             self._statements[draw_obj] = draw_obj.code
 
+    def add_option(self, option: str) -> None:
+        """Add an option to the set of options."""
+        if len(self.options) == 0:
+            self.options += option
+        else:
+            self.options += f", {option}"
+
     def drawing_objects(self) -> list:
         """Returns a list of the currently appended drawing objects in the TikzPicture."""
         return list(self._statements.keys())

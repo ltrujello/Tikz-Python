@@ -8,14 +8,10 @@ from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.tikz_style import TikzStyle
 from tikzpy.utils.helpers import brackets, true_posix_path, replace_code
 
-# TODO: Create a "add option" method that acts as a wrapper for tikz_picture.options += "new_options"
-
-# TODO: Write tests for file correct clearing, code replacement, file opening, and for multiple tikz environments.
-
 
 class TikzPicture(TikzEnvironment):
     """
-    A class for a Tikz picture environment.
+    A class for managing a Tikzpicture environment and associated tex files with tikz code.
 
     Attributes:
         tikz_file : A file path to the destination of the output tikz code
@@ -24,7 +20,7 @@ class TikzPicture(TikzEnvironment):
         _statements : See docstring for "statements" below
     """
 
-    NUM_TIKZS = 0  # TODO: Make a rigorous test .py for this
+    NUM_TIKZS = 0
 
     def __init__(self, center: bool = False, options: str = "") -> None:
         super().__init__(options)
@@ -33,7 +29,6 @@ class TikzPicture(TikzEnvironment):
         self._preamble = {"begin_id": f"%__begin__{self._id}\n"}
         self._postamble = {"end_id": f"%__end__{self._id}\n"}
         self.tikz_file = Path("tikz_code/tikz_code.tex")
-
         TikzPicture.NUM_TIKZS += 1
         self.center_code()
 
@@ -84,20 +79,23 @@ class TikzPicture(TikzEnvironment):
             # Check if the folder exists
             if not tex_file.parent.exists():
                 tex_file.parent.mkdir(parents=True)
-            # The folder has been created. We now gather our template contents and write it into the new tex_file.tex
-            template = pkgutil.get_data("tikzpy", "templates/tex_file.tex").decode(
+            # Gather the template contents
+            tex_code = pkgutil.get_data("tikzpy", "templates/tex_file.tex").decode(
                 "utf-8"
             )
-            # Insert the file path to our tikz_file in the template
-            tex_file_contents, num_matched = replace_code(
-                "\\input{",
-                "}",
-                template,
-                "\\input{" + true_posix_path(self.tikz_file.resolve()) + "}",
-            )
-            assert num_matched == 1, f"Found {num_matched} many matches"
-            with open(tex_file, "w") as f:
-                f.write(tex_file_contents)
+        else:
+            tex_code = tex_file.read_text()
+        # Insert the file path to our tikz_file in the template
+        tex_file_contents, num_matched = replace_code(
+            "\\input{",
+            "}",
+            tex_code,
+            "\\input{" + true_posix_path(self.tikz_file.resolve()) + "}",
+        )
+        assert num_matched == 1, f"Found {num_matched} many matches"
+        # Update the TeX file
+        with open(tex_file, "w") as f:
+            f.write(tex_file_contents)
         return tex_file
 
     @property
@@ -195,7 +193,6 @@ class TikzPicture(TikzEnvironment):
         # If we found our previous code, then we know we've written in the file before.
         if num_matches == 1:
             print("Updating Tikz environment")
-
             # We create a temporary file with our updated tikz code
             tikz_file_temp = self.tikz_file.parent / (self.tikz_file.stem + "_temp.tex")
             with open(tikz_file_temp, "w") as f:
@@ -227,11 +224,12 @@ class TikzPicture(TikzEnvironment):
         )
         # We move the compiled PDF up one directory, out of the tex/ folder, so the viewer can see it.
         pdf_file = self.tex_file.with_suffix(".pdf").resolve()
-        pdf_file.replace(pdf_file.parents[1] / pdf_file.name)
-        return pdf_file
+        moved_pdf_file = pdf_file.replace(pdf_file.parents[1] / pdf_file.name)
+        return moved_pdf_file
 
     def show(self, quiet: bool = False) -> None:
         """Compiles the Tikz code and displays the pdf to the user. Set quiet=True to shut up latexmk."""
+        self.write()
         pdf_file = self.compile(quiet)
         webbrowser.open_new(str(pdf_file.as_uri()))
 

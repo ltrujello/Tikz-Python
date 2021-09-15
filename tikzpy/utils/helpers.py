@@ -20,7 +20,7 @@ def true_posix_path(path_obj: Path) -> str:
     since such a command returns something like "C:\Users\user\Desktop..."
     Since pathlib does not happen to have a method for this, we write one.
     """
-    full_path = path_obj.resolve()
+    full_path = path_obj
     if isinstance(path_obj, WindowsPath):
         drive = full_path.drive  # C:, E:, etc.
         return "/" + str(
