@@ -26,8 +26,9 @@ def test_pdf_creation():
     )
     tikz.write()
     pdf_location = tikz.compile()
-    assert Path("tikz_code/tex_file.pdf").exists()
-    assert pdf_location.resolve() == Path("tikz_code/tex_file.pdf").resolve()
+    correct_pdf_file = Path("tikz_code", "tex_file.pdf")
+    assert correct_pdf_file.exists()
+    assert pdf_location.resolve() == correct_pdf_file.resolve()
     clear_test_code()
 
 
@@ -37,8 +38,9 @@ def test_tikz_file_creation():
     tikz = TikzPicture()
     tikz.circle((1, 1), 7)
     tikz.write()
-    assert Path("tikz_code/tikz_code.tex").exists()
-    assert tikz.tikz_file.resolve() == Path("tikz_code/tikz_code.tex").resolve()
+    correct_tikz_file = Path("tikz_code", "tikz_code.tex")
+    assert correct_tikz_file.exists()
+    assert tikz.tikz_file.resolve() == correct_tikz_file.resolve()
     clear_test_code()
 
 
@@ -49,8 +51,9 @@ def test_tex_file_creation():
     tikz.arc((1, 1), 90, 180, 3)
     tikz.write()
     tikz.compile()
-    assert Path("tikz_code/tex/tex_file.tex").exists()
-    assert tikz.tex_file.resolve() == Path("tikz_code/tex/tex_file.tex").resolve()
+    correct_tex_file = Path("tikz_code", "tex", "tex_file.tex")
+    assert correct_tex_file.exists()
+    assert tikz.tex_file.resolve() == correct_tex_file.resolve()
     clear_test_code()
 
 

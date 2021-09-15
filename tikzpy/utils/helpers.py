@@ -20,14 +20,14 @@ def true_posix_path(path_obj: Path) -> str:
     since such a command returns something like "C:\Users\user\Desktop..."
     Since pathlib does not happen to have a method for this, we write one.
     """
-    full_path = path_obj
+    full_path = path_obj.resolve()
     if isinstance(path_obj, WindowsPath):
         drive = full_path.drive  # C:, E:, etc.
         return "/" + str(
             full_path.relative_to(f"{drive}/").as_posix()
         )  # Need / so we may obtain /Users/... not Users/...
     else:
-        return str(full_path.resolve())
+        return str(full_path)
 
 
 def replace_code(begin_delim, end_delim, content, new_code) -> tuple[str, int]:
