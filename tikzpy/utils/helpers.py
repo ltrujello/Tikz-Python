@@ -1,4 +1,5 @@
 import re
+from typing import Tuple
 from pathlib import Path, WindowsPath
 
 
@@ -30,7 +31,9 @@ def true_posix_path(path_obj: Path) -> str:
         return str(full_path)
 
 
-def replace_code(begin_delim, end_delim, content, new_code) -> tuple[str, int]:
+def replace_code(
+    begin_delim: str, end_delim: str, content: str, new_code: str
+) -> Tuple[str, int]:
     """Replaces text delimited by `begin_delim` and `end_delim` appearing in `content`, with `new_code`.
     Returns new string and number of matches made."""
     return re.subn(

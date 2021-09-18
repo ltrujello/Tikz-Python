@@ -222,10 +222,11 @@ class TikzPicture(TikzEnvironment):
             f"latexmk -pdf {options} -output-directory={tex_file_parents} {tex_file}",
             shell=True,
         )
-        # We move the compiled PDF up one directory, out of the tex/ folder, so the viewer can see it.
+        # We move the compiled PDF into the same folder containing the tikz code.
         pdf_file = self.tex_file.with_suffix(".pdf").resolve()
-        moved_pdf_file = pdf_file.replace(pdf_file.parents[1] / pdf_file.name)
-        return moved_pdf_file
+        moved_pdf_file = self.tikz_file.parent / pdf_file.name
+        pdf_file.replace(moved_pdf_file)
+        return moved_pdf_file.resolve()
 
     def show(self, quiet: bool = False) -> None:
         """Compiles the Tikz code and displays the pdf to the user. Set quiet=True to shut up latexmk."""
