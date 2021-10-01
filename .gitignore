@@ -1,6 +1,9 @@
 # "Get a Mac!", they said...
 *.DS_Store
 
+# tikz_code
+tikz_code
+
 # Pycharm
 .idea
 
