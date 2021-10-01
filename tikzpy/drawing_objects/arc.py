@@ -1,9 +1,9 @@
 from __future__ import annotations
-from typing import Tuple
-from math import sin, cos, tan, atan, atan2, pi, sqrt
+from typing import Tuple, Union
+from math import sin, cos, tan, atan2, pi, sqrt
 from math import radians as degs_2_rads
 from math import degrees as rads_2_degs
-from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
+from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 
 
@@ -23,7 +23,7 @@ class Arc(DrawingObject):
 
     def __init__(
         self,
-        position: Tuple[float, float],
+        position: Union[Tuple[float, float], Point],
         start_angle: float,
         end_angle: float,
         radius: float = None,
@@ -34,7 +34,7 @@ class Arc(DrawingObject):
         draw_from_start: bool = True,
         action: str = "draw",
     ):
-        self.position = position
+        self._position = Point(position)
         self.start_angle = start_angle
         self.end_angle = end_angle
         self.radius = radius
@@ -54,10 +54,10 @@ class Arc(DrawingObject):
     def _end_angle(self) -> Angle:
         return Angle(self.end_angle, self.radians)
 
-    @property
     def arc_type(self) -> str:
-        if self.radius != None:
-            if self.x_radius != None or self.y_radius != None:
+        """Determine the arc type that the user is attempting to create based on their input."""
+        if self.radius is not None:
+            if self.x_radius is not None or self.y_radius is not None:
                 raise ValueError(
                     "Cannot set radius AND x_radius, y_radius at the same time."
                 )
@@ -66,7 +66,7 @@ class Arc(DrawingObject):
                 return "circle"
 
         else:
-            if self.x_radius == None or self.y_radius == None:
+            if self.x_radius is None or self.y_radius is None:
                 raise ValueError(
                     f"x_radius was set to {self.x_radius}, y_radius was set to {self.y_radius}, but neither should be None."
                 )
@@ -80,31 +80,27 @@ class Arc(DrawingObject):
                 )
                 return "ellipse"
 
-    @property
-    def _position(self) -> Tuple[float, float]:
-        """We return the point at which we should begin drawing the arc. This takes a
-        bit of work since we allow the user to possibly specify the center of the
-        arc of which they would like to see drawn.
-        """
+    def draw_start(self) -> Tuple[float, float]:
+        """Return the point at which we should begin drawing the arc."""
         if self.draw_from_start:
-            start_pos = self.position
-        elif self.arc_type == "circle":
+            start_pos = self._position
+        elif self.arc_type() == "circle":
             start_pos = self.start_pos_circle()
-        elif self.arc_type == "ellipse":
-            start_pos = self.start_pos_ellipse()
         else:
-            raise ValueError(
-                f"The type of arc you want to see, which is {self.arc_type}, is not 'circle' or 'ellipse'."
-            )
+            start_pos = self.start_pos_ellipse()
         return start_pos
 
-    @_position.setter
-    def _position(self, new_pos: Tuple[float, float]) -> Tuple[float, float]:
-        return self.position
+    @property
+    def position(self):
+        return self._position
+
+    @position.setter
+    def position(self, new_pos: Tuple[float, float]) -> None:
+        self._position = Point(new_pos)
 
     @property
     def _command(self) -> str:
-        if self.arc_type == "circle":
+        if self.arc_type() == "circle":
             start_angle, end_angle = self._start_angle.degs(), self._end_angle.degs()
         else:  # This is for the case the ellipse.
             # We need to calculate the parameter t at which (x_r*cos(self.start_angle), y_r*sin(self.start_angle)) hits
@@ -112,28 +108,28 @@ class Arc(DrawingObject):
             t_end = self.atan2_for_ellipse(self._end_angle)
 
             start_angle, end_angle = rads_2_degs(t_start), rads_2_degs(t_end)
-        return f"{self._position} arc [start angle = {start_angle}, end angle = {end_angle}, {self.radius_statement}]"
+        return f"{self.draw_start()} arc [start angle = {start_angle}, end angle = {end_angle}, {self.radius_statement}]"
 
     def start_pos_circle(self) -> Tuple[float, float]:
-        """Calculates the point at which the CIRCLE arc should begin
+        """Calculates the point at which the circle should begin
         drawing, given that the user specified what the center, radius,
         start, and end angles of the desired circular arc.
         """
-        assert self.arc_type == "circle"
+        assert self.arc_type() == "circle"
         # Obtain the angles in radians
         start_angle = self._start_angle.rads()
         # Calculate the point at which the arc should begin drawing
-        start_pt_x = self.position[0] + self.radius * cos(start_angle)
-        start_pt_y = self.position[1] + self.radius * sin(start_angle)
+        start_pt_x = self.position.x + self.radius * cos(start_angle)
+        start_pt_y = self.position.y + self.radius * sin(start_angle)
 
         return (start_pt_x, start_pt_y)
 
     def start_pos_ellipse(self) -> Tuple[float, float]:
-        """Calculates the point at which the ELLIPSE arc should begin
+        """Calculates the point at which the ellipse arc should begin
         drawing, given that the user specified what the center, x_radius, y_radius,
         start, and end angles of the desired elliptic arc.
         """
-        assert self.arc_type == "ellipse"
+        assert self.arc_type() == "ellipse"
         # Obtain the angles in radians
         start_angle = self._start_angle.rads()
         # We calculate r_at_theta, the distance between the origin and the point on the ellipse which occurs at angle self.start_angle.
@@ -142,38 +138,31 @@ class Arc(DrawingObject):
             + (self.x_radius * sin(start_angle)) ** 2
         )
         # We then use r_at_theta to calculate the desired point on the ellipse
-        start_pt_x = self.position[0] + r_at_theta * cos(start_angle)
-        start_pt_y = self.position[1] + r_at_theta * sin(start_angle)
+        start_pt_x = self.position.x + r_at_theta * cos(start_angle)
+        start_pt_y = self.position.y + r_at_theta * sin(start_angle)
 
-        return (start_pt_x, start_pt_y)
+        return start_pt_x, start_pt_y
 
     def shift(self, xshift: float, yshift: float) -> None:
-        self.center = shift_coords([self.center], xshift, yshift)[0]
+        self._position.shift(xshift, yshift)
 
     def scale(self, scale: float) -> None:
-        scaled_center = scale_coords([self.center], scale)
-        scaled_radius = self.radius * scale
-
-        self.center = scaled_center[0]
-        self.radius = scaled_radius
+        self._position.scale(scale)
+        self.x_radius *= scale
+        self.y_radius *= scale
 
     def rotate(
         self, angle: float, about_pt: tuple = None, radians: bool = False
     ) -> None:
         if about_pt is None:
-            about_pt = self._position
-        self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
+            about_pt = self.draw_start()
+        self._position.rotate(angle, about_pt, radians)
 
     def atan2_for_ellipse(self, angle: Angle) -> float:
-        """We need to perform a tangent inverse operation which returns values between
-        0 and 2pi. Built in functions only do -pi/2 -- pi/2 (atan) or -pi -- pi (atan2).
-        Further, we need to maintain arithmetic precision. We use the .quadrant attribute to
-        help with this.
-        """
+        """Perform a tangent inverse operation which returns values between 0 and 2pi."""
         theta = angle.rads()
-        t = atan2(
-            self.x_radius * tan(theta), self.y_radius
-        )  # The value of t such that (b*cos(t), a*sin(t)) makes angle theta to the axis.
+        # The value of t such that (b*cos(t), a*sin(t)) makes angle theta to the axis.
+        t = atan2(self.x_radius * tan(theta), self.y_radius)
         if angle.quadrant == 0:
             t += 0
         elif angle.quadrant == 1 or angle.quadrant == 2:

@@ -3,7 +3,6 @@ from typing import Tuple
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.clip import Clip
-from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from tikzpy.utils.helpers import brackets
 
 

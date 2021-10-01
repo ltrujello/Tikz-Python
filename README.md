@@ -325,7 +325,7 @@ from tikzpy import rgb
 
 >>> tikz = TikzPicture()
 >>> line =  tikz.line((1,2), (4,3), options = "color=" + rgb(253, 0, 0))
->>> rectangle = tikz.rectangle( (0,0), (5,5)), options = "fill=" + rgb(120, 0, 120))
+>>> rectangle = tikz.rectangle( (0,0), (5,5), options = "fill=" + rgb(120, 0, 120))
 ```
 
 - A wrapper function `rainbow_colors` uses the `rgb` to provide rainbow colors. The function takes in any integer, and grabs a rainbow color, computing a modulo operation if necessary  (hence, any integer is valid). 
@@ -339,6 +339,37 @@ from tikzpy import rainbow_colors
         circle.options = "opacity = 0.7, fill = " + rainbow_colors(i)
 ```
 
+#Class `Point`
+The `Point` class is how TikzPy handles coordinates and all drawing objects, like Lines and Circles, use the Point class. 
+You normally don't need to construct Point objects because it is usually done behind the scenes. 
+Nevertheless, it is initialized as follows.
+```python
+>>> from tikzpy import Point
+>>> my_point = Point(-1, 2)
+>>> my_point.x
+-1
+>>> my_point.y
+2
+```
+You can also perform arithmetic with `Point` objects, either with other `Point` objects or with Python tuples. For example, the following are all valid.
+```python
+>>> my_point + (1, 1)  # Add it to another tuple
+Point(0, 3)
+>>> my_point + Point(2, 2)  # Add it with another point object
+Point(1, 4)
+>>> 2 * my_point  # Can also do my_point * 2 
+Point(-2, 4)
+>>> my_point / 3 
+Point(-0.33333333, 0.666666666)
+```
+
+This allows you to write things like
+```python
+>>> circle = tikz.circle((0,0), radius=3)
+>>> circle.center += (1, 1)  # This is valid
+>>> circle.center /= 3  # Also valid
+```
+and this feature becomes quite useful in drawings that are highly complex.
 
 # Class: `Line`
 There are two ways to initalize a line object. We've already seen this way:

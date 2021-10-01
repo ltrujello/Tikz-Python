@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple
+from typing import List, Tuple, Union
 from abc import ABC, abstractmethod
 from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
@@ -8,6 +8,7 @@ from tikzpy.drawing_objects.node import Node
 from tikzpy.drawing_objects.rectangle import Rectangle
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
+from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.tikz_environments.tikz_command import TikzCommand
 
@@ -80,8 +81,8 @@ class TikzEnvironment(ABC):
 
     def line(
         self,
-        start: Tuple[float, float],
-        end: Tuple[float, float],
+        start: Union[Tuple[float, float], Point],
+        end: Union[Tuple[float, float], Point],
         options: str = "",
         to_options: str = "",
         control_pts: list = [],
@@ -98,7 +99,7 @@ class TikzEnvironment(ABC):
 
     def plot_coordinates(
         self,
-        points: List[tuple],
+        points: Union[List[tuple], List[Point]],
         options: str = "",
         plot_options: str = "",
         action: str = "draw",
@@ -112,7 +113,7 @@ class TikzEnvironment(ABC):
 
     def circle(
         self,
-        center: Tuple[float, float],
+        center: Union[Tuple[float, float], Point],
         radius: float,
         options: str = "",
         action: str = "draw",
@@ -125,7 +126,10 @@ class TikzEnvironment(ABC):
         return circle
 
     def node(
-        self, position: Tuple[float, float], options: str = "", text: str = ""
+        self,
+        position: Union[Tuple[float, float], Point],
+        options: str = "",
+        text: str = "",
     ) -> Node:
         """Draws a node by creating an instance of the Node class.
         Updates self._statements when necessary; see above comment under line function above.
@@ -136,8 +140,8 @@ class TikzEnvironment(ABC):
 
     def rectangle(
         self,
-        left_corner: Tuple[float, float],
-        right_corner: Tuple[float, float],
+        left_corner: Union[Tuple[float, float], Point],
+        right_corner: Union[Tuple[float, float], Point],
         options: str = "",
         action: str = "draw",
     ) -> Rectangle:
@@ -150,7 +154,7 @@ class TikzEnvironment(ABC):
 
     def ellipse(
         self,
-        center: Tuple[float, float],
+        center: Union[Tuple[float, float], Point],
         x_axis: float,
         y_axis: float,
         options: str = "",
@@ -165,7 +169,7 @@ class TikzEnvironment(ABC):
 
     def arc(
         self,
-        position: Tuple[float, float],
+        position: Union[Tuple[float, float], Point],
         start_angle: float,
         end_angle: float,
         radius: float = None,

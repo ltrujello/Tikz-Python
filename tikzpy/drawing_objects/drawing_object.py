@@ -1,6 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import Tuple
 from copy import deepcopy
 from tikzpy.utils.helpers import brackets
 from tikzpy.drawing_objects.node import Node

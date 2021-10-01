@@ -74,10 +74,15 @@ arc = tikzpy.Arc((0, 0), 20, 90, 4)
 def test_attributes_assignments():
     """#1 : Test that class constructors via tikz work properly"""
     # Test Line
-    assert tikz_line.start == (0, 0)
-    assert tikz_line.end == (1, 1)
+    assert tikz_line.start.x == 0
+    assert tikz_line.start.y == 0
+    assert tikz_line.end.x == 1
+    assert tikz_line.end.y == 1
     assert tikz_line.options == "thick, blue"
-    assert tikz_line.control_pts == [(0.25, 0.25), (0.75, 0.75)]
+    assert tikz_line.control_pts[0].x == 0.25
+    assert tikz_line.control_pts[0].y == 0.25
+    assert tikz_line.control_pts[1].x == 0.75
+    assert tikz_line.control_pts[1].y == 0.75
     assert (
         tikz_line.code
         == r"\draw[thick, blue] (0, 0) .. controls (0.25, 0.25) and (0.75, 0.75)  .. (1, 1);"
@@ -85,18 +90,27 @@ def test_attributes_assignments():
     # Test Plot
     assert tikz_plot.options == "green"
     assert tikz_plot.plot_options == "smooth "
-    assert tikz_plot.points == [(1, 1), (2, 2), (3, 3), (2, -4)]
+    assert tikz_plot.points[0].x == 1
+    assert tikz_plot.points[0].y == 1
+    assert tikz_plot.points[1].x == 2
+    assert tikz_plot.points[1].y == 2
+    assert tikz_plot.points[2].x == 3
+    assert tikz_plot.points[2].y == 3
+    assert tikz_plot.points[3].x == 2
+    assert tikz_plot.points[3].y == -4
     assert (
         tikz_plot.code
         == r"\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };"
     )
     # Test Circle
-    assert tikz_circle.center == (1, 1)
+    assert tikz_circle.center.x == 1
+    assert tikz_circle.center.y == 1
     assert tikz_circle.radius == 1
     assert tikz_circle.options == "fill = purple"
     assert tikz_circle.code == r"\draw[fill = purple] (1, 1) circle (1cm);"
     # Test Node
-    assert tikz_node.position == (3, 3)
+    assert tikz_node.position.x == 3
+    assert tikz_node.position.y == 3
     assert tikz_node.text == r"I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !"
     assert tikz_node.options == "above"
     assert (
@@ -104,17 +118,21 @@ def test_attributes_assignments():
         == r"\node[above] at (3, 3) { I love $ \sum_{x \in \mathbb{R}} f(x^2)$ ! };"
     )
     # Rectangle
-    assert tikz_rectangle.left_corner == (2, 2)
-    assert tikz_rectangle.right_corner == (3, 4)
+    assert tikz_rectangle.left_corner.x == 2
+    assert tikz_rectangle.left_corner.y == 2
+    assert tikz_rectangle.right_corner.x == 3
+    assert tikz_rectangle.right_corner.y == 4
     assert tikz_rectangle.options == "Blue"
     assert tikz_rectangle.code == r"\draw[Blue] (2, 2) rectangle (3, 4);"
     # Ellipse
-    assert tikz_ellipse.center == (0, 0)
+    assert tikz_ellipse.center.x == 0
+    assert tikz_ellipse.center.y == 0
     assert tikz_ellipse.x_axis == 3
     assert tikz_ellipse.y_axis == 4
     assert tikz_ellipse.code == r"\draw (0, 0) ellipse (3cm and 4cm);"
     # Arc
-    assert tikz_arc.position == (0, 0)
+    assert tikz_arc.position.x == 0
+    assert tikz_arc.position.y == 0
     assert tikz_arc.start_angle == 20
     assert tikz_arc.end_angle == 90
     assert tikz_arc.radius == 4
@@ -126,10 +144,15 @@ def test_attributes_assignments():
     """ Test that directly using the class constructors works properly. 
     """
 
-    assert line.start == (0, 0)
-    assert line.end == (1, 1)
+    assert line.start.x == 0
+    assert line.start.y == 0
+    assert line.end.x == 1
+    assert line.end.y == 1
     assert line.options == "thick, blue"
-    assert line.control_pts == [(0.25, 0.25), (0.75, 0.75)]
+    assert line.control_pts[0].x == 0.25
+    assert line.control_pts[0].y == 0.25
+    assert line.control_pts[1].x == 0.75
+    assert line.control_pts[1].y == 0.75
     assert (
         line.code
         == r"\draw[thick, blue] (0, 0) .. controls (0.25, 0.25) and (0.75, 0.75)  .. (1, 1);"
@@ -137,18 +160,27 @@ def test_attributes_assignments():
     # Test Plot
     assert plot.options == "green"
     assert plot.plot_options == "smooth "
-    assert plot.points == [(1, 1), (2, 2), (3, 3), (2, -4)]
+    assert plot.points[0].x == 1
+    assert plot.points[0].y == 1
+    assert plot.points[1].x == 2
+    assert plot.points[1].y == 2
+    assert plot.points[2].x == 3
+    assert plot.points[2].y == 3
+    assert plot.points[3].x == 2
+    assert plot.points[3].y == -4
     assert (
         plot.code
         == r"\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };"
     )
     # Test Circle
-    assert circle.center == (1, 1)
+    assert circle.center.x == 1
+    assert circle.center.y == 1
     assert circle.radius == 1
     assert circle.options == "fill = purple"
     assert circle.code == r"\draw[fill = purple] (1, 1) circle (1cm);"
     # Test Node
-    assert node.position == (3, 3)
+    assert node.position.x == 3
+    assert node.position.y == 3
     assert node.text == r"I love $ \sum_{x \in \mathbb{R}} f(x^2)$ !"
     assert node.options == "above"
     assert (
@@ -156,17 +188,21 @@ def test_attributes_assignments():
         == r"\node[above] at (3, 3) { I love $ \sum_{x \in \mathbb{R}} f(x^2)$ ! };"
     )
     # Rectangle
-    assert rectangle.left_corner == (2, 2)
-    assert rectangle.right_corner == (3, 4)
+    assert rectangle.left_corner.x == 2
+    assert rectangle.left_corner.y == 2
+    assert rectangle.right_corner.x == 3
+    assert rectangle.right_corner.y == 4
     assert rectangle.options == "Blue"
     assert rectangle.code == r"\draw[Blue] (2, 2) rectangle (3, 4);"
     # Ellipse
-    assert ellipse.center == (0, 0)
+    assert ellipse.center.x == 0
+    assert ellipse.center.y == 0
     assert ellipse.x_axis == 3
     assert ellipse.y_axis == 4
     assert ellipse.code == r"\draw (0, 0) ellipse (3cm and 4cm);"
     # Arc
-    assert arc.position == (0, 0)
+    assert arc.position.x == 0
+    assert arc.position.y == 0
     assert arc.start_angle == 20
     assert arc.end_angle == 90
     assert arc.radius == 4

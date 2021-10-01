@@ -1,4 +1,5 @@
 import re
+import numpy as np
 from typing import Tuple
 from pathlib import Path, WindowsPath
 
@@ -9,6 +10,13 @@ def brackets(string: str) -> str:
         return "[" + string + "]"
     else:
         return ""
+
+
+def to_cartesian(r, ang):
+    """Returns the cartesian coordinates of a polar point."""
+    x = r * np.cos(ang)
+    y = r * np.sin(ang)
+    return x, y
 
 
 def true_posix_path(path_obj: Path) -> str:

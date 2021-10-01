@@ -9,3 +9,4 @@ from tikzpy.drawing_objects.rectangle import Rectangle
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.xy_plane import R2_Space
+from tikzpy.drawing_objects.point import Point

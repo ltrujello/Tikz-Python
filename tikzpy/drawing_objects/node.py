@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Tuple
+from typing import Tuple, Union
 from copy import deepcopy
-from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
+from tikzpy.drawing_objects.point import Point
 from tikzpy.utils.helpers import brackets
 
 
@@ -17,9 +17,12 @@ class Node:
     """
 
     def __init__(
-        self, position: Tuple[float, float], options: str = "", text: str = ""
+        self,
+        position: Union[Tuple[float, float], Point],
+        options: str = "",
+        text: str = "",
     ) -> None:
-        self.position = position
+        self._position = Point(position) if position is not None else None
         self.options = options
         self.text = text
 
@@ -31,29 +34,40 @@ class Node:
             return fr"{{ {self.text} }}"
 
     @property
+    def position(self):
+        return self._position
+
+    @position.setter
+    def position(self, new_pos: Union[Tuple[float, float], Point]) -> None:
+        if isinstance(new_pos, (tuple, Point)):
+            self._position = Point(new_pos)
+        else:
+            raise TypeError(f"Invalid type '{type(new_pos)}' for node position")
+
+    @property
     def code(self) -> str:
         return fr"\node{brackets(self.options)} {self._command};"
 
     def shift(self, xshift: float, yshift: float) -> None:
-        if self.position is not None:
-            self.position = shift_coords([self.position], xshift, yshift)[0]
+        if self._position is not None:
+            self._position.shift(xshift, yshift)
 
     def scale(self, scale: float) -> None:
-        if self.position is not None:
-            self.position = scale_coords([self.position], scale)[0]
+        if self._position is not None:
+            self._position.scale(scale)
 
     def rotate(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
-        if self.position is not None:
-            self.position = rotate_coords([self.position], angle, about_pt, radians)[0]
+        if self._position is not None:
+            self._position.rotate(angle, about_pt, radians)
 
     def __deepcopy__(self, memo: dict) -> Node:  # TODO: Check this works
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set
         our methods to modify objects, but not return anything.
         """
         draw_obj = Node(
-            deepcopy(self.position),
+            deepcopy(self._position),
             deepcopy(self.options),
             deepcopy(self.text),
         )

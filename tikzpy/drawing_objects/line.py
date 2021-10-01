@@ -1,8 +1,9 @@
 from __future__ import annotations
-from typing import List, Tuple
+from typing import List, Tuple, Union
+from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
-from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 from tikzpy.utils.helpers import brackets
+
 
 # Class for Lines
 class Line(DrawingObject):
@@ -18,21 +19,29 @@ class Line(DrawingObject):
 
     def __init__(
         self,
-        start: Tuple[float, float],
-        end: Tuple[float, float],
+        start: Union[Tuple[float, float], Point],
+        end: Union[Tuple[float, float], Point],
         options: str = "",
         to_options: str = "",
         control_pts: List[Tuple] = [],
         action: str = "draw",
     ) -> None:
 
-        self.start = start
-        self.end = end
+        self._start = Point(start)
+        self._end = Point(end)
         self.options = options
         self.to_options = to_options
-        self.control_pts = control_pts
+        self._control_pts = [Point(point) for point in control_pts]
 
         super().__init__(action, self.options)
+
+    @property
+    def control_pts(self):
+        return self._control_pts
+
+    @control_pts.setter
+    def control_pts(self, new_control_pts):
+        self._control_pts = [Point(point) for point in new_control_pts]
 
     @property
     def _command(self) -> str:
@@ -46,39 +55,64 @@ class Line(DrawingObject):
         else:
             control_stmt = ".. controls "
             for pt in self.control_pts:
-                control_stmt += f"{pt[0], pt[1]}" + " and "
+                control_stmt += f"{pt.x, pt.y}" + " and "
             control_stmt = control_stmt[:-4] + " .."
             return f"{self.start} {control_stmt} {self.end}"
 
     @property
-    def midpoint(self) -> Tuple[float, float]:
-        mid_x = (self.start[0] + self.end[0]) / 2
-        mid_y = (self.start[1] + self.end[1]) / 2
-        return mid_x, mid_y
+    def start(self) -> Point:
+        return self._start
+
+    @property
+    def end(self) -> Point:
+        return self._end
+
+    @start.setter
+    def start(self, new_start: Union[Tuple, Point]) -> None:
+        if isinstance(new_start, (tuple, Point)):
+            self._start = Point(new_start)
+        else:
+            raise TypeError(f"Invalid type '{type(new_start)}' for start")
+
+    @end.setter
+    def end(self, new_end: Union[Tuple, Point]) -> None:
+        if isinstance(new_end, (tuple, Point)):
+            self._end = Point(new_end)
+        else:
+            raise TypeError(f"Invalid type '{type(new_end)}' for end")
+
+    def pos_at_t(self, t: float) -> Point:
+        """Returns the point on the line that lies at "time t", on a scale from 0 to 1."""
+        x_1, y_1 = self._start
+        x_2, y_2 = self._end
+        return Point(x_1 * (1 - t) + x_2 * t, y_1 * (1 - t) + y_2 * t)
+
+    def midpoint(self) -> Point:
+        return self.pos_at_t(0.5)
 
     def shift(self, xshift: float, yshift: float) -> None:
         """Shift start, end, and control_pts"""
-        shifted_start_end = shift_coords([self.start, self.end], xshift, yshift)
-        shifted_control_pts = shift_coords(self.control_pts, xshift, yshift)
-
-        self.start, self.end = shifted_start_end[0], shifted_start_end[1]
-        self.control_pts = shifted_control_pts
+        self._start.shift(xshift, yshift)
+        self._end.shift(xshift, yshift)
+        for point in self.control_pts:
+            point.shift(xshift, yshift)
 
     def scale(self, scale: float) -> None:
         """Scale start, end, and control_pts."""
-        scaled_start_end = scale_coords([self.start, self.end], scale)
-        self.start, self.end = scaled_start_end[0], scaled_start_end[1]
-        self.control_pts = scale_coords(self.control_pts, scale)
+        self._start.scale(scale)
+        self._end.scale(scale)
+        for point in self.control_pts:
+            point.scale(scale)
 
     def rotate(
         self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
     ) -> None:
-        """Rotate start, end, and control_pts"""
+        """Rotate start, end, and control_pts. By default, the rotation is done relative to the midpoint
+        of the line."""
         if about_pt == None:
             about_pt = self.midpoint
-        rotated_start_end = rotate_coords(
-            [self.start, self.end], angle, about_pt, radians
-        )
+        self._start.rotate(angle, about_pt, radians)
+        self._end.rotate(angle, about_pt, radians)
 
-        self.start, self.end = rotated_start_end[0], rotated_start_end[1]
-        self.control_pts = rotate_coords(self.control_pts, angle, about_pt, radians)
+        for point in self.control_pts:
+            point.rotate(angle, about_pt, radians)

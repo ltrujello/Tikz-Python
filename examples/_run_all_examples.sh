@@ -10,8 +10,8 @@ for pyfile in `find . -name "*.py" -type f`; do
     then 
         python3 $pyfile || break # Run the .py
     else
-        sed -i "" "s|^tikz.show()|#tikz.show()|g" $pyfile #Comment out tikz.show(). Don't want to see the pdf.
+        sed -i "" "s|^tikz.show()|#tikz.show()|g" $pyfile # Comment out tikz.show(). Don't want to see the pdf.
         python3 $pyfile || break  # Run the .py
-        sed -i "" "s|^#tikz.show()|tikz.show()|g" $pyfile #Uncomment tikz.show()
+        sed -i "" "s|^#tikz.show()|tikz.show()|g" $pyfile # Uncomment tikz.show()
     fi
 done

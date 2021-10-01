@@ -13,7 +13,7 @@ tikz.options = "tdplot_main_coords"
 # The blowup
 def blowup(r, t):
     theta = 2 * atan(t * 2 / pi)
-    return (r * cos(theta), r * sin(theta), 6 * atan(tan(theta) / 6))
+    return r * cos(theta), r * sin(theta), 6 * atan(tan(theta) / 6)
 
 
 # Parameters for surface

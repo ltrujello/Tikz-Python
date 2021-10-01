@@ -27,8 +27,8 @@ arc = tikz.arc(
 )
 # Draws the blue path [-R, R]
 bottom_path = tikz.line((-2, 0), (2, 0), options="blue, arrows_along_path=blue")
-tikz.node((bottom_path.start[0], bottom_path.start[1] - 0.5), text="$R$")
-tikz.node((bottom_path.end[0], bottom_path.end[1] - 0.5), text="$-R$")
+tikz.node(bottom_path.start - (0, 0.5), text="$R$")
+tikz.node(bottom_path.end - (0, 0.5), text="$-R$")
 
 # % Draws the points z_1, z_2 of interest
 circle_1 = tikz.circle((0.7, 0.7), 0.05, action="fill")

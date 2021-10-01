@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Tuple
+from typing import Tuple, Union
+from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
-from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
 
 
 class Ellipse(DrawingObject):
@@ -16,36 +16,59 @@ class Ellipse(DrawingObject):
 
     def __init__(
         self,
-        center: Tuple[float, float],
+        center: Union[Tuple[float, float], Point],
         x_axis: float,
         y_axis: float,
         options: str = "",
         action: str = "draw",
     ) -> None:
 
-        self.center = center
+        self._center = Point(center)
         self.x_axis = x_axis
         self.y_axis = y_axis
         self.options = options
         super().__init__(action, self.options)
 
     @property
+    def center(self):
+        return self._center
+
+    @center.setter
+    def center(self, new_center: Union[tuple, Point]) -> None:
+        if isinstance(new_center, (tuple, Point)):
+            self._center = Point(new_center)
+        else:
+            raise TypeError(f"Invalid type '{type(new_center)}' for center")
+
+    @property
+    def north(self):
+        return self._center + (0, self.y_axis)
+
+    @property
+    def east(self):
+        return self._center + (self.x_axis, 0)
+
+    @property
+    def south(self):
+        return self._center - (0, self.y_axis)
+
+    @property
+    def west(self):
+        return self._center - (self.x_axis, 0)
+
+    @property
     def _command(self) -> str:
         return f"{self.center} ellipse ({self.x_axis}cm and {self.y_axis}cm)"
 
     def shift(self, xshift: float, yshift: float) -> None:
-        self.center = shift_coords([self.center], xshift, yshift)[0]
+        self._center.shift(xshift, yshift)
 
     def scale(self, scale: float) -> None:
-        scaled_center = scale_coords([self.center], scale)[0]
-        scaled_h = self.x_axis * scale
-        scaled_v = self.y_axis * scale
-
-        self.center = scaled_center
-        self.x_axis = scaled_h
-        self.y_axis = scaled_v
+        self._center.scale(scale)
+        self.x_axis *= scale
+        self.y_axis *= scale
 
     def rotate(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
-        self.center = rotate_coords([self.center], angle, about_pt, radians)[0]
+        self._center.rotate(angle, about_pt, radians)

@@ -12,11 +12,11 @@ def roots_of_unity(n, scale=5):
 
     for i in range(n):
         theta = (2 * pi * i) / n
-        x, y = scale * cos(theta), scale * sin(theta)
-        content = f"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$"
 
         # Draw line to nth root of unity
-        tikz.line((0, 0), (x, y), options="-o")
+        line_to_root = tikz.line(
+            (0, 0), (scale * cos(theta), scale * sin(theta)), options="-o"
+        )
 
         if 0 <= theta <= pi:
             node_option = "above"
@@ -24,7 +24,11 @@ def roots_of_unity(n, scale=5):
             node_option = "below"
 
         # Label the nth root of unity
-        tikz.node((x, y), options=node_option, text=content)
+        tikz.node(
+            line_to_root.end,
+            options=node_option,
+            text=f"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$",
+        )
 
     tikz.write()
     tikz.show()

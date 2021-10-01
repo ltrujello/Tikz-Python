@@ -1,7 +1,7 @@
+from typing import List, Tuple, Union
+from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.utils.helpers import brackets
-from tikzpy.utils.transformations import shift_coords, scale_coords, rotate_coords
-from typing import List, Tuple
 
 
 class PlotCoordinates(DrawingObject):
@@ -17,15 +17,23 @@ class PlotCoordinates(DrawingObject):
 
     def __init__(
         self,
-        points: List[Tuple],
+        points: Union[List[Tuple], Point],
         options: str = "",
         plot_options: str = "",
         action: str = "draw",
     ):
-        self.points = points
+        self._points = [Point(point) for point in points]
         self.options = options
         self.plot_options = plot_options
         super().__init__(action, self.options)
+
+    @property
+    def points(self):
+        return self._points
+
+    @points.setter
+    def points(self, new_points):
+        self._points = [Point(point) for point in new_points]
 
     @property
     def _command(self) -> str:
@@ -36,28 +44,31 @@ class PlotCoordinates(DrawingObject):
         return cmd
 
     @property
-    def center(self) -> Tuple[float, float]:
-        mean_x: float = 0
-        mean_y: float = 0
+    def center(self) -> "Point":
+        mean_x = 0
+        mean_y = 0
         for pt in self.points:
-            mean_x += pt[0]
-            mean_y += pt[1]
+            mean_x += pt.x
+            mean_y += pt.y
         mean_x = mean_x / len(self.points)
         mean_y = mean_y / len(self.points)
-        return (mean_x, mean_y)
+        return Point(mean_x, mean_y)
 
     def shift(self, xshift: float, yshift: float) -> None:
-        self.points = shift_coords(self.points, xshift, yshift)
+        self.points = [point.shift(xshift, yshift) for point in self.points]
 
     def scale(self, scale: float) -> None:
-        self.points = scale_coords(self.points, scale)
+        self.points = [point.scale(scale) for point in self.points]
 
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
+        self,
+        angle: float,
+        about_pt: Union[Tuple[float, float], None, Point] = None,
+        radians: bool = False,
     ) -> None:
         if about_pt is None:
             about_pt = self.center
-        self.points = rotate_coords(self.points, angle, about_pt, radians)
+        self.points = [point.rotate(angle, about_pt, radians) for point in self.points]
 
     def add_point(self, x, y):
-        self.points.append((x, y))
+        self.points.append(Point(x, y))
