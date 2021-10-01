@@ -33,12 +33,12 @@ class Rectangle(DrawingObject):
     @property
     def height(self) -> float:
         """Returns the height of the rectangle"""
-        return abs(self._right_corner.x - self._left_corner.x)
+        return abs(self._right_corner.y - self._left_corner.y)
 
     @property
     def width(self) -> float:
         """Returns the width of the rectangle"""
-        return abs(self._right_corner.y - self._left_corner.y)
+        return abs(self._right_corner.x - self._left_corner.x)
 
     @property
     def center(self):

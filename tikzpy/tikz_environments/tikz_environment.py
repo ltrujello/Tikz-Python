@@ -140,8 +140,8 @@ class TikzEnvironment(ABC):
 
     def rectangle(
         self,
-        left_corner: Union[Tuple[float, float], Point],
-        right_corner: Union[Tuple[float, float], Point],
+        left_corner: Union[Tuple[float, float], Point] = Point(0, 0),
+        right_corner: Union[Tuple[float, float], Point] = Point(0, 0),
         options: str = "",
         action: str = "draw",
     ) -> Rectangle:
