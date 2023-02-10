@@ -37,7 +37,7 @@ class PlotCoordinates(DrawingObject):
 
     @property
     def _command(self) -> str:
-        cmd: str = fr"plot{brackets(self.plot_options)} coordinates {{"
+        cmd: str = rf"plot{brackets(self.plot_options)} coordinates {{"
         for pt in self.points:
             cmd += str(pt) + " "
         cmd += "}"

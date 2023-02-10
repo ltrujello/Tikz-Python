@@ -1,5 +1,5 @@
 class TikzCommand:
-    """A class to handle manually typed Tikz code. """
+    """A class to handle manually typed Tikz code."""
 
     def __init__(self, code: str) -> None:
         self.code = code

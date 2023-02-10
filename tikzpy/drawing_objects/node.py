@@ -29,9 +29,9 @@ class Node:
     @property
     def _command(self) -> str:
         if self.position is not None:
-            return fr"at {self.position} {{ {self.text} }}"
+            return rf"at {self.position} {{ {self.text} }}"
         else:
-            return fr"{{ {self.text} }}"
+            return rf"{{ {self.text} }}"
 
     @property
     def position(self):
@@ -46,7 +46,7 @@ class Node:
 
     @property
     def code(self) -> str:
-        return fr"\node{brackets(self.options)} {self._command};"
+        return rf"\node{brackets(self.options)} {self._command};"
 
     def shift(self, xshift: float, yshift: float) -> None:
         if self._position is not None:

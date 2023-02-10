@@ -9,6 +9,7 @@ from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 
+
 class Clip:
     """A class for a clipping code statement."""
 
@@ -26,9 +27,9 @@ class Clip:
     @property
     def code(self) -> str:
         if self.draw:
-            return fr"\clip[preaction = {{draw, {self.draw_obj.options}}}] {self.draw_obj._command};"
+            return rf"\clip[preaction = {{draw, {self.draw_obj.options}}}] {self.draw_obj._command};"
         else:
-            return fr"\clip {self.draw_obj._command};"
+            return rf"\clip {self.draw_obj._command};"
 
     def shift(self, xshift: float, yshift: float) -> None:
         self.draw_obj.shift(xshift, yshift)

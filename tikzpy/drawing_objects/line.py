@@ -26,7 +26,6 @@ class Line(DrawingObject):
         control_pts: List[Tuple] = [],
         action: str = "draw",
     ) -> None:
-
         self._start = Point(start)
         self._end = Point(end)
         self.options = options
@@ -50,7 +49,7 @@ class Line(DrawingObject):
         serves no use to the user, so we make it private (well, it's just bells and whistles).
         """
         if len(self.control_pts) == 0:
-            return fr"{self.start} to{brackets(self.to_options)} {self.end}"
+            return rf"{self.start} to{brackets(self.to_options)} {self.end}"
 
         else:
             control_stmt = ".. controls "
@@ -109,7 +108,7 @@ class Line(DrawingObject):
     ) -> None:
         """Rotate start, end, and control_pts. By default, the rotation is done relative to the midpoint
         of the line."""
-        if about_pt == None:
+        if about_pt is None:
             about_pt = self.midpoint
         self._start.rotate(angle, about_pt, radians)
         self._end.rotate(angle, about_pt, radians)

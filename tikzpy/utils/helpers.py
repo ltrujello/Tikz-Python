@@ -45,7 +45,7 @@ def replace_code(
     """Replaces text delimited by `begin_delim` and `end_delim` appearing in `content`, with `new_code`.
     Returns new string and number of matches made."""
     return re.subn(
-        fr"{re.escape(begin_delim)}([\s\S]*?){re.escape(end_delim)}",
+        rf"{re.escape(begin_delim)}([\s\S]*?){re.escape(end_delim)}",
         new_code.replace(
             "\\", "\\\\"
         ),  # Need to escape backslashes twice for re package

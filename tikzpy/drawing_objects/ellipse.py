@@ -22,7 +22,6 @@ class Ellipse(DrawingObject):
         options: str = "",
         action: str = "draw",
     ) -> None:
-
         self._center = Point(center)
         self.x_axis = x_axis
         self.y_axis = y_axis
