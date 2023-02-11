@@ -22,13 +22,17 @@ class TikzPicture(TikzEnvironment):
 
     NUM_TIKZS = 0
 
-    def __init__(self, center: bool = False, options: str = "") -> None:
+    def __init__(
+        self, center: bool = False, options: str = "", tikz_code_dir="tikz_code"
+    ) -> None:
         super().__init__(options)
         self._center = center
         self._id = f"@TikzPy__#id__==__({TikzPicture.NUM_TIKZS})"
         self._preamble = {"begin_id": f"%__begin__{self._id}\n"}
         self._postamble = {"end_id": f"%__end__{self._id}\n"}
-        self.tikz_file = Path("tikz_code/tikz_code.tex")
+        self.BASE_DIR = Path(tikz_code_dir)
+        self.tikz_file = self.BASE_DIR / Path("tikz_code.tex")
+        self.tex_file = self.BASE_DIR / "tex" / "tex_file.tex"
         TikzPicture.NUM_TIKZS += 1
         self.center_code()
 
@@ -70,21 +74,19 @@ class TikzPicture(TikzEnvironment):
         else:
             self._preamble["center"], self._postamble["center"] = "", ""
 
-    @property
-    def tex_file(self) -> Path:
+    def write_tex_file(self) -> None:
         r"""Returns a Path object representing the path to our tex file, which we create if it does not exist."""
-        tex_file = self.tikz_file.parent / "tex" / "tex_file.tex"
         # Check if the TeX file exists
-        if not tex_file.exists():
+        if not self.tex_file.exists():
             # Check if the folder exists
-            if not tex_file.parent.exists():
-                tex_file.parent.mkdir(parents=True)
+            if not self.tex_file.parent.exists():
+                self.tex_file.parent.mkdir(parents=True)
             # Gather the template contents
             tex_code = pkgutil.get_data("tikzpy", "templates/tex_file.tex").decode(
                 "utf-8"
             )
         else:
-            tex_code = tex_file.read_text()
+            tex_code = self.tex_file.read_text()
         # Insert the file path to our tikz_file in the template
         tex_file_contents, num_matched = replace_code(
             "\\input{",
@@ -94,9 +96,8 @@ class TikzPicture(TikzEnvironment):
         )
         assert num_matched == 1, f"Found {num_matched} many matches"
         # Update the TeX file
-        with open(tex_file, "w") as f:
+        with open(self.tex_file, "w") as f:
             f.write(tex_file_contents)
-        return tex_file
 
     @property
     def code(self) -> str:
@@ -167,7 +168,7 @@ class TikzPicture(TikzEnvironment):
         # Check if the tikz_file exists. If not, create it.
         if not self.tikz_file.exists():
             # Make directory, then file
-            self.tikz_file.parent.mkdir(parents=True, exist_ok=True)
+            self.BASE_DIR.mkdir(parents=True, exist_ok=True)
             # Get the template for new tikz code
             template_file_bytes = pkgutil.get_data("tikzpy", "templates/tikz_code.tex")
             with open(self.tikz_file, "wb") as f:
@@ -194,7 +195,7 @@ class TikzPicture(TikzEnvironment):
         if num_matches == 1:
             print("Updating Tikz environment")
             # We create a temporary file with our updated tikz code
-            tikz_file_temp = self.tikz_file.parent / (self.tikz_file.stem + "_temp.tex")
+            tikz_file_temp = self.BASE_DIR / (self.tikz_file.stem + "_temp.tex")
             with open(tikz_file_temp, "w") as f:
                 f.write(new_code)
             # Success, so we now rename the file
@@ -213,18 +214,20 @@ class TikzPicture(TikzEnvironment):
 
     def compile(self, quiet: bool = False) -> Path:
         """Compiles the Tikz code and returns a Path to the final PDF."""
-        tex_file = true_posix_path(self.tex_file)
+        self.write_tex_file()
+
+        tex_file_posix_path = true_posix_path(self.tex_file)
         tex_file_parents = true_posix_path(self.tex_file.parent)
         options = ""
         if quiet:
             options += " -quiet "
         subprocess.run(
-            f"latexmk -pdf {options} -output-directory={tex_file_parents} {tex_file}",
+            f"latexmk -pdf {options} -output-directory={tex_file_parents} {tex_file_posix_path}",
             shell=True,
         )
         # We move the compiled PDF into the same folder containing the tikz code.
         pdf_file = self.tex_file.with_suffix(".pdf").resolve()
-        moved_pdf_file = self.tikz_file.parent / pdf_file.name
+        moved_pdf_file = self.BASE_DIR / pdf_file.name
         pdf_file.replace(moved_pdf_file)
         return moved_pdf_file.resolve()
 
