@@ -212,7 +212,7 @@ class TikzPicture(TikzEnvironment):
                         f.write("\n")
                 f.write(self.code)
 
-    def compile(self, quiet: bool = False) -> Path:
+    def compile(self, quiet: bool = True) -> Path:
         """Compiles the Tikz code and returns a Path to the final PDF."""
         self.write_tex_file()
 
