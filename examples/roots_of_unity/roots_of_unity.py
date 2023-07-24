@@ -32,3 +32,6 @@ def roots_of_unity(n, scale=5):
 
     tikz.write()
     tikz.show()
+
+if __name__ == "__main__":
+    roots_of_unity(10)

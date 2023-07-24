@@ -73,3 +73,7 @@ def plot_linear_transformation(matrix, num_vecs=40):
 
     tikz.write()
     tikz.show()
+
+if __name__ == "__main__":
+    matrix = np.array([[2, 0], [1, 1], [1, 1]])
+    plot_linear_transformation(matrix)

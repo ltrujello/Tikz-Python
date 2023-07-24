@@ -19,10 +19,6 @@ r""" Allows us to arbitrarily color intersections of 2D figures.
         >>> ven_diagram(blob1, blob2, blob3)
 """
 
-
-tikz = TikzPicture()
-
-
 def ven_diagram(*blobs, show_outlines=False):
     """A function that takes in an arbitrary number of 2D blobs and intersects and colors every
     single  intersection area.
@@ -65,58 +61,62 @@ def ven_diagram(*blobs, show_outlines=False):
 
 " Initialize some drawings that we can test the function with."
 
-# Four specific circles
-circle1 = Circle((0, 0), 2, options="purple, opacity = 0.7", action="fill")
-circle2 = Circle((1, 0), 2, options="ProcessBlue, opacity = 0.7", action="fill")
-circle3 = Circle((1, 1), 2, options="Magenta, opacity = 0.7", action="fill")
-circle4 = Circle((0, 1), 2, options="ForestGreen, opacity = 0.7", action="fill")
+if __name__ == "__main__":
+    tikz = TikzPicture()
+    # Four specific circles
+    circle1 = Circle((0, 0), 2, options="purple, opacity = 0.7", action="fill")
+    circle2 = Circle((1, 0), 2, options="ProcessBlue, opacity = 0.7", action="fill")
+    circle3 = Circle((1, 1), 2, options="Magenta, opacity = 0.7", action="fill")
+    circle4 = Circle((0, 1), 2, options="ForestGreen, opacity = 0.7", action="fill")
 
-# 9 rainbow circles
-circles = []
-for i in range(1, 4):
-    for j in range(1, 4):
-        circ = Circle(
-            (i, j),
-            1.5,
-            options=f"fill = {rainbow_colors(i*j)}, fill opacity = 0.7",
-            action="fill",
-        )
-        circles.append(circ)
+    # 9 rainbow circles
+    circles = []
+    for i in range(1, 4):
+        for j in range(1, 4):
+            circ = Circle(
+                (i, j),
+                1.5,
+                options=f"fill = {rainbow_colors(i*j)}, fill opacity = 0.7",
+                action="fill",
+            )
+            circles.append(circ)
 
-# A set of three plots
-pts_one = [
-    (-2.1, 1.5),
-    (-1, 2.5),
-    (1.5, 1),
-    (4, 0.5),
-    (3, -0.5),
-    (2.5, -3),
-    (0, -0.2),
-    (-3, -2.5),
-]
+    # A set of three plots
+    pts_one = [
+        (-2.1, 1.5),
+        (-1, 2.5),
+        (1.5, 1),
+        (4, 0.5),
+        (3, -0.5),
+        (2.5, -3),
+        (0, -0.2),
+        (-3, -2.5),
+    ]
 
 
-pts_two = [
-    (-3.5, -0.5),
-    (-3, -2.5),
-    (-1.5, -3.5),
-    (1, -2),
-    (3.5, -2.5),
-    (3.5, 0.5),
-    (2, 2),
-    (-0.5, -1.5),
-    (-3, 2),
-]
+    pts_two = [
+        (-3.5, -0.5),
+        (-3, -2.5),
+        (-1.5, -3.5),
+        (1, -2),
+        (3.5, -2.5),
+        (3.5, 0.5),
+        (2, 2),
+        (-0.5, -1.5),
+        (-3, 2),
+    ]
 
-pts_three = [(-1.5, 0), (1, 1), (2, 0), (1, -1), (0, -2), (-2, -1)]
+    pts_three = [(-1.5, 0), (1, 1), (2, 0), (1, -1), (0, -2), (-2, -1)]
 
-plot_options = "smooth, tension=.7, closed hobby"
-blob1 = PlotCoordinates(
-    pts_one, options="red!80", plot_options=plot_options, action="fill"
-)
-blob2 = PlotCoordinates(
-    pts_two, options="ProcessBlue!80", plot_options=plot_options, action="fill"
-)
-blob3 = PlotCoordinates(
-    pts_three, options="Green!80", plot_options=plot_options, action="fill"
-)
+    plot_options = "smooth, tension=.7, closed hobby"
+    blob1 = PlotCoordinates(
+        pts_one, options="red!80", plot_options=plot_options, action="fill"
+    )
+    blob2 = PlotCoordinates(
+        pts_two, options="ProcessBlue!80", plot_options=plot_options, action="fill"
+    )
+    blob3 = PlotCoordinates(
+        pts_three, options="Green!80", plot_options=plot_options, action="fill"
+    )
+
+    ven_diagram(circle1, circle2, circle3, circle4)

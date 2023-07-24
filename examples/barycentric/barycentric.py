@@ -69,3 +69,6 @@ def medians(coords, tikz, iteration):
         new_triangle.append([centroid, midpts[i], coords[i - 2]])
 
     return new_triangle
+
+if __name__ == "__main__":
+    nth_subdivision(3)

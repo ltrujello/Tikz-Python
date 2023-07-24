@@ -13,44 +13,45 @@ from tikzpy import TikzPicture
     and it can definitely handle it) or one could take less iterations in the code below.
 """
 
-tikz = TikzPicture(center=True)
-tikz.set_tdplotsetmaincoords(60, 45)
-tikz.options = "tdplot_main_coords"
+if __name__ == "__main__":
+    tikz = TikzPicture(center=True)
+    tikz.set_tdplotsetmaincoords(60, 45)
+    tikz.options = "tdplot_main_coords"
 
-# lorenz parameters
-rho = 28.0
-sigma = 10.0
-beta = 8.0 / 3.0
-
-
-# Next state according to the ODEs
-def next(state):
-    x, y, z = state
-    return sigma * (y - x), x * (rho - z) - y, x * y - beta * z
+    # lorenz parameters
+    rho = 28.0
+    sigma = 10.0
+    beta = 8.0 / 3.0
 
 
-# Set initial conditions and time steps
-initial = [1.0, 1.0, 1.0]
-t = np.arange(
-    0.0, 80.0, 0.02
-)  # This might need to be changed, e.g., 0.02 to 0.08, to make the program run.
+    # Next state according to the ODEs
+    def next(state):
+        x, y, z = state
+        return sigma * (y - x), x * (rho - z) - y, x * y - beta * z
 
-# Solve for the next positions, scale them
-states = odeint(next, initial, t)
-states = states * 0.25
 
-# We convert points from np.array to tuple for Tikz
-tuple_states = []
-for state in states:
-    tuple_states.append(tuple(state))
+    # Set initial conditions and time steps
+    initial = [1.0, 1.0, 1.0]
+    t = np.arange(
+        0.0, 80.0, 0.02
+    )  # This might need to be changed, e.g., 0.02 to 0.08, to make the program run.
 
-# Plot the lorenz system
-lorenz_plot = tikz.plot_coordinates(
-    tuple_states, options="ProcessBlue!70", plot_options="smooth"
-)
-# Annotate the initial state
-tikz.circle(tuple_states[0], radius=0.1, action="fill")
-tikz.node(tuple_states[0], options="below", text="Initial: (1,1,1)")
+    # Solve for the next positions, scale them
+    states = odeint(next, initial, t)
+    states = states * 0.25
 
-tikz.write()
-tikz.show()
+    # We convert points from np.array to tuple for Tikz
+    tuple_states = []
+    for state in states:
+        tuple_states.append(tuple(state))
+
+    # Plot the lorenz system
+    lorenz_plot = tikz.plot_coordinates(
+        tuple_states, options="ProcessBlue!70", plot_options="smooth"
+    )
+    # Annotate the initial state
+    tikz.circle(tuple_states[0], radius=0.1, action="fill")
+    tikz.node(tuple_states[0], options="below", text="Initial: (1,1,1)")
+
+    tikz.write()
+    tikz.show()

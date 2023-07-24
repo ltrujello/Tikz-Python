@@ -53,3 +53,7 @@ def integrate_n_times(func, n, x_start=-2.5, x_end=2.5):
 
     tikz.write()
     tikz.show()
+
+if __name__ == "__main__":
+    integrate_n_times(poly(x**2), 5)
+

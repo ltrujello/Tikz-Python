@@ -22,18 +22,10 @@ class PlotCoordinates(DrawingObject):
         plot_options: str = "",
         action: str = "draw",
     ):
-        self._points = [Point(point) for point in points]
+        self.points = [Point(point) for point in points]
         self.options = options
         self.plot_options = plot_options
         super().__init__(action, self.options)
-
-    @property
-    def points(self):
-        return self._points
-
-    @points.setter
-    def points(self, new_points):
-        self._points = [Point(point) for point in new_points]
 
     @property
     def _command(self) -> str:
@@ -55,10 +47,12 @@ class PlotCoordinates(DrawingObject):
         return Point(mean_x, mean_y)
 
     def shift(self, xshift: float, yshift: float) -> None:
-        self.points = [point.shift(xshift, yshift) for point in self.points]
+        for point in self.points:
+            point.shift(xshift, yshift)
 
     def scale(self, scale: float) -> None:
-        self.points = [point.scale(scale) for point in self.points]
+        for point in self.points:
+            point.scale(scale)
 
     def rotate(
         self,
@@ -68,7 +62,8 @@ class PlotCoordinates(DrawingObject):
     ) -> None:
         if about_pt is None:
             about_pt = self.center
-        self.points = [point.rotate(angle, about_pt, radians) for point in self.points]
+        for point in self.points:
+            point.rotate(angle, about_pt, radians)
 
     def add_point(self, x, y):
         self.points.append(Point(x, y))

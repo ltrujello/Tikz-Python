@@ -21,22 +21,24 @@ def subdivide(x_1, x_2, n):
     )
 
 
-tikz = TikzPicture()
-s = 4  # Scale
+if __name__ == "__main__":
+    tikz = TikzPicture()
+    s = 4  # Scale
 
-# Set up xy-plane
-xy_plane = R2_Space(x_interval=(0, s), y_interval=(0, s))
-xy_plane.x_axis_options = "Gray!30, ->"
-xy_plane.y_axis_options = "Gray!30, ->"
-tikz.draw(xy_plane)
+    # Set up xy-plane
+    xy_plane = R2_Space(x_interval=(0, s), y_interval=(0, s))
+    xy_plane.x_axis_options = "Gray!30, ->"
+    xy_plane.y_axis_options = "Gray!30, ->"
+    tikz.draw(xy_plane)
 
-# Collect (x,y) cantor data
-x = np.array(cantor(10))
-y = np.cumsum(np.ones(len(x)) / (len(x) - 2)) - 1 / (len(x) - 2)
-y[-1] = 1
+    # Collect (x,y) cantor data
+    x = np.array(cantor(10))
+    y = np.cumsum(np.ones(len(x)) / (len(x) - 2)) - 1 / (len(x) - 2)
+    y[-1] = 1
 
-# Plot it
-points = tikz.plot_coordinates(list(zip(x, y)), options="ProcessBlue")
-points.scale(4)
-tikz.write()
-tikz.show()
+    # Plot it
+    points = tikz.plot_coordinates(list(zip(x, y)), options="ProcessBlue")
+    print(points.points)
+    points.scale(4)
+    tikz.write()
+    tikz.show()
