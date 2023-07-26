@@ -312,17 +312,26 @@ def test_updating_multiple_environments(
         ellipse.options += ", dashed"
         second_tikz.rectangle((0, 0), (1, 1))
         second_tikz.write()
-        assert second_tikz.tikz_file.read_text() == expected_after_first_update_multiple_envs
+        assert (
+            second_tikz.tikz_file.read_text()
+            == expected_after_first_update_multiple_envs
+        )
 
         # Test updating third environment
         line.end = (0, 4)
         line.options = ", ->, dashed"
         third_tikz.arc((0, 0), start_angle=45, end_angle=90, radius=2)
         third_tikz.write()
-        assert third_tikz.tikz_file.read_text() == expected_after_second_update_multiple_envs
+        assert (
+            third_tikz.tikz_file.read_text()
+            == expected_after_second_update_multiple_envs
+        )
 
         # Test updating first environment
         circle.radius = 1
         first_tikz.line((2, 2), (5, 5))
         first_tikz.write()
-        assert first_tikz.tikz_file.read_text() == expected_after_third_update_multiple_envs
+        assert (
+            first_tikz.tikz_file.read_text()
+            == expected_after_third_update_multiple_envs
+        )
