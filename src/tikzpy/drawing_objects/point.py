@@ -1,6 +1,6 @@
 import math
 from numbers import Number
-from typing import Tuple, Union
+from typing import Tuple, Union, Optional
 
 
 class Point:
@@ -13,36 +13,57 @@ class Point:
     def __init__(
         self,
         first_arg: Union[float, Number, tuple, "Point"],
-        second_arg: Union[float, Number, tuple, "Point", None] = None,
+        second_arg: Union[float, Number, None] = None,
+        third_arg: Union[float, Number, None] = None,
     ) -> None:
         # Check if attempting to construct from one tuple of two numeric types
         if isinstance(first_arg, tuple) and second_arg is None:
-            first_arg, second_arg = (
-                first_arg[0],
-                first_arg[1],
-            )  # Careful, this must be a one linear
-        # Check if attempting to construct from two numeric types
-        if isinstance(first_arg, Number) and isinstance(second_arg, Number):
-            self.x = first_arg
-            self.y = second_arg
-        # Check if attempting to construct from another Point object
+            if len(first_arg) == 2:
+                self.x, self.y = (
+                    first_arg[0],
+                    first_arg[1],
+                )
+                self.z = None
+            elif len(first_arg) == 3:
+                self.x, self.y, self.z = (first_arg[0], first_arg[1], first_arg[2])
+            else:
+                raise ValueError(
+                    f"Recieved invalid tuple={first_arg} to Point constructor"
+                )
+
         elif isinstance(first_arg, Point) and second_arg is None:
             self.x = first_arg.x
             self.y = first_arg.y
+            self.z = None
+            if first_arg.z is not None:
+                self.z = first_arg.z
+
+        elif second_arg is not None:
+            self.x = first_arg
+            self.y = second_arg
+            self.z = None
+            if third_arg is not None:
+                self.z = third_arg
         else:
             raise TypeError(
                 f"Invalid non-numeric types {type(first_arg)}, {type(second_arg)} supplied to Point class "
             )
 
-    def shift(self, xshift: float, yshift: float) -> None:
+    def shift(
+        self, xshift: float, yshift: float, zshift: Optional[float] = None
+    ) -> None:
         """Translate the point via x, y offsets."""
         self.x += xshift
         self.y += yshift
+        if zshift is not None:
+            self.z += zshift
 
     def scale(self, scale: float) -> None:
         """Scale the point given the scale."""
         self.x *= scale
         self.y *= scale
+        if self.z is not None:
+            self.z *= scale
 
     def rotate(
         self,
@@ -51,6 +72,9 @@ class Point:
         radians: bool = False,
     ) -> None:
         """Rotate the point about another point."""
+        if self.z is None:
+            print("Warning: Rotate method for 3D points not yet implemented")
+            self.z *= scale
         about_pt = Point(about_pt)
         if not radians:
             angle *= math.pi / 180
@@ -72,40 +96,73 @@ class Point:
 
     def to_tuple(self) -> Tuple:
         """Return a tuple of the x, y data."""
-        return self.x, self.y
+        if self.z is None:
+            return self.x, self.y
+        return self.x, self.y, self.z
 
     def __iter__(self):
-        return iter((self.x, self.y))
+        if self.z is None:
+            return iter((self.x, self.y))
+        return iter((self.x, self.y, self.z))
 
     def __add__(self, other) -> "Point":
         """Allow Point + tuple and Point + Point arithmetic."""
+        if self.z is None:
+            if isinstance(other, tuple):
+                x, y = other
+            elif isinstance(other, Point):
+                x, y = other.x, other.y
+            else:
+                raise TypeError(f"Cannot perform Point object addition with {other} ")
+            return Point(self.x + x, self.y + y)
+
         if isinstance(other, tuple):
-            x, y = other
+            x, y, z = other
         elif isinstance(other, Point):
-            x, y = other.x, other.y
+            x, y, z = other.x, other.y, other.z
         else:
             raise TypeError(f"Cannot perform Point object addition with {other} ")
-        return Point(self.x + x, self.y + y)
+        return Point(self.x + x, self.y + y, self.z + z)
 
     def __radd__(self, other) -> "Point":
         """Allow tuple + Point arithmetic."""
+        if self.z is None:
+            if isinstance(other, tuple):
+                x, y = other
+            elif isinstance(other, Point):
+                x, y = other.x, other.y
+            else:
+                raise TypeError(f"Cannot perform Point object addition with {other} ")
+            return Point(self.x + x, self.y + y)
+
         if isinstance(other, tuple):
-            x, y = other
+            x, y, z = other
         elif isinstance(other, Point):
-            x, y = other.x, other.y
+            x, y, z = other.x, other.y, other.z
         else:
             raise TypeError(f"Cannot perform Point object addition with {other} ")
-        return Point(self.x + x, self.y + y)
+        return Point(self.x + x, self.y + y, self.z + z)
 
     def __sub__(self, other):
-        """Allow tuple + Point arithmetic."""
+        if self.z is None:
+            """Allow tuple + Point arithmetic."""
+            if isinstance(other, tuple):
+                x, y = other
+            elif isinstance(other, Point):
+                x, y = other.x, other.y
+            else:
+                raise TypeError(
+                    f"Cannot perform Point object subtraction with {other} "
+                )
+            return Point(self.x - x, self.y - y)
+
         if isinstance(other, tuple):
-            x, y = other
+            x, y, z = other
         elif isinstance(other, Point):
-            x, y = other.x, other.y
+            x, y, z = other.x, other.y, other.z
         else:
-            raise TypeError(f"Cannot perform Point object addition with {other} ")
-        return Point(self.x - x, self.y - y)
+            raise TypeError(f"Cannot perform Point object subtraction with {other} ")
+        return Point(self.x - x, self.y - y, self.z - z)
 
     def __rsub__(self, other):
         return other + (-1) * self
@@ -116,7 +173,9 @@ class Point:
             raise TypeError(
                 f"Unsupported * between Point object and {scale} of type {type(scale)} (must be numeric)"
             )
-        return Point(self.x * scale, self.y * scale)
+        if self.z is None:
+            return Point(self.x * scale, self.y * scale)
+        return Point(self.x * scale, self.y * scale, self.z * scale)
 
     def __rmul__(self, scale: float) -> "Point":
         """Allow Number * Point arithmetic."""
@@ -124,7 +183,9 @@ class Point:
             raise TypeError(
                 f"Unsupported * between {scale} of type {type(scale)} and Point object (must be numeric)"
             )
-        return Point(scale * self.x, scale * self.y)
+        if self.z is None:
+            return Point(scale * self.x, scale * self.y)
+        return Point(scale * self.x, scale * self.y, scale * self.z)
 
     def __truediv__(self, scale) -> "Point":
         """Allow Point / Number arithmetic."""
@@ -132,10 +193,18 @@ class Point:
             raise TypeError(
                 f"Unsupported / between Point object and {scale} of type {type(scale)}."
             )
-        return Point(self.x / scale, self.y / scale)
+        if self.z is None:
+            return Point(self.x / scale, self.y / scale)
+        return Point(self.x / scale, self.y / scale, self.z / scale)
 
     def __str__(self):
-        return f"({self.x}, {self.y})"
+        if self.z is None:
+            return f"({self.x}, {self.y})"
+
+        return f"({self.x}, {self.y},{self.z})"
 
     def __repr__(self):
-        return f"Point({self.x}, {self.y})"
+        if self.z is None:
+            return f"Point({self.x}, {self.y})"
+
+        return f"Point({self.x}, {self.y}, {self.z})"

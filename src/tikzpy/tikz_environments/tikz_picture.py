@@ -80,7 +80,7 @@ class TikzPicture(TikzEnvironment):
         if not self.tex_file.exists():
             # Check if the folder exists
             if not self.tex_file.parent.exists():
-                self.tex_file.parent.mkdir(parents=True)
+               self.tex_file.parent.mkdir(parents=True)
             # Gather the template contents
             tex_code = pkgutil.get_data("tikzpy", "templates/tex_file.tex").decode(
                 "utf-8"
