@@ -6,26 +6,19 @@ This requires Python 3.7+ Additionally, you need an up-to-date version of a LaTe
 
 If you already have LaTeX or a related TeX engine, you most definitely have `tikz`. You also probably have `latexmk`. If you're not sure, run `latexmk --version` from the command line and observe the output.
 
-To run the tests, you need the python packages `numpy`, [`pytest`](https://github.com/pytest-dev/pytest) and [`pytest-order`](https://github.com/pytest-dev/pytest-orderhttps://github.com/pytest-dev/pytest-order). These will be installed for you if they are missing.
-
 ## Installation 
 You can install Tikzpy as follows.
 ```bash
 $ git clone https://github.com/ltrujello/Tikz-Python
 $ cd Tikz-Python
-$ pip install --use-feature=in-tree-build .
+$ pip install -e .
 ```
 If you additionally want to check that everything is working normally, run 
 ```bash
-$ cd tests
-$ pytest
+$ pip install -r requirements.txt
+$ make test 
 ```
 All test cases should pass. Let me know if that is not the case.
-
-## Troubleshooting
-If pip tries to tell you `no such option: --use-feature`, then that means you need to upgrade your pip which you can do via `pip install --upgrade pip`. If you don't want to upgrade your pip, then simply remove the `--use-feature` flag, at which point pip may scream a warning to you about in tree builds. 
-
-If pip gives you a truly nonsense error with some keywords like `exit status 1` or `check the logs`, running `pip install -U setuptools` should do the trick.
 
 ## How to Use: Basics
 An example of this package in action is below. 
