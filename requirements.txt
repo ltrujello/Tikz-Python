@@ -9,4 +9,3 @@ platformdirs==3.9.1
 pluggy==1.2.0
 pytest==7.4.0
 ruff==0.0.280
--e git+https://github.com/ltrujello/Tikz-Python.git@5d6fee1fc02b62b0927c838c5e0784bf50955ea2#egg=tikzpy
