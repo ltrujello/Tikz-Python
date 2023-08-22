@@ -1,11 +1,11 @@
 import pytest
-import tikzpy
+from tikzpy import TikzPicture, Point
 
 """ #2
     We test that reassignment of attributes returns the correct Tikz code.
 """
 
-tikz = tikzpy.TikzPicture()
+tikz = TikzPicture()
 # Line
 line = tikz.line((0, 0), (1, 1))
 line.start = (-1, 2)
@@ -15,7 +15,7 @@ line.to_options = "bend right = 45"
 line.control_pts = [(0.5, 0.9), (1, -2)]
 # Plot
 plot = tikz.plot_coordinates(points=[(1, 1), (2, 2), (3, 3), (2, -4)])
-plot.points = [(0, 0), (1, 0), (1, 1), (0, 1)]
+plot.points = [Point(0, 0), Point(1, 0), Point(1, 1), Point(0, 1)]
 plot.options = "fill=green"
 plot.plot_options = "smooth cycle"
 # Circle
