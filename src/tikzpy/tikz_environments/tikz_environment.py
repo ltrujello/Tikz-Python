@@ -29,21 +29,6 @@ class TikzEnvironment(ABC):
             statement_dict[draw_obj] = draw_obj.code
         return statement_dict
 
-    @property
-    @abstractmethod
-    def begin(self) -> list:
-        """A list of strings containing the beginning code of our tikz environment."""
-
-    @property
-    @abstractmethod
-    def end(self) -> list:
-        """A list of strings containing the end code of our tikz environment."""
-
-    @property
-    @abstractmethod
-    def code(self) -> str:
-        """A string containing the Tikz code for the Tikz environment."""
-
     def remove(self, draw_obj: DrawingObject) -> None:
         """Remove a drawing_object from the Tikz environment, e.g., an instance of Line."""
         del self._statements[draw_obj]
