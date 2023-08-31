@@ -5,7 +5,6 @@ from tikzpy.drawing_objects.point import Point
 from tikzpy.utils.helpers import brackets
 
 
-# Class for Nodes
 class Node:
     """
     A class to create nodes in the tikz environment.

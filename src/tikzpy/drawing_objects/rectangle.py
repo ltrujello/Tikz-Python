@@ -67,6 +67,24 @@ class Rectangle(DrawingObject):
     def left_corner(self) -> Point:
         return self._left_corner
 
+    @left_corner.setter
+    def left_corner(self, new_corner) -> None:
+        if isinstance(new_corner, (tuple, Point)):
+            self._left_corner = Point(new_corner)
+        else:
+            raise TypeError(f"Invalid type '{type(new_corner)}' for left corner")
+
+    @property
+    def right_corner(self) -> Point:
+        return self._right_corner
+
+    @right_corner.setter
+    def right_corner(self, new_corner) -> None:
+        if isinstance(new_corner, (tuple, Point)):
+            self._right_corner = Point(new_corner)
+        else:
+            raise TypeError(f"Invalid type '{type(new_corner)}' for right corner")
+
     def set_north(
         self,
         north_point: Union[Tuple[float, float], Point],
@@ -114,24 +132,6 @@ class Rectangle(DrawingObject):
         self._left_corner = Point(west_point.x, west_point.y - height / 2)
         self._right_corner = Point(west_point.x + width, west_point.y + height / 2)
         return self
-
-    @property
-    def right_corner(self) -> Point:
-        return self._right_corner
-
-    @left_corner.setter
-    def left_corner(self, new_corner) -> None:
-        if isinstance(new_corner, (tuple, Point)):
-            self._left_corner = Point(new_corner)
-        else:
-            raise TypeError(f"Invalid type '{type(new_corner)}' for left corner")
-
-    @right_corner.setter
-    def right_corner(self, new_corner) -> None:
-        if isinstance(new_corner, (tuple, Point)):
-            self._right_corner = Point(new_corner)
-        else:
-            raise TypeError(f"Invalid type '{type(new_corner)}' for right corner")
 
     def shift(self, xshift: float, yshift: float) -> None:
         self._left_corner.shift(xshift, yshift)

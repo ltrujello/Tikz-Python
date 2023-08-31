@@ -16,27 +16,12 @@ from tikzpy.tikz_environments.tikz_command import TikzCommand
 class TikzEnvironment(ABC):
     def __init__(self, options: str) -> None:
         self.options = options
-        self._statements = {}
-
-    @property
-    def statements(self) -> dict:
-        """A dictionary to keep track of the current Tikz code we've commanded.
-        keys : instances of subclasses created (e.g, Line)
-        values : the Tikz code of the instance (e.g., Line.code)
-        """
-        statement_dict = {}
-        for draw_obj in self._statements:
-            statement_dict[draw_obj] = draw_obj.code
-        return statement_dict
-
-    def remove(self, draw_obj: DrawingObject) -> None:
-        """Remove a drawing_object from the Tikz environment, e.g., an instance of Line."""
-        del self._statements[draw_obj]
+        self.drawing_objects = []
 
     def draw(self, *args: List[DrawingObject]) -> None:
         """Add an arbitrary sequence of drawing objects."""
         for draw_obj in args:
-            self._statements[draw_obj] = draw_obj.code
+            self.drawing_objects.append(draw_obj)
 
     def add_option(self, option: str) -> None:
         """Add an option to the set of options."""
@@ -44,15 +29,6 @@ class TikzEnvironment(ABC):
             self.options += option
         else:
             self.options += f", {option}"
-
-    def drawing_objects(self) -> list:
-        """Returns a list of the currently appended drawing objects in the TikzPicture."""
-        return list(self._statements.keys())
-
-    def undo(self) -> None:
-        """Remove the last added drawing object from the tikz environment."""
-        last_obj = list(self._statements.keys())[-1]
-        self.remove(last_obj)
 
     def add_command(self, tikz_statement: str) -> TikzCommand:
         """Add a string of valid Tikz code into the Tikz environment."""
@@ -73,11 +49,7 @@ class TikzEnvironment(ABC):
         control_pts: list = [],
         action: str = "draw",
     ) -> Line:
-        """Draws a line by creating an instance of the Line class.
-        Upon creation, we update self._statements with our new code.
-        * Key feature: If we update any attributes of our line, the changes
-          to the Tikz code are automatically reflected in self._statements.
-        """
+        """Draws a line by creating an instance of the Line class."""
         line = Line(start, end, options, to_options, control_pts, action)
         self.draw(line)
         return line
@@ -89,9 +61,7 @@ class TikzEnvironment(ABC):
         plot_options: str = "",
         action: str = "draw",
     ) -> PlotCoordinates:
-        """Draws a plot coordinates statement by creating an instance of the PlotCoordinates class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
+        """Draws a plot coordinates statement by creating an instance of the PlotCoordinates class."""
         plot = PlotCoordinates(points, options, plot_options, action)
         self.draw(plot)
         return plot
@@ -103,9 +73,7 @@ class TikzEnvironment(ABC):
         options: str = "",
         action: str = "draw",
     ) -> Circle:
-        """Draws a circle by creating an instance of the Circle class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
+        """Draws a circle by creating an instance of the Circle class."""
         circle = Circle(center, radius, options, action)
         self.draw(circle)
         return circle
@@ -116,9 +84,7 @@ class TikzEnvironment(ABC):
         options: str = "",
         text: str = "",
     ) -> Node:
-        """Draws a node by creating an instance of the Node class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
+        """Draws a node by creating an instance of the Node class."""
         node = Node(position, options, text)
         self.draw(node)
         return node
@@ -130,9 +96,7 @@ class TikzEnvironment(ABC):
         options: str = "",
         action: str = "draw",
     ) -> Rectangle:
-        """Draws a rectangle by creating an instance of the Rectangle class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
+        """Draws a rectangle by creating an instance of the Rectangle class."""
         rectangle = Rectangle(left_corner, right_corner, options, action)
         self.draw(rectangle)
         return rectangle
@@ -145,9 +109,7 @@ class TikzEnvironment(ABC):
         options: str = "",
         action: str = "draw",
     ) -> Ellipse:
-        """Draws an ellipse by creating an instance of the Ellipse class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
+        """Draws an ellipse by creating an instance of the Ellipse class."""
         ellipse = Ellipse(center, x_axis, y_axis, options, action)
         self.draw(ellipse)
         return ellipse
@@ -165,9 +127,7 @@ class TikzEnvironment(ABC):
         draw_from_start: bool = True,
         action: str = "draw",
     ) -> Arc:
-        """Draws an arc by creating an instance of the Arc class.
-        Updates self._statements when necessary; see above comment under line function above.
-        """
+        """Draws an arc by creating an instance of the Arc class."""
         arc = Arc(
             position,
             start_angle,

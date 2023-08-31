@@ -5,7 +5,6 @@ from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.utils.helpers import brackets
 
 
-# Class for Lines
 class Line(DrawingObject):
     """
     A class to create lines in the tikz environment.

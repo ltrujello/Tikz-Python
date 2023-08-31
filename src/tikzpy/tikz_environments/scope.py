@@ -13,20 +13,12 @@ class Scope(TikzEnvironment):
         super().__init__(options)
 
     @property
-    def begin(self) -> str:
-        return f"\\begin{{scope}}{brackets(self.options)}\n"
-
-    @property
-    def end(self) -> str:
-        return "\\end{scope}\n"
-
-    @property
     def code(self) -> str:
-        """A string contaning the statements in the scope."""
-        code = self.begin
-        for draw_obj in self.statements:
+        """A string contaning the drawing_objects in the scope."""
+        code = f"\\begin{{scope}}{brackets(self.options)}\n"
+        for draw_obj in self.drawing_objects:
             code += "\t" + draw_obj.code + "\n"
-        code += self.end
+        code += "\\end{scope}\n"
         return code
 
     def __repr__(self) -> str:
@@ -38,15 +30,15 @@ class Scope(TikzEnvironment):
         self.append(clip)
 
     def shift(self, xshift: float, yshift: float) -> None:
-        for draw_obj in self._statements:
+        for draw_obj in self.drawing_objects:
             draw_obj.shift(xshift, yshift)
 
     def scale(self, scale: float) -> None:
-        for draw_obj in self._statements:
+        for draw_obj in self.drawing_objects:
             draw_obj.scale(scale)
 
     def rotate(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
-        for draw_obj in self._statements:
+        for draw_obj in self.drawing_objects:
             draw_obj.rotate(angle, about_pt, radians)

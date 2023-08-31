@@ -208,3 +208,10 @@ class Point:
             return f"Point({self.x}, {self.y})"
 
         return f"Point({self.x}, {self.y}, {self.z})"
+
+    def __eq__(self, other):
+        """Overrides the default implementation"""
+        if isinstance(other, Point):
+            return self.x == other.x and self.y == other.y and self.z == other.z
+        return False
+

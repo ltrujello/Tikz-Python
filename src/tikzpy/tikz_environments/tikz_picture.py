@@ -19,14 +19,13 @@ class TikzPicture(TikzEnvironment):
         tikz_file : A file path to the destination of the output tikz code
         center : True/False if one wants to center their Tikz code
         options : A list of options for the Tikz picture
-        _statements : See docstring for "statements" below
+        drawing_objects : List of DrawingObjects appened to curr tikz env
     """
 
     def __init__(
         self, center: bool = False, options: str = "", tikz_code_dir=None
     ) -> None:
         super().__init__(options)
-        self._center = center
         self._preamble = {}
         self._postamble = {}
         if tikz_code_dir is not None:
@@ -37,26 +36,13 @@ class TikzPicture(TikzEnvironment):
             self.BASE_DIR = None
             self.tikz_file = None
             self.tex_file = None
-        self.center_code()
 
-    @property
-    def center(self) -> bool:
-        return self._center
-
-    @center.setter
-    def center(self, centering: bool) -> None:
-        self._center = centering
-        self.center_code()
-
-    def center_code(self) -> None:
-        if self.center:
-            print("Centering is true")
-            self._preamble["center"], self._postamble["center"] = (
-                "\\begin{center}\n",
-                "\\end{center}\n",
-            )
+        if center:
+            self._preamble["center"] = "\\begin{center}\n"
+            self._postamble["center"] = "\\end{center}\n"
         else:
-            self._preamble["center"], self._postamble["center"] = "", ""
+            self._preamble["center"] = ""
+            self._postamble["center"] = ""
 
     def code(self) -> str:
         """A string contaning our Tikz code."""
@@ -67,7 +53,7 @@ class TikzPicture(TikzEnvironment):
         code += f"\\begin{{tikzpicture}}{brackets(self.options)}\n"
 
         # Add the main tikz code
-        for draw_obj in self.statements:
+        for draw_obj in self.drawing_objects:
             code += "    " + draw_obj.code + "\n"
 
         # Add the ending statement
@@ -80,7 +66,7 @@ class TikzPicture(TikzEnvironment):
         """Return a readable string of the current tikz code"""
         readable_code = f"\\begin{{tikzpicture}}{brackets(self.options)}\n"
 
-        for draw_obj in self.statements:
+        for draw_obj in self.drawing_objects:
             readable_code += "    " + draw_obj.code + "\n"
 
         readable_code += "\\end{tikzpicture}\n"
