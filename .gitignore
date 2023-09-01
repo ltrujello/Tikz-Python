@@ -2,7 +2,7 @@
 *.DS_Store
 
 # tikz_code
-tikz_code
+*tex_file.pdf
 
 # Pycharm
 .idea

@@ -10,5 +10,4 @@ if __name__ == "__main__":
     start_node = tikz.node(line.start, options="below", text="Start!")
     end_node = tikz.node(line.end, options="above", text="End!")
 
-    tikz.write()
     tikz.show()

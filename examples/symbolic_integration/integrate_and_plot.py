@@ -51,7 +51,6 @@ def integrate_n_times(func, n, x_start=-2.5, x_end=2.5):
             options = "left"
         tikz.node(pos, options=options, text=f"${latex(integ[0])}$")
 
-    tikz.write()
     tikz.show()
 
 if __name__ == "__main__":

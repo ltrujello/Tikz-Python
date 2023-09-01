@@ -34,5 +34,4 @@ if __name__ == "__main__":
         plot.shift(0, i / 5)
         plot.rotate(45, about_pt=plot.center, radians=False)
 
-    tikz.write()
     tikz.show()

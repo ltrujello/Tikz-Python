@@ -1,6 +1,7 @@
 from tikzpy import TikzPicture, Node, Point
 import pytest
 
+
 @pytest.fixture
 def node_from_tikzpicture():
     tikz = TikzPicture()
@@ -11,6 +12,7 @@ def node_from_tikzpicture():
     )
     return node
 
+
 @pytest.fixture
 def mock_node():
     node = Node(
@@ -20,11 +22,13 @@ def mock_node():
     )
     return node
 
+
 @pytest.mark.parametrize(
-    "object", [
+    "object",
+    [
         "node_from_tikzpicture",
         "mock_node",
-    ]
+    ],
 )
 def test_node_construction(object, request):
     node = request.getfixturevalue(object)
@@ -45,10 +49,10 @@ def test_node_position_assignment(mock_node):
 
 
 def test_node_shift(mock_node):
-    mock_node.shift(1, 1) 
+    mock_node.shift(1, 1)
     assert mock_node.position == Point(4, 4)
 
 
 def test_node_scale(mock_node):
-    mock_node.scale(2) 
+    mock_node.scale(2)
     assert mock_node.position == Point(8, 8)

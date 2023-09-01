@@ -57,5 +57,4 @@ if __name__ == "__main__":
     S1 = tikz.ellipse((0, -2), x_axis=2, y_axis=2 * 0.2)
     tikz.circle((-1.5, -2.255), radius=0.05, action="fill")
 
-    tikz.write()
     tikz.show()

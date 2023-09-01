@@ -14,7 +14,6 @@ def nth_subdivision(n):
             barycentric_subdivision(iters, tikz)
         else:
             barycentric_subdivision(0, tikz)
-        tikz.write()
 
     tikz.show()
 

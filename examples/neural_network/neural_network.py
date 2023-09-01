@@ -1,12 +1,13 @@
+import math
 from tikzpy import TikzPicture, Point
 tikz = TikzPicture()
 radius = 0.25
 
-x_2 = 8
+x_2 = 6
 y_2 = 2
 epsilon = 0.3
 
-horiz_space = 4
+horiz_space = 3
 vert_space = 1.25
 def calc_start_end_between_nodes(pos_a, rad_a, pos_b, rad_b):
     x_1, y_1 = pos_a
@@ -26,18 +27,19 @@ def calc_start_end_between_nodes(pos_a, rad_a, pos_b, rad_b):
 
 if __name__ == "__main__":
     layers = []
+    num_nodes = 4
     for layer in range(2):
         layer_nodes = []
-        for i in range(5):
+        for i in range(num_nodes):
             x_1 = layer * horiz_space
-            y_1 = (4 - i) * vert_space
+            y_1 = (num_nodes - 1 - i) * vert_space
 
             layer_node = tikz.circle((x_1, y_1), radius)
             # Draw the input x_i or hidden layer
             if layer == 0:
-                tikz.node((x_1, y_1 + radius + epsilon), text=f"$x_{i}$")
+                tikz.node((x_1, y_1 + radius + epsilon), text=f"$x_{i + 1}$")
             else:
-                tikz.node((x_1, y_1 + radius + epsilon), text=f"$h_{i}$")
+                tikz.node((x_1, y_1 + radius + epsilon), text=f"$h_{i + 1}$")
             layer_nodes.append(layer_node)
         layers.append(layer_nodes)
     # Add the final output layer

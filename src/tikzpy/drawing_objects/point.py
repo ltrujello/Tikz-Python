@@ -72,9 +72,8 @@ class Point:
         radians: bool = False,
     ) -> None:
         """Rotate the point about another point."""
-        if self.z is None:
+        if self.z is not None:
             print("Warning: Rotate method for 3D points not yet implemented")
-            self.z *= scale
         about_pt = Point(about_pt)
         if not radians:
             angle *= math.pi / 180
@@ -214,4 +213,3 @@ class Point:
         if isinstance(other, Point):
             return self.x == other.x and self.y == other.y and self.z == other.z
         return False
-

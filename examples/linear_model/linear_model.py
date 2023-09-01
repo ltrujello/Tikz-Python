@@ -4,7 +4,7 @@ from tikzpy import TikzPicture, Point
 tikz = TikzPicture()
 radius = 0.25
 
-if __name__ == "__main__"
+if __name__ == "__main__":
     x_2 = 6
     y_2 = 2
     epsilon = 0.2
@@ -33,3 +33,4 @@ if __name__ == "__main__"
     tikz.circle((x_2, y_2), radius)
     # Draw label for output node
     tikz.node((x_2, y_2 + radius + epsilon), text="$y$")
+    tikz.show()

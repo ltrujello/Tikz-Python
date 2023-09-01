@@ -71,7 +71,6 @@ def plot_linear_transformation(matrix, num_vecs=40):
         if M[2] < 0:  # If the Z-coordinate is negative, color it with low opacity
             vec.options += ", opacity=0.2"
 
-    tikz.write()
     tikz.show()
 
 if __name__ == "__main__":

@@ -37,5 +37,4 @@ if __name__ == "__main__":
     tikz.node(circle_1.center, options="right", text="$z_1$")
     tikz.node(circle_2.center, options="left", text="$z_2$")
 
-    tikz.write()
     tikz.show()

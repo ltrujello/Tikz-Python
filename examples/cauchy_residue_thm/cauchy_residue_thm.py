@@ -51,5 +51,4 @@ if __name__ == "__main__":
         tikz.circle(singularity.center, 0.05, action="fill")
         tikz.node(singularity.center, options="right", text=f"$a_{ind+1}$")
 
-    tikz.write()
     tikz.show()

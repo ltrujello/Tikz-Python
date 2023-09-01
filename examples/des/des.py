@@ -114,7 +114,6 @@ if __name__ == "__main__":
     # Ciphertext rectangle
     cipher_text = tikz.rectangle().set_north(to_cipher_text.end, height=0.8, width=4)
     tikz.node(cipher_text.center, text="Ciphertext")
-    tikz.write()
     tikz.show()
 
 

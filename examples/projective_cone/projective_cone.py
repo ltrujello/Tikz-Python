@@ -41,5 +41,4 @@ if __name__ == "__main__":
     tikz.node((0, 2.5, 1), text="$C(Y)$")
     tikz.node((0, 4.2, 3.5), text="$\mathbf{A}^3$")
 
-    tikz.write()
     tikz.show()

@@ -30,7 +30,6 @@ def roots_of_unity(n, scale=5):
             text=f"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$",
         )
 
-    tikz.write()
     tikz.show()
 
 if __name__ == "__main__":

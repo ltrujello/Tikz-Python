@@ -53,5 +53,4 @@ if __name__ == "__main__":
     tikz.circle(tuple_states[0], radius=0.1, action="fill")
     tikz.node(tuple_states[0], options="below", text="Initial: (1,1,1)")
 
-    tikz.write()
     tikz.show()

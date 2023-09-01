@@ -14,5 +14,4 @@ if __name__ == "__main__":
         tikz.circle(point, 2.4, "red")  # xcolor Red is very ugly
         tikz.circle(point, 2.6, "Purple")
 
-    tikz.write()
     tikz.show()

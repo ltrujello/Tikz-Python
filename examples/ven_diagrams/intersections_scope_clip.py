@@ -55,7 +55,6 @@ def ven_diagram(*blobs, show_outlines=False):
         for blob in blobs:
             draw_blob = blob.copy(options="", action="draw")
             tikz.draw(draw_blob)
-    tikz.write()
     tikz.show()
 
 

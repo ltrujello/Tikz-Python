@@ -37,5 +37,4 @@ if __name__ == "__main__":
         # Scale them
         plot.scale(exp(-1.5 * theta / 180))
 
-    tikz.write()
     tikz.show()

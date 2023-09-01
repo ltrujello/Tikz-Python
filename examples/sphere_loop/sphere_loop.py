@@ -31,5 +31,4 @@ if __name__ == "__main__":
             options=f"color={rainbow_colors(int(t*180/np.pi))}",
         )
 
-    tikz.write()
     tikz.show()
