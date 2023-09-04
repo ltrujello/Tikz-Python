@@ -200,7 +200,7 @@ class Point:
         if self.z is None:
             return f"({self.x}, {self.y})"
 
-        return f"({self.x}, {self.y},{self.z})"
+        return f"({self.x}, {self.y}, {self.z})"
 
     def __repr__(self):
         if self.z is None:

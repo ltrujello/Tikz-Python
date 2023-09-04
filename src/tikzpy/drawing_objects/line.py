@@ -53,7 +53,10 @@ class Line(DrawingObject):
         else:
             control_stmt = ".. controls "
             for pt in self.control_pts:
-                control_stmt += f"{pt.x, pt.y}" + " and "
+                if pt.z is None:
+                    control_stmt += f"{pt.x, pt.y}" + " and "
+                else:
+                    control_stmt += f"{pt.x, pt.y, pt.z}" + " and "
             control_stmt = control_stmt[:-4] + " .."
             return f"{self.start} {control_stmt} {self.end}"
 
