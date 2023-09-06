@@ -94,18 +94,24 @@ class TikzPicture(TikzEnvironment):
             "tdplotsetmaincoords"
         ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
 
-    def save_tex_code(self, tex_filepath):
+    def write_tex_file(self, tex_filepath):
         tex_code = pkgutil.get_data("tikzpy", "templates/tex_file.tex").decode("utf-8")
         tex_file_contents = re.sub("fillme", lambda x: self.code(), tex_code)
         # Update the TeX file
         with open(tex_filepath, "w") as f:
             f.write(tex_file_contents)
 
+    def write(self, tikz_code_filepath=None):
+        if tikz_code_filepath is None:
+            tikz_code_filepath = Path.cwd() / "tikz_code.tex"
+        with open(tikz_code_filepath, "w") as f:
+            f.write(self.code())
+
     def compile(self, quiet: bool = True) -> Path:
         """Compiles the Tikz code and returns a Path to the final PDF."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tex_filepath = Path(tmp_dir) / "tex_file.tex"
-            self.save_tex_code(tex_filepath)
+            self.write_tex_file(tex_filepath)
 
             tex_file_posix_path = true_posix_path(tex_filepath)
             tex_file_parents = true_posix_path(tex_filepath.parent)

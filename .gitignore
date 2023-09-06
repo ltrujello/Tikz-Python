@@ -1,3 +1,5 @@
+*.sw*
+
 # "Get a Mac!", they said...
 *.DS_Store
 

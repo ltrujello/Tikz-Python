@@ -44,5 +44,4 @@ if __name__ == "__main__":
             new_points.append(blowup(j, i))
         tikz.plot_coordinates(new_points, options="ProcessBlue!70", plot_options="smooth")
 
-    tikz.write()
     tikz.show()

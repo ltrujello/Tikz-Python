@@ -55,4 +55,4 @@ def test_node_shift(mock_node):
 
 def test_node_scale(mock_node):
     mock_node.scale(2)
-    assert mock_node.position == Point(8, 8)
+    assert mock_node.position == Point(6, 6)

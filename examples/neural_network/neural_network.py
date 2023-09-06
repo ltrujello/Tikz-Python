@@ -62,4 +62,3 @@ if __name__ == "__main__":
                 tikz.line(start, end, options="->")
 
     tikz.show()
-    tikz.clear()

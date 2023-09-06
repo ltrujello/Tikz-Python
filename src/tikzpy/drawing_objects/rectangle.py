@@ -43,9 +43,10 @@ class Rectangle(DrawingObject):
     @property
     def center(self):
         """Returns the center of the rectangle."""
-        return (self._left_corner.x + self._right_corner.x) / 2, (
-            self._left_corner.y + self._right_corner.y
-        ) / 2
+        return Point(
+            (self._left_corner.x + self._right_corner.x) / 2,
+            (self._left_corner.y + self._right_corner.y) / 2,
+        )
 
     @property
     def north(self):

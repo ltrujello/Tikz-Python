@@ -51,7 +51,7 @@ def test_ellipse_shift(mock_ellipse):
     mock_ellipse.shift(1, 1)
     assert mock_ellipse.center == Point(1, 1)
     assert mock_ellipse.north == Point(1, 5)
-    assert mock_ellipse.east == Point(4, 4)
+    assert mock_ellipse.east == Point(4, 1)
     assert mock_ellipse.south == Point(1, -3)
     assert mock_ellipse.west == Point(-2, 1)
 

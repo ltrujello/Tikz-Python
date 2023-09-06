@@ -32,17 +32,17 @@ def mock_plot_coordinates():
 )
 def test_plot_coordinates_construction(object, request):
     plot_coordinates = request.getfixturevalue(object)
-    assert tikz_plot.options == "green"
-    assert tikz_plot.plot_options == "smooth "
-    assert tikz_plot.points[0].x == 1
-    assert tikz_plot.points[0].y == 1
-    assert tikz_plot.points[1].x == 2
-    assert tikz_plot.points[1].y == 2
-    assert tikz_plot.points[2].x == 3
-    assert tikz_plot.points[2].y == 3
-    assert tikz_plot.points[3].x == 2
-    assert tikz_plot.points[3].y == -4
+    assert plot_coordinates.options == "green"
+    assert plot_coordinates.plot_options == "smooth "
+    assert plot_coordinates.points[0].x == 1
+    assert plot_coordinates.points[0].y == 1
+    assert plot_coordinates.points[1].x == 2
+    assert plot_coordinates.points[1].y == 2
+    assert plot_coordinates.points[2].x == 3
+    assert plot_coordinates.points[2].y == 3
+    assert plot_coordinates.points[3].x == 2
+    assert plot_coordinates.points[3].y == -4
     assert (
-        tikz_plot.code
+        plot_coordinates.code
         == r"\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };"
     )

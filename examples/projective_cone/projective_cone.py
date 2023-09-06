@@ -3,7 +3,7 @@ import numpy as np
 from tikzpy import TikzPicture, PlotCoordinates
 
 if __name__ == "__main__":
-    tikz = TikzPicture(center=True)
+    tikz = TikzPicture(center=True, options="tdplot_main_coords")
     tikz.set_tdplotsetmaincoords(75, 120)
 
     HEIGHT = 3.75  # Height of the surace (from the floor)
@@ -40,5 +40,7 @@ if __name__ == "__main__":
     tikz.node((1, 4.5, 0), text="$\mathbf{P}^2$")
     tikz.node((0, 2.5, 1), text="$C(Y)$")
     tikz.node((0, 4.2, 3.5), text="$\mathbf{A}^3$")
+    with open("code.tex", "w") as f:
+        f.write(tikz.code())
 
-    tikz.show()
+    tikz.show(quiet=True)
