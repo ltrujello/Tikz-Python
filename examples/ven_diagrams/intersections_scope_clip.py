@@ -1,25 +1,11 @@
-#!/bin/bash/python3
+import sys
 from itertools import combinations
-from tikzpy import TikzPicture, Circle, Rectangle, PlotCoordinates
+from tikzpy import TikzPicture, Circle, PlotCoordinates, Rectangle
 from tikzpy.colors import rainbow_colors
 
-r""" Allows us to arbitrarily color intersections of 2D figures. 
+tikz = TikzPicture()
 
-    Normally, this process is achieved by a writing, very tediously, a series 
-    of \begin{scope}...\end{scope} and \clip... environments and commands, but there's a pattern 
-    to it, and so it can be programmed. 
-
-    The function is defined below, as well as some families of drawing objects that can be used 
-    to test it. 
-    To test it, run any of these:
-        >>> ven_diagram(*circles)
-    or
-        >>> ven_diagram(circle1, circle2, circle3, circle4)
-    or 
-        >>> ven_diagram(blob1, blob2, blob3)
-"""
-
-def ven_diagram(*blobs, show_outlines=False):
+def ven_diagram(blobs, show_outlines=False):
     """A function that takes in an arbitrary number of 2D blobs and intersects and colors every
     single  intersection area.
     """
@@ -48,20 +34,56 @@ def ven_diagram(*blobs, show_outlines=False):
                 scope.clip(blob_copy)
             else:
                 blob_copy.options = f"fill = {rainbow_colors(j)}, opacity = 0.7"
-                scope.draw(blob_copy)
+                scope.append(blob_copy)
 
     # We're done, draw the outline
     if show_outlines:
         for blob in blobs:
             draw_blob = blob.copy(options="", action="draw")
             tikz.draw(draw_blob)
+    tikz.write()
     tikz.show()
 
+# A set of three plots
+pts_one = [
+    (-2.1, 1.5),
+    (-1, 2.5),
+    (1.5, 1),
+    (4, 0.5),
+    (3, -0.5),
+    (2.5, -3),
+    (0, -0.2),
+    (-3, -2.5),
+]
 
-" Initialize some drawings that we can test the function with."
+
+pts_two = [
+    (-3.5, -0.5),
+    (-3, -2.5),
+    (-1.5, -3.5),
+    (1, -2),
+    (3.5, -2.5),
+    (3.5, 0.5),
+    (2, 2),
+    (-0.5, -1.5),
+    (-3, 2),
+]
+
+pts_three = [(-1.5, 0), (1, 1), (2, 0), (1, -1), (0, -2), (-2, -1)]
+
+plot_options = "smooth, tension=.7, closed hobby"
+blob1 = PlotCoordinates(
+    pts_one, options="red!80", plot_options=plot_options, action="fill"
+)
+blob2 = PlotCoordinates(
+    pts_two, options="ProcessBlue!80", plot_options=plot_options, action="fill"
+)
+blob3 = PlotCoordinates(
+    pts_three, options="Green!80", plot_options=plot_options, action="fill"
+)
+blobs = [blob1, blob2, blob3]
 
 if __name__ == "__main__":
-    tikz = TikzPicture()
     # Four specific circles
     circle1 = Circle((0, 0), 2, options="purple, opacity = 0.7", action="fill")
     circle2 = Circle((1, 0), 2, options="ProcessBlue, opacity = 0.7", action="fill")
@@ -79,43 +101,5 @@ if __name__ == "__main__":
                 action="fill",
             )
             circles.append(circ)
-
-    # A set of three plots
-    pts_one = [
-        (-2.1, 1.5),
-        (-1, 2.5),
-        (1.5, 1),
-        (4, 0.5),
-        (3, -0.5),
-        (2.5, -3),
-        (0, -0.2),
-        (-3, -2.5),
-    ]
-
-
-    pts_two = [
-        (-3.5, -0.5),
-        (-3, -2.5),
-        (-1.5, -3.5),
-        (1, -2),
-        (3.5, -2.5),
-        (3.5, 0.5),
-        (2, 2),
-        (-0.5, -1.5),
-        (-3, 2),
-    ]
-
-    pts_three = [(-1.5, 0), (1, 1), (2, 0), (1, -1), (0, -2), (-2, -1)]
-
-    plot_options = "smooth, tension=.7, closed hobby"
-    blob1 = PlotCoordinates(
-        pts_one, options="red!80", plot_options=plot_options, action="fill"
-    )
-    blob2 = PlotCoordinates(
-        pts_two, options="ProcessBlue!80", plot_options=plot_options, action="fill"
-    )
-    blob3 = PlotCoordinates(
-        pts_three, options="Green!80", plot_options=plot_options, action="fill"
-    )
-
-    ven_diagram(circle1, circle2, circle3, circle4)
+    ven_diagram(circles)
+    #ven_diagram(blobs)

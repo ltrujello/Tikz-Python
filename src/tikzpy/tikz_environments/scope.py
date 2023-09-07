@@ -27,7 +27,7 @@ class Scope(TikzEnvironment):
     def append(self, *args: List[DrawingObject]) -> None:
         """Append a drawing object to the scope statement"""
         for draw_obj in args:
-            self._scope_statements[draw_obj] = draw_obj.code
+            self.drawing_objects.append(draw_obj)
 
     def clip(self, draw_obj: DrawingObject, draw: bool = False) -> None:
         """Clip a drawing object in the scope environment"""

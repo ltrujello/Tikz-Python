@@ -1,5 +1,4 @@
-import pytest
-import tikzpy
+from tikzpy import TikzPicture
 
 """ #3
     We test that the construction of self.action returns the correct Tikz code. 
@@ -7,7 +6,7 @@ import tikzpy
     We also test that reassigning class attributes returns the correct Tikz code.
 """
 
-tikz = tikzpy.TikzPicture()
+tikz = TikzPicture()
 
 # Line : \fill
 line_fill = tikz.line(
@@ -81,7 +80,6 @@ arc_filldraw = tikz.arc((0, 0), 20, 90, 4, action="filldraw")
 arc_path = tikz.arc((0, 0), 20, 90, 4, action="path")
 
 
-@pytest.mark.order(3)
 def test_action_construction():
     """#3 : Test that the action argument returns the correct code."""
     # Test Line : \fill
@@ -161,7 +159,6 @@ filldraws = [
 paths = [line_path, plot_path, circle_path, rectangle_path, ellipse_path, arc_path]
 
 
-@pytest.mark.order(4)
 def test_action_reset_to_draw():
     """Test that resetting the action to "draw" returns the correct code."""
     for draw_obj in fills + filldraws + paths:
@@ -230,7 +227,6 @@ def test_action_reset_to_draw():
     )
 
 
-@pytest.mark.order(5)
 def test_action_reset_to_fill():
     """Test that resetting the action to "fill" returns the correct code."""
     for draw_obj in fills + filldraws + paths:
@@ -299,7 +295,6 @@ def test_action_reset_to_fill():
     )
 
 
-@pytest.mark.order(6)
 def test_action_reset_to_filldraw():
     """Test that resetting the action to "filldraw" returns the correct code."""
     for draw_obj in fills + filldraws + paths:
@@ -368,7 +363,6 @@ def test_action_reset_to_filldraw():
     )
 
 
-@pytest.mark.order(7)
 def test_action_reset_to_path():
     """Test that resetting the action to "path" returns the correct code."""
     for draw_obj in fills + filldraws + paths:
