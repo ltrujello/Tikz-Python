@@ -1,5 +1,5 @@
 .PHONY: default
-default: black lint
+default: black lint test
 
 .PHONY: black
 black:

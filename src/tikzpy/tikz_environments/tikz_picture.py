@@ -28,14 +28,10 @@ class TikzPicture(TikzEnvironment):
         super().__init__(options)
         self._preamble = {}
         self._postamble = {}
+        self.BASE_DIR = None
+
         if tikz_code_dir is not None:
             self.BASE_DIR = Path(tikz_code_dir)
-            self.tikz_file = self.BASE_DIR / Path("tikz_code.tex")
-            self.tex_file = self.BASE_DIR / "tex" / "tex_file.tex"
-        else:
-            self.BASE_DIR = None
-            self.tikz_file = None
-            self.tex_file = None
 
         if center:
             self._preamble["center"] = "\\begin{center}\n"
@@ -98,12 +94,21 @@ class TikzPicture(TikzEnvironment):
         tex_code = pkgutil.get_data("tikzpy", "templates/tex_file.tex").decode("utf-8")
         tex_file_contents = re.sub("fillme", lambda x: self.code(), tex_code)
         # Update the TeX file
+        if self.BASE_DIR is not None:
+            tex_filepath = self.BASE_DIR / tex_filepath
+
         with open(tex_filepath, "w") as f:
             f.write(tex_file_contents)
 
     def write(self, tikz_code_filepath=None):
         if tikz_code_filepath is None:
-            tikz_code_filepath = Path.cwd() / "tikz_code.tex"
+            tikz_code_filepath = "tikz_code.tex"
+
+        base_dir: Path = Path.cwd()
+        if self.BASE_DIR is not None:
+            base_dir = self.BASE_DIR
+
+        tikz_code_filepath = base_dir / tikz_code_filepath
         with open(tikz_code_filepath, "w") as f:
             f.write(self.code())
 

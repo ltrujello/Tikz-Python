@@ -17,4 +17,6 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[tool.ruff]
+ignore-init-module-imports = true
 

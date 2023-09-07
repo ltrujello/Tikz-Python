@@ -32,7 +32,6 @@ def test_tikz_file_creation():
         tikz.write()
         correct_tikz_file = Path(tmp_dir, "tikz_code.tex")
         assert correct_tikz_file.exists()
-        assert tikz.tikz_file.resolve() == correct_tikz_file.resolve()
 
 
 def test_tex_file_creation():
@@ -40,24 +39,6 @@ def test_tex_file_creation():
     with tempfile.TemporaryDirectory() as tmp_dir:
         tikz = TikzPicture(tikz_code_dir=tmp_dir)
         tikz.arc((1, 1), 90, 180, 3)
-        tikz.write()
-        tikz.compile()
-        correct_tex_file = Path(tmp_dir, "tex", "tex_file.tex")
+        tikz.write_tex_file("tex_file.tex")
+        correct_tex_file = Path(tmp_dir, "tex_file.tex")
         assert correct_tex_file.exists()
-        assert tikz.tex_file.resolve() == correct_tex_file.resolve()
-
-
-def test_tikz_file_path():
-    """Test that the \\input command in the tex file correctly points to the tikz file."""
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        tikz = TikzPicture(tikz_code_dir=tmp_dir)
-        tikz.rectangle((0, 0), (4, 4), options="fill")
-        tikz.write()
-        tikz.compile()
-        begin_delim = "\\input{"
-        end_delim = "}"
-        content = tikz.tex_file.read_text()
-        match = re.search(
-            rf"{re.escape(begin_delim)}([\s\S]*?){re.escape(end_delim)}", content
-        )
-        assert match.group(1) == true_posix_path(tikz.tikz_file)

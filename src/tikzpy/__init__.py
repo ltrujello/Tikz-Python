@@ -10,3 +10,18 @@ from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.xy_plane import R2_Space
 from tikzpy.drawing_objects.point import Point
+
+__all__ = [
+    TikzPicture,
+    Scope,
+    Clip,
+    Line,
+    PlotCoordinates,
+    Circle,
+    Node,
+    Rectangle,
+    Ellipse,
+    Arc,
+    R2_Space,
+    Point,
+]
