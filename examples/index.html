@@ -791,7 +791,7 @@
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">end_node</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;End!&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 and produces</p>
-<p><img src="/png/line_and_two_nodes/png"/> </p>
+<p><img src="/png/line_and_two_nodes.png"/> </p>
 <p>Saving the line as a variable <code>line</code> allows us to pass in <code>line.start</code> and <code>line.end</code> into the node positions, so we don't have to type out the exact coordinates. 
 This is because lines, nodes, etc. are class instances with useful attributes: 
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">line</span><span class="o">.</span><span class="n">start</span>
@@ -820,7 +820,7 @@ demonstates how Pythons <code>for</code> loop is a lot less messier than the <co
 </span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="mf">2.6</span><span class="p">,</span> <span class="s2">&quot;Purple&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 The above code then produces</p>
-<p><img src="/png/circles/png"/></p>
+<p><img src="/png/circles.png"/></p>
 <h3 id="roots-of-unity">Roots of Unity</h3>
 <p>In this example, we draw the 13 <a href="https://en.wikipedia.org/wiki/Root_of_unity">roots of unity</a>. </p>
 <p>If we wanted to normally do this in TeX, we'd
@@ -849,54 +849,54 @@ probably have to spend 30 minutes reading some manual about how TeX handles basi
 </span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="n">node_option</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
 </span></code></pre></div>
 Which generates: </p>
-<p><img src="/png/roots_of_unity/png"/></p>
+<p><img src="/png/roots_of_unity.png"/></p>
 <p>We will see in the examples that follow how imported Python libraries can alllow us to quickly (and efficiently, this is really important) make more sophisticated Tikz pictures. </p>
 <h3 id="general-ven-diagrams">General Ven Diagrams</h3>
 <p>In the <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py">source here</a>, we use the python library <code>itertools.combinations</code> to create a function which takes in an arbitrary number of 2D Tikz figures and colors each and every single intersection. </p>
 <p>For example, suppose we arrange nine circles in a 3 x 3 grid. Plugging these nine circles in, we generate the image below.</p>
-<p><img src="/png/intersection_circles/png"/></p>
+<p><img src="/png/intersection_circles.png"/></p>
 <p>As another example, we can create three different overlapping topological blobs and then plug them into the function to obtain</p>
-<p><img src="/png/intersection_blobs/png"/></p>
+<p><img src="/png/intersection_blobs.png"/></p>
 <p>(Both examples are initialized in <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py">the source</a> for testing.)
 As one might guess, this function is useful for creating topological figures, as manually writing all of the <code>\scope</code> and <code>\clip</code> commands to create such images is pretty tedious.</p>
 <h3 id="barycentric-subdivision">Barycentric subdivision</h3>
 <p>In <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric/barycentric.py">the source here</a>, we create a function that allows us to generate the the n-th barycentric subdivision of a triangle. </p>
-<p><img src="/png/barycentric/png"/></p>
+<p><img src="/png/barycentric.png"/></p>
 <h3 id="cantor-function">Cantor function</h3>
 <p>In <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/cantor/cantor.py">the source here</a>, we plot the Cantor function by performing recursion. It is clear from this <a href="https://tex.stackexchange.com/questions/241622/plotting-the-cantor-function">TeX Stackexchange question</a> that TeX alone cannot do this, as most answers rely on external programs to generate the data. </p>
-<p><img src="/png/cantor/png"/></p>
+<p><img src="/png/cantor.png"/></p>
 <h3 id="symbolic-intergation">Symbolic Intergation</h3>
 <p>In <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/symbolic_integration/integrate_and_plot.py">the source here</a>, we use <code>numpy</code> and <code>sympy</code> to very simply perform symbolic integration. The result is a function which plots and labels the n-order integrals of any function. For example, the output of <code>x**2</code> (the polynomial x^2) generates the image below. </p>
-<p><img src="/png/integration_ex/png"/></p>
+<p><img src="/png/integration_ex.png"/></p>
 <h3 id="cone-over-a-projective-variety">Cone over a Projective Variety</h3>
 <p>In <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/projective_cone/projective_cone.py">the source here</a>, we use <code>numpy</code> to create an image which illustrates the concept of an affine cone over a projective variety. In the case of a curve Y in P^2, the cone C(Y) is a surface in A^3. </p>
 <p>The image that this drawing was modeled after appears in Exercise 2.10 of Hartshorne's Algebraic Geometry.</p>
-<p><img src="/png/projective_cone/png"/></p>
+<p><img src="/png/projective_cone.png"/></p>
 <h3 id="lorenz-system">Lorenz System</h3>
 <p>In <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/lorenz/lorenz.py">the source here</a>, we use <code>numpy</code> and <code>scipy</code> to solve ODEs and plot the Lorenz system. This is made possible since <code>tikz_py</code> also supports 3D. </p>
-<p><img src="/png/lorenz_ex/png"/></p>
+<p><img src="/png/lorenz_ex.png"/></p>
 <h3 id="tikz-styles">Tikz Styles</h3>
 <p><code>tikzpy</code> supports the creation of any <code>\tikzset</code>, a feature of Tikz that saves users a great deal of time. You can save your tikz styles in a .py file instead of copying and pasting all the time. </p>
 <p>Even if you don't want to make such settings, there are useful <code>\tikzset</code> styles that are preloaded in <code>tikzpy</code>. One particular is the very popular tikzset authored by Paul Gaborit <a href="https://tex.stackexchange.com/questions/3161/tikz-how-to-draw-an-arrow-in-the-middle-of-the-line">in this TeX stackexchange question</a>. Using such settings, we create these pictures, which illustrate Cauchy's Residue Theorem.
 <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm.py">The source here</a> produces </p>
-<p><img src="/png/cauchy_residue_thm_ex/png"/></p>
+<p><img src="/png/cauchy_residue_thm_ex.png"/></p>
 <p>while <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm_arc.py">the source here</a> produces </p>
-<p><img src="/png/cauchy_residue_thm_arc_ex/png"/></p>
+<p><img src="/png/cauchy_residue_thm_arc_ex.png"/></p>
 <h3 id="linear-transformations">Linear Transformations</h3>
 <p>Recall a 3x2 matrix is a linear transformation from R^2 to R^3. Using such an interpretation, we create a function in <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/linear_transformations/linear_transformations.py">the source here</a> which plots the image of a 3x2 matrix. The input is in the form of a <code>numpy.array</code>. </p>
 <p>For example, plugging the array <code>np.array([[0, 1], [1, 1], [0, 1]])</code> into the source produces </p>
-<p><img src="/png/linear_transformation_ex_1/png"/></p>
+<p><img src="/png/linear_transformation_ex_1.png"/></p>
 <p>while plugging the array <code>np.array([[2, 0], [1, 1], [1, 1]])</code> into the source produces </p>
-<p><img src="/png/linear_transformation_ex_2/png"/></p>
+<p><img src="/png/linear_transformation_ex_2.png"/></p>
 <h3 id="projecting-r1-onto-s1">Projecting R^1 onto S^1</h3>
 <p>In <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/spiral/spiral.py">the source here</a>, we use <code>numpy</code> to illustrate the projection of R^1 onto S^1. Creating this figure in Tex alone is nontrivial, as one must create white space at self intersections to illustrate crossovers. Existing tikz solutions cannot take care of this, but the flexible logical operators of Python allow one to achieve it. </p>
-<p><img src="/png/spiral/png"/></p>
+<p><img src="/png/spiral.png"/></p>
 <h3 id="polar-coordinates">Polar Coordinates</h3>
 <p>In <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/polar/polar.py">the source here</a>, we illustrate the concept of polar coordiantes by demonstrating how a sine curve is mapped into polar coordinates. This example should be compared to the more complex answers in this <a href="https://tex.stackexchange.com/questions/594231/make-rainbow-coloured-bullets-to-show-points">TeX Stackexchange question</a> which seeks a similar result. </p>
-<p><img src="/png/polar/png"/></p>
+<p><img src="/png/polar.png"/></p>
 <h3 id="blowup-at-a-point">Blowup at a point</h3>
 <p>In <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/blowup/blowup.py">the source here</a>, we illustrate the blowup of a point, a construction in algebraic geometry. This picture was created in 5 minutes and in half the lines of code compared to <a href="https://tex.stackexchange.com/a/158762/195136">this popular TeX stackexchange answer</a>, which uses quite convoluted, C-like Asymptote code.</p>
-<p><img src="/png/blowup_ex/png"/></p>
+<p><img src="/png/blowup_ex.png"/></p>
 
 
 

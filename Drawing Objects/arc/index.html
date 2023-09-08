@@ -710,9 +710,9 @@ The signature of this class is below.
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">arc</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">arc</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;fill=</span><span class="si">{</span><span class="n">rainbow_colors</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></code></pre></div>
 This generates the image</p>
-<p><img src="/png/arc_ex_1/png"/></p>
+<p><img src="/png/arc_ex_1.png"/></p>
 <p>If instead we would like these arcs sharing the same center, we can use the same code, but pass in <code>draw_from_start=False</code> to achieve </p>
-<p><img src="/png/arc_ex_2/png"/></p>
+<p><img src="/png/arc_ex_2.png"/></p>
 <p>Without this option, if we were forced to specify the point at which each arc should begin drawing, we would have to calculate the x-shift for every arc and apply such a shift to keep the centers aligned. That sounds inefficient and like a waste of time to achieve something so simple, right?</p>
 <h2 id="methods">Methods</h2>
 <p><code>Arc</code> has access to methods <code>.shift()</code>, <code>.scale()</code>, <code>.rotate()</code>, which behave as one would expect and takes in parameters as described before.</p>
