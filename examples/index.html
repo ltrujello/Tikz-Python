@@ -278,6 +278,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#des" class="md-nav__link">
+    DES
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#general-ven-diagrams" class="md-nav__link">
     General Ven Diagrams
   </a>
@@ -689,6 +696,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#des" class="md-nav__link">
+    DES
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#general-ven-diagrams" class="md-nav__link">
     General Ven Diagrams
   </a>
@@ -851,6 +865,9 @@ probably have to spend 30 minutes reading some manual about how TeX handles basi
 Which generates: </p>
 <p><img src="../png/roots_of_unity.png"/></p>
 <p>We will see in the examples that follow how imported Python libraries can alllow us to quickly (and efficiently, this is really important) make more sophisticated Tikz pictures. </p>
+<h3 id="des">DES</h3>
+<p>In the <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/des/des.py">source here</a>, we use a Python function to draw one round of the <a href="https://en.wikipedia.org/wiki/Data_Encryption_Standard">DES function</a>. We then call this function multiple times to illustrate the multiple rounds that entail the DES encryption algorithm.</p>
+<p><img src="../png/des.png" width="80%"/></p>
 <h3 id="general-ven-diagrams">General Ven Diagrams</h3>
 <p>In the <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py">source here</a>, we use the python library <code>itertools.combinations</code> to create a function which takes in an arbitrary number of 2D Tikz figures and colors each and every single intersection. </p>
 <p>For example, suppose we arrange nine circles in a 3 x 3 grid. Plugging these nine circles in, we generate the image below.</p>
