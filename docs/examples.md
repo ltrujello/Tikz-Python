@@ -86,6 +86,12 @@ Which generates:
 
 We will see in the examples that follow how imported Python libraries can alllow us to quickly (and efficiently, this is really important) make more sophisticated Tikz pictures. 
 
+### DES
+In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/des/des.py), we use a Python function to draw one round of the [DES function](https://en.wikipedia.org/wiki/Data_Encryption_Standard). We then call this function multiple times to illustrate the multiple rounds that entail the DES encryption algorithm.
+
+<img src="../png/des.png" width="80%"/>
+
+
 ### General Ven Diagrams 
 In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py), we use the python library `itertools.combinations` to create a function which takes in an arbitrary number of 2D Tikz figures and colors each and every single intersection. 
 

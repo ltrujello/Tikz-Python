@@ -1,6 +1,5 @@
 import subprocess
 import webbrowser
-import pkgutil
 import tempfile
 import re
 from pathlib import Path
@@ -9,6 +8,7 @@ from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.tikz_style import TikzStyle
 from tikzpy.utils.helpers import brackets, true_posix_path, replace_code
+from tikzpy.templates.tex_file import TEX_FILE
 
 
 class TikzPicture(TikzEnvironment):
@@ -91,7 +91,7 @@ class TikzPicture(TikzEnvironment):
         ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
 
     def write_tex_file(self, tex_filepath):
-        tex_code = pkgutil.get_data("tikzpy", "templates/tex_file.tex").decode("utf-8")
+        tex_code = TEX_FILE
         tex_file_contents = re.sub("fillme", lambda x: self.code(), tex_code)
         # Update the TeX file
         if self.BASE_DIR is not None:

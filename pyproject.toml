@@ -19,4 +19,5 @@ classifiers = [
 
 [tool.ruff]
 ignore-init-module-imports = true
-
+[project.urls]
+"Homepage" = "https://ltrujello.github.io/Tikz-Python/"

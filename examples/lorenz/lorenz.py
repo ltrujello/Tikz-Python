@@ -25,8 +25,8 @@ if __name__ == "__main__":
 
 
     # Next state according to the ODEs
-    def next(state):
-        x, y, z = state
+    def next(*state):
+        x, y, z = state[0][0], state[0][1], state[0][2]
         return sigma * (y - x), x * (rho - z) - y, x * y - beta * z
 
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     )  # This might need to be changed, e.g., 0.02 to 0.08, to make the program run.
 
     # Solve for the next positions, scale them
-    states = odeint(next, initial, t)
+    states = odeint(func=next, y0=initial, t=t)
     states = states * 0.25
 
     # We convert points from np.array to tuple for Tikz
