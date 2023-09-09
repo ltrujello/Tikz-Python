@@ -40,7 +40,7 @@ tikz.node(h_line.midpoint, options="below", text="Major")
 tikz.node(v_line.midpoint, options="left", text="Minor")
 ```
 
-<img src="/png/ellipse_ex_1.png" height = 250/>
+<img src="../png/ellipse_ex_1.png" height = 250/>
 
 
 ## Methods

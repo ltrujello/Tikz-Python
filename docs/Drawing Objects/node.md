@@ -36,7 +36,7 @@ tikz.node((2.1, 1.7), text="$z = re^{i\\theta}$")
 tikz.node((-2, 0.3), text="Cut")
 ```
 which produces
-<img src="/png/node_ex_1.png"/>
+<img src="../png/node_ex_1.png"/>
 
 Here's another example of usings nodes to illustrate the concept of a multivariable function.
 ```python
@@ -56,7 +56,7 @@ row_1.node((5, 0.3), text="output")
 row_1.node((7.3, 0), text="$f(x_1, \dots, x_n)$")
 ```
 
-<img src="/png/node_ex_2.png"/>
+<img src="../png/node_ex_2.png"/>
 
 ## Methods
 

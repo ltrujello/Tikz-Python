@@ -40,11 +40,11 @@ for i in range(1, 10):
 ```
 This generates the image
 
-<img src="/png/arc_ex_1.png"/>
+<img src="../png/arc_ex_1.png"/>
 
 If instead we would like these arcs sharing the same center, we can use the same code, but pass in `draw_from_start=False` to achieve 
 
-<img src="/png/arc_ex_2.png"/>
+<img src="../png/arc_ex_2.png"/>
 
 Without this option, if we were forced to specify the point at which each arc should begin drawing, we would have to calculate the x-shift for every arc and apply such a shift to keep the centers aligned. That sounds inefficient and like a waste of time to achieve something so simple, right?
 

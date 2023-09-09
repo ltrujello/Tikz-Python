@@ -1,6 +1,6 @@
 # Welcome to Tikz-Python!
 
-![Image Title](/Tikz-Python/png/blowup.png){align=right width=40%} 
+![Image Title](../png/blowup.png){align=right width=40%} 
 
 Tikz-Python is intended to be an easy-to-use, no-nonsense python package meant to serve as an interface to TikZ code. With Tikz-Python, you can have your beautiful vector graphics and eat it too! (erh, maybe).  
 
@@ -27,7 +27,7 @@ tikz.arc((-3, 0), 180, 360, x_radius=3, y_radius=1.5)
 tikz.show()  # Displays a pdf of the drawing to the user
 ```
 which produces
-<img src="/Tikz-Python/png/basic.png"> 
+<img src="../png/basic.png"> 
 
 # Why Tikz-Python 
 
@@ -57,7 +57,7 @@ start_node = tikz.node(line.start, options="below", text="Start!")
 end_node = tikz.node(line.end, options="above", text="End!")
 ```
 which produces 
-<img src="/Tikz-Python/png/line_and_two_nodes.png">
+<img src="../png/line_and_two_nodes.png">
 Saving the line as a variable `line` allows us to pass in `line.start` and `line.end` into the node positions, so we don't have to type out the exact coordinates. 
 This is great, because it makes our code more modular and therefore easier to change. With TikZ alone, you'd need to type out exact coordinates, and update every single one each time you make a minor adjustment to your code.
 
