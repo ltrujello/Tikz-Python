@@ -29,5 +29,5 @@ We explain line-by-line the above code.
 
 * The third, fourth, and fifth lines draw a filled circle and two elliptic arcs, which give the illusion of a sphere.
 
-* In the last two lines, `write()` writes all of our tikz code into a file located at `tikz_code/tikz_code.tex`. The call `show()` immediately displays the PDF of the drawing to the user.
+* In the last line, the call `show()` immediately displays the PDF of the drawing to the user.
 
