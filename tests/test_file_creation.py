@@ -74,5 +74,4 @@ def test_tex_file_creation():
         tikz.write_tex_file("tex_file.tex")
         correct_tex_file = Path(tmp_dir, "tex_file.tex")
         assert correct_tex_file.exists()
-        print(correct_tex_file.read_text())
         assert correct_tex_file.read_text() == TEX_FILE
