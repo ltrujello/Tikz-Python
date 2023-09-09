@@ -3,6 +3,12 @@ from tikzpy import TikzPicture, PlotCoordinates, Circle
 from tikzpy.colors import rainbow_colors
 from tikzpy.utils.helpers import to_cartesian
 
+def to_cartesian(r, ang):
+    """Returns the cartesian coordinates of a polar point."""
+    x = r * np.cos(ang)
+    y = r * np.sin(ang)
+    return x, y
+
 
 if __name__ == "__main__":
     xy_plane = TikzPicture(options="thick")
