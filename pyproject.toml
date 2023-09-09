@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tikzpy"
+name = "tikz_python"
 version = "0.0.1"
 authors = [
   { name="Luke Trujillo", email="ltrujillo@hmc.edu" },

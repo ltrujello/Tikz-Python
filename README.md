@@ -1,6 +1,11 @@
 # Tikz-Python
 An object-oriented Python approach towards providing a giant wrapper for Tikz code, with the goal of streamlining the process of creating complex figures for TeX documents.
 
+To install it, run 
+```
+pip install tikz-python
+```
+
 ## Documentation
 
 We have documentation now! Please visit the [documentation](https://ltrujello.github.io/Tikz-Python) site.
