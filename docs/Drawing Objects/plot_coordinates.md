@@ -31,7 +31,7 @@ plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 produces the image 
 
-<img src="../png/plotcoordinates_ex_1.png"/>
+<img src="../../png/plotcoordinates_ex_1.png"/>
 
 Alternatively we can set `action = "fill"` (analogous to `\fill` in Tikz) as in the code below
 ```python
@@ -44,7 +44,7 @@ plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 to produce the image
 
-<img src="../png/plotcoordinates_ex_2.png"/>
+<img src="../../png/plotcoordinates_ex_2.png"/>
 
 If we want both, we can set `action = "filldraw"` (analogous to `\filldraw` in Tikz)
 ```python
@@ -57,7 +57,7 @@ plot.options = "fill=ProcessBlue!50"
 plot.plot_options = "smooth cycle, tension = 0.5"
 ```
 which produces. 
-<img src="../png/plotcoordinates_ex_3.png"/>
+<img src="../../png/plotcoordinates_ex_3.png"/>
 
 Finally, we can set `action = "path"` (analogous to `\path` in Tikz), but as one would expect this doesn't draw anything. 
 
@@ -81,5 +81,5 @@ for i in range(0, 20):
 ```
 generates the image
 
-<img src="../png/PlotCoords_rotate_Example.png"/>
+<img src="../../png/PlotCoords_rotate_Example.png"/>
 

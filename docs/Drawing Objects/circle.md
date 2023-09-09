@@ -32,7 +32,7 @@ tikz.circle((3, 0), 1, options="thick, fill=red!60", action="filldraw")
 tikz.circle((6, 0), 1.25, options="Green!50", action="fill")
 ```
 
-<img src="../png/circle_ex_1.png"/>
+<img src="../../png/circle_ex_1.png"/>
 
 We can also use circles to create the [Hawaiian Earing](https://en.wikipedia.org/wiki/Hawaiian_earring).
 
@@ -46,7 +46,7 @@ for i in range(1, 60):
     n = radius / i
     tikz.circle((n, 0), n)
 ```
-<img src="../png/circle_ex_2.png"/>
+<img src="../../png/circle_ex_2.png"/>
 
 ## Attributes
 
