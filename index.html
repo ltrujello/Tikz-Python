@@ -567,7 +567,7 @@
 which produces
 <img src="/Tikz-Python/png/basic.png"> </p>
 <h1 id="why-tikz-python">Why Tikz-Python</h1>
-<p>With Tikz-Python, you write python code to obtain your desired raw TikZ code, and Python is much nicer than TeX. </p>
+<p>With Tikz-Python, you generate TikZ code by writing python code. And Python is much nicer than TeX. </p>
 <ul>
 <li>
 <p>Instead of spending a lot of time tediously writing messy, unreadable TikZ code to generate your desired figure, 
@@ -599,7 +599,7 @@ which produces
 <img src="/Tikz-Python/png/line_and_two_nodes.png">
 Saving the line as a variable <code>line</code> allows us to pass in <code>line.start</code> and <code>line.end</code> into the node positions, so we don't have to type out the exact coordinates. 
 This is great, because it makes our code more modular and therefore easier to change. With TikZ alone, you'd need to type out exact coordinates, and update every single one each time you make a minor adjustment to your code.</p>
-<p>Thus the key feature of Tikz-Python is that we lines, nodes, circles, etc. are all classes with useful attributes:
+<p>If we were working in an interactive python shell with the code above, we would be able to see that these functions return classes with useful attributes:
 <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">line</span><span class="o">.</span><span class="n">start</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">line</span><span class="o">.</span><span class="n">end</span>
@@ -607,17 +607,15 @@ This is great, because it makes our code more modular and therefore easier to ch
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">start_node</span><span class="o">.</span><span class="n">text</span>
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="s2">&quot;Start!&quot;</span>
 </span></code></pre></div>
-When working in an interactive python shell, you can iteratively build your tikz image and periodically view it with the <code>TikzPicture.show()</code> method.
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>...
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>tikz.show() # compiles the code and displays the graphics
-</span></code></pre></div>
-At any time, you can look at the current TikZ code you've created 
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">tikz</span><span class="p">)</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>\<span class="n">begin</span><span class="p">{</span><span class="n">tikzpicture</span><span class="p">}</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    \<span class="n">draw</span><span class="p">[</span><span class="n">thick</span><span class="p">,</span> <span class="n">blue</span><span class="p">,</span> <span class="n">o</span><span class="o">-</span><span class="n">o</span><span class="p">]</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="n">to</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    \<span class="n">node</span><span class="p">[</span><span class="n">below</span><span class="p">]</span> <span class="n">at</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="n">Start</span><span class="err">!</span> <span class="p">};</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    \<span class="n">node</span><span class="p">[</span><span class="n">above</span><span class="p">]</span> <span class="n">at</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="n">End</span><span class="err">!</span> <span class="p">};</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>\<span class="n">end</span><span class="p">{</span><span class="n">tikzpicture</span><span class="p">}</span>
+Additionally, you can <code>print</code> your tikz object to see the code generated
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>At any time, you can look at the current TikZ code you&#39;ve created 
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>```python
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>&gt;&gt;&gt; print(tikz)
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>\begin{tikzpicture}
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    \draw[thick, blue, o-o] (0, 0) to (1, 1);
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    \node[below] at (0, 0) { Start! };
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    \node[above] at (1, 1) { End! };
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>\end{tikzpicture}
 </span></code></pre></div>
 which you can then use to export to your project.</p>
 <h1 id="background">Background</h1>
