@@ -32,7 +32,7 @@ tikz.circle((3, 0), 1, options="thick, fill=red!60", action="filldraw")
 tikz.circle((6, 0), 1.25, options="Green!50", action="fill")
 ```
 
-<img src="/Tikz-Python/png/circle_ex_1.png"/>
+<img src="/png/circle_ex_1.png"/>
 
 We can also use circles to create the [Hawaiian Earing](https://en.wikipedia.org/wiki/Hawaiian_earring).
 
@@ -46,9 +46,30 @@ for i in range(1, 60):
     n = radius / i
     tikz.circle((n, 0), n)
 ```
-<img src="/Tikz-Python/png/circle_ex_2.png"/>
+<img src="/png/circle_ex_2.png"/>
 
+## Attributes
+
+The `Circle` class has attributes that are commonly used when making a TikZ graphic that has circles.
+
+## `Circle.north`
+Returns a `Point` object representing the north point on the circle.
+
+## `Circle.east`
+Returns a `Point` object representing the east point on the circle.
+
+## `Circle.south`
+Returns a `Point` object representing the south point on the circle.
+
+## `Circle.west`
+Returns a `Point` object representing the west point on the circle.
 
 ## Methods
+The circle class has the following methods.
+## `Circle.point_at_arg(angle: float, radians=False) -> Point`
+Returns a `Point` object representing the coordinates of the point on the circle at angle `angle` relative to the horizontal. One can use the optional argument `radians` to use either radians or degrees (the default).
+
+
+
 `Circle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
 

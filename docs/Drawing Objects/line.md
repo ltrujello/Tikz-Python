@@ -28,4 +28,13 @@ tikz = tikzpy.TikzPicture()
 tikz.line((0, 0), (4, 0), options="->", control_pts=[(1, 1), (3, -1)]
 ```
 which generates 
-<img src="/Tikz-Python/png/line_ex_1.png">
+<img src="/png/line_ex_1.png">
+
+## Methods
+
+The `Line` class has the following methods.
+
+## `Line.pos_at_t(t: float)`
+Returns a `Point` object representing the parametrized point on the line at time `t`, where `0 <= t <= 1`.
+Thus, when `t = 0` the start position of the line is returned, and when `t = 1` the end position of the line is returned.
+

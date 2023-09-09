@@ -47,7 +47,7 @@ for i in range(len(nodes)):
     tikz.line(start, end, options="->, shorten >= 10pt, shorten <=10pt")
 ```
 
-<img src="/Tikz-Python/png/rectangle_ex_1.png"/>
+<img src="/png/rectangle_ex_1.png"/>
 
 
 ## Methods

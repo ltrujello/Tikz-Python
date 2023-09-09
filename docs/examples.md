@@ -11,7 +11,7 @@ end_node = tikz.node(line.end, options="above", text="End!")
 ```
 and produces
 
-<img src="/Tikz-Python/png/line_and_two_nodes.png"/> 
+<img src="/png/line_and_two_nodes.png"/> 
 
 Saving the line as a variable `line` allows us to pass in `line.start` and `line.end` into the node positions, so we don't have to type out the exact coordinates. 
 This is because lines, nodes, etc. are class instances with useful attributes: 
@@ -47,7 +47,7 @@ for i in np.linspace(0, 1, 30): # Grab 30 equidistant points in [0, 1]
 ```
 The above code then produces
 
-<img src="/Tikz-Python/png/circles.png"/>
+<img src="/png/circles.png"/>
 
 
 ### Roots of Unity 
@@ -82,7 +82,7 @@ for i in range(n):
 ```
 Which generates: 
 
-<img src="/Tikz-Python/png/roots_of_unity.png"/>
+<img src="/png/roots_of_unity.png"/>
 
 We will see in the examples that follow how imported Python libraries can alllow us to quickly (and efficiently, this is really important) make more sophisticated Tikz pictures. 
 
@@ -91,11 +91,11 @@ In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples
 
 For example, suppose we arrange nine circles in a 3 x 3 grid. Plugging these nine circles in, we generate the image below.
 
-<img src="/Tikz-Python/png/intersection_circles.png"/>
+<img src="/png/intersection_circles.png"/>
 
 As another example, we can create three different overlapping topological blobs and then plug them into the function to obtain
 
-<img src="/Tikz-Python/png/intersection_blobs.png"/>
+<img src="/png/intersection_blobs.png"/>
 
 (Both examples are initialized in [the source](https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py) for testing.)
 As one might guess, this function is useful for creating topological figures, as manually writing all of the `\scope` and `\clip` commands to create such images is pretty tedious.
@@ -103,29 +103,29 @@ As one might guess, this function is useful for creating topological figures, as
 ### Barycentric subdivision
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/barycentric/barycentric.py), we create a function that allows us to generate the the n-th barycentric subdivision of a triangle. 
 
-<img src="/Tikz-Python/png/barycentric.png"/>
+<img src="/png/barycentric.png"/>
 
 ### Cantor function
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cantor/cantor.py), we plot the Cantor function by performing recursion. It is clear from this [TeX Stackexchange question](https://tex.stackexchange.com/questions/241622/plotting-the-cantor-function) that TeX alone cannot do this, as most answers rely on external programs to generate the data. 
 
-<img src="/Tikz-Python/png/cantor.png"/>
+<img src="/png/cantor.png"/>
 
 ### Symbolic Intergation
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/symbolic_integration/integrate_and_plot.py), we use `numpy` and `sympy` to very simply perform symbolic integration. The result is a function which plots and labels the n-order integrals of any function. For example, the output of `x**2` (the polynomial x^2) generates the image below. 
 
-<img src="/Tikz-Python/png/integration_ex.png"/>
+<img src="/png/integration_ex.png"/>
 
 ### Cone over a Projective Variety
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/projective_cone/projective_cone.py), we use `numpy` to create an image which illustrates the concept of an affine cone over a projective variety. In the case of a curve Y in P^2, the cone C(Y) is a surface in A^3. 
 
 The image that this drawing was modeled after appears in Exercise 2.10 of Hartshorne's Algebraic Geometry.
 
-<img src="/Tikz-Python/png/projective_cone.png"/>
+<img src="/png/projective_cone.png"/>
 
 ### Lorenz System
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/lorenz/lorenz.py), we use `numpy` and `scipy` to solve ODEs and plot the Lorenz system. This is made possible since `tikz_py` also supports 3D. 
 
-<img src="/Tikz-Python/png/lorenz_ex.png"/>
+<img src="/png/lorenz_ex.png"/>
 
 ### Tikz Styles
 `tikzpy` supports the creation of any `\tikzset`, a feature of Tikz that saves users a great deal of time. You can save your tikz styles in a .py file instead of copying and pasting all the time. 
@@ -133,35 +133,35 @@ In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples
 Even if you don't want to make such settings, there are useful `\tikzset` styles that are preloaded in `tikzpy`. One particular is the very popular tikzset authored by Paul Gaborit [in this TeX stackexchange question](https://tex.stackexchange.com/questions/3161/tikz-how-to-draw-an-arrow-in-the-middle-of-the-line). Using such settings, we create these pictures, which illustrate Cauchy's Residue Theorem.
 [The source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm.py) produces 
 
-<img src="/Tikz-Python/png/cauchy_residue_thm_ex.png"/>
+<img src="/png/cauchy_residue_thm_ex.png"/>
 
 while [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/cauchy_residue_thm/cauchy_residue_thm_arc.py) produces 
 
-<img src="/Tikz-Python/png/cauchy_residue_thm_arc_ex.png"/>
+<img src="/png/cauchy_residue_thm_arc_ex.png"/>
 
 ### Linear Transformations
 Recall a 3x2 matrix is a linear transformation from R^2 to R^3. Using such an interpretation, we create a function in [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/linear_transformations/linear_transformations.py) which plots the image of a 3x2 matrix. The input is in the form of a `numpy.array`. 
 
 For example, plugging the array `np.array([[0, 1], [1, 1], [0, 1]])` into the source produces 
 
-<img src="/Tikz-Python/png/linear_transformation_ex_1.png"/>
+<img src="/png/linear_transformation_ex_1.png"/>
 
 while plugging the array `np.array([[2, 0], [1, 1], [1, 1]])` into the source produces 
 
-<img src="/Tikz-Python/png/linear_transformation_ex_2.png"/>
+<img src="/png/linear_transformation_ex_2.png"/>
 
 ### Projecting R^1 onto S^1
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/spiral/spiral.py), we use `numpy` to illustrate the projection of R^1 onto S^1. Creating this figure in Tex alone is nontrivial, as one must create white space at self intersections to illustrate crossovers. Existing tikz solutions cannot take care of this, but the flexible logical operators of Python allow one to achieve it. 
 
-<img src="/Tikz-Python/png/spiral.png"/>
+<img src="/png/spiral.png"/>
 
 ### Polar Coordinates
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/polar/polar.py), we illustrate the concept of polar coordiantes by demonstrating how a sine curve is mapped into polar coordinates. This example should be compared to the more complex answers in this [TeX Stackexchange question](https://tex.stackexchange.com/questions/594231/make-rainbow-coloured-bullets-to-show-points) which seeks a similar result. 
 
-<img src="/Tikz-Python/png/polar.png"/>
+<img src="/png/polar.png"/>
 
 ### Blowup at a point
 In [the source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/blowup/blowup.py), we illustrate the blowup of a point, a construction in algebraic geometry. This picture was created in 5 minutes and in half the lines of code compared to [this popular TeX stackexchange answer](https://tex.stackexchange.com/a/158762/195136), which uses quite convoluted, C-like Asymptote code.
 
-<img src="/Tikz-Python/png/blowup_ex.png"/>
+<img src="/png/blowup_ex.png"/>
 

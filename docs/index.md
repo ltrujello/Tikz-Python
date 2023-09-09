@@ -31,7 +31,7 @@ which produces
 
 # Why Tikz-Python 
 
-With Tikz-Python, you write python code to obtain your desired raw TikZ code, and Python is much nicer than TeX. 
+With Tikz-Python, you generate TikZ code by writing python code. And Python is much nicer than TeX. 
 
 * Instead of spending a lot of time tediously writing messy, unreadable TikZ code to generate your desired figure, 
 you can use TikZ-Python to quickly create your figure *as a Python script*. Your Python code will definitely be much 
@@ -61,7 +61,7 @@ which produces
 Saving the line as a variable `line` allows us to pass in `line.start` and `line.end` into the node positions, so we don't have to type out the exact coordinates. 
 This is great, because it makes our code more modular and therefore easier to change. With TikZ alone, you'd need to type out exact coordinates, and update every single one each time you make a minor adjustment to your code.
 
-Thus the key feature of Tikz-Python is that we lines, nodes, circles, etc. are all classes with useful attributes:
+If we were working in an interactive python shell with the code above, we would be able to see that these functions return classes with useful attributes:
 ```python
 >>> line.start
 (0,0)
@@ -70,10 +70,7 @@ Thus the key feature of Tikz-Python is that we lines, nodes, circles, etc. are a
 >>> start_node.text
 "Start!"
 ```
-When working in an interactive python shell, you can iteratively build your tikz image and periodically view it with the `TikzPicture.show()` method.
-```
-...
-tikz.show() # compiles the code and displays the graphics
+Additionally, you can `print` your tikz object to see the code generated
 ```
 At any time, you can look at the current TikZ code you've created 
 ```python
