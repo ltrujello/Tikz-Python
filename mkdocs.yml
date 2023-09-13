@@ -3,6 +3,8 @@ theme:
   name: material
   features:
     - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -16,4 +18,7 @@ markdown_extensions:
 
 extra_css:
   - stylesheets/extra.css
+
+repo_url: https://github.com/ltrujello/Tikz-Python
+
 

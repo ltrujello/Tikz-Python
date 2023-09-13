@@ -10,6 +10,9 @@ pip install tikz-python
 
 We have documentation now! Please visit the [documentation](https://ltrujello.github.io/Tikz-Python) site.
 
+## Examples
+Want to see some nice examples of what this package can do? See [here](https://ltrujello.github.io/Tikz-Python/examples/).
+
 ## How to Use: Basics
 An example of this package in action is below. 
 ```python
