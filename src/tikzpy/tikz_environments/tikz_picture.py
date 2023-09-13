@@ -3,7 +3,7 @@ import webbrowser
 import tempfile
 import re
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.tikz_style import TikzStyle
@@ -112,7 +112,9 @@ class TikzPicture(TikzEnvironment):
         with open(tikz_code_filepath, "w") as f:
             f.write(self.code())
 
-    def compile(self, quiet: bool = True) -> Path:
+    def compile(
+        self, pdf_destination: Optional[str] = None, quiet: bool = True
+    ) -> Path:
         """Compiles the Tikz code and returns a Path to the final PDF."""
         with tempfile.TemporaryDirectory() as tmp_dir:
             tex_filepath = Path(tmp_dir) / "tex_file.tex"
@@ -130,10 +132,13 @@ class TikzPicture(TikzEnvironment):
 
             # We move the compiled PDF into the same folder containing the tikz code.
             pdf_file = tex_filepath.with_suffix(".pdf").resolve()
-            if self.BASE_DIR is None:
-                moved_pdf_file = Path.cwd() / pdf_file.name
+            if pdf_destination is None:
+                if self.BASE_DIR is None:
+                    moved_pdf_file = Path.cwd() / pdf_file.name
+                else:
+                    moved_pdf_file = self.BASE_DIR / pdf_file.name
             else:
-                moved_pdf_file = self.BASE_DIR / pdf_file.name
+                moved_pdf_file = Path(pdf_destination)
             pdf_file.replace(moved_pdf_file)
             return moved_pdf_file.resolve()
 
