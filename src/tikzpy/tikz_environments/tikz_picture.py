@@ -144,7 +144,7 @@ class TikzPicture(TikzEnvironment):
 
     def show(self, quiet: bool = False) -> None:
         """Compiles the Tikz code and displays the pdf to the user. Set quiet=True to shut up latexmk."""
-        pdf_file = self.compile(quiet)
+        pdf_file = self.compile(quiet=quiet)
         webbrowser.open_new(str(pdf_file.as_uri()))
 
     def scope(self, options: str = "") -> Scope:
