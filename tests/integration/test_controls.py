@@ -1,3 +1,5 @@
+import tempfile
+from pathlib import Path
 from tikzpy import TikzPicture
 from tikzpy.colors import rainbow_colors
 
@@ -27,4 +29,9 @@ def test_controls_example():
         line = tikz.line((i, 0), (0, 5))
         line.options = f"color={rainbow_colors(i)}"
         line.control_pts = [(i - 2, -1), (i + 2, -2)]
+
+    with tempfile.NamedTemporaryFile() as fp:
+        temp_path = Path(fp.name)
+        tikz.compile(temp_path, quiet=True)
+
     assert str(tikz) == code

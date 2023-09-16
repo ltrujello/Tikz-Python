@@ -1,3 +1,5 @@
+import tempfile
+from pathlib import Path
 from tikzpy import TikzPicture
 
 code = r"""\begin{tikzpicture}
@@ -14,5 +16,9 @@ def test_basic_circle_example():
 
     arc_one = tikz.arc((3, 0), 0, 180, x_radius=3, y_radius=1.5, options=f"dashed")
     arc_two = tikz.arc((-3, 0), 180, 360, x_radius=3, y_radius=1.5)
+
+    with tempfile.NamedTemporaryFile() as fp:
+        temp_path = Path(fp.name)
+        tikz.compile(temp_path, quiet=True)
 
     assert str(tikz) == code

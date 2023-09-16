@@ -1,3 +1,5 @@
+import tempfile
+from pathlib import Path
 from tikzpy import TikzPicture
 from tikzpy.styles import arrows_along_path_style
 
@@ -68,4 +70,9 @@ def test_cauchy_residue_example():
     ):
         tikz.circle(singularity.center, 0.05, action="fill")
         tikz.node(singularity.center, options="right", text=f"$a_{ind+1}$")
+
+    with tempfile.NamedTemporaryFile() as fp:
+        temp_path = Path(fp.name)
+        tikz.compile(temp_path, quiet=True)
+
     assert str(tikz) == code

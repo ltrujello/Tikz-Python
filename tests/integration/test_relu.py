@@ -1,3 +1,6 @@
+import tempfile
+from pathlib import Path
+
 import numpy as np
 from tikzpy import TikzPicture, Point, R2_Space
 import math
@@ -35,4 +38,9 @@ def test_relu_example():
     # Plot it
     tikz.line((-4, 0), (0, 0), options="ProcessBlue, <-")
     tikz.line((0, 0), (4.5, 4.5), options="ProcessBlue, ->")
+
+    with tempfile.NamedTemporaryFile() as fp:
+        temp_path = Path(fp.name)
+        tikz.compile(temp_path, quiet=True)
+
     assert str(tikz) == code
