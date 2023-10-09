@@ -20,6 +20,34 @@ circle = Circle(center, radius, options, action)
 | `action` (str)   | An action to perform with the circle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"` |
 
 
+## Attributes
+
+The `Circle` class has attributes that are commonly used when making a TikZ graphic that has circles.
+
+## `Circle.north`
+Returns a `Point` object representing the north point on the circle .
+
+## `Circle.east`
+Returns a `Point` object representing the east point on the circle.
+
+## `Circle.south`
+Returns a `Point` object representing the south point on the circle.
+
+## `Circle.west`
+Returns a `Point` object representing the west point on the circle.
+
+## `Circle.center`
+Returns a `Point` object representing the center of the circle. This attribute is modifiable so that one can set this value as well.
+
+## Methods
+The circle class has the following methods.
+## `Circle.point_at_arg(angle: float, radians=False) -> Point`
+Returns a `Point` object representing the coordinates of the point on the circle at angle `angle` relative to the horizontal. One can use the optional argument `radians` to use either radians or degrees (the default).
+
+
+
+`Circle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
+
 ## Examples
 Here we create several circles, making use of the `action` parameter. 
 ```python
@@ -47,29 +75,4 @@ for i in range(1, 60):
     tikz.circle((n, 0), n)
 ```
 <img src="../../png/circle_ex_2.png"/>
-
-## Attributes
-
-The `Circle` class has attributes that are commonly used when making a TikZ graphic that has circles.
-
-## `Circle.north`
-Returns a `Point` object representing the north point on the circle.
-
-## `Circle.east`
-Returns a `Point` object representing the east point on the circle.
-
-## `Circle.south`
-Returns a `Point` object representing the south point on the circle.
-
-## `Circle.west`
-Returns a `Point` object representing the west point on the circle.
-
-## Methods
-The circle class has the following methods.
-## `Circle.point_at_arg(angle: float, radians=False) -> Point`
-Returns a `Point` object representing the coordinates of the point on the circle at angle `angle` relative to the horizontal. One can use the optional argument `radians` to use either radians or degrees (the default).
-
-
-
-`Circle` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
 
