@@ -23,6 +23,7 @@ class Rectangle(DrawingObject):
     ) -> None:
         self._left_corner = Point(left_corner)
         self._right_corner = Point(right_corner)
+        self.determine_true_corners()
         self.options = options
         super().__init__(action, self.options)
 
@@ -33,58 +34,81 @@ class Rectangle(DrawingObject):
     @property
     def height(self) -> float:
         """Returns the height of the rectangle"""
-        return abs(self._right_corner.y - self._left_corner.y)
+        return abs(self.true_right_corner.y - self.true_left_corner.y)
 
     @property
     def width(self) -> float:
         """Returns the width of the rectangle"""
-        return abs(self._right_corner.x - self._left_corner.x)
+        return abs(self.true_right_corner.x - self.true_left_corner.x)
 
     @property
     def center(self):
         """Returns the center of the rectangle."""
         return Point(
-            (self._left_corner.x + self._right_corner.x) / 2,
-            (self._left_corner.y + self._right_corner.y) / 2,
+            (self.true_left_corner.x + self.true_right_corner.x) / 2,
+            (self.true_left_corner.y + self.true_right_corner.y) / 2,
         )
 
     @property
     def north(self):
-        return self._right_corner - (self.width / 2, 0)
+        print(self.true_right_corner)
+        return self.true_right_corner - (self.width / 2, 0)
 
     @property
     def east(self):
-        return self._right_corner - (0, self.height / 2)
+        return self.true_right_corner - (0, self.height / 2)
 
     @property
     def south(self):
-        return self._left_corner + (self.width / 2, 0)
+        return self.true_left_corner + (self.width / 2, 0)
 
     @property
     def west(self):
-        return self._left_corner + (0, self.height / 2)
+        return self.true_left_corner + (0, self.height / 2)
 
     @property
     def left_corner(self) -> Point:
-        return self._left_corner
+        return self.true_left_corner
 
     @left_corner.setter
     def left_corner(self, new_corner) -> None:
         if isinstance(new_corner, (tuple, Point)):
             self._left_corner = Point(new_corner)
+            self.determine_true_corners()
         else:
             raise TypeError(f"Invalid type '{type(new_corner)}' for left corner")
 
     @property
     def right_corner(self) -> Point:
-        return self._right_corner
+        return self.true_right_corner
 
     @right_corner.setter
     def right_corner(self, new_corner) -> None:
         if isinstance(new_corner, (tuple, Point)):
             self._right_corner = Point(new_corner)
+            self.determine_true_corners()
         else:
             raise TypeError(f"Invalid type '{type(new_corner)}' for right corner")
+
+    def determine_true_corners(self):
+        x_1, y_1 = self._left_corner
+        x_2, y_2 = self._right_corner
+
+        if x_1 < x_2 and y_1 < y_2:
+            self.true_left_corner = Point(x_1, y_1)
+            self.true_right_corner = Point(x_2, y_2)
+
+        elif x_1 > x_2 and y_1 < y_2:
+            self.true_left_corner = Point(x_2, y_1)
+            self.true_right_corner = Point(x_1, y_2)
+
+        elif x_1 < x_2 and y_1 > y_2:
+            self.true_left_corner = Point(x_1, y_2)
+            self.true_right_corner = Point(x_2, y_1)
+
+        else:
+            self.true_left_corner = Point(x_2, y_2)
+            self.true_right_corner = Point(x_1, y_1)
 
     def set_north(
         self,
@@ -96,6 +120,7 @@ class Rectangle(DrawingObject):
         north_point = Point(north_point)
         self._left_corner = Point(north_point.x - width / 2, north_point.y - height)
         self._right_corner = Point(north_point.x + width / 2, north_point.y)
+        self.determine_true_corners()
         return self
 
     def set_east(
@@ -108,6 +133,7 @@ class Rectangle(DrawingObject):
         east_point = Point(east_point)
         self._left_corner = Point(east_point.x - width, east_point.y - height / 2)
         self._right_corner = Point(east_point.x, east_point.y + height / 2)
+        self.determine_true_corners()
         return self
 
     def set_south(
@@ -120,6 +146,7 @@ class Rectangle(DrawingObject):
         south_point = Point(south_point)
         self._left_corner = Point(south_point.x - width / 2, south_point.y)
         self._right_corner = Point(south_point.x + width / 2, south_point.y + height)
+        self.determine_true_corners()
         return self
 
     def set_west(
@@ -132,18 +159,22 @@ class Rectangle(DrawingObject):
         west_point = Point(west_point)
         self._left_corner = Point(west_point.x, west_point.y - height / 2)
         self._right_corner = Point(west_point.x + width, west_point.y + height / 2)
+        self.determine_true_corners()
         return self
 
     def shift(self, xshift: float, yshift: float) -> None:
         self._left_corner.shift(xshift, yshift)
         self._right_corner.shift(xshift, yshift)
+        self.determine_true_corners()
 
     def scale(self, scale: float) -> None:
         self._left_corner.scale(scale)
         self._right_corner.scale(scale)
+        self.determine_true_corners()
 
     def rotate(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
         self._left_corner.rotate(angle, about_pt, radians)
         self._right_corner.rotate(angle, about_pt, radians)
+        self.determine_true_corners()

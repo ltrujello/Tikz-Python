@@ -10,6 +10,13 @@ def tikz_rectangle():
 
 
 @pytest.fixture
+def tikz_rectangle_left_greater_than_right():
+    tikz = TikzPicture()
+    rectangle = tikz.rectangle((3, 4), (2, 2), options="Blue")
+    return rectangle
+
+
+@pytest.fixture
 def mock_rectangle():
     rectangle = Rectangle((2, 2), (3, 4), options="Blue")
     return rectangle
@@ -31,11 +38,13 @@ def test_rectangle_constructor(object, request):
     assert rectangle.options == "Blue"
     assert rectangle.height == 2
     assert rectangle.width == 1
+
     assert rectangle.center == Point(2.5, 3.0)
     assert rectangle.north == Point(2.5, 4)
     assert rectangle.east == Point(3, 3)
     assert rectangle.south == Point(2.5, 2)
     assert rectangle.west == Point(2, 3)
+
     assert rectangle.code == r"\draw[Blue] (2, 2) rectangle (3, 4);"
 
 
@@ -67,3 +76,20 @@ def test_rectangle_scale(mock_rectangle):
     assert mock_rectangle.left_corner == Point(4, 4)
     assert mock_rectangle.right_corner == Point(6, 8)
     assert mock_rectangle.code == r"\draw[Blue] (4, 4) rectangle (6, 8);"
+
+
+@pytest.mark.parametrize(
+    "left_corner,right_corner",
+    [
+        [(2, 2), (3, 4)],  # x_1 < x_2 and y_1 < y_2, good
+        [(3, 2), (2, 4)],  # x_1 > x_2 but y_1 < y_2
+        [(2, 4), (3, 2)],  # x_1 < x_2 but y_1 > y_2
+        [(3, 4), (2, 2)],  # x_1 > x_2 and y_1 > y_2
+    ],
+)
+def test_rectangle_attributes(left_corner, right_corner):
+    rectangle = Rectangle(left_corner, right_corner)
+    assert rectangle.north == Point(2.5, 4)
+    assert rectangle.east == Point(3, 3)
+    assert rectangle.south == Point(2.5, 2)
+    assert rectangle.west == Point(2, 3)
