@@ -2,13 +2,22 @@ import subprocess
 import webbrowser
 import tempfile
 import re
+import numpy as np
 from pathlib import Path
 from typing import List, Optional
 from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.tikz_style import TikzStyle
-from tikzpy.utils.helpers import brackets, true_posix_path, replace_code
+from tikzpy.utils.helpers import (
+    brackets,
+    true_posix_path,
+    replace_code,
+    find_image_start_boundary,
+    find_image_end_boundary,
+)
 from tikzpy.templates.tex_file import TEX_FILE
+from pdf2image import convert_from_path
+from PIL import Image
 
 
 class TikzPicture(TikzEnvironment):
@@ -141,6 +150,43 @@ class TikzPicture(TikzEnvironment):
                 moved_pdf_file = Path(pdf_destination)
             pdf_file.replace(moved_pdf_file)
             return moved_pdf_file.resolve()
+
+    def save_png(self, pdf_fp, png_destination):
+        page_pngs = convert_from_path(pdf_fp)
+
+        # Create the png of the pdf
+        total = len(page_pngs)
+        ind = 0
+        if total > 1:
+            print(
+                f"WARNING! {pdf_file=} has more than two pages, expected only one. Going to use"
+                " the last page. "
+            )
+            ind = len(page_pngs) - 1
+        page_pngs = list(page_pngs)
+        image = page_pngs[ind]
+        print(f"Converting page {ind}/{total}")
+        # easier to find boundaries of a grayscale image
+        grayscale_image = image.convert("L")
+        img_data = np.asarray(grayscale_image)
+        y_0 = find_image_start_boundary(img_data)
+        y_1 = find_image_end_boundary(img_data)
+        x_0 = find_image_start_boundary(img_data.T)
+        x_1 = find_image_end_boundary(img_data.T)
+        horizontal_len = len(img_data.T)
+        vertical_len = len(img_data.T)
+        # Zoom in the picture
+        x_0 = int(min(0.20 * horizontal_len, x_0))
+        x_1 = int(max(0.80 * horizontal_len, x_1))
+        # Add vertical whitespace padding
+        y_0 = int(max(0, y_0 - 0.02 * vertical_len))
+        y_1 = int(min(vertical_len, y_1 + 0.02 * vertical_len))
+
+        true_img = image.convert("RGB")
+        img_data = np.asarray(true_img)
+        cropped_img_data = img_data[y_0:y_1, x_0:x_1]
+        cropped_img = Image.fromarray(np.uint8(cropped_img_data))
+        cropped_img.save(str(png_destination), "PNG")
 
     def show(self, quiet: bool = False) -> None:
         """Compiles the Tikz code and displays the pdf to the user. Set quiet=True to shut up latexmk."""

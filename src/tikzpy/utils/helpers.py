@@ -44,3 +44,33 @@ def replace_code(
         ),  # Need to escape backslashes twice for re package
         content,
     )
+
+
+def find_image_start_boundary(img_data):
+    ind = 0
+    while ind < len(img_data):
+        row = img_data[ind]
+        found = False
+        for col in row:
+            if col < 255:
+                found = True
+                break
+        if found:
+            break
+        ind += 1
+    return ind
+
+
+def find_image_end_boundary(img_data):
+    ind = len(img_data) - 1
+    while ind > 0:
+        row = img_data[ind]
+        found = False
+        for col in row:
+            if col < 255:
+                found = True
+                break
+        if found:
+            break
+        ind -= 1
+    return ind

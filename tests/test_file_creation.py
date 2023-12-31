@@ -13,6 +13,7 @@ TEX_FILE = r"""%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 %%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 \documentclass[12pt,letterpaper]{article}
+\usepackage[left=0.3in, right=0.3in]{geometry}
 \usepackage{amsmath, amsfonts, amssymb}
 \usepackage[dvipsnames]{xcolor} % Colors, use dvipsnames for more color options
 \usepackage{tikz-cd} % Diagrams
