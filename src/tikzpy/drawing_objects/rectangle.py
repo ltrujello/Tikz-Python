@@ -16,13 +16,18 @@ class Rectangle(DrawingObject):
 
     def __init__(
         self,
-        left_corner: Union[Tuple[float, float], Point] = Point(0, 0),
-        right_corner: Union[Tuple[float, float], Point] = Point(0, 0),
+        left_corner: Union[Tuple[float, float], Point],
+        width: float,
+        height: float,
+        right_corner: Union[Tuple[float, float], Point] = None,
         options: str = "",
         action: str = "draw",
     ) -> None:
         self._left_corner = Point(left_corner)
-        self._right_corner = Point(right_corner)
+        self.width = width
+        self.height = height
+        if right_corner is None:
+            self._right_corner = Point(left_corner) + (width, height)
         self.determine_true_corners()
         self.options = options
         super().__init__(action, self.options)
@@ -30,16 +35,6 @@ class Rectangle(DrawingObject):
     @property
     def _command(self) -> str:
         return f"{self._left_corner} rectangle {self._right_corner}"
-
-    @property
-    def height(self) -> float:
-        """Returns the height of the rectangle"""
-        return abs(self.true_right_corner.y - self.true_left_corner.y)
-
-    @property
-    def width(self) -> float:
-        """Returns the width of the rectangle"""
-        return abs(self.true_right_corner.x - self.true_left_corner.x)
 
     @property
     def center(self):
@@ -74,6 +69,7 @@ class Rectangle(DrawingObject):
     def left_corner(self, new_corner) -> None:
         if isinstance(new_corner, (tuple, Point)):
             self._left_corner = Point(new_corner)
+            self._right_corner = Point(new_corner) + (self.width, self.height)
             self.determine_true_corners()
         else:
             raise TypeError(f"Invalid type '{type(new_corner)}' for left corner")
@@ -86,6 +82,7 @@ class Rectangle(DrawingObject):
     def right_corner(self, new_corner) -> None:
         if isinstance(new_corner, (tuple, Point)):
             self._right_corner = Point(new_corner)
+            self._left_corner = Point(new_corner) - (self.width, self.height)
             self.determine_true_corners()
         else:
             raise TypeError(f"Invalid type '{type(new_corner)}' for right corner")
