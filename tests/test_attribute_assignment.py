@@ -31,7 +31,8 @@ node.options = "below"
 # Rectangle
 rectangle = tikz.rectangle((2, 2), (3, 4))
 rectangle.left_corner = (1, 1)
-rectangle.right_corner = (5, 5)
+rectangle.width = 4
+rectangle.height = 4
 rectangle.options = "fill=purple!50"
 # Ellipse
 ellipse = tikz.ellipse((0, 0), 3, 4)
@@ -96,8 +97,8 @@ def test_attribute_assignment():
     # Rectangle
     assert rectangle.left_corner.x == 1
     assert rectangle.left_corner.y == 1
-    assert rectangle.right_corner.x == 5
-    assert rectangle.right_corner.y == 5
+    assert rectangle.width == 4
+    assert rectangle.height == 4
     assert rectangle.options == "fill=purple!50"
     assert rectangle.code == r"\draw[fill=purple!50] (1, 1) rectangle (5, 5);"
     # Ellipse

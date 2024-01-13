@@ -110,13 +110,14 @@ class TikzEnvironment(ABC):
 
     def rectangle(
         self,
-        left_corner: Union[Tuple[float, float], Point] = Point(0, 0),
-        right_corner: Union[Tuple[float, float], Point] = Point(0, 0),
+        left_corner: Union[Tuple[float, float], Point],
+        width: float = 0,
+        height: float = 0,
         options: str = "",
         action: str = "draw",
     ) -> Rectangle:
         """Draws a rectangle by creating an instance of the Rectangle class."""
-        rectangle = Rectangle(left_corner, right_corner, options, action)
+        rectangle = Rectangle(left_corner, width, height, options, action)
         self.draw(rectangle)
         return rectangle
 

@@ -8,13 +8,14 @@ The signature of the class is given below.
 ```python
 from tikzpy import Rectangle
 
-rectangle = Rectangle(left_corner, right_corner, options, action)
+rectangle = Rectangle(left_corner, width, height, options="", action="\draw")
 ```
 
 | Parameter              | Description                                                                            | Default   |
 | ---------------------- | -------------------------------------------------------------------------------------- | --------- |
 | `left_corner`  (tuple) | A tuple (x, y) of floats representing the position of the node.                        |
-| `right_corner` (str)   | String containing valid Tikz node options (e.g., "above")                              | `""`      |
+| `width` (float)        | Width of the rectangle                                                                 | `0`      |
+| `height` (float)       | Height of the rectangle                                                                | `0`      |
 | `options` (str)        | A string containing valid Tikz draw optins, (e.g, "fill = Blue").                      | `""`      |
 | `action` (str)         | An action to perform with the rectangle (e.g., `\draw`, `\fill`, `\filldraw`, `\path`) | `"\draw"` |
 

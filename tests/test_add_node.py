@@ -14,7 +14,7 @@ plot = tikz.plot_coordinates(
 # Circle
 circle = tikz.circle((1, 1), 1, options="fill=red")
 # Rectangle
-rectangle = tikz.rectangle((2, 2), (3, 4), options="thick")
+rectangle = tikz.rectangle((2, 2), 1, 2, options="thick")
 # Ellipse
 ellipse = tikz.ellipse((0, 0), 3, 4, options="fill=Blue")
 # Arc

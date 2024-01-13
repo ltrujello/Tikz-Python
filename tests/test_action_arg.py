@@ -61,11 +61,11 @@ circle_filldraw = tikz.circle((1, 1), 1, options="fill = purple", action="filldr
 # Circle : \path
 circle_path = tikz.circle((1, 1), 1, options="fill = purple", action="path")
 # Rectangle : \fill
-rectangle_fill = tikz.rectangle((2, 2), (3, 4), options="Blue", action="fill")
+rectangle_fill = tikz.rectangle((2, 2), 1, 2, options="Blue", action="fill")
 # Rectangle : \filldraw
-rectangle_filldraw = tikz.rectangle((2, 2), (3, 4), options="Blue", action="filldraw")
+rectangle_filldraw = tikz.rectangle((2, 2), 1, 2, options="Blue", action="filldraw")
 # Rectangle : \path
-rectangle_path = tikz.rectangle((2, 2), (3, 4), options="Blue", action="path")
+rectangle_path = tikz.rectangle((2, 2), 1, 2, options="Blue", action="path")
 # Ellipse : \fill
 ellipse_fill = tikz.ellipse((0, 0), 3, 4, action="fill")
 # Ellipse : \filldraw
