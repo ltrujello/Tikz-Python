@@ -23,6 +23,17 @@ def mock_plot_coordinates():
     return plot_coordinates
 
 
+@pytest.fixture
+def plot_relative_coordinates():
+    tikz = TikzPicture()
+    plot_coordinates = tikz.plot_relative_coordinates(
+        options="green",
+        plot_options="smooth ",
+        points=[(0, 0), (0, 1), (1, 0), (1, 1)],
+    )
+    return plot_coordinates
+
+
 @pytest.mark.parametrize(
     "object",
     [
@@ -46,3 +57,12 @@ def test_plot_coordinates_construction(object, request):
         plot_coordinates.code
         == r"\draw[green] plot[smooth ] coordinates {(1, 1) (2, 2) (3, 3) (2, -4) };"
     )
+
+
+def test_plot_relative_coordinates(plot_relative_coordinates):
+    assert plot_relative_coordinates.points == [
+        Point(0, 0),
+        Point(0, 1),
+        Point(1, 1),
+        Point(2, 2),
+    ]

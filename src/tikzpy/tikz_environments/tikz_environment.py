@@ -66,6 +66,25 @@ class TikzEnvironment(ABC):
         self.draw(plot)
         return plot
 
+    def plot_relative_coordinates(
+        self,
+        points: Union[List[tuple], List[Point]],
+        options: str = "",
+        plot_options: str = "",
+        action: str = "draw",
+    ) -> PlotCoordinates:
+        """Draws a (relative) plot coordinates statement by creating an instance of the PlotCoordinates class."""
+        last_point = points[0]
+        new_points = [last_point]
+        for point in points[1:]:
+            new_point = last_point + Point(point)
+            new_points.append(new_point)
+            last_point = new_point
+
+        plot = PlotCoordinates(new_points, options, plot_options, action)
+        self.draw(plot)
+        return plot
+
     def circle(
         self,
         center: Union[Tuple[float, float], Point],
