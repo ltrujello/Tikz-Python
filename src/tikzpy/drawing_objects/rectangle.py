@@ -88,46 +88,6 @@ class Rectangle(DrawingObject):
         else:
             raise TypeError(f"Invalid type '{type(new_corner)}' for left corner")
 
-    def set_north(
-        self,
-        north_point: Union[Tuple[float, float], Point],
-    ):
-        """Set the left and right corners such that their .north attribute is north_point"""
-        north_point = Point(north_point)
-        self._left_corner = Point(
-            north_point.x - self.width / 2, north_point.y - self.height
-        )
-        return self
-
-    def set_east(
-        self,
-        east_point: Union[Tuple[float, float], Point],
-    ):
-        """Set the left and right corners such that their .east attribute is east_point"""
-        east_point = Point(east_point)
-        self._left_corner = Point(
-            east_point.x - self.width, east_point.y - self.height / 2
-        )
-        return self
-
-    def set_south(
-        self,
-        south_point: Union[Tuple[float, float], Point],
-    ):
-        """Set the left and right corners such that their .south attribute is south_point"""
-        south_point = Point(south_point)
-        self._left_corner = Point(south_point.x - self.width / 2, south_point.y)
-        return self
-
-    def set_west(
-        self,
-        west_point: Union[Tuple[float, float], Point],
-    ):
-        """Set the left and right corners such that their .west attribute is west_point"""
-        west_point = Point(west_point)
-        self._left_corner = Point(west_point.x, west_point.y - self.height / 2)
-        return self
-
     def shift(self, xshift: float, yshift: float) -> None:
         self._left_corner.shift(xshift, yshift)
 
@@ -140,3 +100,79 @@ class Rectangle(DrawingObject):
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
         self._left_corner.rotate(angle, about_pt, radians)
+
+
+def rectangle_from_north(
+    north_point: Union[Tuple[float, float], Point],
+    width: float = 0,
+    height: float = 0,
+    options: list[str] = [],
+    action: str = "draw",
+):
+    """Create a Rectangle whose such that the .north attribute is north_point"""
+    north_point = Point(north_point)
+    left_corner = Point(north_point.x - width / 2, north_point.y - height)
+    return Rectangle(
+        left_corner=left_corner,
+        width=width,
+        height=height,
+        options=options,
+        action=action,
+    )
+
+
+def rectangle_from_east(
+    east_point: Union[Tuple[float, float], Point],
+    width: float = 0,
+    height: float = 0,
+    options: list[str] = [],
+    action: str = "draw",
+):
+    """Create a Rectangle whose such that the .east attribute is north_point"""
+    east_point = Point(east_point)
+    left_corner = Point(east_point.x - width, east_point.y - height / 2)
+    return Rectangle(
+        left_corner=left_corner,
+        width=width,
+        height=height,
+        options=options,
+        action=action,
+    )
+
+
+def rectangle_from_south(
+    south_point: Union[Tuple[float, float], Point],
+    width: float = 0,
+    height: float = 0,
+    options: list[str] = [],
+    action: str = "draw",
+):
+    """Create a Rectangle whose such that the .south attribute is north_point"""
+    south_point = Point(south_point)
+    left_corner = Point(south_point.x - width / 2, south_point.y)
+    return Rectangle(
+        left_corner=left_corner,
+        width=width,
+        height=height,
+        options=options,
+        action=action,
+    )
+
+
+def rectangle_from_west(
+    west_point: Union[Tuple[float, float], Point],
+    width: float = 0,
+    height: float = 0,
+    options: list[str] = [],
+    action: str = "draw",
+):
+    """Create a Rectangle whose such that the .west attribute is north_point"""
+    west_point = Point(west_point)
+    left_corner = Point(west_point.x, west_point.y - height / 2)
+    return Rectangle(
+        left_corner=left_corner,
+        width=width,
+        height=height,
+        options=options,
+        action=action,
+    )

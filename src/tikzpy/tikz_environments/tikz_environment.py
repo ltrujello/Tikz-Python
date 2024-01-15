@@ -5,7 +5,13 @@ from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
 from tikzpy.drawing_objects.circle import Circle
 from tikzpy.drawing_objects.node import Node
-from tikzpy.drawing_objects.rectangle import Rectangle
+from tikzpy.drawing_objects.rectangle import (
+    Rectangle,
+    rectangle_from_north,
+    rectangle_from_east,
+    rectangle_from_south,
+    rectangle_from_west,
+)
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.point import Point
@@ -118,6 +124,64 @@ class TikzEnvironment(ABC):
     ) -> Rectangle:
         """Draws a rectangle by creating an instance of the Rectangle class."""
         rectangle = Rectangle(left_corner, width, height, options, action)
+        self.draw(rectangle)
+        return rectangle
+
+    def rectangle_from_north(
+        self,
+        north_point: Union[Tuple[float, float], Point],
+        width: float = 0,
+        height: float = 0,
+        options: list[str] = [],
+        action: str = "draw",
+    ) -> Rectangle:
+        """Draws a rectangle whose .north attribute equals the north_point argument."""
+        rectangle = rectangle_from_north(
+            north_point=north_point,
+            width=width,
+            height=height,
+            options=options,
+            action=action,
+        )
+        self.draw(rectangle)
+        return rectangle
+
+    def rectangle_from_east(
+        self,
+        east_point: Union[Tuple[float, float], Point],
+        width: float = 0,
+        height: float = 0,
+        options: list[str] = [],
+        action: str = "draw",
+    ) -> Rectangle:
+        """Draws a rectangle whose .east attribute equals the north_point argument."""
+        rectangle = rectangle_from_east(east_point, width, height, options, action)
+        self.draw(rectangle)
+        return rectangle
+
+    def rectangle_from_south(
+        self,
+        south_point: Union[Tuple[float, float], Point],
+        width: float = 0,
+        height: float = 0,
+        options: list[str] = [],
+        action: str = "draw",
+    ) -> Rectangle:
+        """Draws a rectangle whose .south attribute equals the north_point argument."""
+        rectangle = rectangle_from_south(south_point, width, height, options, action)
+        self.draw(rectangle)
+        return rectangle
+
+    def rectangle_from_west(
+        self,
+        west_point: Union[Tuple[float, float], Point],
+        width: float = 0,
+        height: float = 0,
+        options: list[str] = [],
+        action: str = "draw",
+    ) -> Rectangle:
+        """Draws a rectangle whose .west attribute equals the north_point argument."""
+        rectangle = rectangle_from_west(west_point, width, height, options, action)
         self.draw(rectangle)
         return rectangle
 

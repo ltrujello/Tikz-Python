@@ -72,6 +72,9 @@ class DrawingObject(ABC):
         new_node = Node(position, options, text)
         self.node = new_node
 
+    def add_option(self, option: str) -> None:
+        self.options.append(option)
+
     def __deepcopy__(self, memo: dict) -> DrawingObject:
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set
         our methods to modify objects, but not return anything.
