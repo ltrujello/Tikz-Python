@@ -106,7 +106,7 @@ def rectangle_from_north(
     north_point: Union[Tuple[float, float], Point],
     width: float = 0,
     height: float = 0,
-    options: list[str] = [],
+    options: str = "",
     action: str = "draw",
 ):
     """Create a Rectangle whose such that the .north attribute is north_point"""
@@ -125,7 +125,7 @@ def rectangle_from_east(
     east_point: Union[Tuple[float, float], Point],
     width: float = 0,
     height: float = 0,
-    options: list[str] = [],
+    options: str = "",
     action: str = "draw",
 ):
     """Create a Rectangle whose such that the .east attribute is north_point"""
@@ -144,7 +144,7 @@ def rectangle_from_south(
     south_point: Union[Tuple[float, float], Point],
     width: float = 0,
     height: float = 0,
-    options: list[str] = [],
+    options: str = "",
     action: str = "draw",
 ):
     """Create a Rectangle whose such that the .south attribute is north_point"""
@@ -163,7 +163,7 @@ def rectangle_from_west(
     west_point: Union[Tuple[float, float], Point],
     width: float = 0,
     height: float = 0,
-    options: list[str] = [],
+    options: str = "",
     action: str = "draw",
 ):
     """Create a Rectangle whose such that the .west attribute is north_point"""

@@ -4,12 +4,12 @@ if __name__ == "__main__":
     tikz = TikzPicture(center=True, options=">=stealth, thick")
 
     # Plaintext
-    plaintext = tikz.rectangle((0, 0), (4, 0.8))
+    plaintext = tikz.rectangle((0, 0), 4, 0.8)
     tikz.node(plaintext.center, text="Plaintext")
 
     to_IP = tikz.line(plaintext.south, plaintext.south - (0, 0.5), options="->")
     # IP
-    IP = tikz.rectangle(options="rounded corners").set_north(to_IP.end, height=0.7, width=2)  # Rectangle who's .north position is the end of IP
+    IP = tikz.rectangle_from_north(to_IP.end, height=0.7, width=2, options="rounded corners")  # Rectangle who's .north position is the end of IP
     tikz.node(IP.center, text="IP")
     vertical = tikz.line(IP.south, IP.south - (0, 0.8))
 
@@ -23,11 +23,11 @@ if __name__ == "__main__":
 
     def DES_round(to_left_block, to_right_block, left_label, right_label, K_i=None, dotted=False, is_last_block=False):
         # Left block
-        L_0 = tikz.rectangle().set_north(to_left_block.end, height=1, width=5)
+        L_0 = tikz.rectangle_from_north(to_left_block.end, height=1, width=5)
         tikz.node(L_0.center, text=left_label)
         
         # Right block
-        R_0 = tikz.rectangle().set_north(to_right_block.end, height=1, width=5)
+        R_0 = tikz.rectangle_from_north(to_right_block.end, height=1, width=5)
         tikz.node(R_0.center, text=right_label)
 
         # Line to the XOR symbol
@@ -88,11 +88,11 @@ if __name__ == "__main__":
     next_left_block, next_right_block = DES_round(next_left_block, next_right_block, "$L_{15}=R_{14}$", "$R_{15} = L_{14} \oplus f(R_{14}, K_{15})$", "$K_{16}$", is_last_block=True)
 
     # Left block
-    L_0 = tikz.rectangle().set_north(next_left_block.end, height=1, width=5)
+    L_0 = tikz.rectangle_from_north(next_left_block.end, height=1, width=5)
     tikz.node(L_0.center, text="$R_{16} = L_{15}\oplus f(R_{15}, K_{16})$")
 
     # Right block
-    R_0 = tikz.rectangle().set_north(next_right_block.end, height=1, width=5)
+    R_0 = tikz.rectangle_from_north(next_right_block.end, height=1, width=5)
     tikz.node(R_0.center, text="$L_{16} = R_{15}$")
 
     # Leaving the blocks 
@@ -105,14 +105,14 @@ if __name__ == "__main__":
 
     # Line to IP inverse
     to_IP_inv = tikz.line(h1.end, h1.end - (0, 0.5), options="->")
-    IP_inv = tikz.rectangle(options="rounded corners").set_north(to_IP_inv.end, height=0.7, width=2)
+    IP_inv = tikz.rectangle_from_north(to_IP_inv.end, height=0.7, width=2, options="rounded corners")
 
     # IP rectangle
     tikz.node(IP_inv.center, text="$\\text{IP}^{-1}$")
     to_cipher_text = tikz.line(IP_inv.south, IP_inv.south - (0, 0.5), options="->")
 
     # Ciphertext rectangle
-    cipher_text = tikz.rectangle().set_north(to_cipher_text.end, height=0.8, width=4)
+    cipher_text = tikz.rectangle_from_north(to_cipher_text.end, height=0.8, width=4)
     tikz.node(cipher_text.center, text="Ciphertext")
     tikz.show()
 

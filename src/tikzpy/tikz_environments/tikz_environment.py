@@ -17,6 +17,7 @@ from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.tikz_environments.tikz_command import TikzCommand
+from tikzpy.drawing_objects.drawing_utils import line_connecting_circle_edges
 
 
 class TikzEnvironment(ABC):
@@ -103,6 +104,16 @@ class TikzEnvironment(ABC):
         self.draw(circle)
         return circle
 
+    def connect_circle_edges(
+        self,
+        circle_a,
+        circle_b,
+    ) -> Circle:
+        """Draws a line connecting the edges of two circles."""
+        line = line_connecting_circle_edges(circle_a, circle_b)
+        self.draw(line)
+        return line
+
     def node(
         self,
         position: Union[Tuple[float, float], Point],
@@ -132,7 +143,7 @@ class TikzEnvironment(ABC):
         north_point: Union[Tuple[float, float], Point],
         width: float = 0,
         height: float = 0,
-        options: list[str] = [],
+        options: str = "",
         action: str = "draw",
     ) -> Rectangle:
         """Draws a rectangle whose .north attribute equals the north_point argument."""
@@ -151,7 +162,7 @@ class TikzEnvironment(ABC):
         east_point: Union[Tuple[float, float], Point],
         width: float = 0,
         height: float = 0,
-        options: list[str] = [],
+        options: str = "",
         action: str = "draw",
     ) -> Rectangle:
         """Draws a rectangle whose .east attribute equals the north_point argument."""
@@ -164,7 +175,7 @@ class TikzEnvironment(ABC):
         south_point: Union[Tuple[float, float], Point],
         width: float = 0,
         height: float = 0,
-        options: list[str] = [],
+        options: str = "",
         action: str = "draw",
     ) -> Rectangle:
         """Draws a rectangle whose .south attribute equals the north_point argument."""
@@ -177,7 +188,7 @@ class TikzEnvironment(ABC):
         west_point: Union[Tuple[float, float], Point],
         width: float = 0,
         height: float = 0,
-        options: list[str] = [],
+        options: str = "",
         action: str = "draw",
     ) -> Rectangle:
         """Draws a rectangle whose .west attribute equals the north_point argument."""

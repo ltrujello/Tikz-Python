@@ -159,7 +159,7 @@ class TikzPicture(TikzEnvironment):
         ind = 0
         if total > 1:
             print(
-                f"WARNING! {pdf_file=} has more than two pages, expected only one. Going to use"
+                f"WARNING! {pdf_fp=} has more than two pages, expected only one. Going to use"
                 " the last page. "
             )
             ind = len(page_pngs) - 1
