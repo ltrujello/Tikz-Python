@@ -8,6 +8,7 @@ tikz = TikzPicture()
 line = tikz.line((0, 0), (1, 1), options="thick, blue, o-o")
 start_node = tikz.node(line.start, options="below", text="Start!")
 end_node = tikz.node(line.end, options="above", text="End!")
+tikz.show()
 ```
 and produces
 
@@ -44,6 +45,8 @@ for i in np.linspace(0, 1, 30): # Grab 30 equidistant points in [0, 1]
     tikz.circle(point, 2.2, "ForestGreen")
     tikz.circle(point, 2.4, "red")  # xcolor Red is very ugly
     tikz.circle(point, 2.6, "Purple")
+
+tikz.show()
 ```
 The above code then produces
 
@@ -79,12 +82,50 @@ for i in range(n):
     # Label the nth root of unity
     tikz.node((x, y), options=node_option, text=content)
 
+tikz.show()
 ```
 Which generates: 
 
 <img src="../png/roots_of_unity.png"/>
 
 We will see in the examples that follow how imported Python libraries can alllow us to quickly (and efficiently, this is really important) make more sophisticated Tikz pictures. 
+
+### Neural Network Connection
+
+In this example, we illustrate the connection between two nodes in a neural network, and mathematically
+annotate the diagram. Specifically, we're showing the weight connection node j to node i between
+layers n-1 and n.
+
+```python
+from tikzpy import TikzPicture
+
+tikz = TikzPicture(center=True) # center it in the PDF
+radius = 0.25
+pos_a = (0, 0)
+pos_b = (4, 1)
+
+# Draw the nodes
+node_a = tikz.circle(pos_a, radius)
+node_b = tikz.circle(pos_b, radius)
+
+# Draw the line between the nodes
+line = tikz.connect_circle_edges(node_a, node_b)
+line.options = "->"
+
+# Annotate the drawing with mathematical variables
+h_j = tikz.node(node_a.center + (0.3, 0.75), text="$h_j^{(n-1)}$")
+h_i = tikz.node(node_b.center + (0.3, 0.75), text="$h_i^{(n)}$")
+w_ij = tikz.node(line.pos_at_t(0.5) + (0, 0.5), text="$w_{ij}^{(n)}$")
+
+# Add ellipses on each side to illustrate more nodes are present
+tikz.node(node_a.center + (0, 1.5), text="\\vdots")
+tikz.node(node_a.center + (0, -0.75), text="\\vdots")
+tikz.node(node_b.center + (0, 1.5), text="\\vdots")
+tikz.node(node_b.center + (0, -0.75), text="\\vdots")
+tikz.show()
+```
+
+<img src="../png/nn_nodes.png" width="80%"/>
 
 ### DES
 In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/des/des.py), we use a Python function to draw one round of the [DES function](https://en.wikipedia.org/wiki/Data_Encryption_Standard). We then call this function multiple times to illustrate the multiple rounds that entail the DES encryption algorithm.

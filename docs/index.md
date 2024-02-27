@@ -55,6 +55,7 @@ tikz = TikzPicture()
 line = tikz.line((0, 0), (1, 1), options="thick, blue, o-o")
 start_node = tikz.node(line.start, options="below", text="Start!")
 end_node = tikz.node(line.end, options="above", text="End!")
+tikz.show()  # Displays a pdf of the drawing to the user
 ```
 which produces 
 <img src="png/line_and_two_nodes.png">
