@@ -109,7 +109,8 @@ class TikzEnvironment(ABC):
         circle_a,
         circle_b,
     ) -> Circle:
-        """Draws a line connecting the edges of two circles."""
+        """Draws a line connecting the edges of two circles. This is useful for drawing
+        graphs, diagrams, neural networks, etc."""
         line = line_connecting_circle_edges(circle_a, circle_b)
         self.draw(line)
         return line
@@ -146,7 +147,23 @@ class TikzEnvironment(ABC):
         options: str = "",
         action: str = "draw",
     ) -> Rectangle:
-        """Draws a rectangle whose .north attribute equals the north_point argument."""
+        """
+        Creates and draws a rectangle using the northernmost point as a reference.
+
+        This method allows for the creation of a rectangle by specifying its north point,
+        width, and height.
+
+        Args:
+            north_point: The northernmost point of the
+                rectangle. This can be a tuple of floats representing the coordinates, or
+                a Point object.
+            width: The width of the rectangle. Defaults to 0.
+            height: The height of the rectangle. Defaults to 0.
+            options: A string representing additional options for the
+                rectangle's creation or manipulation. Defaults to an empty string.
+            action: Specifies the TikZ action to be taken with the rectangle
+                once created. Defaults to "draw".
+        """
         rectangle = rectangle_from_north(
             north_point=north_point,
             width=width,
@@ -165,7 +182,22 @@ class TikzEnvironment(ABC):
         options: str = "",
         action: str = "draw",
     ) -> Rectangle:
-        """Draws a rectangle whose .east attribute equals the north_point argument."""
+        """
+        Creates and draws a rectangle using the east point as a reference.
+
+        This method allows for the creation of a rectangle by specifying its east point,
+        width, and height.
+
+        Args:
+            east_point: The east point of the rectangle.
+                This can be a tuple of floats representing the coordinates, or a Point object.
+            width: The width of the rectangle. Defaults to 0.
+            height: The height of the rectangle. Defaults to 0.
+            options: A string representing additional options for the
+                rectangle's creation or manipulation. Defaults to an empty string.
+            action: Specifies the TikZ action to be taken with the rectangle
+                once created. Defaults to "draw".
+        """
         rectangle = rectangle_from_east(east_point, width, height, options, action)
         self.draw(rectangle)
         return rectangle
@@ -178,7 +210,22 @@ class TikzEnvironment(ABC):
         options: str = "",
         action: str = "draw",
     ) -> Rectangle:
-        """Draws a rectangle whose .south attribute equals the north_point argument."""
+        """
+        Creates and draws a rectangle using the south point as a reference.
+
+        This method allows for the creation of a rectangle by specifying its south point,
+        width, and height.
+
+        Args:
+            south_point: The south point of the rectangle.
+                This can be a tuple of floats representing the coordinates, or a Point object.
+            width: The width of the rectangle. Defaults to 0.
+            height: The height of the rectangle. Defaults to 0.
+            options: A string representing additional options for the
+                rectangle's creation or manipulation. Defaults to an empty string.
+            action: Specifies the TikZ action to be taken with the rectangle
+                once created. Defaults to "draw".
+        """
         rectangle = rectangle_from_south(south_point, width, height, options, action)
         self.draw(rectangle)
         return rectangle
@@ -191,7 +238,22 @@ class TikzEnvironment(ABC):
         options: str = "",
         action: str = "draw",
     ) -> Rectangle:
-        """Draws a rectangle whose .west attribute equals the north_point argument."""
+        """
+        Creates and draws a rectangle using the west point as a reference.
+
+        This method allows for the creation of a rectangle by specifying its west point,
+        width, and height.
+
+        Args:
+            west_point: The west point of the rectangle.
+                This can be a tuple of floats representing the coordinates, or a Point object.
+            width: The width of the rectangle. Defaults to 0.
+            height: The height of the rectangle. Defaults to 0.
+            options: A string representing additional options for the
+                rectangle's creation or manipulation. Defaults to an empty string.
+            action: Specifies the TikZ action to be taken with the rectangle
+                once created. Defaults to "draw".
+        """
         rectangle = rectangle_from_west(west_point, width, height, options, action)
         self.draw(rectangle)
         return rectangle

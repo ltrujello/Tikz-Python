@@ -9,9 +9,18 @@ from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 
-
+    
 class Clip:
-    """A class for a clipping code statement."""
+    r"""A class for a clipping code statement.
+
+    This class is used to clip a single drawing object draw_obj.
+    It is meant to be used in conjunction with the Scope class.
+    It is analagous to the tikz code
+
+    ```
+    \clip ... # some drawing object
+    ```
+    """
 
     def __init__(self, draw_obj: DrawingObject, draw: bool = False) -> None:
         if isinstance(

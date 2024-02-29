@@ -5,10 +5,16 @@ from tikzpy.utils.helpers import brackets
 
 
 class PlotCoordinates(DrawingObject):
-    """
-    A class to create plots in the tikz environment.
+    r"""
+    A class to manage plots in a tikz environment.
 
-    Attributes :
+    The PlotCoordinates class is used to represent the plot_coordinates 
+    functionality in TikZ. It is analagous to the TikZ command
+    ```
+    \draw plot[<options>] coordinates{ <points> };
+    ```
+
+    Parameters:
         options (str) : String containing drawing options (e.g., "Blue")
         plot_options (str) : String containing the plot options (e.g., "smooth cycle")
         points (list) : A list of points to be drawn
@@ -37,6 +43,15 @@ class PlotCoordinates(DrawingObject):
 
     @property
     def center(self) -> "Point":
+        """Calculates the geometric center (centroid) of a collection of points.
+
+        This property computes the arithmetic mean of the x and y coordinates of all points in the collection. 
+        The result is a new Point object representing the centroid of these points. 
+
+        Returns:
+            Point: A Point object representing the geometric center of the collection of points.
+        """
+    
         mean_x = 0
         mean_y = 0
         for pt in self.points:
@@ -66,4 +81,16 @@ class PlotCoordinates(DrawingObject):
             point.rotate(angle, about_pt, radians)
 
     def add_point(self, x, y):
+        """Adds a new point to the points list.
+
+        This method creates a new Point instance with the specified x and y coordinates,
+        and appends it to the `points` attribute of the class.
+
+        Args:
+            x (int/float): The x-coordinate of the point.
+            y (int/float): The y-coordinate of the point.
+
+        Returns:
+            None
+        """
         self.points.append(Point(x, y))

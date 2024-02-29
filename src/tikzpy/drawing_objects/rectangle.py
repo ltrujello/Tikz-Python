@@ -6,12 +6,19 @@ from tikzpy.drawing_objects.drawing_object import DrawingObject
 
 class Rectangle(DrawingObject):
     """
-    A class to create rectangles in the tikz environment
+    A class to manage rectangles in a tikz environment
 
-    Attributes :
-        left_corner (tuple) : Pair of floats representing the position of the bottom left corner
-        right_corner (tuple) : Pair of floats representing the position of the upper right corner
+    The `Rectangle` class is used to handle rectangles in TikZ. It is analagous to the TikZ code
+    ```
+    \draw[<options>] <left_corner> rectangle <right_corner>;
+    ```
+
+    Parameters:
+        left_corner (tuple or Point) : Position of the left corner
+        width (float) : Rectangle width
+        height (float) : Rectangle height
         options (str) : String containing the drawing options, e.g, ("Blue")
+        action (str) : The type of TikZ action to use. Default is "draw".
     """
 
     def __init__(
@@ -74,6 +81,7 @@ class Rectangle(DrawingObject):
 
     @property
     def left_corner(self) -> Point:
+        """Returns the left corner of the rectangle. This attribute is modifiable and can be set."""
         return self._left_corner
 
     @property

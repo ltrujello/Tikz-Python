@@ -6,13 +6,18 @@ from tikzpy.utils.helpers import brackets
 
 
 class Node:
-    """
-    A class to create nodes in the tikz environment.
+    r"""
+    A class to manage nodes in a tikz environment.
 
-    Attributes :
+    This class is equivalent to the tikz code
+    ```
+    \node[<options>] at (<position>) {<text>};
+    ```
+
+    Parameters:
         position (tuple) : Pair of floats representing the location of the node
-        text (str): Text that will be displayed with the node; can use dollar signs $ for LaTeX
         options (str) : String containing node options (e.g., "above")
+        text (str): Text that will be displayed with the node; can use dollar signs $ for LaTeX
     """
 
     def __init__(
@@ -34,6 +39,9 @@ class Node:
 
     @property
     def position(self):
+        """
+        Returns a Point object representing the position of the node. This attribute is modifiable.
+        """
         return self._position
 
     @position.setter

@@ -5,13 +5,20 @@ from tikzpy.drawing_objects.drawing_object import DrawingObject
 
 
 class Ellipse(DrawingObject):
-    """
+    r"""
     A class to create ellipses in the tikz environment.
 
-    Attributes :
-        center (tuple) : Pair of floats representing the center of the ellipse
-        x_axis (float): The length (in cm) of the horizontal axis of the ellipse
-        y_axis (float): The length (in cm) of the vertical axis of the ellipse
+    The ellipse class handles ellipses in Tikz. It it analagous to the Tikz command
+    ```
+    \draw[options] <center> ellipse (<x_radius> and <y_radius>);
+    ```
+
+    Parameters:
+        center: Position of the center of the ellipse
+        x_axis: The length (in cm) of the horizontal axis of the ellipse
+        y_axis: The length (in cm) of the vertical axis of the ellipse
+        options: TikZ options to draw with
+        action: The type of TikZ action to use. Default is "draw"
     """
 
     def __init__(
@@ -40,19 +47,23 @@ class Ellipse(DrawingObject):
             raise TypeError(f"Invalid type '{type(new_center)}' for center")
 
     @property
-    def north(self):
+    def north(self) -> Point:
+        """Returns the north point of the ellipse."""
         return self._center + (0, self.y_axis)
 
     @property
-    def east(self):
+    def east(self) -> Point:
+        """Returns the east point of the ellipse."""
         return self._center + (self.x_axis, 0)
 
     @property
-    def south(self):
+    def south(self) -> Point:
+        """Returns the south point of the ellipse."""
         return self._center - (0, self.y_axis)
 
     @property
-    def west(self):
+    def west(self) -> Point:
+        """Returns the west point of the ellipse."""
         return self._center - (self.x_axis, 0)
 
     @property

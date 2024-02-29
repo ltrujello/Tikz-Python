@@ -5,9 +5,18 @@ from typing import Tuple, Union, Optional
 
 class Point:
     """A class to handle points for TikzPy.
-    It is designed to perform arithmetic with instances of itself and with Python tuples.
+
+    The Point class is how TikzPy handles coordinates. All drawing objects, like Line and Circle,
+    use the Point class under the hood.
+
+    The Point class is designed to perform arithmetic with instances of itself and with Python tuples.
     The constructor accepts can either accept two numeric arguments, a single tuple of floats argument, or a
     single Point object.
+
+    Parameters:
+        first_arg: A number, a tuple, or Point object.
+        second_arg: A number, in the case of a 2D point, or None.
+        third_arg: A number, in the case of a 3D point, or None.
     """
 
     def __init__(

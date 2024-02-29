@@ -24,11 +24,13 @@ class TikzPicture(TikzEnvironment):
     """
     A class for managing a Tikzpicture environment and associated tex files with tikz code.
 
-    Attributes:
-        tikz_file : A file path to the destination of the output tikz code
-        center : True/False if one wants to center their Tikz code
-        options : A list of options for the Tikz picture
-        drawing_objects : List of DrawingObjects appened to curr tikz env
+    The TikzPicture class acts a canvas in which users can append drawings to.
+    In the background, the TikzPicture manages the creation of
+    the tikz code.
+
+    Parameters:
+        center: True/False if one wants to center their Tikz code
+        options: A list of options for the Tikz picture
     """
 
     def __init__(
@@ -50,7 +52,7 @@ class TikzPicture(TikzEnvironment):
             self._postamble["center"] = ""
 
     def code(self) -> str:
-        """A string contaning our Tikz code."""
+        """Returns a string contaning the generated Tikz code."""
         code = ""
         # Add the beginning statement
         for stmt in self._preamble.values():
@@ -68,7 +70,6 @@ class TikzPicture(TikzEnvironment):
         return code
 
     def __repr__(self) -> str:
-        """Return a readable string of the current tikz code"""
         readable_code = f"\\begin{{tikzpicture}}{brackets(self.options)}\n"
 
         for draw_obj in self.drawing_objects:
@@ -124,7 +125,13 @@ class TikzPicture(TikzEnvironment):
     def compile(
         self, pdf_destination: Optional[str] = None, quiet: bool = True
     ) -> Path:
-        """Compiles the Tikz code and returns a Path to the final PDF."""
+        """Compiles the Tikz code and returns a Path to the final PDF.
+        If no file path is provided, a default value of "tex_file.pdf" will be used.
+
+        Parameters:
+            pdf_destination (str): The file path of the compiled pdf.
+            quiet (bool): Parameter to silence latexmk.
+        """
         with tempfile.TemporaryDirectory() as tmp_dir:
             tex_filepath = Path(tmp_dir) / "tex_file.tex"
             self.write_tex_file(tex_filepath)
@@ -189,7 +196,10 @@ class TikzPicture(TikzEnvironment):
         cropped_img.save(str(png_destination), "PNG")
 
     def show(self, quiet: bool = False) -> None:
-        """Compiles the Tikz code and displays the pdf to the user. Set quiet=True to shut up latexmk."""
+        """Compiles the Tikz code and displays the pdf to the user. Set quiet=True to shut up latexmk.
+        This should either open the PDF viewer on the user's computer with the graphic,
+        or open the PDF in the user's browser.
+        """
         pdf_file = self.compile(quiet=quiet)
         webbrowser.open_new(str(pdf_file.as_uri()))
 

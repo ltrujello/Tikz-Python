@@ -8,17 +8,21 @@ from tikzpy.drawing_objects.drawing_object import DrawingObject
 
 
 class Arc(DrawingObject):
-    """
+    r"""
     A class to create arcs in the tikz environment.
 
-    Attributes :
-        center (tuple) : Pair of points representing the relative center of the arc
-        start_angle (float) : The angle of the start of the arc
-        end_angle (float) : The angle of the end of the arc
-        radius (float) : The radius (in cm) of the arc
-        radians (bool) : Set true if inputting radians. Default behavior is for degrees.
-        draw_from_start (bool) : Set true if you are drawing the arc by specifying the point from
-                                 where it should start drawing. False will draw the arc from the center specified.
+    The arc class helps create arcs in Tikz. It is analagous to the TikZ code
+    ```
+    \draw <center> arc (<start_angle>:<end_angle>:<radius>);
+    ```
+
+    Parameters:
+        center: Pair of points representing either the center of the arc or the point at which it should begin drawing (see draw_from_start).
+        start_angle: The angle (relative to the horizontal) of the start of the arc
+        end_angle: The angle (relative to the horizontal) of the end of the arc
+        radius: The radius (in cm) of the arc. If this is specified, x_radius and y_radius cannot be specified.
+        radians: True if angles are in radians, False otherwise
+        draw_from_start: True if position represents the point at which the arc should begin drawing. False if position represents the center of the desired arc.
     """
 
     def __init__(

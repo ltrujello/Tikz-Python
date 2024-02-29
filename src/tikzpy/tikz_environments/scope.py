@@ -7,7 +7,18 @@ from tikzpy.utils.helpers import brackets
 
 
 class Scope(TikzEnvironment):
-    """A class to create a scope environment."""
+    r"""A class to create a scope environment.
+
+    The `Scope` class is meant to handle the `scope` environment in TikZ.
+    Scoping is useful as it can be used to nest a set of commands in a TikZ picture, or it can be used in conjunction with the TikZ `clip` command to "clip out" drawings.
+
+    This class is analagous to the TikZ command
+    ```
+    \begin{scope}
+        ...
+    \end{scope}
+    ```
+    """
 
     def __init__(self, options: str = "") -> None:
         super().__init__(options)

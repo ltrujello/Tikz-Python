@@ -6,14 +6,21 @@ from tikzpy.utils.helpers import brackets
 
 
 class Line(DrawingObject):
-    """
+    r"""
     A class to create lines in the tikz environment.
 
-    Attributes :
-        start (tuple) : Pair of floats representing the start of the line
-        end (tuple) : Pair of floats representing the end of the line
-        options (str) : String containing Tikz drawing options, e.g. "Blue"
-        control_pts (list): List of control points for the line
+    The `Line` class helps handle the creation of lines in tikz code. It is analagous to the TikZ code
+    ```
+    \draw[<options>] <start> to [<to_options>] <end>;
+    ```
+    Lines in TikZ have even more features, like adding control points, and these features are accessible through the Line class.
+
+
+    Parameters:
+        start: Pair of floats representing the start of the line
+        end: Pair of floats representing the end of the line
+        options: String containing Tikz drawing options, e.g. "Blue"
+        control_pts: List of control points for the line
     """
 
     def __init__(

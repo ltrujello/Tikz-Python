@@ -6,13 +6,14 @@ from tikzpy.drawing_objects.drawing_object import DrawingObject
 
 
 class Circle(DrawingObject):
-    """
+    r"""
     A class to create circles in the tikz environment.
 
-    Attributes :
-        position (Point) : Pair of floats representing the center of the circle
-        radius (float) : Length (in cm) of the radius
-        options (str) : String containing the drawing options (e.g, "Blue")
+    Parameters:
+        center: Pair of floats representing the center of the circle
+        radius: Length (in cm) of the radius
+        options: String containing the drawing options (e.g, "Blue")
+        action: The type of TikZ action to use. Default is "draw".
     """
 
     def __init__(
@@ -29,6 +30,9 @@ class Circle(DrawingObject):
 
     @property
     def center(self) -> Point:
+        """
+        Returns a Point object representing the center of the circle.
+        """
         return self._center
 
     @center.setter
@@ -39,19 +43,31 @@ class Circle(DrawingObject):
             raise TypeError(f"Invalid type '{type(new_center)}' for center")
 
     @property
-    def north(self):
+    def north(self) -> Point:
+        """
+        Returns a Point object representing the north point on the circle.
+        """
         return self._center + (0, self.radius)
 
     @property
-    def east(self):
+    def east(self) -> Point:
+        """
+        Returns a Point object representing the east point on the circle.
+        """
         return self._center + (self.radius, 0)
 
     @property
-    def south(self):
+    def south(self) -> Point:
+        """
+        Returns a Point object representing the south point on the circle.
+        """
         return self._center - (0, self.radius)
 
     @property
-    def west(self):
+    def west(self) -> Point:
+        """
+        Returns a Point object representing the west point on the circle.
+        """
         return self._center - (self.radius, 0)
 
     @property
