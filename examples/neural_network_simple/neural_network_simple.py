@@ -87,4 +87,3 @@ if __name__ == "__main__":
     tikz.node(lines[8].pos_at_t(0.5), options="left", text="-2")
 
     tikz.show()
-    tikz.clear()

@@ -1,7 +1,6 @@
 import numpy as np
 from tikzpy import TikzPicture, PlotCoordinates, Circle
 from tikzpy.colors import rainbow_colors
-from tikzpy.utils.helpers import to_cartesian
 
 def to_cartesian(r, ang):
     """Returns the cartesian coordinates of a polar point."""
