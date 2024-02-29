@@ -8,7 +8,7 @@ class PlotCoordinates(DrawingObject):
     r"""
     A class to manage plots in a tikz environment.
 
-    The PlotCoordinates class is used to represent the plot_coordinates 
+    The PlotCoordinates class is used to represent the plot_coordinates
     functionality in TikZ. It is analagous to the TikZ command
     ```
     \draw plot[<options>] coordinates{ <points> };
@@ -45,13 +45,13 @@ class PlotCoordinates(DrawingObject):
     def center(self) -> "Point":
         """Calculates the geometric center (centroid) of a collection of points.
 
-        This property computes the arithmetic mean of the x and y coordinates of all points in the collection. 
-        The result is a new Point object representing the centroid of these points. 
+        This property computes the arithmetic mean of the x and y coordinates of all points in the collection.
+        The result is a new Point object representing the centroid of these points.
 
         Returns:
             Point: A Point object representing the geometric center of the collection of points.
         """
-    
+
         mean_x = 0
         mean_y = 0
         for pt in self.points:

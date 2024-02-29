@@ -9,7 +9,7 @@ from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 
-    
+
 class Clip:
     r"""A class for a clipping code statement.
 
