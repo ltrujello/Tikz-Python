@@ -1,23 +1,6 @@
-# `PlotCoordinates`
+# PlotCoordinates
 
-The `PlotCoordinates` class is used to represent the plot_coordinates functionality in TikZ. It is analagous to the TikZ command 
-```
-\draw plot[<options>] coordinates{ <points> };
-```
-The signature of the class is given below.
-```python
-from tikzpy import PlotCoordinates
-
-plot = PlotCoordinates(points, options, plot_options, action)
-```
-
-| Parameter            | Description                                                                            | Default   |
-| -------------------- | -------------------------------------------------------------------------------------- | --------- |
-| `points` (list)      | A list of tuples (x, y) representing coordinates that one wishes to create a plot for. |
-| `options` (str)      | A string of valid Tikz drawing options.                                                | `""`      |
-| `plot_options` (str) | A string of valid Tikz plotting options                                                | `""`      |
-| `action` (str)       | An action to perform with the line (e.g., `\draw`, `\fill`, `\filldraw`, `\path`)      | `"\draw"` |
-
+::: tikzpy.drawing_objects.plotcoordinates.PlotCoordinates
 
 ## Examples
 Introducing examples of `PlotCoordinates` gives us an opportunity to illustrate the optional parameter `action`. By default, `action` is `"draw"` (analogous to `\draw` in Tikz) so the code below
@@ -60,9 +43,6 @@ which produces.
 <img src="../../png/plotcoordinates_ex_3.png"/>
 
 Finally, we can set `action = "path"` (analogous to `\path` in Tikz), but as one would expect this doesn't draw anything. 
-
-
-## Methods
 
 `PlotCoordinates` has methods `.shift()`, `.scale`, and `.rotate`, similar to the class `Line`, and the parameters behave similarly. These methods are more interestingly used on `PlotCoordinates` than on `Line`. For example, the code
 ```python

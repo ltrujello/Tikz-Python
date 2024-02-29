@@ -12,7 +12,7 @@ pip install tikz-python
 
 Want to see some nice examples of what this package can do? See [here](examples.md).
 
-# Usage 
+## Usage 
 Suppose we want to create a sphere. We can achieve this as follows.
 ```python
 from tikzpy import TikzPicture  
@@ -29,7 +29,7 @@ tikz.show()  # Displays a pdf of the drawing to the user
 which produces
 <img src="png/basic.png"> 
 
-# Why Tikz-Python 
+## Why Tikz-Python 
 
 With Tikz-Python, you generate TikZ code by writing python code. And Python is much nicer than TeX. 
 
@@ -85,7 +85,7 @@ At any time, you can look at the current TikZ code you've created
 which you can then use to export to your project.
 
 
-# Background
+## Background
 TikZ is itself a wrapper of the TeX-based graphics package PGF (see [here](https://github.com/pgf-tikz/pgf/blob/master/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex)), and it is commonly used in LaTeX documents to produce beautiful graphics.
 However, the power of TikZ comes with a tradeoff: it is extremely tedious to use, learn, understand, and iterate on. 
 
@@ -98,7 +98,7 @@ This takes years of practice and for the average person this is not realistic or
 This can be seen in research papers; even in high quality research papers, the graphics are usually not that great and it totally makes sense why. 
 It's probably because the authors are too busy being an expert in their own field of work to sit down and read a 1300 page manual on TikZ.
 
-# About
+## About
 I started this project after realizing 
 
 * most TikZ code is repetitive.

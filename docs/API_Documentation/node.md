@@ -1,17 +1,6 @@
-# `Node`
+# Node
 
-The `Node` class is an object that is used 
-```python
-from tikzpy import Node
-
-node = Node(position, options, text)
-```
-
-| Parameter          | Description                                                                            | Default |
-| ------------------ | -------------------------------------------------------------------------------------- | ------- |
-| `position` (tuple) | A tuple (x, y) of floats representing the position of the node                         |
-| `options` (str)    | String containing valid Tikz node options (e.g., "Above")                              | `""`    |
-| `text` (str)       | A string containing content, such as text or LaTeX code, to be displayed with the node | `""`    |
+::: tikzpy.drawing_objects.node.Node
 
 ## Examples
 Here we use some nodes to label a figure explaining the logarithm branch cut
@@ -57,8 +46,3 @@ row_1.node((7.3, 0), text="$f(x_1, \dots, x_n)$")
 ```
 
 <img src="../../png/node_ex_2.png"/>
-
-## Methods
-
-`Node` has access to methods `.shift()`, `.scale()`, `.rotate()`, which behave as one would expect and takes in parameters as described before.
-
