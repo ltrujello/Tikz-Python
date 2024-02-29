@@ -3,8 +3,28 @@ theme:
   name: material
   features:
     - content.code.copy
+    - navigation.tabs
   icon:
     repo: fontawesome/brands/github
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]  # search packages in the src folder 
+          options:
+            allow_inspection: true
+            show_source: false
+            show_symbol_type_toc: true
+            show_symbol_type_heading: true
+            show_root_heading: true
+            show_root_full_path: false
+            separate_signature: true
+            show_signature_annotations: true
+watch:
+- src/tikzpy
+
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -21,4 +41,18 @@ extra_css:
 
 repo_url: https://github.com/ltrujello/Tikz-Python
 
-
+nav:
+- Home: index.md
+- Examples: examples.md
+- API Documentation: 
+  - TikzPicture: API_Documentation/tikz_picture.md
+  - Circle: API_Documentation/circle.md
+  - Ellipse: API_Documentation/ellipse.md
+  - Line: API_Documentation/line.md
+  - Node: API_Documentation/node.md
+  - PlotCoordinates: API_Documentation/plot_coordinates.md
+  - Point: API_Documentation/point.md
+  - Rectangle: API_Documentation/rectangle.md
+  - Arc: API_Documentation/arc.md
+  - Scope: API_Documentation/scope.md
+- Installation: installation.md
