@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tikz_python"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Luke Trujillo", email="ltrujillo@hmc.edu" },
 ]
@@ -15,6 +15,10 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+]
+dependencies = [
+    "pdf2image>=1.14.0", 
+    "numpy>=1.22.0"
 ]
 
 [tool.ruff]
