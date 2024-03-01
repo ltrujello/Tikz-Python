@@ -12,7 +12,7 @@
         <link rel="prev" href="..">
       
       
-        <link rel="next" href="../installation/">
+        <link rel="next" href="../API_Documentation/tikz_picture/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -42,6 +42,8 @@
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
       
     
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
       <link rel="stylesheet" href="../stylesheets/extra.css">
     
@@ -79,9 +81,7 @@
     
       
 
-  
-
-<header class="md-header md-header--shadow" data-md-component="header">
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="Tikz-Python" class="md-header__button md-logo" aria-label="Tikz-Python" data-md-component="logo">
       
@@ -171,6 +171,86 @@
       
         
           
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+    
+  
+  Examples
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../API_Documentation/tikz_picture/" class="md-tabs__link">
+          
+  
+  API Documentation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../installation/" class="md-tabs__link">
+        
+  
+    
+  
+  Installation
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -184,8 +264,10 @@
                     
 
 
+  
 
-<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="Tikz-Python" class="md-nav__button md-logo" aria-label="Tikz-Python" data-md-component="logo">
       
@@ -220,7 +302,7 @@
         
   
   <span class="md-ellipsis">
-    Welcome to Tikz-Python!
+    Home
   </span>
   
 
@@ -297,6 +379,13 @@
         <li class="md-nav__item">
   <a href="#roots-of-unity" class="md-nav__link">
     Roots of Unity
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neural-network-connection" class="md-nav__link">
+    Neural Network Connection
   </a>
   
 </li>
@@ -398,27 +487,42 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../installation/" class="md-nav__link">
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
         
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
   
   <span class="md-ellipsis">
-    Installation
+    API Documentation
   </span>
   
 
-      </a>
-    </li>
-  
-
-    
-      
-      
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            API Documentation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
   
   
   
     <li class="md-nav__item">
-      <a href="../tikz_picture/" class="md-nav__link">
+      <a href="../API_Documentation/tikz_picture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -430,59 +534,6 @@
     </li>
   
 
-    
-      
-      
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
-        
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Drawing Objects
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
-            <span class="md-nav__icon md-icon"></span>
-            Drawing Objects
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Drawing%20Objects/arc/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Arc
-  </span>
-  
-
-      </a>
-    </li>
-  
-
               
             
               
@@ -491,7 +542,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Drawing%20Objects/circle/" class="md-nav__link">
+      <a href="../API_Documentation/circle/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -511,27 +562,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Drawing%20Objects/clip/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Clip
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../Drawing%20Objects/ellipse/" class="md-nav__link">
+      <a href="../API_Documentation/ellipse/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -551,7 +582,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Drawing%20Objects/line/" class="md-nav__link">
+      <a href="../API_Documentation/line/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -571,7 +602,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Drawing%20Objects/node/" class="md-nav__link">
+      <a href="../API_Documentation/node/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -591,7 +622,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Drawing%20Objects/plot_coordinates/" class="md-nav__link">
+      <a href="../API_Documentation/plot_coordinates/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -611,7 +642,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Drawing%20Objects/point/" class="md-nav__link">
+      <a href="../API_Documentation/point/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -631,7 +662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Drawing%20Objects/rectangle/" class="md-nav__link">
+      <a href="../API_Documentation/rectangle/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -651,7 +682,27 @@
   
   
     <li class="md-nav__item">
-      <a href="../Drawing%20Objects/scope/" class="md-nav__link">
+      <a href="../API_Documentation/arc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Arc
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../API_Documentation/scope/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -668,6 +719,25 @@
           </ul>
         </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -715,6 +785,13 @@
         <li class="md-nav__item">
   <a href="#roots-of-unity" class="md-nav__link">
     Roots of Unity
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neural-network-connection" class="md-nav__link">
+    Neural Network Connection
   </a>
   
 </li>
@@ -830,6 +907,7 @@
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;thick, blue, o-o&quot;</span><span class="p">)</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">start_node</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;below&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Start!&quot;</span><span class="p">)</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">end_node</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;End!&quot;</span><span class="p">)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </span></code></pre></div>
 and produces</p>
 <p><img src="../png/line_and_two_nodes.png"/> </p>
@@ -859,6 +937,8 @@ demonstates how Pythons <code>for</code> loop is a lot less messier than the <co
 </span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="s2">&quot;ForestGreen&quot;</span><span class="p">)</span>
 </span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>  <span class="c1"># xcolor Red is very ugly</span>
 </span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">point</span><span class="p">,</span> <span class="mf">2.6</span><span class="p">,</span> <span class="s2">&quot;Purple&quot;</span><span class="p">)</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </span></code></pre></div>
 The above code then produces</p>
 <p><img src="../png/circles.png"/></p>
@@ -888,10 +968,44 @@ probably have to spend 30 minutes reading some manual about how TeX handles basi
 </span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>
 </span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    <span class="c1"># Label the nth root of unity</span>
 </span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="n">node_option</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">content</span><span class="p">)</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </span></code></pre></div>
 Which generates: </p>
 <p><img src="../png/roots_of_unity.png"/></p>
 <p>We will see in the examples that follow how imported Python libraries can alllow us to quickly (and efficiently, this is really important) make more sophisticated Tikz pictures. </p>
+<h3 id="neural-network-connection">Neural Network Connection</h3>
+<p>In this example, we illustrate the connection between two nodes in a neural network, and mathematically
+annotate the diagram. Specifically, we're showing the weight connection node j to node i between
+layers n-1 and n.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># center it in the PDF</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">radius</span> <span class="o">=</span> <span class="mf">0.25</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">pos_a</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">pos_b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># Draw the nodes</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">node_a</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">pos_a</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">node_b</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">pos_b</span><span class="p">,</span> <span class="n">radius</span><span class="p">)</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="c1"># Draw the line between the nodes</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="n">line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">connect_circle_edges</span><span class="p">(</span><span class="n">node_a</span><span class="p">,</span> <span class="n">node_b</span><span class="p">)</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="n">line</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="s2">&quot;-&gt;&quot;</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="c1"># Annotate the drawing with mathematical variables</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="n">h_j</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">node_a</span><span class="o">.</span><span class="n">center</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$h_j^{(n-1)}$&quot;</span><span class="p">)</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="n">h_i</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">node_b</span><span class="o">.</span><span class="n">center</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$h_i^{(n)}$&quot;</span><span class="p">)</span>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="n">w_ij</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">pos_at_t</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$w_</span><span class="si">{ij}</span><span class="s2">^{(n)}$&quot;</span><span class="p">)</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="c1"># Add ellipses on each side to illustrate more nodes are present</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">node_a</span><span class="o">.</span><span class="n">center</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">vdots&quot;</span><span class="p">)</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">node_a</span><span class="o">.</span><span class="n">center</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.75</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">vdots&quot;</span><span class="p">)</span>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">node_b</span><span class="o">.</span><span class="n">center</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">vdots&quot;</span><span class="p">)</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">node_b</span><span class="o">.</span><span class="n">center</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.75</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">vdots&quot;</span><span class="p">)</span>
+</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></code></pre></div>
+<p><img src="../png/nn_nodes.png" width="80%"/></p>
 <h3 id="des">DES</h3>
 <p>In the <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/des/des.py">source here</a>, we use a Python function to draw one round of the <a href="https://en.wikipedia.org/wiki/Data_Encryption_Standard">DES function</a>. We then call this function multiple times to illustrate the multiple rounds that entail the DES encryption algorithm.</p>
 <p><img src="../png/des.png" width="80%"/></p>
@@ -978,7 +1092,7 @@ As one might guess, this function is useful for creating topological figures, as
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy"], "search": "../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "navigation.tabs"], "search": "../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.dff1b7c8.min.js"></script>

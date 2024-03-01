@@ -41,6 +41,8 @@
       
     
     
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
       <link rel="stylesheet" href="stylesheets/extra.css">
     
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
@@ -77,9 +79,7 @@
     
       
 
-  
-
-<header class="md-header md-header--shadow" data-md-component="header">
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="." title="Tikz-Python" class="md-header__button md-logo" aria-label="Tikz-Python" data-md-component="logo">
       
@@ -101,7 +101,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Welcome to Tikz-Python!
+              Home
             
           </span>
         </div>
@@ -169,6 +169,86 @@
       
         
           
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="examples/" class="md-tabs__link">
+        
+  
+    
+  
+  Examples
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="API_Documentation/tikz_picture/" class="md-tabs__link">
+          
+  
+  API Documentation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="installation/" class="md-tabs__link">
+        
+  
+    
+  
+  Installation
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -182,8 +262,10 @@
                     
 
 
+  
 
-<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="." title="Tikz-Python" class="md-nav__button md-logo" aria-label="Tikz-Python" data-md-component="logo">
       
@@ -223,15 +305,73 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="." class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    Welcome to Tikz-Python!
+    Home
   </span>
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-tikz-python" class="md-nav__link">
+    Why Tikz-Python
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#about" class="md-nav__link">
+    About
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -261,27 +401,42 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="installation/" class="md-nav__link">
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
         
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
   
   <span class="md-ellipsis">
-    Installation
+    API Documentation
   </span>
   
 
-      </a>
-    </li>
-  
-
-    
-      
-      
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            API Documentation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
   
   
   
     <li class="md-nav__item">
-      <a href="tikz_picture/" class="md-nav__link">
+      <a href="API_Documentation/tikz_picture/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -293,59 +448,6 @@
     </li>
   
 
-    
-      
-      
-  
-  
-  
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
-        
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Drawing Objects
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
-            <span class="md-nav__icon md-icon"></span>
-            Drawing Objects
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="Drawing%20Objects/arc/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Arc
-  </span>
-  
-
-      </a>
-    </li>
-  
-
               
             
               
@@ -354,7 +456,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Drawing%20Objects/circle/" class="md-nav__link">
+      <a href="API_Documentation/circle/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -374,27 +476,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Drawing%20Objects/clip/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Clip
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="Drawing%20Objects/ellipse/" class="md-nav__link">
+      <a href="API_Documentation/ellipse/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -414,7 +496,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Drawing%20Objects/line/" class="md-nav__link">
+      <a href="API_Documentation/line/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -434,7 +516,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Drawing%20Objects/node/" class="md-nav__link">
+      <a href="API_Documentation/node/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -454,7 +536,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Drawing%20Objects/plot_coordinates/" class="md-nav__link">
+      <a href="API_Documentation/plot_coordinates/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -474,7 +556,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Drawing%20Objects/point/" class="md-nav__link">
+      <a href="API_Documentation/point/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -494,7 +576,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Drawing%20Objects/rectangle/" class="md-nav__link">
+      <a href="API_Documentation/rectangle/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -514,7 +596,27 @@
   
   
     <li class="md-nav__item">
-      <a href="Drawing%20Objects/scope/" class="md-nav__link">
+      <a href="API_Documentation/arc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Arc
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="API_Documentation/scope/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -531,6 +633,25 @@
           </ul>
         </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -555,6 +676,42 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-tikz-python" class="md-nav__link">
+    Why Tikz-Python
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    Background
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#about" class="md-nav__link">
+    About
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -578,7 +735,7 @@
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip install tikz-python
 </span></code></pre></div></p>
 <p>Want to see some nice examples of what this package can do? See <a href="examples/">here</a>.</p>
-<h1 id="usage">Usage</h1>
+<h2 id="usage">Usage</h2>
 <p>Suppose we want to create a sphere. We can achieve this as follows.
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span>  
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
@@ -593,7 +750,7 @@
 </span></code></pre></div>
 which produces
 <img src="png/basic.png"> </p>
-<h1 id="why-tikz-python">Why Tikz-Python</h1>
+<h2 id="why-tikz-python">Why Tikz-Python</h2>
 <p>With Tikz-Python, you generate TikZ code by writing python code. And Python is much nicer than TeX. </p>
 <ul>
 <li>
@@ -621,6 +778,7 @@ that can be used to create other drawings.</p>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;thick, blue, o-o&quot;</span><span class="p">)</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">start_node</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;below&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Start!&quot;</span><span class="p">)</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">end_node</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;End!&quot;</span><span class="p">)</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  <span class="c1"># Displays a pdf of the drawing to the user</span>
 </span></code></pre></div>
 which produces 
 <img src="png/line_and_two_nodes.png">
@@ -645,7 +803,7 @@ Additionally, you can <code>print</code> your tikz object to see the code genera
 </span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>\end{tikzpicture}
 </span></code></pre></div>
 which you can then use to export to your project.</p>
-<h1 id="background">Background</h1>
+<h2 id="background">Background</h2>
 <p>TikZ is itself a wrapper of the TeX-based graphics package PGF (see <a href="https://github.com/pgf-tikz/pgf/blob/master/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex">here</a>), and it is commonly used in LaTeX documents to produce beautiful graphics.
 However, the power of TikZ comes with a tradeoff: it is extremely tedious to use, learn, understand, and iterate on. </p>
 <p>The main problem is Tikz is that, even though Tikz is so powerful, it is often the case that 
@@ -655,7 +813,7 @@ LaTeX, TeX, PGF, and the history, bugs, cryptic error messages, and ridiculous q
 This takes years of practice and for the average person this is not realistic or desirable.</p>
 <p>This can be seen in research papers; even in high quality research papers, the graphics are usually not that great and it totally makes sense why. 
 It's probably because the authors are too busy being an expert in their own field of work to sit down and read a 1300 page manual on TikZ.</p>
-<h1 id="about">About</h1>
+<h2 id="about">About</h2>
 <p>I started this project after realizing </p>
 <ul>
 <li>
@@ -707,7 +865,7 @@ Then I became a professional software engineer, and I refactored the code to a m
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.copy"], "search": "assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.copy", "navigation.tabs"], "search": "assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="assets/javascripts/bundle.dff1b7c8.min.js"></script>
