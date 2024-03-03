@@ -117,7 +117,7 @@ def rectangle_from_north(
     options: str = "",
     action: str = "draw",
 ):
-    """Create a Rectangle whose such that the .north attribute is north_point"""
+    """Create a Rectangle such that the .north attribute is north_point"""
     north_point = Point(north_point)
     left_corner = Point(north_point.x - width / 2, north_point.y - height)
     return Rectangle(
@@ -136,7 +136,7 @@ def rectangle_from_east(
     options: str = "",
     action: str = "draw",
 ):
-    """Create a Rectangle whose such that the .east attribute is north_point"""
+    """Create a Rectangle such that the .east attribute is north_point"""
     east_point = Point(east_point)
     left_corner = Point(east_point.x - width, east_point.y - height / 2)
     return Rectangle(
@@ -155,7 +155,7 @@ def rectangle_from_south(
     options: str = "",
     action: str = "draw",
 ):
-    """Create a Rectangle whose such that the .south attribute is north_point"""
+    """Create a Rectangle such that the .south attribute is north_point"""
     south_point = Point(south_point)
     left_corner = Point(south_point.x - width / 2, south_point.y)
     return Rectangle(
@@ -174,9 +174,27 @@ def rectangle_from_west(
     options: str = "",
     action: str = "draw",
 ):
-    """Create a Rectangle whose such that the .west attribute is north_point"""
+    """Create a Rectangle such that the .west attribute is west_point"""
     west_point = Point(west_point)
     left_corner = Point(west_point.x, west_point.y - height / 2)
+    return Rectangle(
+        left_corner=left_corner,
+        width=width,
+        height=height,
+        options=options,
+        action=action,
+    )
+
+def rectangle_from_center(
+    center: Union[Tuple[float, float], Point],
+    width: float = 0,
+    height: float = 0,
+    options: str = "",
+    action: str = "draw",
+):
+    """Create a Rectangle by specifying its center."""
+    center = Point(center)
+    left_corner = Point(center.x - width / 2, center.y - height / 2)
     return Rectangle(
         left_corner=left_corner,
         width=width,

@@ -6,6 +6,9 @@ theme:
     - navigation.tabs
   icon:
     repo: fontawesome/brands/github
+  favicon: png/favicon.png
+  logo: png/favicon.png
+
 
 plugins:
   - search
@@ -43,6 +46,7 @@ repo_url: https://github.com/ltrujello/Tikz-Python
 
 nav:
 - Home: index.md
+- Tutorials: tutorials.md 
 - Examples: examples.md
 - API Documentation: 
   - TikzPicture: API_Documentation/tikz_picture.md

@@ -11,6 +11,7 @@ from tikzpy.drawing_objects.rectangle import (
     rectangle_from_east,
     rectangle_from_south,
     rectangle_from_west,
+    rectangle_from_center,
 )
 from tikzpy.drawing_objects.ellipse import Ellipse
 from tikzpy.drawing_objects.arc import Arc
@@ -255,6 +256,18 @@ class TikzEnvironment(ABC):
                 once created. Defaults to "draw".
         """
         rectangle = rectangle_from_west(west_point, width, height, options, action)
+        self.draw(rectangle)
+        return rectangle
+
+    def rectangle_from_center(
+        self,
+        center: Union[Tuple[float, float], Point],
+        width: float = 0,
+        height: float = 0,
+        options: str = "",
+        action: str = "draw",
+    ) -> Rectangle:
+        rectangle = rectangle_from_center(center, width, height, options, action)
         self.draw(rectangle)
         return rectangle
 
