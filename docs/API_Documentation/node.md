@@ -31,18 +31,22 @@ Here's another example of usings nodes to illustrate the concept of a multivaria
 ```python
 import tikzpy
 
-row_1 = tikzpy.TikzPicture()
+tikz = tikzpy.TikzPicture()
 
+arrow_len = 2
+box_width = 2
 # Lines and rectangles
-row_1.line((0, 0), (2, 0), options="->")
-row_1.rectangle((2, -0.5), (4, 0.5))
-row_1.line((4, 0), (6, 0), options="->")
+input_arrow = tikz.line((0, 0), (arrow_len, 0), options="->")
+box = tikz.rectangle_from_west(input_arrow.end, width=box_width, height=1)
+output_arrow = tikz.line(box.east, box.east + (arrow_len, 0), options="->")
+
 # Labels
-row_1.node((-1.2, 0), text="$(x_1, \dots, x_n)$")
-row_1.node((1, 0.3), text="input")
-row_1.node((3, 0), text="$f$")
-row_1.node((5, 0.3), text="output")
-row_1.node((7.3, 0), text="$f(x_1, \dots, x_n)$")
+tikz.node((-1.2, 0), text="$(x_1, \dots, x_n)$")
+tikz.node(input_arrow.midpoint() + (0, 0.3), text="input")
+tikz.node(box.center, text="$f$")
+tikz.node(output_arrow.midpoint() + (0, 0.3), text="output")
+tikz.node((7.3, 0), text="$f(x_1, \dots, x_n)$")
+tikz.show()
 ```
 
 <img src="../../png/node_ex_2.png"/>

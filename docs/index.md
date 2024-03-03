@@ -72,8 +72,7 @@ If we were working in an interactive python shell with the code above, we would 
 "Start!"
 ```
 Additionally, you can `print` your tikz object to see the code generated
-```
-At any time, you can look at the current TikZ code you've created 
+
 ```python
 >>> print(tikz)
 \begin{tikzpicture}
