@@ -69,10 +69,12 @@ class Line(DrawingObject):
 
     @property
     def start(self) -> Point:
+        """Returns a Point object representing the start of the line."""
         return self._start
 
     @property
     def end(self) -> Point:
+        """Returns a Point object representing the end of the line."""
         return self._end
 
     @start.setter
@@ -96,6 +98,7 @@ class Line(DrawingObject):
         return Point(x_1 * (1 - t) + x_2 * t, y_1 * (1 - t) + y_2 * t)
 
     def midpoint(self) -> Point:
+        """Returns a Point object representing the middle of the line."""
         return self.pos_at_t(0.5)
 
     def shift(self, xshift: float, yshift: float) -> None:

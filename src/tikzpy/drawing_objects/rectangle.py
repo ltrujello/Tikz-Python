@@ -47,12 +47,30 @@ class Rectangle(DrawingObject):
             self._left_corner.y + self.height / 2,
         )
 
+    @center.setter
+    def center(self, center_point: Union[Point, tuple[int, int]]) -> Point:
+        """Sets the center of the rectangle."""
+        if isinstance(center_point, tuple):
+            center_point = Point(center_point)
+        self._left_corner = Point(
+            center_point.x - self.width / 2, center_point.y - self.height / 2
+        )
+
     @property
     def north(self) -> Point:
         """Returns the north point of the rectangle."""
         return Point(
             self._left_corner.x + self.width / 2,
             self._left_corner.y + self.height,
+        )
+
+    @north.setter
+    def north(self, north_point: Union[Point, tuple[int, int]]) -> Point:
+        """Sets the north point of the rectangle."""
+        if isinstance(north_point, tuple):
+            north_point = Point(north_point)
+        self._left_corner = Point(
+            north_point.x - self.width / 2, north_point.y - self.height
         )
 
     @property
@@ -63,6 +81,15 @@ class Rectangle(DrawingObject):
             self._left_corner.y + self.height / 2,
         )
 
+    @east.setter
+    def east(self, east_point: Union[Point, tuple[int, int]]) -> Point:
+        """Sets the east point of the rectangle."""
+        if isinstance(east_point, tuple):
+            east_point = Point(east_point)
+        self._left_corner = Point(
+            east_point.x - self.width, east_point.y - self.height / 2
+        )
+
     @property
     def south(self) -> Point:
         """Returns the south point of the rectangle."""
@@ -71,6 +98,13 @@ class Rectangle(DrawingObject):
             self._left_corner.y,
         )
 
+    @south.setter
+    def south(self, south_point: Union[Point, tuple[int, int]]) -> Point:
+        """Sets the south point of the rectangle."""
+        if isinstance(south_point, tuple):
+            south_point = Point(south_point)
+        self._left_corner = Point(south_point.x - self.width / 2, south_point.y)
+
     @property
     def west(self) -> Point:
         """Returns the west point of the rectangle."""
@@ -78,6 +112,13 @@ class Rectangle(DrawingObject):
             self._left_corner.x,
             self._left_corner.y + self.height / 2,
         )
+
+    @west.setter
+    def west(self, west_point: Union[Point, tuple[int, int]]) -> Point:
+        """Sets the west point of the rectangle."""
+        if isinstance(west_point, tuple):
+            west_point = Point(west_point)
+        self._left_corner = Point(west_point.x, west_point.y - self.height / 2)
 
     @property
     def left_corner(self) -> Point:
@@ -184,6 +225,7 @@ def rectangle_from_west(
         options=options,
         action=action,
     )
+
 
 def rectangle_from_center(
     center: Union[Tuple[float, float], Point],
