@@ -7,12 +7,12 @@ Rectangles are often used as a background to many figures; in this case,
 we create a fancy colored background.
 
 ```python
-import tikzpy
+from tikzpy import TikzPicture, Rectangle
 import math
 
-tikz = tikzpy.TikzPicture(center=True)
+tikz = TikzPicture(center=True)
 
-tikz.rectangle_from_center((0, 0), width=7, height=5, options="rounded corners, Yellow!30",action="filldraw")
+yellow_box: Rectangle = tikz.rectangle_from_center((0, 0), width=7, height=5, options="rounded corners, Yellow!30",action="filldraw")
 # Params
 r = 2
 n_nodes = 7

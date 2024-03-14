@@ -132,6 +132,12 @@ In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples
 
 <img src="../png/des.png" width="80%"/>
 
+### Transformer Architecture
+In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/transformer/pre_layer_transformer.py), we draw a diagram illustrating the Transformer architecture. This is very similar 
+to the original diagram from Attention is All You Need. Note we also illustrate the Pre-Layer normalization technique that most implementations of the Transformer use. 
+
+<img src="../png/transformer.png" width="99%"/>
+
 
 ### General Ven Diagrams 
 In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py), we use the python library `itertools.combinations` to create a function which takes in an arbitrary number of 2D Tikz figures and colors each and every single intersection. 
