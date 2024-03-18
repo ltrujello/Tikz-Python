@@ -8,7 +8,7 @@ Towards that goal we offer step-by-step tutorials demonstrating this package.
 
 Suppose we desire to create this diagram from mathematics, which illustrates the logarithmic branch cut.
 
-<img src="../../png/node_ex_1.png"/>
+<img src="../png/node_ex_1.png"/>
 
 
 ### Axes
@@ -36,7 +36,7 @@ on the `axes_len` value. This lets us experiment with various `axes_len` values,
 
 This code generates the graphic below. 
 
-<img src="../../png/tutorial_imgs/log_cut_step_1.png"/>
+<img src="../png/tutorial_imgs/log_cut_step_1.png"/>
 
 ### Cut branch
 
@@ -54,7 +54,7 @@ have to also change node's position. This saves us time.
 
 This so far generates 
 
-<img src="../../png/tutorial_imgs/log_cut_step_2.png"/>
+<img src="../png/tutorial_imgs/log_cut_step_2.png"/>
 
 ### Line from origin
 
@@ -73,7 +73,7 @@ We then shift it up by specifying `options=above`, as one normally would in TikZ
 
 This then generates 
 
-<img src="../../png/tutorial_imgs/log_cut_step_3.png"/>
+<img src="../png/tutorial_imgs/log_cut_step_3.png"/>
 
 ### Angle arc
 
