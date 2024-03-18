@@ -9,13 +9,13 @@
       
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../tutorials/">
       
       
         <link rel="next" href="../API_Documentation/tikz_picture/">
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../png/favicon.png">
       <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.8">
     
     
@@ -85,8 +85,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href=".." title="Tikz-Python" class="md-header__button md-logo" aria-label="Tikz-Python" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <img src="../png/favicon.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -196,6 +195,23 @@
         
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../tutorials/" class="md-tabs__link">
+        
+  
+    
+  
+  Tutorials
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
     
   
   
@@ -271,8 +287,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href=".." title="Tikz-Python" class="md-nav__button md-logo" aria-label="Tikz-Python" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+  <img src="../png/favicon.png" alt="logo">
 
     </a>
     Tikz-Python
@@ -303,6 +318,25 @@
   
   <span class="md-ellipsis">
     Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tutorials/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tutorials
   </span>
   
 
@@ -393,6 +427,13 @@
         <li class="md-nav__item">
   <a href="#des" class="md-nav__link">
     DES
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transformer-architecture" class="md-nav__link">
+    Transformer Architecture
   </a>
   
 </li>
@@ -496,9 +537,9 @@
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -509,8 +550,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             API Documentation
           </label>
@@ -804,6 +845,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#transformer-architecture" class="md-nav__link">
+    Transformer Architecture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#general-ven-diagrams" class="md-nav__link">
     General Ven Diagrams
   </a>
@@ -1009,6 +1057,10 @@ layers n-1 and n.</p>
 <h3 id="des">DES</h3>
 <p>In the <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/des/des.py">source here</a>, we use a Python function to draw one round of the <a href="https://en.wikipedia.org/wiki/Data_Encryption_Standard">DES function</a>. We then call this function multiple times to illustrate the multiple rounds that entail the DES encryption algorithm.</p>
 <p><img src="../png/des.png" width="80%"/></p>
+<h3 id="transformer-architecture">Transformer Architecture</h3>
+<p>In the <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/transformer/pre_layer_transformer.py">source here</a>, we draw a diagram illustrating the Transformer architecture. This is very similar 
+to the original diagram from Attention is All You Need. Note we also illustrate the Pre-Layer normalization technique that most implementations of the Transformer use. </p>
+<p><img src="../png/transformer.png" width="99%"/></p>
 <h3 id="general-ven-diagrams">General Ven Diagrams</h3>
 <p>In the <a href="https://github.com/ltrujello/Tikz-Python/blob/main/examples/ven_diagrams/intersections_scope_clip.py">source here</a>, we use the python library <code>itertools.combinations</code> to create a function which takes in an arbitrary number of 2D Tikz figures and colors each and every single intersection. </p>
 <p>For example, suppose we arrange nine circles in a 3 x 3 grid. Plugging these nine circles in, we generate the image below.</p>
