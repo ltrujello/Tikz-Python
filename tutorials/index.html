@@ -796,7 +796,7 @@ That is, we aim to minimize "surprises" such that users experienced with TikZ ca
 Towards that goal we offer step-by-step tutorials demonstrating this package.</p>
 <h2 id="logarithmic-branch-cut">Logarithmic Branch Cut</h2>
 <p>Suppose we desire to create this diagram from mathematics, which illustrates the logarithmic branch cut.</p>
-<p><img src="../../png/node_ex_1.png"/></p>
+<p><img src="../png/node_ex_1.png"/></p>
 <h3 id="axes">Axes</h3>
 <p>The first thing we can do is create the x and y axes. To do this, we can create two 
 <code>Line</code> objects for the x and y axes, and two <code>Node</code> objects to draw the labels for these axes.  </p>
@@ -816,7 +816,7 @@ Towards that goal we offer step-by-step tutorials demonstrating this package.</p
 <p>Note that this code is modular; the <code>Node</code> objects are dependent on the <code>Line.end</code> attributes, and the <code>Line</code> objects are dependent
 on the <code>axes_len</code> value. This lets us experiment with various <code>axes_len</code> values, if we'd like.</p>
 <p>This code generates the graphic below. </p>
-<p><img src="../../png/tutorial_imgs/log_cut_step_1.png"/></p>
+<p><img src="../png/tutorial_imgs/log_cut_step_1.png"/></p>
 <h3 id="cut-branch">Cut branch</h3>
 <p>Next, let's add the "Cut" branch. We achieve this with one <code>Line</code> object and one <code>Node</code> object to put in the word "Cut".</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Cut branch</span>
@@ -827,7 +827,7 @@ on the <code>axes_len</code> value. This lets us experiment with various <code>a
 <code>Line.midpoint()</code> method, which calculates the middle of the line. Thus, if we change the length of our line, we do not 
 have to also change node's position. This saves us time. </p>
 <p>This so far generates </p>
-<p><img src="../../png/tutorial_imgs/log_cut_step_2.png"/></p>
+<p><img src="../png/tutorial_imgs/log_cut_step_2.png"/></p>
 <h3 id="line-from-origin">Line from origin</h3>
 <p>Next, let's add the line from the origin and annotate it. Again, we achieve this with a <code>Line</code> and a <code>Node</code> object. </p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Line from origin</span>
@@ -839,7 +839,7 @@ The denominator <code>3</code> is pretty arbitrary and subjective, and can be ch
 For our node, we use the <code>Line.end</code> attribute to specify the position and shift it to the right a bit by 0.7.
 We then shift it up by specifying <code>options=above</code>, as one normally would in TikZ.</p>
 <p>This then generates </p>
-<p><img src="../../png/tutorial_imgs/log_cut_step_3.png"/></p>
+<p><img src="../png/tutorial_imgs/log_cut_step_3.png"/></p>
 <h3 id="angle-arc">Angle arc</h3>
 <p>Finally, we draw the dashed-angle. To achieve this we can use an <code>Arc</code> object and one <code>Node</code> object. </p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Angle arc</span>
