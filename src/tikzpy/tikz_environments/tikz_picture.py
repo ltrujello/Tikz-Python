@@ -1,6 +1,6 @@
 import subprocess
 import webbrowser
-import tempfile
+from shutil import rmtree, copy
 import re
 import numpy as np
 from pathlib import Path
@@ -18,6 +18,18 @@ from tikzpy.utils.helpers import (
 from tikzpy.templates.tex_file import TEX_FILE
 from pdf2image import convert_from_path
 from PIL import Image
+
+try:
+    from IPython import get_ipython
+    from IPython.display import display
+
+    ipython = get_ipython()
+    if ipython is None:
+        JUPYTER_ENABLED = False
+    if "IPKernelApp" in ipython.config:  # Jupyter notebook or qtconsole
+        JUPYTER_ENABLED = True
+except ImportError:
+    JUPYTER_ENABLED = False
 
 
 class TikzPicture(TikzEnvironment):
@@ -40,6 +52,7 @@ class TikzPicture(TikzEnvironment):
         self._preamble = {}
         self._postamble = {}
         self.BASE_DIR = None
+        self.TEMP_DIR = Path.cwd() / f".tikz_tmp{id(self)}"
 
         if tikz_code_dir is not None:
             self.BASE_DIR = Path(tikz_code_dir)
@@ -126,37 +139,31 @@ class TikzPicture(TikzEnvironment):
         self, pdf_destination: Optional[str] = None, quiet: bool = True
     ) -> Path:
         """Compiles the Tikz code and returns a Path to the final PDF.
-        If no file path is provided, a default value of "tex_file.pdf" will be used.
+        If no file path is provided, a default value of ".temp/TEMP_DIR/temp.pdf" will be used.
 
         Parameters:
             pdf_destination (str): The file path of the compiled pdf.
             quiet (bool): Parameter to silence latexmk.
         """
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            tex_filepath = Path(tmp_dir) / "tex_file.tex"
-            self.write_tex_file(tex_filepath)
+        self.TEMP_DIR.mkdir(parents=True, exist_ok=True)
+        tex_filepath = self.TEMP_DIR / "temp.tex"
+        self.write_tex_file(tex_filepath)
 
-            tex_file_posix_path = true_posix_path(tex_filepath)
-            tex_file_parents = true_posix_path(tex_filepath.parent)
-            options = ""
-            if quiet:
-                options += " -quiet "
-            subprocess.run(
-                f"latexmk -pdf {options} -output-directory={tex_file_parents} {tex_file_posix_path}",
-                shell=True,
-            )
+        tex_file_posix_path = true_posix_path(tex_filepath)
+        tex_file_parents = true_posix_path(tex_filepath.parent)
+        options = ""
+        if quiet:
+            options += " -quiet "
+        subprocess.run(
+            f"latexmk -pdf {options} -output-directory={tex_file_parents} -aux-directory={tex_file_parents} {tex_file_posix_path}",
+            shell=True,
+        )
 
-            # We move the compiled PDF into the same folder containing the tikz code.
-            pdf_file = tex_filepath.with_suffix(".pdf").resolve()
-            if pdf_destination is None:
-                if self.BASE_DIR is None:
-                    moved_pdf_file = Path.cwd() / pdf_file.name
-                else:
-                    moved_pdf_file = self.BASE_DIR / pdf_file.name
-            else:
-                moved_pdf_file = Path(pdf_destination)
-            pdf_file.replace(moved_pdf_file)
-            return moved_pdf_file.resolve()
+        pdf_file = tex_filepath.with_suffix(".pdf")
+        if pdf_destination is not None:
+            copy(pdf_file, pdf_destination)
+            pdf_file = Path(pdf_destination)
+        return pdf_file.resolve()
 
     def save_png(self, pdf_fp, png_destination):
         page_pngs = convert_from_path(pdf_fp)
@@ -201,7 +208,16 @@ class TikzPicture(TikzEnvironment):
         or open the PDF in the user's browser.
         """
         pdf_file = self.compile(quiet=quiet)
-        webbrowser.open_new(str(pdf_file.as_uri()))
+        if JUPYTER_ENABLED:
+            page_pngs = convert_from_path(pdf_file, transparent=True)
+            for img in page_pngs:
+                display(img)
+        else:
+            webbrowser.open_new(str(pdf_file.as_uri()))
+
+    def close(self) -> None:
+        if self.TEMP_DIR is not None and self.TEMP_DIR.is_dir():
+            rmtree(self.TEMP_DIR)
 
     def scope(self, options: str = "") -> Scope:
         scope = Scope(options=options)
