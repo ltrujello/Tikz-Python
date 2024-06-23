@@ -139,7 +139,7 @@ class TikzPicture(TikzEnvironment):
         self, pdf_destination: Optional[str] = None, quiet: bool = True
     ) -> Path:
         """Compiles the Tikz code and returns a Path to the final PDF.
-        If no file path is provided, a default value of ".temp/TEMP_DIR/temp.pdf" will be used.
+        If no file path is provided, a default value of "{self.TEMP_DIR}/temp.pdf" will be used.
 
         Parameters:
             pdf_destination (str): The file path of the compiled pdf.
