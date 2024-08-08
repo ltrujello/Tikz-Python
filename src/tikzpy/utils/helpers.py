@@ -74,3 +74,37 @@ def find_image_end_boundary(img_data):
             break
         ind -= 1
     return ind
+
+
+def extract_error_content(log_lines: list[str]) -> str:
+    """
+    Scans the provided text for LaTeX error messages.
+
+    This function searches the given text for lines that begin with "! " which
+    typically indicates the start of an error message in LaTeX logs. It then
+    continues to collect all subsequent lines until it encounters a line that
+    begins with "? ", which usually indicates the end of the error message.
+    All collected lines are appended to a list and returned.
+
+    Parameters:
+    text (str): The input text to scan for error messages.
+
+    Returns:
+    list: A list of strings containing the lines of the error message.
+          If no error message is found, the list will be empty.
+    """
+    error_lines = []
+    recording = False
+
+    for line in log_lines:
+        if line.startswith("! "):
+            recording = True
+        if recording:
+            error_lines.append(line)
+            if line.startswith("?"):
+                break
+
+    if len(error_lines) == 0:
+        return None
+
+    return "".join(error_lines)

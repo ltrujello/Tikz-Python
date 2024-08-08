@@ -2,6 +2,7 @@ import subprocess
 import webbrowser
 import tempfile
 import re
+
 import numpy as np
 from pathlib import Path
 from typing import List, Optional
@@ -14,7 +15,9 @@ from tikzpy.utils.helpers import (
     replace_code,
     find_image_start_boundary,
     find_image_end_boundary,
+    extract_error_content,
 )
+from tikzpy.utils.types import CompileError
 from tikzpy.templates.tex_file import TEX_FILE
 from pdf2image import convert_from_path
 from PIL import Image
@@ -141,10 +144,28 @@ class TikzPicture(TikzEnvironment):
             options = ""
             if quiet:
                 options += " -quiet "
-            subprocess.run(
+            cmd = (
                 f"latexmk -pdf {options} -output-directory={tex_file_parents} {tex_file_posix_path}",
-                shell=True,
             )
+            completed_process = subprocess.run(cmd, shell=True, capture_output=True)
+            if completed_process.returncode != 0:
+                logfile = Path(tmp_dir) / "tex_file.log"
+                if not logfile.exists():
+                    raise CompileError(
+                        f"Unexpected compilation error when running {cmd=}. No log file found. Manually compile the tikz code to debug."
+                        f"{completed_process.stderr=}"
+                    )
+                # If there's a log file, try to extract the error from it
+                # and return it to the user.
+                error_content = extract_error_content(
+                    logfile.read_text().splitlines(keepends=True)
+                )
+                if error_content is None:
+                    raise CompileError(
+                        f"Unexpected compilation error when running {cmd=}. Failed to parse log file. Manually compile the tikz code and check the .log file."
+                        f"{completed_process.stderr=}"
+                    )
+                raise CompileError(error_content)
 
             # We move the compiled PDF into the same folder containing the tikz code.
             pdf_file = tex_filepath.with_suffix(".pdf").resolve()
