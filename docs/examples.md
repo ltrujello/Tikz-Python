@@ -1,4 +1,22 @@
 # Examples
+
+### Hawaiian Earring
+Suppose I want to draw the [Hawaiian Earring](https://en.wikipedia.org/wiki/Hawaiian_earring). The code below achieves this. 
+```python
+from tikzpy import TikzPicture
+
+tikz = TikzPicture()
+radius = 5
+for i in range(1, 60):
+    n = radius / i
+    tikz.circle((n, 0), n)
+tikz.show()
+```
+and produces 
+<img src="../png/circle_ex_2.png"/> 
+
+Notice that this code is readable, modular, and therefore easy to experiment with (and compare this with pure TikZ implementations [here](https://tex.stackexchange.com/questions/230588/how-to-draw-infinite-earring-with-tikz).)
+
 ### Line and two nodes
 Suppose I want to create a line and two labels at the ends. The code below achieves this
 ```python

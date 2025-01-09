@@ -85,10 +85,10 @@ which you can then use to export to your project.
 
 
 ## Background
-TikZ is itself a wrapper of the TeX-based graphics package PGF (see [here](https://github.com/pgf-tikz/pgf/blob/master/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex)), and it is commonly used in LaTeX documents to produce beautiful graphics.
+TikZ is a wrapper of the TeX-based graphics package PGF (see [here](https://github.com/pgf-tikz/pgf/blob/master/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex)), and it is commonly used in LaTeX documents to produce beautiful graphics.
 However, the power of TikZ comes with a tradeoff: it is extremely tedious to use, learn, understand, and iterate on. 
 
-The main problem is Tikz is that, even though Tikz is so powerful, it is often the case that 
+The main problem with Tikz is that even though Tikz is very powerful, it is often the case that 
 nonexperts who use TikZ end up producing subpar images. 
 The reason for this is because of the fact that in order to create beautiful images with TikZ, you also need to deeply understand 
 LaTeX, TeX, PGF, and the history, bugs, cryptic error messages, and ridiculous quirks (and there are *many* quirks) of these languages. 
