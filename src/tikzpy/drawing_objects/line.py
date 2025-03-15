@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Optional
 from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.utils.helpers import brackets
@@ -69,12 +69,35 @@ class Line(DrawingObject):
 
     @property
     def start(self) -> Point:
-        """Returns a Point object representing the start of the line."""
+        """Returns a Point object representing the start of the line.
+        ```python
+        from tikzpy import TikzPicture
+
+        tikz = TikzPicture(center=True)
+        line = tikz.line((0, 0), (4, 3), options="->")
+        tikz.node(line.start, text="Start", options="below")
+        tikz.show()
+        ```
+        
+        <img src="../../png/line_start.png"/> 
+        """
         return self._start
 
     @property
     def end(self) -> Point:
-        """Returns a Point object representing the end of the line."""
+        """Returns a Point object representing the end of the line.
+
+        ```python
+        from tikzpy import TikzPicture
+
+        tikz = TikzPicture(center=True)
+        line = tikz.line((0, 0), (4, 3), options="->")
+        tikz.node(line.end, text="End", options="above")
+        tikz.show()
+        ```
+        
+        <img src="../../png/line_end.png"/> 
+        """
         return self._end
 
     @start.setter
@@ -92,14 +115,50 @@ class Line(DrawingObject):
             raise TypeError(f"Invalid type '{type(new_end)}' for end")
 
     def pos_at_t(self, t: float) -> Point:
-        """Returns the point on the line that lies at "time t", on a scale from 0 to 1."""
+        """Returns the point on the line that lies at "time t", on a scale from 0 to 1.
+
+        ```python
+        from tikzpy import TikzPicture
+
+        tikz = TikzPicture(center=True)
+        line = tikz.line((0, 0), (4, 3), options="->")
+        tikz.node(line.pos_at_t(0.7), text="0.7", options="above")
+        tikz.show()
+        ```
+        
+        <img src="../../png/line_pos_a_t.png"/> 
+        """
         x_1, y_1 = self._start
         x_2, y_2 = self._end
         return Point(x_1 * (1 - t) + x_2 * t, y_1 * (1 - t) + y_2 * t)
 
     def midpoint(self) -> Point:
-        """Returns a Point object representing the middle of the line."""
+        """Returns a Point object representing the middle of the line.
+
+        ```python
+        from tikzpy import TikzPicture
+
+        tikz = TikzPicture(center=True)
+        line = tikz.line((0, 0), (4, 3), options="->")
+        tikz.node(line.midpoint(), text="$M$", options="above")
+        tikz.show()
+        ```
+        
+        <img src="../../png/line_midpoint.png"/> 
+        """
         return self.pos_at_t(0.5)
+
+    def slope(self) -> Optional[float]:
+        """Returns the slope of the line"""
+        if self.end.x == self.start.x:
+            return None
+        return (self.end.y - self.start.y) / (self.end.x - self.start.x)
+
+    def y_intercept(self) -> Optional[float]:
+        slope = self.slope()
+        if slope is None:
+            return None
+        return self.start.y - slope * self.start.x
 
     def shift(self, xshift: float, yshift: float) -> None:
         """Shift start, end, and control_pts"""

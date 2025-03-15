@@ -18,7 +18,7 @@ from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.tikz_environments.tikz_command import TikzCommand
-from tikzpy.drawing_objects.drawing_utils import line_connecting_circle_edges
+from tikzpy.drawing_objects.drawing_utils import line_connecting_circle_edges, draw_segments
 
 
 class TikzEnvironment(ABC):
@@ -109,12 +109,78 @@ class TikzEnvironment(ABC):
         self,
         circle_a,
         circle_b,
-    ) -> Circle:
+    ) -> Line:
         """Draws a line connecting the edges of two circles. This is useful for drawing
-        graphs, diagrams, neural networks, etc."""
+        graphs, diagrams, neural networks, etc.
+
+        ```python
+        from tikzpy import TikzPicture
+
+        tikz = TikzPicture()
+        radius = 0.3
+        centers = [(0,2), (2, 4), (4,2), (6,5)]
+        circles = [tikz.circle(x, radius, options="ProcessBlue!50", action="filldraw") for x in centers]
+        for idx in range(len(circles) - 1):
+            line = tikz.connect_circle_edges(circles[idx], circles[idx + 1])
+            line.options = "->"
+        tikz.show()
+        ```
+        <img src="../../png/connect_circles.png"/> 
+
+        """
         line = line_connecting_circle_edges(circle_a, circle_b)
         self.draw(line)
         return line
+
+
+    def connect_circle_edges(
+        self,
+        circle_a,
+        circle_b,
+    ) -> Line:
+        """Draws a line connecting the edges of two circles. This is useful for drawing
+        graphs, diagrams, neural networks, etc.
+
+        ```python
+        from tikzpy import TikzPicture
+
+        tikz = TikzPicture()
+        radius = 0.3
+        centers = [(0,2), (2, 4), (4,2), (6,5)]
+        circles = [tikz.circle(x, radius, options="ProcessBlue!50", action="filldraw") for x in centers]
+        for idx in range(len(circles) - 1):
+            line = tikz.connect_circle_edges(circles[idx], circles[idx + 1])
+            line.options = "->"
+        tikz.show()
+        ```
+        <img src="../../png/connect_circles.png"/> 
+
+        """
+        line = line_connecting_circle_edges(circle_a, circle_b)
+        self.draw(line)
+        return line
+
+    def draw_segments(self, points, options):
+        """
+        Given a list of points, draw a sequence of line segments between the points.
+
+        ```python
+        from tikzpy import TikzPicture
+        tikz = TikzPicture(center=True)
+        circle = tikz.circle((0,0), 3, options="fill=ProcessBlue!30", action="filldraw")
+        num_points = 7
+        points = []
+        for num in range(num_points):
+            angle = 360/num_points*num
+            points.append(circle.point_at_arg(angle))
+        draw_segments(tikz, points, options="thick")
+        tikz.show()
+        ```
+
+        <img src="../../png/draw_segments.png"/> 
+        """
+        lines = draw_segments(self, points, options)
+        return lines
 
     def node(
         self,

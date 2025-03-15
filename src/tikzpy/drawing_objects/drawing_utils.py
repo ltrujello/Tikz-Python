@@ -52,3 +52,26 @@ def calc_start_end_between_nodes(pos_a, rad_a, pos_b, rad_b):
             start = (x_1 - rad_a * math.sin(theta), y_1 - rad_a * math.cos(theta))
             end = (x_2 + rad_b * math.sin(theta), y_2 + rad_b * math.cos(theta))
     return start, end
+
+def draw_segments(tikz, points, circular=True, options=""):
+    """
+    Given a list of points, draw a sequence of line segments between the points.
+    Returns a dictionary collection of the lines for later modification if necessary.
+    """
+    idx = 0
+    lines = {}
+    while idx < len(points):
+        if idx == len(points) - 1:
+            if not circular:
+                break
+            first_pt = points[-1]
+            second_pt = points[0]
+        else:
+            first_pt = points[idx]
+            second_pt = points[idx + 1]
+
+        line = tikz.line(first_pt, second_pt, options=options)
+        lines[(first_pt, second_pt)] = line
+        idx += 1
+
+    return lines

@@ -32,6 +32,16 @@ class Circle(DrawingObject):
     def center(self) -> Point:
         """
         Returns a Point object representing the center of the circle.
+
+        ```python
+        from tikzpy import TikzPicture
+        tikz = TikzPicture()
+        circle = tikz.circle((0,0), 1, options="fill=ProcessBlue!30", action="filldraw")
+        tikz.node(circle.center, text="O")
+        tikz.show()
+        ```
+
+        <img src="../../png/circle_center.png"/> 
         """
         return self._center
 
@@ -46,6 +56,16 @@ class Circle(DrawingObject):
     def north(self) -> Point:
         """
         Returns a Point object representing the north point on the circle.
+
+        ```python
+        from tikzpy import TikzPicture
+        tikz = TikzPicture()
+        circle = tikz.circle((0,0), 1, options="fill=ProcessBlue!30", action="filldraw")
+        tikz.node(circle.north, text="$N$", options="above")
+        tikz.show()
+        ```
+
+        <img src="../../png/circle_north.png"/> 
         """
         return self._center + (0, self.radius)
 
@@ -53,6 +73,16 @@ class Circle(DrawingObject):
     def east(self) -> Point:
         """
         Returns a Point object representing the east point on the circle.
+
+        ```python
+        from tikzpy import TikzPicture
+        tikz = TikzPicture()
+        circle = tikz.circle((0,0), 1, options="fill=ProcessBlue!30", action="filldraw")
+        tikz.node(circle.east, text="$E$", options="right")
+        tikz.show()
+        ```
+
+        <img src="../../png/circle_east.png"/> 
         """
         return self._center + (self.radius, 0)
 
@@ -60,6 +90,16 @@ class Circle(DrawingObject):
     def south(self) -> Point:
         """
         Returns a Point object representing the south point on the circle.
+
+        ```python
+        from tikzpy import TikzPicture
+        tikz = TikzPicture()
+        circle = tikz.circle((0,0), 1, options="fill=ProcessBlue!30", action="filldraw")
+        tikz.node(circle.south, text="$S$", options="below")
+        tikz.show()
+        ```
+
+        <img src="../../png/circle_south.png"/> 
         """
         return self._center - (0, self.radius)
 
@@ -67,6 +107,16 @@ class Circle(DrawingObject):
     def west(self) -> Point:
         """
         Returns a Point object representing the west point on the circle.
+
+        ```python
+        from tikzpy import TikzPicture
+        tikz = TikzPicture()
+        circle = tikz.circle((0,0), 1, options="fill=ProcessBlue!30", action="filldraw")
+        tikz.node(circle.west, text="$W$", options="left")
+        tikz.show()
+        ```
+
+        <img src="../../png/circle_west.png"/> 
         """
         return self._center - (self.radius, 0)
 
@@ -75,7 +125,21 @@ class Circle(DrawingObject):
         return f"{self._center} circle ({self.radius}cm)"
 
     def point_at_arg(self, theta: float, radians: bool = False) -> tuple:
-        """Returns the point on the circle at angle theta."""
+        """Returns the point on the circle at angle theta. Both degrees and radians can be specified.
+
+
+        ```python
+        from tikzpy import TikzPicture
+        tikz = TikzPicture(center=True)
+        circle = tikz.circle((0,0), 1, options="fill=ProcessBlue!30", action="filldraw")
+        tikz.node(circle.point_at_arg(45), text="$\pi/2$", options="right")
+        tikz.node(circle.point_at_arg(135), text="$3\pi/4$", options="left")
+        tikz.node(circle.point_at_arg(270), text="$3\pi/2$", options="below")
+        tikz.show()
+        ```
+
+        <img src="../../png/circle_point_at_arg.png"/> 
+        """
         if not radians:
             theta = math.radians(theta)
         return self.center.x + self.radius * math.cos(
