@@ -3,20 +3,20 @@ from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.circle import Circle
 
 
-def line_connecting_circle_edges(circle_a: Circle, circle_b: Circle) -> Line:
+def line_connecting_circle_edges(circle_a: Circle, circle_b: Circle, options="", src_delta=0, dst_delta=0) -> Line:
     """
     Returns a line that connects the outer edges of circle_a
     to circle_b.
     """
     pos_a = circle_a.center
     pos_b = circle_b.center
-    rad_a = circle_a.radius
-    rad_b = circle_b.radius
+    rad_a = circle_a.radius + src_delta
+    rad_b = circle_b.radius + dst_delta
 
     start, end = calc_start_end_between_nodes(
         pos_a=pos_a, rad_a=rad_a, pos_b=pos_b, rad_b=rad_b
     )
-    return Line(start, end)
+    return Line(start, end, options=options)
 
 
 def calc_start_end_between_nodes(pos_a, rad_a, pos_b, rad_b):
