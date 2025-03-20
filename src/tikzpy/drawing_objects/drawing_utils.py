@@ -73,5 +73,48 @@ def draw_segments(tikz, points, circular=True, options=""):
         line = tikz.line(first_pt, second_pt, options=options)
         lines[(first_pt, second_pt)] = line
         idx += 1
-
     return lines
+
+def calc_intersection(item_a, item_b):
+    intersection_map = {
+        (Circle, Circle): circle_circle_intersection,
+    }
+
+    func = intersection_map.get((type(item_a), type(item_b)))
+    if func:
+        return func(item_a, item_b)
+    else:
+        raise NotImplementedError(f"No intersection logic for {type(item_a)} and {type(item_b)}")
+
+def circle_circle_intersection(circle_a, circle_b):
+    return _circle_circle_intersection(circle_a.center.x, circle_a.center.y, circle_a.radius, circle_b.center.x, circle_b.center.y, circle_b.radius)
+
+def _circle_circle_intersection(x1, y1, r1, x2, y2, r2):
+    # Distance between circle centers
+    d = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    
+    # No solutions if circles are separate or one completely contains the other
+    if d > r1 + r2 or d < abs(r1 - r2) or d == 0:
+        return None  # No intersection
+
+    # Find a and h for intersection calculations
+    a = (r1 ** 2 - r2 ** 2 + d ** 2) / (2 * d)
+    h = math.sqrt(r1 ** 2 - a ** 2)
+
+    # Find the point P2, which is the base point of the perpendicular
+    x3 = x1 + a * (x2 - x1) / d
+    y3 = y1 + a * (y2 - y1) / d
+
+    # Intersection points
+    x_int1 = x3 + h * (y2 - y1) / d
+    y_int1 = y3 - h * (x2 - x1) / d
+
+    x_int2 = x3 - h * (y2 - y1) / d
+    y_int2 = y3 + h * (x2 - x1) / d
+
+    # One intersection if circles touch at one point, otherwise two
+    if d == r1 + r2 or d == abs(r1 - r2):
+        return [(x_int1, y_int1)]  
+    return [(x_int1, y_int1), (x_int2, y_int2)]  
+
+

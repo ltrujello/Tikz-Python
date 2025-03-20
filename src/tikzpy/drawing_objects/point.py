@@ -58,6 +58,23 @@ class Point:
                 f"Invalid non-numeric types {type(first_arg)}, {type(second_arg)} supplied to Point class "
             )
 
+    def distance(self, other_point):
+        """
+        Calculates the distance between two points.
+        """
+        if self.z is not None and other_point.z is not None:
+            return math.sqrt(
+                (self.x - other_point.x) ** 2 +
+                (self.y - other_point.y) ** 2 +
+                (self.z - other_point.z) ** 2
+            )
+        else:
+            return math.sqrt(
+                (self.x - other_point.x) ** 2 +
+                (self.y - other_point.y) ** 2
+            )
+
+
     def shift(
         self, xshift: float, yshift: float, zshift: Optional[float] = None
     ) -> None:
@@ -114,7 +131,6 @@ class Point:
         return iter((self.x, self.y, self.z))
 
     def __add__(self, other) -> "Point":
-        """Allow Point + tuple and Point + Point arithmetic."""
         if self.z is None:
             if isinstance(other, tuple):
                 x, y = other
@@ -133,7 +149,6 @@ class Point:
         return Point(self.x + x, self.y + y, self.z + z)
 
     def __radd__(self, other) -> "Point":
-        """Allow tuple + Point arithmetic."""
         if self.z is None:
             if isinstance(other, tuple):
                 x, y = other
@@ -153,7 +168,6 @@ class Point:
 
     def __sub__(self, other):
         if self.z is None:
-            """Allow tuple + Point arithmetic."""
             if isinstance(other, tuple):
                 x, y = other
             elif isinstance(other, Point):
@@ -176,7 +190,6 @@ class Point:
         return other + (-1) * self
 
     def __mul__(self, scale: Number) -> "Point":
-        """Allow Point * Number arithmetic."""
         if not isinstance(scale, Number):
             raise TypeError(
                 f"Unsupported * between Point object and {scale} of type {type(scale)} (must be numeric)"
@@ -186,7 +199,6 @@ class Point:
         return Point(self.x * scale, self.y * scale, self.z * scale)
 
     def __rmul__(self, scale: float) -> "Point":
-        """Allow Number * Point arithmetic."""
         if not isinstance(scale, Number):
             raise TypeError(
                 f"Unsupported * between {scale} of type {type(scale)} and Point object (must be numeric)"
@@ -196,7 +208,6 @@ class Point:
         return Point(scale * self.x, scale * self.y, scale * self.z)
 
     def __truediv__(self, scale) -> "Point":
-        """Allow Point / Number arithmetic."""
         if not isinstance(scale, Number):
             raise TypeError(
                 f"Unsupported / between Point object and {scale} of type {type(scale)}."
@@ -218,7 +229,6 @@ class Point:
         return f"Point({self.x}, {self.y}, {self.z})"
 
     def __eq__(self, other):
-        """Overrides the default implementation"""
         if isinstance(other, Point):
             return self.x == other.x and self.y == other.y and self.z == other.z
         return False
