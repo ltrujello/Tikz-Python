@@ -61,15 +61,15 @@ class PlotCoordinates(DrawingObject):
         mean_y = mean_y / len(self.points)
         return Point(mean_x, mean_y)
 
-    def shift(self, xshift: float, yshift: float) -> None:
+    def shift_(self, xshift: float, yshift: float) -> None:
         for point in self.points:
-            point.shift(xshift, yshift)
+            point.shift_(xshift, yshift)
 
-    def scale(self, scale: float) -> None:
+    def scale_(self, scale: float) -> None:
         for point in self.points:
-            point.scale(scale)
+            point.scale_(scale)
 
-    def rotate(
+    def rotate_(
         self,
         angle: float,
         about_pt: Union[Tuple[float, float], None, Point] = None,
@@ -78,7 +78,28 @@ class PlotCoordinates(DrawingObject):
         if about_pt is None:
             about_pt = self.center
         for point in self.points:
-            point.rotate(angle, about_pt, radians)
+            point.rotate_(angle, about_pt, radians)
+
+    def shift(self, xshift: float, yshift: float) -> None:
+        new_plot = self.copy()
+        new_plot.shift_(xshift, yshift)
+        return new_plot
+
+
+    def scale(self, scale: float) -> None:
+        new_plot = self.copy()
+        new_plot.scale_(scale)
+        return new_plot
+
+    def rotate(
+        self,
+        angle: float,
+        about_pt: Union[Tuple[float, float], None, Point] = None,
+        radians: bool = False,
+    ) -> None:
+        new_plot = self.copy()
+        new_plot.rotate_(angle, about_pt, radians)
+        return new_plot
 
     def add_point(self, x, y):
         """Adds a new point to the points list.

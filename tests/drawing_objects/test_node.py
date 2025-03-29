@@ -49,10 +49,10 @@ def test_node_position_assignment(mock_node):
 
 
 def test_node_shift(mock_node):
-    mock_node.shift(1, 1)
-    assert mock_node.position == Point(4, 4)
+    new_node = mock_node.shift(1, 1)
+    assert new_node.position == Point(4, 4)
 
 
 def test_node_scale(mock_node):
-    mock_node.scale(2)
-    assert mock_node.position == Point(6, 6)
+    new_node = mock_node.scale(2)
+    assert new_node.position == Point(6, 6)

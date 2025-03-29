@@ -33,8 +33,8 @@ if __name__ == "__main__":
             points=points,
         )
         # Rotate them
-        plot.rotate(theta, about_pt=(0, 0))
+        plot.rotate_(theta, about_pt=(0, 0))
         # Scale them
-        plot.scale(exp(-1.5 * theta / 180))
+        plot.scale_(exp(-1.5 * theta / 180))
 
     tikz.show()

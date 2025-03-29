@@ -70,15 +70,32 @@ class Ellipse(DrawingObject):
     def _command(self) -> str:
         return f"{self.center} ellipse ({self.x_axis}cm and {self.y_axis}cm)"
 
-    def shift(self, xshift: float, yshift: float) -> None:
-        self._center.shift(xshift, yshift)
+    def shift_(self, xshift: float, yshift: float) -> None:
+        self._center.shift_(xshift, yshift)
 
-    def scale(self, scale: float) -> None:
-        self._center.scale(scale)
+    def scale_(self, scale: float) -> None:
+        self._center.scale_(scale)
         self.x_axis *= scale
         self.y_axis *= scale
 
-    def rotate(
+    def rotate_(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
-        self._center.rotate(angle, about_pt, radians)
+        self._center.rotate_(angle, about_pt, radians)
+
+    def shift(self, xshift: float, yshift: float) -> "Ellipse":
+        new_ellipse = self.copy()
+        new_ellipse.shift_(xshift, yshift)
+        return new_ellipse
+
+    def scale(self, scale: float) -> "Ellipse":
+        new_ellipse = self.copy()
+        new_ellipse.scale_(scale)
+        return new_ellipse
+
+    def rotate(
+        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
+    ) -> "Ellipse":
+        new_ellipse = self.copy()
+        new_ellipse.rotate_(angle, about_pt, radians)
+        return new_ellipse

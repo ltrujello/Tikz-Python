@@ -11,7 +11,7 @@ if __name__ == "__main__":
         point = (sin(2 * pi * i / n), cos(2 * pi * i / n))
 
         for j in range(0, 8):
-            tikz.circle(point, 2 + j * 0.2, options="color=" + rainbow_colors(i + j)).shift(
+            tikz.circle(point, 2 + j * 0.2, options="color=" + rainbow_colors(i + j)).shift_(
                 0, -2
             )
 

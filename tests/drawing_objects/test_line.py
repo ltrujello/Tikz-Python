@@ -67,12 +67,12 @@ def test_line_point_assignment():
 
 
 def test_line_scale(line_simple):
-    line_simple.scale(4)
-    assert line_simple.start == Point(0, 0)
-    assert line_simple.end == Point(4, 4)
+    new_line = line_simple.scale(4)
+    assert new_line.start == Point(0, 0)
+    assert new_line.end == Point(4, 4)
 
 
 def test_line_scale(line_simple):
-    line_simple.shift(1, 1)
-    assert line_simple.start == Point(1, 1)
-    assert line_simple.end == Point(2, 2)
+    new_line = line_simple.shift(1, 1)
+    assert new_line.start == Point(1, 1)
+    assert new_line.end == Point(2, 2)

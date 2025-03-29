@@ -31,7 +31,7 @@ if __name__ == "__main__":
             plot_options="smooth, tension=.5, closed hobby",
             points=points,
         )
-        plot.shift(0, i / 5)
-        plot.rotate(45, about_pt=plot.center, radians=False)
+        plot.shift_(0, i / 5)
+        plot.rotate_(45, about_pt=plot.center, radians=False)
 
     tikz.show()

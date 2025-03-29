@@ -47,18 +47,18 @@ def test_center_assignment(mock_circle):
 
 
 def test_circle_shift(mock_circle):
-    mock_circle.shift(1, 1)
-    assert mock_circle.center == Point(2, 2)
-    assert mock_circle.north == Point(2, 3)
-    assert mock_circle.east == Point(3, 2)
-    assert mock_circle.south == Point(2, 1)
-    assert mock_circle.west == Point(1, 2)
+    new_circle = mock_circle.shift(1, 1)
+    assert new_circle.center == Point(2, 2)
+    assert new_circle.north == Point(2, 3)
+    assert new_circle.east == Point(3, 2)
+    assert new_circle.south == Point(2, 1)
+    assert new_circle.west == Point(1, 2)
 
 
 def test_circle_scale(mock_circle):
-    mock_circle.scale(2)
-    assert mock_circle.center == Point(2, 2)
-    assert mock_circle.north == Point(2, 3)
-    assert mock_circle.east == Point(3, 2)
-    assert mock_circle.south == Point(2, 1)
-    assert mock_circle.west == Point(1, 2)
+    new_circle = mock_circle.scale(2)
+    assert new_circle.center == Point(2, 2)
+    assert new_circle.north == Point(2, 4)
+    assert new_circle.east == Point(4, 2)
+    assert new_circle.south == Point(2, 0)
+    assert new_circle.west == Point(0, 2)

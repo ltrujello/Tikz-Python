@@ -160,29 +160,50 @@ class Line(DrawingObject):
             return None
         return self.start.y - slope * self.start.x
 
-    def shift(self, xshift: float, yshift: float) -> None:
+    def shift_(self, xshift: float, yshift: float) -> None:
         """Shift start, end, and control_pts"""
-        self._start.shift(xshift, yshift)
-        self._end.shift(xshift, yshift)
+        self._start.shift_(xshift, yshift)
+        self._end.shift_(xshift, yshift)
         for point in self.control_pts:
-            point.shift(xshift, yshift)
+            point.shift_(xshift, yshift)
 
-    def scale(self, scale: float) -> None:
+    def scale_(self, scale: float) -> None:
         """Scale start, end, and control_pts."""
-        self._start.scale(scale)
-        self._end.scale(scale)
+        self._start.scale_(scale)
+        self._end.scale_(scale)
         for point in self.control_pts:
-            point.scale(scale)
+            point.scale_(scale)
 
-    def rotate(
+    def rotate_(
         self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
     ) -> None:
         """Rotate start, end, and control_pts. By default, the rotation is done relative to the midpoint
         of the line."""
         if about_pt is None:
             about_pt = self.midpoint
-        self._start.rotate(angle, about_pt, radians)
-        self._end.rotate(angle, about_pt, radians)
+        self._start.rotate_(angle, about_pt, radians)
+        self._end.rotate_(angle, about_pt, radians)
 
         for point in self.control_pts:
-            point.rotate(angle, about_pt, radians)
+            point.rotate_(angle, about_pt, radians)
+
+    def shift(self, xshift: float, yshift: float) -> "Line":
+        """Shift start, end, and control_pts"""
+        new_line = self.copy()
+        new_line.shift_(xshift, yshift)
+        return new_line
+
+    def scale(self, scale: float) -> "Line":
+        """Scale start, end, and control_pts."""
+        new_line = self.copy()
+        new_line.scale_(scale)
+        return new_line
+
+    def rotate(
+        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
+    ) -> "Line":
+        """Rotate start, end, and control_pts. By default, the rotation is done relative to the midpoint
+        of the line."""
+        new_line = self.copy()
+        new_line.rotate_(angle, about_pt, radians)
+        return new_line

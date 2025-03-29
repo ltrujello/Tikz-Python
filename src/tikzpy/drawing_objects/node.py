@@ -55,19 +55,36 @@ class Node:
     def code(self) -> str:
         return rf"\node{brackets(self.options)} {self._command};"
 
-    def shift(self, xshift: float, yshift: float) -> None:
+    def shift_(self, xshift: float, yshift: float) -> None:
         if self._position is not None:
-            self._position.shift(xshift, yshift)
+            self._position.shift_(xshift, yshift)
 
-    def scale(self, scale: float) -> None:
+    def scale_(self, scale: float) -> None:
         if self._position is not None:
-            self._position.scale(scale)
+            self._position.scale_(scale)
 
-    def rotate(
+    def rotate_(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
         if self._position is not None:
-            self._position.rotate(angle, about_pt, radians)
+            self._position.rotate_(angle, about_pt, radians)
+
+    def shift(self, xshift: float, yshift: float) -> "Node":
+        new_node = self.copy()
+        new_node.shift_(xshift, yshift)
+        return new_node
+
+    def scale(self, scale: float) -> "Node":
+        new_node = self.copy()
+        new_node.scale_(scale)
+        return new_node
+
+    def rotate(
+        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
+    ) -> "Node":
+        new_node = self.copy()
+        new_node.rotate_(angle, about_pt, radians)
+        return new_node
 
     def __deepcopy__(self, memo: dict) -> Node:  # TODO: Check this works
         """Creates a deep copy of a class object. This is useful since in our classes, we chose to set

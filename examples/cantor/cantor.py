@@ -38,5 +38,5 @@ if __name__ == "__main__":
 
     # Plot it
     points = tikz.plot_coordinates(list(zip(x, y)), options="ProcessBlue")
-    points.scale(4)
+    points.scale_(4)
     tikz.show()

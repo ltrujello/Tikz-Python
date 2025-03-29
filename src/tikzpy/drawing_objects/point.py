@@ -1,4 +1,5 @@
 import math
+import copy
 from numbers import Number
 from typing import Tuple, Union, Optional
 
@@ -74,30 +75,32 @@ class Point:
                 (self.y - other_point.y) ** 2
             )
 
+    def copy(self):
+        return Point((self.x, self.y, self.z))
 
-    def shift(
+    def shift_(
         self, xshift: float, yshift: float, zshift: Optional[float] = None
     ) -> None:
-        """Translate the point via x, y offsets."""
-        self.x += xshift
-        self.y += yshift
-        if zshift is not None:
-            self.z += zshift
+        """Translate the point via x, y offsets. This performs an in-place operation."""
+        self.x = self.x + xshift
+        self.y = self.y + yshift
+        if zshift is not None and zshift is not None:
+            self.z = self.z + zshift
 
-    def scale(self, scale: float) -> None:
-        """Scale the point given the scale."""
-        self.x *= scale
-        self.y *= scale
+    def scale_(self, scale: float) -> None:
+        """Scale the point given the scale. This performs an in-place operation."""
+        self.x = self.x * scale
+        self.y = self.y * scale
         if self.z is not None:
-            self.z *= scale
+            self.z = self.z * scale
 
-    def rotate(
+    def rotate_(
         self,
         angle: float,
         about_pt: Union[Tuple[float, float], "Point"],
         radians: bool = False,
     ) -> None:
-        """Rotate the point about another point."""
+        """Rotate the point about another point. This performs an in-place operation."""
         if self.z is not None:
             print("Warning: Rotate method for 3D points not yet implemented")
         about_pt = Point(about_pt)
@@ -118,6 +121,32 @@ class Point:
 
         self.x = rotated_x
         self.y = rotated_y
+
+
+    def shift(
+        self, xshift: float, yshift: float, zshift: Optional[float] = None
+    ) -> "Point":
+        """Returns a point translated by x, y, z offsets."""
+        new_point = self.copy()
+        new_point.shift_(xshift, yshift, zshift)
+        return new_point
+
+    def scale(self, scale: float) -> "Point":
+        """Returns a point scaled by the given scale."""
+        new_point = self.copy()
+        new_point.scale_(scale)
+        return new_point
+
+    def rotate(
+        self,
+        angle: float,
+        about_pt: Union[Tuple[float, float], "Point"],
+        radians: bool = False,
+    ) -> "Point":
+        """Returns a point that is rotated about another point. """
+        new_point = self.copy()
+        new_point.rotate_(angle, about_pt, radians)
+        return new_point
 
     def to_tuple(self) -> Tuple:
         """Return a tuple of the x, y data."""

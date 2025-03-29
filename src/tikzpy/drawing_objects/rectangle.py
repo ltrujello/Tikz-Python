@@ -137,18 +137,35 @@ class Rectangle(DrawingObject):
         else:
             raise TypeError(f"Invalid type '{type(new_corner)}' for left corner")
 
-    def shift(self, xshift: float, yshift: float) -> None:
-        self._left_corner.shift(xshift, yshift)
+    def shift_(self, xshift: float, yshift: float) -> None:
+        self._left_corner.shift_(xshift, yshift)
 
-    def scale(self, scale: float) -> None:
-        self._left_corner.scale(scale)
+    def scale_(self, scale: float) -> None:
+        self._left_corner.scale_(scale)
         self.width = scale * self.width
         self.height = scale * self.height
 
-    def rotate(
+    def rotate_(
         self, angle: float, about_pt: Tuple[float, float], radians: bool = False
     ) -> None:
-        self._left_corner.rotate(angle, about_pt, radians)
+        self._left_corner.rotate_(angle, about_pt, radians)
+
+    def shift(self, xshift: float, yshift: float) -> "Rectangle":
+        new_rectangle = self.copy()
+        new_rectangle.shift_(xshift, yshift)
+        return new_rectangle
+
+    def scale(self, scale: float) -> "Rectangle":
+        new_rectangle = self.copy()
+        new_rectangle.scale_(scale)
+        return new_rectangle
+
+    def rotate(
+        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
+    ) -> "Rectangle":
+        new_rectangle = self.copy()
+        new_rectangle.rotate_(angle, about_pt, radians)
+        return new_rectangle
 
 
 def rectangle_from_north(

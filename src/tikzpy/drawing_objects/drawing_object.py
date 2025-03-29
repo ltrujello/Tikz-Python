@@ -39,17 +39,17 @@ class DrawingObject(ABC):
         """
 
     @abstractmethod
-    def shift(self, xshift: float, yshift: float) -> None:
+    def shift(self, xshift: float, yshift: float) -> "DrawingObject":
         """Shift the coordinates of the drawing object by (xshift, yshift)"""
 
     @abstractmethod
-    def scale(self, scale: float) -> None:
+    def scale(self, scale: float) -> "DrawingObject":
         """Scale the coordinates of the drawing object by amount "scale"."""
 
     @abstractmethod
     def rotate(
         self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
-    ) -> None:
+    ) -> "DrawingObject":
         """Rotate the coordinates of the drawing object (counterclockwise) by "angle" about the
         point "about_pt".
         """

@@ -125,7 +125,7 @@ class Circle(DrawingObject):
         return f"{self._center} circle ({self.radius}cm)"
 
     def point_at_arg(self, theta: float, radians: bool = False) -> tuple:
-        """Returns the point on the circle at angle theta. Both degrees and radians can be specified.
+        r"""Returns the point on the circle at angle theta. Both degrees and radians can be specified.
 
 
         ```python
@@ -146,13 +146,34 @@ class Circle(DrawingObject):
             theta
         ), self.center.y + self.radius * math.sin(theta)
 
-    def shift(self, xshift: float, yshift: float) -> None:
-        self._center.shift(xshift, yshift)
+    def shift_(self, xshift: float, yshift: float) -> None:
+        self._center.shift_(xshift, yshift)
 
-    def scale(self, scale: float) -> None:
-        self._center.scale(scale)
+    def scale_(self, scale: float) -> None:
+        self._center.scale_(scale)
+        self.radius *= scale
+
+    def rotate_(
+        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
+    ) -> None:
+        self._center.rotate_(angle, about_pt, radians)
+
+    def shift(self, xshift: float, yshift: float) -> "Circle":
+        new_circle = self.copy()
+        new_circle.shift_(xshift, yshift)
+        return new_circle
+
+    def scale(self, scale: float) -> "Circle":
+        new_circle = self.copy()
+        new_circle.scale_(scale)
+        return new_circle
 
     def rotate(
         self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
-    ) -> None:
-        self._center.rotate(angle, about_pt, radians)
+    ) -> "Circle":
+        new_circle = self.copy()
+        new_circle.rotate_(angle, about_pt, radians)
+        return new_circle
+
+
+

@@ -48,14 +48,14 @@ def test_left_corner_assignment(mock_rectangle):
 
 
 def test_rectangle_shift(mock_rectangle):
-    mock_rectangle.shift(1, 1)
-    assert mock_rectangle.left_corner == Point(3, 3)
-    assert mock_rectangle.right_corner == Point(4, 5)
-    assert mock_rectangle.code == r"\draw[Blue] (3, 3) rectangle (4, 5);"
+    new_rectangle = mock_rectangle.shift(1, 1)
+    assert new_rectangle.left_corner == Point(3, 3)
+    assert new_rectangle.right_corner == Point(4, 5)
+    assert new_rectangle.code == r"\draw[Blue] (3, 3) rectangle (4, 5);"
 
 
 def test_rectangle_scale(mock_rectangle):
-    mock_rectangle.scale(2)
-    assert mock_rectangle.left_corner == Point(4, 4)
-    assert mock_rectangle.right_corner == Point(6, 8)
-    assert mock_rectangle.code == r"\draw[Blue] (4, 4) rectangle (6, 8);"
+    new_rectangle = mock_rectangle.scale(2)
+    assert new_rectangle.left_corner == Point(4, 4)
+    assert new_rectangle.right_corner == Point(6, 8)
+    assert new_rectangle.code == r"\draw[Blue] (4, 4) rectangle (6, 8);"
