@@ -16,10 +16,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = [
-    "pdf2image>=1.14.0", 
-    "numpy>=1.22.0"
-]
 
 [tool.ruff]
 ignore-init-module-imports = true
