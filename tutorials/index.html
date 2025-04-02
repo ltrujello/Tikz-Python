@@ -378,43 +378,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#neural-networks" class="md-nav__link">
-    Neural Networks
+  <a href="#line-and-a-midpoint" class="md-nav__link">
+    Line and a midpoint
   </a>
-  
-    <nav class="md-nav" aria-label="Neural Networks">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#drawing-one-layer" class="md-nav__link">
-    Drawing one layer
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#drawing-many-layers" class="md-nav__link">
-    Drawing many layers
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#drawing-connections" class="md-nav__link">
-    Drawing connections
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#drawing-the-fully-connected-network" class="md-nav__link">
-    Drawing the fully connected network
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -457,6 +423,47 @@
           <li class="md-nav__item">
   <a href="#angle-arc" class="md-nav__link">
     Angle arc
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neural-networks" class="md-nav__link">
+    Neural Networks
+  </a>
+  
+    <nav class="md-nav" aria-label="Neural Networks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#drawing-one-layer" class="md-nav__link">
+    Drawing one layer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drawing-many-layers" class="md-nav__link">
+    Drawing many layers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drawing-connections" class="md-nav__link">
+    Drawing connections
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drawing-the-fully-connected-network" class="md-nav__link">
+    Drawing the fully connected network
   </a>
   
 </li>
@@ -780,43 +787,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#neural-networks" class="md-nav__link">
-    Neural Networks
+  <a href="#line-and-a-midpoint" class="md-nav__link">
+    Line and a midpoint
   </a>
-  
-    <nav class="md-nav" aria-label="Neural Networks">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#drawing-one-layer" class="md-nav__link">
-    Drawing one layer
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#drawing-many-layers" class="md-nav__link">
-    Drawing many layers
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#drawing-connections" class="md-nav__link">
-    Drawing connections
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#drawing-the-fully-connected-network" class="md-nav__link">
-    Drawing the fully connected network
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -868,6 +841,47 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#neural-networks" class="md-nav__link">
+    Neural Networks
+  </a>
+  
+    <nav class="md-nav" aria-label="Neural Networks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#drawing-one-layer" class="md-nav__link">
+    Drawing one layer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drawing-many-layers" class="md-nav__link">
+    Drawing many layers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drawing-connections" class="md-nav__link">
+    Drawing connections
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#drawing-the-fully-connected-network" class="md-nav__link">
+    Drawing the fully connected network
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -890,6 +904,149 @@
 <p>This package is meant to have an extremely simple API that also resembles the creation of TikZ code very closely.
 That is, we aim to minimize "surprises" such that users experienced with TikZ can easily use this package.
 Towards that goal we offer step-by-step tutorials demonstrating this package.</p>
+<h2 id="line-and-a-midpoint">Line and a midpoint</h2>
+<p>Suppose we want to draw a line and a node positioned at the middle of the line.</p>
+<p><img src="../png/tutorial_imgs/line.png"/></p>
+<p>According to the <a href="https://tikz.dev/tutorial-Euclid#sec-4.2.1">TikZ docs</a>, the way you would do this is with the TikZ code below.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>\usetikzlibrary {calc}
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>\begin{tikzpicture}
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  \coordinate [label=left:$A$]  (A) at (0,0);
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  \coordinate [label=right:$B$] (B) at (1.25,0.25);
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  \draw (A) -- (B);
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>  \node [fill=red,inner sep=1pt,label=below:$X$] (X) at ($ (A)!.5!(B) $) {};
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>\end{tikzpicture}
+</span></code></pre></div>
+<p>This is great, but it's also not really intuitive. The syntax <code>(X) at ($ (A)!.5!(B) $)</code> is kind of hard to understand and also later 
+remember. Wouldn't it be nice if instead there was some kind of <code>midpoint</code> function that we could call on lines that we create? </p>
+<p>In tikz-python, we are able to write code that can draw this more intuitively. The code below also creates the diagram.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Define a canvas to draw on</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># Draw a line</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">))</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="c1"># Draw the nodes</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;label=left:$A$&quot;</span><span class="p">)</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;label=right:$B$&quot;</span><span class="p">)</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">midpoint</span><span class="p">(),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;fill=red,inner sep=1pt,label=below:$X$&quot;</span><span class="p">)</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="c1"># Display the drawing</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></code></pre></div>
+<p>Here, <code>tikz.line</code> draws a line and it returns a Line object. <code>tikz.node</code> draws the nodes. The midpoint is calculated via the method <code>line.midpoint</code>. 
+Also, note that we used the exact same options that were being used in TikZ. </p>
+<p>This is more intuitive. It's reasonable to define your graphics in terms of objects, and it's reasonable for a Line object to 
+have a <code>.midpoint()</code> method, which should return the middle point of the line.
+Overall, it's much easier to think about graphics as a collection of objects with different properties. 
+However, a functional/object oriented approach is not possible in TikZ, so the code sometimes isn't intuitive.</p>
+<h2 id="logarithmic-branch-cut">Logarithmic Branch Cut</h2>
+<p>Suppose we desire to create this diagram from mathematics, which illustrates the logarithmic branch cut.</p>
+<p><img src="../png/node_ex_1.png"/></p>
+<h3 id="axes">Axes</h3>
+<p>The first thing we can do is create the x and y axes. To do this, we can write the code as below.
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">()</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">axes_len</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">x_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">y_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">axes_len</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">axes_len</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+Here, we decide on an axis length, and we use this to create two perpendicular lines. </p>
+<p>Because of the way we wrote the code, if we change the axis length, we do not have 
+to change the code controlling the lines.</p>
+<h3 id="labels">Labels</h3>
+<p>Next, we need to add the x-axis and y-axis labels. In TikZ, you would do this with a <code>\node</code> object. TikzPy implements 
+node objects. For this example, we can do
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">x_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$x$&quot;</span><span class="p">)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">y_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$iy$&quot;</span><span class="p">)</span>
+</span></code></pre></div></p>
+<p>Notice we are specifying the position of each node by accessing the <code>.end</code> attribute of each respective <code>Line</code> object, and then shifting it. This is possible because <code>Line</code> objects have <code>.start</code> and <code>.end</code> attributes that return coordinates. Thus, we are not hardcoding or guessing where to put the nodes. </p>
+<p>If we change the line (e.g. adjust its length), we do not have to change this code.</p>
+<p>All together we now have this.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">()</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">axes_len</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># x,y axes</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">x_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">y_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">axes_len</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">axes_len</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># axes labels</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">x_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$x$&quot;</span><span class="p">)</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">y_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$iy$&quot;</span><span class="p">)</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></code></pre></div>
+<p>This code generates the graphic below. </p>
+<p><img src="../png/tutorial_imgs/log_cut_step_1.png"/></p>
+<p>Again, because of the way we wrote the code, if we change the axis length, or even change the lines themselves, 
+we do not have to do anything else; the nodes will move automatically. </p>
+<h3 id="cut-branch">Cut branch</h3>
+<p>Next, let's add the "Cut" branch. We achieve this with one <code>Line</code> object and one <code>Node</code> object to put in the word "Cut".</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Cut branch</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">origin</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">cut_line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">origin</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;thick&quot;</span><span class="p">)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">cut_line</span><span class="o">.</span><span class="n">midpoint</span><span class="p">(),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Cut&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>The cut <code>Line</code> is dependent on <code>axes_len</code> value. The <code>Node</code> object is positioned via 
+<code>Line.midpoint()</code>, a method which calculates the middle of the line. Thus, if we change the length of our line, we do not 
+have to also change node's position. This saves us time. </p>
+<p>This so far generates </p>
+<p><img src="../png/tutorial_imgs/log_cut_step_2.png"/></p>
+<h3 id="line-from-origin">Line from origin</h3>
+<p>Next, let's add the line from the origin and annotate it. Again, we achieve this with a <code>Line</code> and a <code>Node</code> object. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Line from origin</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="n">axes_len</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axes_len</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;-o&quot;</span><span class="p">)</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">end</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$z = re^{i</span><span class="se">\\</span><span class="s2">theta}$&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>In the code above, we draw 45-degree angled line from the origin to the point <code>(axes_len / 3, axes_len / 3)</code>. 
+The denominator <code>3</code> is pretty arbitrary and subjective, and can be changed if the user likes. 
+For our node, we use the <code>Line.end</code> attribute to specify the position and shift it to the right a bit by 0.7.
+We then shift it up by specifying <code>options=above</code>, as one normally would in TikZ.</p>
+<p>This then generates </p>
+<p><img src="../png/tutorial_imgs/log_cut_step_3.png"/></p>
+<h3 id="angle-arc">Angle arc</h3>
+<p>Finally, we draw the dashed-angle. To achieve this we can use an <code>Arc</code> object and one <code>Node</code> object. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Angle arc</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">Point</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">arc_start</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">tikz</span><span class="o">.</span><span class="n">arc</span><span class="p">(</span><span class="n">arc_start</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">)</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">arc_start</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">theta$&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>In the code above, we draw an arc starting at the point <code>arc_start</code> from angle 0 to 45. We define this point using 
+the <code>Point</code> class instead of just a Python tuple. This is useful for when we create the node object, since we 
+can specify the position of the node as <code>arc_start + (0.3, 0.5)</code>. </p>
+<p>All together, this generates the original image. The complete code is given below. </p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span><span class="p">,</span> <span class="n">Point</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">axes_len</span> <span class="o">=</span> <span class="mi">4</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="c1"># x,y axes</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">origin</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="n">x_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="n">y_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">axes_len</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">axes_len</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="c1"># axes labels</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">x_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$x$&quot;</span><span class="p">)</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">y_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$iy$&quot;</span><span class="p">)</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="c1"># Cut branch</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="n">cut_line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">origin</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;thick&quot;</span><span class="p">)</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">cut_line</span><span class="o">.</span><span class="n">midpoint</span><span class="p">(),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Cut&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">)</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="c1"># Line from origin</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="n">line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="n">axes_len</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axes_len</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;-o&quot;</span><span class="p">)</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">end</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$z = re^{i</span><span class="se">\\</span><span class="s2">theta}$&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">)</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="c1"># Angle arc</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="n">arc_start</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="n">tikz</span><span class="o">.</span><span class="n">arc</span><span class="p">(</span><span class="n">arc_start</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">)</span>
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">arc_start</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">theta$&quot;</span><span class="p">)</span>
+</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a>
+</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></code></pre></div>
 <h2 id="neural-networks">Neural Networks</h2>
 <p>Let's use this package to draw the typical fully connected neural network architecture diagram. </p>
 <p>Our goal will be to draw this image via Python code that will be maintainable, readable, and modular.</p>
@@ -897,68 +1054,68 @@ Towards that goal we offer step-by-step tutorials demonstrating this package.</p
 <h3 id="drawing-one-layer">Drawing one layer</h3>
 <p>Firstly, we need to draw layers. We have input, hidden, and output layers to draw, but we'll first focus on the input layer. A given layer consists of a number of circles which are vertically stacked, each separated by some distance we'll call <code>node_sep</code>. These circles also have some color <code>color</code> and a mathematical symbol <code>symbol</code> inscribed. </p>
 <p>Thinking this through, we can use tikzpy's <code>Circle</code> class to draw the circles and the <code>Node</code> class to draw the mathematical symbols. The code below</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span><span class="p">,</span> <span class="n">Point</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">node_radius</span> <span class="o">=</span> <span class="mf">0.5</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">node_sep</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)):</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">node_sep</span> <span class="o">*</span> <span class="n">idx</span><span class="p">)</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="c1"># Draw the node</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">node_radius</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;fill=</span><span class="si">{</span><span class="n">color</span><span class="si">}</span><span class="s2">!40&quot;</span><span class="p">)</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="c1"># Draw the symbol</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span><span class="p">,</span> <span class="n">Point</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">node_radius</span> <span class="o">=</span> <span class="mf">0.5</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">node_sep</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)):</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>    <span class="n">pos</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">node_sep</span> <span class="o">*</span> <span class="n">idx</span><span class="p">)</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>    <span class="c1"># Draw the node</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">node_radius</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;fill=</span><span class="si">{</span><span class="n">color</span><span class="si">}</span><span class="s2">!40&quot;</span><span class="p">)</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>    <span class="c1"># Draw the symbol</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>    <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </span></code></pre></div>
 <p>produces the image
 <img src="../png/tutorial_imgs/neural_network_step_1.png"/></p>
 <p>Thus, we figured out how to draw layers. We can abstract the code above into a function that will then allow us to draw all of our input, hidden, and output layers.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">def</span> <span class="nf">network_layer</span><span class="p">(</span><span class="n">init_pos</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">layer_nodes</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">)):</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        <span class="n">pos</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">init_pos</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">node_sep</span> <span class="o">*</span> <span class="n">idx</span><span class="p">)</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        <span class="c1"># Draw the circle</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        <span class="n">circle</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">node_radius</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;fill=</span><span class="si">{</span><span class="n">color</span><span class="si">}</span><span class="s2">!40&quot;</span><span class="p">)</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        <span class="c1"># Draw the node</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>        <span class="n">layer_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">circle</span><span class="p">)</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="k">return</span> <span class="n">layer_nodes</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">def</span> <span class="nf">network_layer</span><span class="p">(</span><span class="n">init_pos</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="n">layer_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">)):</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>        <span class="n">pos</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">init_pos</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">node_sep</span> <span class="o">*</span> <span class="n">idx</span><span class="p">)</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="c1"># Draw the circle</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>        <span class="n">circle</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">node_radius</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;fill=</span><span class="si">{</span><span class="n">color</span><span class="si">}</span><span class="s2">!40&quot;</span><span class="p">)</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>        <span class="c1"># Draw the node</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>        <span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;$</span><span class="si">{</span><span class="n">symbol</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>        <span class="n">layer_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">circle</span><span class="p">)</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    <span class="k">return</span> <span class="n">layer_nodes</span>
 </span></code></pre></div>
 <p>In this function, we add an extra parameter <code>init_pos</code> that controls where to start drawing the network layer (necessary for when we start drawing multiple layers). We also collect the layers into a list <code>layer_nodes</code> and return it (necessary for when we draw arrows between layers). </p>
 <h3 id="drawing-many-layers">Drawing many layers</h3>
 <p>With the function from earlier, we can now draw many layers. For instance, here's just the input layer and the next hidden layer. </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span><span class="p">,</span> <span class="n">Point</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">node_radius</span> <span class="o">=</span> <span class="mf">0.5</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">node_sep</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">layer_sep</span> <span class="o">=</span> <span class="mi">4</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">input_layer_pos</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">hidden_layer_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">layer_sep</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">network_layer</span><span class="p">(</span><span class="n">input_layer_pos</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="n">network_layer</span><span class="p">(</span><span class="n">hidden_layer_pos</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span><span class="p">,</span> <span class="n">Point</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">node_radius</span> <span class="o">=</span> <span class="mf">0.5</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">node_sep</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">layer_sep</span> <span class="o">=</span> <span class="mi">3</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="n">input_layer_pos</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="n">hidden_layer_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">layer_sep</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="n">network_layer</span><span class="p">(</span><span class="n">input_layer_pos</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="n">network_layer</span><span class="p">(</span><span class="n">hidden_layer_pos</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </span></code></pre></div>
 <p>The code above produces the image </p>
 <p><img src="../png/tutorial_imgs/neural_network_step_2.png"/></p>
 <h3 id="drawing-connections">Drawing connections</h3>
 <p>Next, we need to draw connections between these nodes. This is actually not too bad. 
 This package has a method <code>connect_circle_edges</code> that can draw lines between two circles. Thus the code for this step is simply </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span> <span class="nf">draw_layer_connection</span><span class="p">(</span><span class="n">curr_layer</span><span class="p">,</span> <span class="n">next_layer</span><span class="p">):</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="k">for</span> <span class="n">curr_node</span> <span class="ow">in</span> <span class="n">curr_layer</span><span class="p">:</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>        <span class="k">for</span> <span class="n">next_node</span> <span class="ow">in</span> <span class="n">next_layer</span><span class="p">:</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>            <span class="n">tikz</span><span class="o">.</span><span class="n">connect_circle_edges</span><span class="p">(</span><span class="n">curr_node</span><span class="p">,</span> <span class="n">next_node</span><span class="p">,</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">dst_delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">def</span> <span class="nf">draw_layer_connection</span><span class="p">(</span><span class="n">curr_layer</span><span class="p">,</span> <span class="n">next_layer</span><span class="p">):</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>    <span class="k">for</span> <span class="n">curr_node</span> <span class="ow">in</span> <span class="n">curr_layer</span><span class="p">:</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>        <span class="k">for</span> <span class="n">next_node</span> <span class="ow">in</span> <span class="n">next_layer</span><span class="p">:</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>            <span class="n">tikz</span><span class="o">.</span><span class="n">connect_circle_edges</span><span class="p">(</span><span class="n">curr_node</span><span class="p">,</span> <span class="n">next_node</span><span class="p">,</span> <span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">dst_delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 </span></code></pre></div>
 <p>To see that this works, we can use this function as below </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">input_layer</span> <span class="o">=</span> <span class="n">network_layer</span><span class="p">(</span><span class="n">input_layer_pos</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">hidden_layer</span> <span class="o">=</span> <span class="n">network_layer</span><span class="p">(</span><span class="n">hidden_layer_pos</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">draw_layer_connection</span><span class="p">(</span><span class="n">input_layer</span><span class="p">,</span> <span class="n">hidden_layer</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">input_layer</span> <span class="o">=</span> <span class="n">network_layer</span><span class="p">(</span><span class="n">input_layer_pos</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">hidden_layer</span> <span class="o">=</span> <span class="n">network_layer</span><span class="p">(</span><span class="n">hidden_layer_pos</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">draw_layer_connection</span><span class="p">(</span><span class="n">input_layer</span><span class="p">,</span> <span class="n">hidden_layer</span><span class="p">)</span>
 </span></code></pre></div>
 <p>to produce the image </p>
 <p><img src="../png/tutorial_imgs/neural_network_step_3.png"/></p>
@@ -971,32 +1128,32 @@ Let's take a first stab at it by writing a function
 <p>Towards that goal, we produce this function. We loop over <code>layer_sizes</code>. In this loop, we have logic 
 to control where to start drawing the layer, what to color it, what symbol to put inside of it.
 After the loop, we then connect all the layers. </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span> <span class="nf">draw_neural_network</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">):</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">init_pos</span> <span class="o">=</span> <span class="n">Point</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">):</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>        <span class="n">x_shift</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">*</span> <span class="n">layer_sep</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="n">pos</span> <span class="o">=</span> <span class="n">init_pos</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_shift</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>        <span class="k">else</span><span class="p">:</span> 
-</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;h^</span><span class="se">{{</span><span class="s2">(</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">)</span><span class="se">}}</span><span class="s2">&quot;</span>
-</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span>
-</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>
-</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a>        <span class="n">nodes</span> <span class="o">=</span> <span class="n">network_layer</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
-</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>        <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
-</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a>
-</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
-</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>        <span class="n">draw_layer_connection</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">layers</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">def</span> <span class="nf">draw_neural_network</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">):</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="n">init_pos</span> <span class="o">=</span> <span class="n">Point</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">):</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>        <span class="n">x_shift</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">*</span> <span class="n">layer_sep</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>        <span class="n">pos</span> <span class="o">=</span> <span class="n">init_pos</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_shift</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span>
+</span><span id="__span-14-12"><a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+</span><span id="__span-14-13"><a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>        <span class="k">else</span><span class="p">:</span> 
+</span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;h^</span><span class="se">{{</span><span class="s2">(</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">)</span><span class="se">}}</span><span class="s2">&quot;</span>
+</span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span>
+</span><span id="__span-14-16"><a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>
+</span><span id="__span-14-17"><a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>        <span class="n">nodes</span> <span class="o">=</span> <span class="n">network_layer</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+</span><span id="__span-14-18"><a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>        <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+</span><span id="__span-14-19"><a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>
+</span><span id="__span-14-20"><a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
+</span><span id="__span-14-21"><a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>        <span class="n">draw_layer_connection</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">layers</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
 </span></code></pre></div>
 <p>Invoking this function as 
-<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">draw_neural_network</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">draw_neural_network</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </span></code></pre></div></p>
 <p>Then produces the image </p>
 <p><img src="../png/tutorial_imgs/neural_network_step_4.png"/></p>
@@ -1005,148 +1162,40 @@ should be vertically offset depends on the layer size itself, i.e. the number of
 it for a second, you'll realize that the y-shift we need to invoke on a layer is given by a formula: If 
 <code>max_size</code> is the largest layer size, <code>size</code> is the size of the layer we want to draw, and <code>node_sep</code> is the vertical distance 
 between the nodes in the neural network, then</p>
-<p><div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>    y_shift = - (max_size - size) / 2 * node_sep
+<p><div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>    y_shift = - (max_size - size) / 2 * node_sep
 </span></code></pre></div>
 We can the modify our function by placing this computation for the y_shift inside, when drawing the layer.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">def</span> <span class="nf">draw_neural_network</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">):</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>    <span class="n">max_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">)</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">init_pos</span> <span class="o">=</span> <span class="n">Point</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">):</span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>        <span class="n">x_shift</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">*</span> <span class="n">layer_sep</span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>        <span class="n">y_shift</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">max_size</span> <span class="o">-</span> <span class="n">size</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">node_sep</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>        <span class="n">pos</span> <span class="o">=</span> <span class="n">init_pos</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_shift</span><span class="p">,</span> <span class="n">y_shift</span><span class="p">)</span>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;h^</span><span class="se">{{</span><span class="s2">(</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">)</span><span class="se">}}</span><span class="s2">&quot;</span>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a>        <span class="n">nodes</span> <span class="o">=</span> <span class="n">network_layer</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
-</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>        <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
-</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a>
-</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
-</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a>        <span class="n">draw_layer_connection</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">layers</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="k">def</span> <span class="nf">draw_neural_network</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">):</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>    <span class="n">max_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">)</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>    <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>    <span class="n">init_pos</span> <span class="o">=</span> <span class="n">Point</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">):</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>        <span class="n">x_shift</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">*</span> <span class="n">layer_sep</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a>        <span class="n">y_shift</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">max_size</span> <span class="o">-</span> <span class="n">size</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">node_sep</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>        <span class="n">pos</span> <span class="o">=</span> <span class="n">init_pos</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_shift</span><span class="p">,</span> <span class="n">y_shift</span><span class="p">)</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;x&quot;</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">layer_sizes</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;y&quot;</span>
+</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span>
+</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>            <span class="n">symbol</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;h^</span><span class="se">{{</span><span class="s2">(</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">)</span><span class="se">}}</span><span class="s2">&quot;</span>
+</span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>            <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span>
+</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a>
+</span><span id="__span-17-19"><a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a>        <span class="n">nodes</span> <span class="o">=</span> <span class="n">network_layer</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+</span><span id="__span-17-20"><a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a>        <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+</span><span id="__span-17-21"><a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a>
+</span><span id="__span-17-22"><a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
+</span><span id="__span-17-23"><a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a>        <span class="n">draw_layer_connection</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">layers</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
 </span></code></pre></div>
 <p>This completes the work. We can then call the function like so </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">draw_neural_network</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">draw_neural_network</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </span></code></pre></div>
 <p>which will produce the image </p>
 <p><img src="../png/tutorial_imgs/neural_network_step_5.png"/></p>
-<h2 id="logarithmic-branch-cut">Logarithmic Branch Cut</h2>
-<p>Suppose we desire to create this diagram from mathematics, which illustrates the logarithmic branch cut.</p>
-<p><img src="../png/node_ex_1.png"/></p>
-<h3 id="axes">Axes</h3>
-<p>The first thing we can do is create the x and y axes. To do this, we can write the code as below.
-<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">()</span>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">axes_len</span> <span class="o">=</span> <span class="mi">4</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="n">x_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
-</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="n">y_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">axes_len</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">axes_len</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
-</span></code></pre></div>
-First, we must create <code>TikzPicture</code> object; this can be thought of as a blank canvas that we can draw on.
-Next, we decide on an axis length, and we use this to create two perpendicular lines. This is achieved via 
-the <code>tikz.line()</code> method, which returns a <code>Line</code> object.</p>
-<p>Because of the way we wrote the code, if we change the axis length, we do not have 
-to change the code controlling the lines.</p>
-<h3 id="labels">Labels</h3>
-<p>Next, we need to add the x-axis and y-axis labels. In TikZ, you would do this with a <code>\node</code> object. TikzPy implements 
-node objects. For this example, we can do
-<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">x_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$x$&quot;</span><span class="p">)</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">y_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$iy$&quot;</span><span class="p">)</span>
-</span></code></pre></div></p>
-<p>Notice we specifying the position of each node by accessing the <code>.end</code> attribute of each respective <code>Line</code> object, and then shifting it. This is possible because <code>Line</code> objects have <code>.start</code> and <code>.end</code> attributes that return coordinates. Thus, we are not hardcoding or guessing where to put the nodes. </p>
-<p>If we change the line (e.g. adjust its length), we do not have to change this code.</p>
-<p>All together we now have this.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span>
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
-</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">()</span>
-</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="n">axes_len</span> <span class="o">=</span> <span class="mi">4</span>
-</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="c1"># x,y axes</span>
-</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="n">x_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
-</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="n">y_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">axes_len</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">axes_len</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
-</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="c1"># axes labels</span>
-</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">x_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$x$&quot;</span><span class="p">)</span>
-</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">y_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$iy$&quot;</span><span class="p">)</span>
-</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</span></code></pre></div>
-<p>This code generates the graphic below. </p>
-<p><img src="../png/tutorial_imgs/log_cut_step_1.png"/></p>
-<p>Again, because of the way we wrote the code, if we change the axis length, or even change the lines themselves, 
-we do not have to do anything else; the nodes will move automatically. </p>
-<h3 id="cut-branch">Cut branch</h3>
-<p>Next, let's add the "Cut" branch. We achieve this with one <code>Line</code> object and one <code>Node</code> object to put in the word "Cut".</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Cut branch</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">origin</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">cut_line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">origin</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;thick&quot;</span><span class="p">)</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">cut_line</span><span class="o">.</span><span class="n">midpoint</span><span class="p">(),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Cut&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">)</span>
-</span></code></pre></div>
-<p>The cut <code>Line</code> is dependent on <code>axes_len</code> value. The <code>Node</code> object is positioned via 
-<code>Line.midpoint()</code>, a method which calculates the middle of the line. Thus, if we change the length of our line, we do not 
-have to also change node's position. This saves us time. </p>
-<p>This so far generates </p>
-<p><img src="../png/tutorial_imgs/log_cut_step_2.png"/></p>
-<h3 id="line-from-origin">Line from origin</h3>
-<p>Next, let's add the line from the origin and annotate it. Again, we achieve this with a <code>Line</code> and a <code>Node</code> object. </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Line from origin</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="n">axes_len</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axes_len</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;-o&quot;</span><span class="p">)</span>
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">end</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$z = re^{i</span><span class="se">\\</span><span class="s2">theta}$&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">)</span>
-</span></code></pre></div>
-<p>In the code above, we draw 45-degree angled line from the origin to the point <code>(axes_len / 3, axes_len / 3)</code>. 
-The denominator <code>3</code> is pretty arbitrary and subjective, and can be changed if the user likes. 
-For our node, we use the <code>Line.end</code> attribute to specify the position and shift it to the right a bit by 0.7.
-We then shift it up by specifying <code>options=above</code>, as one normally would in TikZ.</p>
-<p>This then generates </p>
-<p><img src="../png/tutorial_imgs/log_cut_step_3.png"/></p>
-<h3 id="angle-arc">Angle arc</h3>
-<p>Finally, we draw the dashed-angle. To achieve this we can use an <code>Arc</code> object and one <code>Node</code> object. </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Angle arc</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">Point</span>
-</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
-</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">arc_start</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">tikz</span><span class="o">.</span><span class="n">arc</span><span class="p">(</span><span class="n">arc_start</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">)</span>
-</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">arc_start</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">theta$&quot;</span><span class="p">)</span>
-</span></code></pre></div>
-<p>In the code above, we draw an arc starting at the point <code>arc_start</code> from angle 0 to 45. We define this point using 
-the <code>Point</code> class instead of just a Python tuple. This is useful for when we create the node object, since we 
-can specify the position of the node as <code>arc_start + (0.3, 0.5)</code>. </p>
-<p>All together, this generates the original image. The complete code is given below. </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="kn">from</span> <span class="nn">tikzpy</span> <span class="kn">import</span> <span class="n">TikzPicture</span><span class="p">,</span> <span class="n">Point</span>
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
-</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">tikz</span> <span class="o">=</span> <span class="n">TikzPicture</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="n">axes_len</span> <span class="o">=</span> <span class="mi">4</span>
-</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>
-</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="c1"># x,y axes</span>
-</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="n">origin</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">x_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
-</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="n">y_axis</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">axes_len</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">axes_len</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;Gray!40, -&gt;&quot;</span><span class="p">)</span>
-</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1"># axes labels</span>
-</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">x_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$x$&quot;</span><span class="p">)</span>
-</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">y_axis</span><span class="o">.</span><span class="n">end</span> <span class="o">-</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$iy$&quot;</span><span class="p">)</span>
-</span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>
-</span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="c1"># Cut branch</span>
-</span><span id="__span-16-15"><a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a><span class="n">cut_line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="o">-</span><span class="n">axes_len</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">origin</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;thick&quot;</span><span class="p">)</span>
-</span><span id="__span-16-16"><a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">cut_line</span><span class="o">.</span><span class="n">midpoint</span><span class="p">(),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Cut&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">)</span>
-</span><span id="__span-16-17"><a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>
-</span><span id="__span-16-18"><a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a><span class="c1"># Line from origin</span>
-</span><span id="__span-16-19"><a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a><span class="n">line</span> <span class="o">=</span> <span class="n">tikz</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">origin</span><span class="p">,</span> <span class="p">(</span><span class="n">axes_len</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="n">axes_len</span> <span class="o">/</span> <span class="mi">3</span><span class="p">),</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;-o&quot;</span><span class="p">)</span>
-</span><span id="__span-16-20"><a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">end</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$z = re^{i</span><span class="se">\\</span><span class="s2">theta}$&quot;</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;above&quot;</span><span class="p">)</span>
-</span><span id="__span-16-21"><a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>
-</span><span id="__span-16-22"><a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a><span class="c1"># Angle arc</span>
-</span><span id="__span-16-23"><a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a><span class="n">arc_start</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="__span-16-24"><a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a><span class="n">tikz</span><span class="o">.</span><span class="n">arc</span><span class="p">(</span><span class="n">arc_start</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">)</span>
-</span><span id="__span-16-25"><a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a><span class="n">tikz</span><span class="o">.</span><span class="n">node</span><span class="p">(</span><span class="n">arc_start</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">theta$&quot;</span><span class="p">)</span>
-</span><span id="__span-16-26"><a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>
-</span><span id="__span-16-27"><a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a><span class="n">tikz</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</span></code></pre></div>
 
 
 

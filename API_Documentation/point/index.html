@@ -594,6 +594,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tikzpy.drawing_objects.point.Point.rotate_" class="md-nav__link">
+    <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;rotate_
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tikzpy.drawing_objects.point.Point.scale" class="md-nav__link">
     <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;scale
   </a>
@@ -601,8 +608,22 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tikzpy.drawing_objects.point.Point.scale_" class="md-nav__link">
+    <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;scale_
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tikzpy.drawing_objects.point.Point.shift" class="md-nav__link">
     <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;shift
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tikzpy.drawing_objects.point.Point.shift_" class="md-nav__link">
+    <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;shift_
   </a>
   
 </li>
@@ -763,6 +784,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tikzpy.drawing_objects.point.Point.rotate_" class="md-nav__link">
+    <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;rotate_
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tikzpy.drawing_objects.point.Point.scale" class="md-nav__link">
     <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;scale
   </a>
@@ -770,8 +798,22 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#tikzpy.drawing_objects.point.Point.scale_" class="md-nav__link">
+    <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;scale_
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tikzpy.drawing_objects.point.Point.shift" class="md-nav__link">
     <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;shift
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tikzpy.drawing_objects.point.Point.shift_" class="md-nav__link">
+    <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;shift_
   </a>
   
 </li>
@@ -936,12 +978,37 @@ single Point object.</p>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">about_pt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Point</span><span class="p">],</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">radians</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point</span>
+</span></code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns a point that is rotated about another point.</p>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="tikzpy.drawing_objects.point.Point.rotate_" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">rotate_</span>
+
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">rotate_</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">angle</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">about_pt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">Point</span><span class="p">],</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">radians</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </span></code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Rotate the point about another point.</p>
+      <p>Rotate the point about another point. This performs an in-place operation.</p>
 
   </div>
 
@@ -957,12 +1024,33 @@ single Point object.</p>
 
 
 </h3>
-<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">scale</span><span class="p">(</span><span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">scale</span><span class="p">(</span><span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point</span>
 </span></code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Scale the point given the scale.</p>
+      <p>Returns a point scaled by the given scale.</p>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="tikzpy.drawing_objects.point.Point.scale_" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">scale_</span>
+
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">scale_</span><span class="p">(</span><span class="n">scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</span></code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Scale the point given the scale. This performs an in-place operation.</p>
 
   </div>
 
@@ -982,12 +1070,37 @@ single Point object.</p>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">xshift</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">yshift</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">zshift</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Point</span>
+</span></code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns a point translated by x, y, z offsets.</p>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="tikzpy.drawing_objects.point.Point.shift_" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>          <span class="doc doc-object-name doc-function-name">shift_</span>
+
+
+</h3>
+<div class="doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">shift_</span><span class="p">(</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">xshift</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">yshift</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">zshift</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </span></code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Translate the point via x, y offsets.</p>
+      <p>Translate the point via x, y offsets. This performs an in-place operation.</p>
 
   </div>
 
