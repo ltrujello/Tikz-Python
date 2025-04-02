@@ -135,7 +135,7 @@ class TikzEnvironment(ABC):
         self.draw(line)
         return line
 
-    def draw_segments(self, points, options):
+    def draw_segments(self, points, circular=True, options=""):
         """
         Given a list of points, draw a sequence of line segments between the points.
 
@@ -154,7 +154,7 @@ class TikzEnvironment(ABC):
 
         <img src="../../png/draw_segments.png"/> 
         """
-        lines = draw_segments(self, points, options)
+        lines = draw_segments(self, points, circular, options)
         return lines
 
     def node(
