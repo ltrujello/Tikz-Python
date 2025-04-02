@@ -17,31 +17,6 @@ and produces
 
 Notice that this code is readable, modular, and therefore easy to experiment with (and compare this with pure TikZ implementations [here](https://tex.stackexchange.com/questions/230588/how-to-draw-infinite-earring-with-tikz).)
 
-### Line and two nodes
-Suppose I want to create a line and two labels at the ends. The code below achieves this
-```python
-from tikzpy import TikzPicture
-
-tikz = TikzPicture()
-line = tikz.line((0, 0), (1, 1), options="thick, blue, o-o")
-start_node = tikz.node(line.start, options="below", text="Start!")
-end_node = tikz.node(line.end, options="above", text="End!")
-tikz.show()
-```
-and produces
-
-<img src="../png/line_and_two_nodes.png"/> 
-
-Saving the line as a variable `line` allows us to pass in `line.start` and `line.end` into the node positions, so we don't have to type out the exact coordinates. 
-This is because lines, nodes, etc. are class instances with useful attributes: 
-```python
->>> line.start
-(0,0)
->>> line.end
-(1,1)
->>> start_node.text
-"Start!"
-```
 
 ### Circles
 In this example, we use a for loop to draw a pattern of circles. 
@@ -110,45 +85,33 @@ We will see in the examples that follow how imported Python libraries can alllow
 
 ### Neural Network Connection
 
-In this example, we illustrate the connection between two nodes in a neural network, and mathematically
-annotate the diagram. Specifically, we're showing the weight connection node j to node i between
-layers n-1 and n.
-
-```python
-from tikzpy import TikzPicture
-
-tikz = TikzPicture(center=True) # center it in the PDF
-radius = 0.25
-pos_a = (0, 0)
-pos_b = (4, 1)
-
-# Draw the nodes
-node_a = tikz.circle(pos_a, radius)
-node_b = tikz.circle(pos_b, radius)
-
-# Draw the line between the nodes
-line = tikz.connect_circle_edges(node_a, node_b)
-line.options = "->"
-
-# Annotate the drawing with mathematical variables
-h_j = tikz.node(node_a.center + (0.3, 0.75), text="$h_j^{(n-1)}$")
-h_i = tikz.node(node_b.center + (0.3, 0.75), text="$h_i^{(n)}$")
-w_ij = tikz.node(line.pos_at_t(0.5) + (0, 0.5), text="$w_{ij}^{(n)}$")
-
-# Add ellipses on each side to illustrate more nodes are present
-tikz.node(node_a.center + (0, 1.5), text="\\vdots")
-tikz.node(node_a.center + (0, -0.75), text="\\vdots")
-tikz.node(node_b.center + (0, 1.5), text="\\vdots")
-tikz.node(node_b.center + (0, -0.75), text="\\vdots")
-tikz.show()
-```
+In this [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/neural_network_connection/neural_network_connection.py), we illustrate the connection between two nodes in a neural network, and mathematically annotate the diagram. 
+Specifically, we're showing the weight connection node j to node i between layers n-1 and n.
 
 <img src="../png/nn_nodes.png" width="80%"/>
+
+### Circle and Line Intersections
+
+In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/circle_intersections_2/circle_intersections_2.py), we can use the package to calculate circle and line intersections to recreate this figure from the [TikZ manual](https://tikz.dev/tutorial-Euclid#sec-4.1.4)
+
+<img src="../png/circle_intersections_2.png"/> 
+
+
+### Fully Connected Neural Network
+the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/neural_network/neural_network.py), we draw a typical neural network diagram. The code written is very flexible, allowing one to specify the number of nodes in each layer.
+
+<img src="../png/fully_connected_neural_network.png" width="80%"/>
 
 ### DES
 In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/des/des.py), we use a Python function to draw one round of the [DES function](https://en.wikipedia.org/wiki/Data_Encryption_Standard). We then call this function multiple times to illustrate the multiple rounds that entail the DES encryption algorithm.
 
 <img src="../png/des.png" width="80%"/>
+
+
+### Geometry Figures
+In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/geometry_figure/geometry_figure.py), we recreate this diagram that appeared in a [TeX Stack Exchange question](https://tex.stackexchange.com/questions/538319/drawing-complicated-geometry-figures-in-tikz). Compare the syntax and readability of this code against the answers provided by the TeX stack exchange community.
+
+<img src="../png/geometry_figure.png" width="99%"/>
 
 ### Transformer Architecture
 In the [source here](https://github.com/ltrujello/Tikz-Python/blob/main/examples/transformer/pre_layer_transformer.py), we draw a diagram illustrating the Transformer architecture. This is very similar 

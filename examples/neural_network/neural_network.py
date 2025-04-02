@@ -1,64 +1,56 @@
-import math
 from tikzpy import TikzPicture, Point
-tikz = TikzPicture()
-radius = 0.25
 
-x_2 = 6
-y_2 = 2
-epsilon = 0.3
+node_radius = 0.5
+node_sep = 2
+layer_sep = 3
 
-horiz_space = 3
-vert_space = 1.25
-def calc_start_end_between_nodes(pos_a, rad_a, pos_b, rad_b):
-    x_1, y_1 = pos_a
-    x_2, y_2 = pos_b
-    if y_1 - y_2 == 0:
-        theta = math.pi/2
-    else:
-        theta = math.atan(abs(x_2 - x_1) / abs(y_1 - y_2))
+input_layer_pos = (0, 0)
+hidden_layer_pos = (layer_sep, 0)
 
-    if y_2 > y_1:
-        start = (x_1 + radius * math.sin(theta), y_1 + radius* math.cos(theta))
-        end = (x_2 - radius * math.sin(theta), y_2 - radius * math.cos(theta))
-    else:
-        start = (x_1 + radius * math.sin(theta), y_1 - radius* math.cos(theta))
-        end = (x_2 - radius * math.sin(theta), y_2 + radius * math.cos(theta))
-    return start, end
+def network_layer(init_pos, num_nodes, symbol, color):
+    layer_nodes = []
+    for idx, _ in enumerate(range(num_nodes)):
+        pos = Point(init_pos) + (0, -node_sep * idx)
+        # Draw the circle
+        circle = tikz.circle(pos, radius=node_radius, options=f"fill={color}!40")
+        # Draw the node
+        tikz.node(pos, text=f"${symbol}_{idx}$")
+        layer_nodes.append(circle)
+    return layer_nodes
+
+
+def draw_layer_connection(curr_layer, next_layer):
+    for curr_node in curr_layer:
+        for next_node in next_layer:
+            tikz.connect_circle_edges(curr_node, next_node, "->", dst_delta=0.1)
+
+def draw_neural_network(layer_sizes):
+    max_size = max(layer_sizes)
+    layers = []
+    init_pos = Point((0, 0))
+    for idx, size in enumerate(layer_sizes):
+        x_shift = idx * layer_sep
+        y_shift = - (max_size - size) / 2 * node_sep
+        pos = init_pos + (x_shift, y_shift)
+        if idx == 0:
+            symbol = "x"
+            color = "green"
+        elif idx == len(layer_sizes) - 1:
+            symbol = "y"
+            color = "red"
+        else:
+            symbol = f"h^{{({idx})}}"
+            color = "blue"
+
+        nodes = network_layer(pos, size, symbol, color)
+        layers.append(nodes)
+
+    for idx, layer in enumerate(range(len(layers) - 1)):
+        draw_layer_connection(layers[idx], layers[idx + 1])
+
 
 if __name__ == "__main__":
-    layers = []
-    num_nodes = 4
-    for layer in range(2):
-        layer_nodes = []
-        for i in range(num_nodes):
-            x_1 = layer * horiz_space
-            y_1 = (num_nodes - 1 - i) * vert_space
-
-            layer_node = tikz.circle((x_1, y_1), radius)
-            # Draw the input x_i or hidden layer
-            if layer == 0:
-                tikz.node((x_1, y_1 + radius + epsilon), text=f"$x_{i + 1}$")
-            else:
-                tikz.node((x_1, y_1 + radius + epsilon), text=f"$h_{i + 1}$")
-            layer_nodes.append(layer_node)
-        layers.append(layer_nodes)
-    # Add the final output layer
-    layer_node = tikz.circle((x_2, y_2), radius)
-    layers.append([layer_node])
-    # Draw label for output node
-    tikz.node((x_2, y_2 + radius + epsilon), text="$y$")
-
-    for i in range(len(layers) - 1):
-        curr_nodes = layers[i]
-        next_nodes = layers[i + 1]
-
-        for node in curr_nodes:
-            pos_a = node.center
-            rad_a = node.radius
-            for next_node in next_nodes:
-                pos_b = next_node.center
-                rad_b = next_node.radius
-                start, end = calc_start_end_between_nodes(pos_a, rad_a, pos_b, rad_b)
-                tikz.line(start, end, options="->")
-
+    tikz = TikzPicture(center=True)
+    draw_neural_network([4, 5, 3, 4, 3, 2])
     tikz.show()
+
