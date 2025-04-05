@@ -4,6 +4,7 @@ import tempfile
 import re
 
 from pathlib import Path
+import shutil
 from typing import List, Optional
 from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
@@ -170,7 +171,7 @@ class TikzPicture(TikzEnvironment):
                     moved_pdf_file = self.BASE_DIR / pdf_file.name
             else:
                 moved_pdf_file = Path(pdf_destination)
-            pdf_file.replace(moved_pdf_file)
+            shutil.move(pdf_file, moved_pdf_file)
             return moved_pdf_file.resolve()
 
     def show(self, quiet: bool = False) -> None:
