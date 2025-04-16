@@ -85,7 +85,6 @@ class PlotCoordinates(DrawingObject):
         new_plot.shift_(xshift, yshift)
         return new_plot
 
-
     def scale(self, scale: float) -> None:
         new_plot = self.copy()
         new_plot.scale_(scale)

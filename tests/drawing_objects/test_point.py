@@ -22,6 +22,7 @@ def test_point_instantiation(point, expected):
         print(point, point.z)
         assert point.z is None
 
+
 def test_point_scale():
     point = Point(1, 4)
     new_point = point.scale(2)
@@ -42,4 +43,3 @@ def test_point_rotate():
     new_point = point.rotate(90, about_point)
     assert pytest.approx(new_point.x) == 0
     assert pytest.approx(new_point.y) == 1
-

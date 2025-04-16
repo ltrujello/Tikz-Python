@@ -18,7 +18,10 @@ from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
 from tikzpy.tikz_environments.tikz_command import TikzCommand
-from tikzpy.drawing_objects.drawing_utils import line_connecting_circle_edges, draw_segments
+from tikzpy.drawing_objects.drawing_utils import (
+    line_connecting_circle_edges,
+    draw_segments,
+)
 
 
 class TikzEnvironment(ABC):
@@ -106,12 +109,7 @@ class TikzEnvironment(ABC):
         return circle
 
     def connect_circle_edges(
-        self,
-        circle_a,
-        circle_b,
-        options="",
-        src_delta=0,
-        dst_delta=0
+        self, circle_a, circle_b, options="", src_delta=0, dst_delta=0
     ) -> Line:
         """Draws a line connecting the edges of two circles. This is useful for drawing
         graphs, diagrams, neural networks, etc.
@@ -128,10 +126,12 @@ class TikzEnvironment(ABC):
             line.options = "->"
         tikz.show()
         ```
-        <img src="../../png/connect_circles.png"/> 
+        <img src="../../png/connect_circles.png"/>
 
         """
-        line = line_connecting_circle_edges(circle_a, circle_b, options, src_delta, dst_delta)
+        line = line_connecting_circle_edges(
+            circle_a, circle_b, options, src_delta, dst_delta
+        )
         self.draw(line)
         return line
 
@@ -152,7 +152,7 @@ class TikzEnvironment(ABC):
         tikz.show()
         ```
 
-        <img src="../../png/draw_segments.png"/> 
+        <img src="../../png/draw_segments.png"/>
         """
         lines = draw_segments(self, points, circular, options)
         return lines

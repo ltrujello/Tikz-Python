@@ -4,7 +4,9 @@ from tikzpy.drawing_objects.circle import Circle
 from tikzpy.drawing_objects.point import Point
 
 
-def line_connecting_circle_edges(circle_a: Circle, circle_b: Circle, options="", src_delta=0, dst_delta=0) -> Line:
+def line_connecting_circle_edges(
+    circle_a: Circle, circle_b: Circle, options="", src_delta=0, dst_delta=0
+) -> Line:
     """
     Returns a line that connects the outer edges of circle_a
     to circle_b.
@@ -54,6 +56,7 @@ def calc_start_end_between_nodes(pos_a, rad_a, pos_b, rad_b):
             end = (x_2 + rad_b * math.sin(theta), y_2 + rad_b * math.cos(theta))
     return start, end
 
+
 def draw_segments(tikz, points, circular=True, options=""):
     """
     Given a list of points, draw a sequence of line segments between the points.
@@ -76,6 +79,7 @@ def draw_segments(tikz, points, circular=True, options=""):
         idx += 1
     return lines
 
+
 def calc_intersection(item_a, item_b):
     intersection_map = {
         (Circle, Circle): circle_circle_intersection,
@@ -88,23 +92,34 @@ def calc_intersection(item_a, item_b):
     if func:
         return func(item_a, item_b)
     else:
-        raise NotImplementedError(f"No intersection logic for {type(item_a)} and {type(item_b)}")
+        raise NotImplementedError(
+            f"No intersection logic for {type(item_a)} and {type(item_b)}"
+        )
+
 
 def circle_circle_intersection(circle_a, circle_b):
-    intersections = _circle_circle_intersection(circle_a.center.x, circle_a.center.y, circle_a.radius, circle_b.center.x, circle_b.center.y, circle_b.radius)
+    intersections = _circle_circle_intersection(
+        circle_a.center.x,
+        circle_a.center.y,
+        circle_a.radius,
+        circle_b.center.x,
+        circle_b.center.y,
+        circle_b.radius,
+    )
     return [Point(pt) for pt in intersections]
+
 
 def _circle_circle_intersection(x1, y1, r1, x2, y2, r2):
     # Distance between circle centers
     d = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-    
+
     # No solutions if circles are separate or one completely contains the other
     if d > r1 + r2 or d < abs(r1 - r2) or d == 0:
         return None  # No intersection
 
     # Find a and h for intersection calculations
-    a = (r1 ** 2 - r2 ** 2 + d ** 2) / (2 * d)
-    h = math.sqrt(r1 ** 2 - a ** 2)
+    a = (r1**2 - r2**2 + d**2) / (2 * d)
+    h = math.sqrt(r1**2 - a**2)
 
     # Find the point P2, which is the base point of the perpendicular
     x3 = x1 + a * (x2 - x1) / d
@@ -119,15 +134,20 @@ def _circle_circle_intersection(x1, y1, r1, x2, y2, r2):
 
     # One intersection if circles touch at one point, otherwise two
     if d == r1 + r2 or d == abs(r1 - r2):
-        return [(x_int1, y_int1)]  
-    return [(x_int1, y_int1), (x_int2, y_int2)]  
+        return [(x_int1, y_int1)]
+    return [(x_int1, y_int1), (x_int2, y_int2)]
+
 
 def line_line_intersection(line_a, line_b):
     intersections = _line_line_intersection(
-        line_a.start.x, line_a.start.y, 
-        line_a.end.x, line_a.end.y, 
-        line_b.start.x, line_b.start.y, 
-        line_b.end.x, line_b.end.y
+        line_a.start.x,
+        line_a.start.y,
+        line_a.end.x,
+        line_a.end.y,
+        line_b.start.x,
+        line_b.start.y,
+        line_b.end.x,
+        line_b.end.y,
     )
     return [Point(pt) for pt in intersections]
 
@@ -142,19 +162,20 @@ def _line_line_intersection(x1, y1, x2, y2, x3, y3, x4, y4):
     B2 = x3 - x4
     C2 = A2 * x3 + B2 * y3
 
-    
     det = A1 * B2 - A2 * B1
     # Parallel lines
     if det == 0:
-        return None  
+        return None
 
     x = (C1 * B2 - C2 * B1) / det
     y = (A1 * C2 - A2 * C1) / det
     return [(x, y)]
 
+
 def circle_line_intersection(circle, line):
     intersections = line_circle_intersection(line, circle)
     return [Point(pt) for pt in intersections]
+
 
 def line_circle_intersection(line, circle):
     m = line.slope()
@@ -163,30 +184,29 @@ def line_circle_intersection(line, circle):
     r = circle.radius
     intersections = _line_circle_intersection(m, b, h, k, r)
     return [Point(pt) for pt in intersections]
-    
+
 
 def _line_circle_intersection(m, b, h, k, r):
     # Quadratic equation coefficients (Ax^2 + Bx + C = 0)
     A = 1 + m**2
     B = 2 * (m * (b - k) - h)
-    C = h**2 + (b - k)**2 - r**2
-    
+    C = h**2 + (b - k) ** 2 - r**2
+
     # Discriminant
     D = B**2 - 4 * A * C
     if D < 0:
         # No intersection
-        return None 
+        return None
     elif D == 0:
         # One intersection (tangent)
         x = -B / (2 * A)
         y = m * x + b
         return [(x, y)]
-    
+
     sqrt_D = math.sqrt(D)
     x_1 = (-B + sqrt_D) / (2 * A)
     x_2 = (-B - sqrt_D) / (2 * A)
     y_1 = m * x_1 + b
     y_2 = m * x_2 + b
-    
-    return [(x_1, y_1), (x_2, y_2)]
 
+    return [(x_1, y_1), (x_2, y_2)]

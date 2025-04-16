@@ -65,14 +65,13 @@ class Point:
         """
         if self.z is not None and other_point.z is not None:
             return math.sqrt(
-                (self.x - other_point.x) ** 2 +
-                (self.y - other_point.y) ** 2 +
-                (self.z - other_point.z) ** 2
+                (self.x - other_point.x) ** 2
+                + (self.y - other_point.y) ** 2
+                + (self.z - other_point.z) ** 2
             )
         else:
             return math.sqrt(
-                (self.x - other_point.x) ** 2 +
-                (self.y - other_point.y) ** 2
+                (self.x - other_point.x) ** 2 + (self.y - other_point.y) ** 2
             )
 
     def copy(self):
@@ -122,7 +121,6 @@ class Point:
         self.x = rotated_x
         self.y = rotated_y
 
-
     def shift(
         self, xshift: float, yshift: float, zshift: Optional[float] = None
     ) -> "Point":
@@ -143,7 +141,7 @@ class Point:
         about_pt: Union[Tuple[float, float], "Point"],
         radians: bool = False,
     ) -> "Point":
-        """Returns a point that is rotated about another point. """
+        """Returns a point that is rotated about another point."""
         new_point = self.copy()
         new_point.rotate_(angle, about_pt, radians)
         return new_point

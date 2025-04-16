@@ -78,8 +78,8 @@ class Line(DrawingObject):
         tikz.node(line.start, text="Start", options="below")
         tikz.show()
         ```
-        
-        <img src="../../png/line_start.png"/> 
+
+        <img src="../../png/line_start.png"/>
         """
         return self._start
 
@@ -95,8 +95,8 @@ class Line(DrawingObject):
         tikz.node(line.end, text="End", options="above")
         tikz.show()
         ```
-        
-        <img src="../../png/line_end.png"/> 
+
+        <img src="../../png/line_end.png"/>
         """
         return self._end
 
@@ -125,8 +125,8 @@ class Line(DrawingObject):
         tikz.node(line.pos_at_t(0.7), text="0.7", options="above")
         tikz.show()
         ```
-        
-        <img src="../../png/line_pos_a_t.png"/> 
+
+        <img src="../../png/line_pos_a_t.png"/>
         """
         x_1, y_1 = self._start
         x_2, y_2 = self._end
@@ -143,8 +143,8 @@ class Line(DrawingObject):
         tikz.node(line.midpoint(), text="$M$", options="above")
         tikz.show()
         ```
-        
-        <img src="../../png/line_midpoint.png"/> 
+
+        <img src="../../png/line_midpoint.png"/>
         """
         return self.pos_at_t(0.5)
 

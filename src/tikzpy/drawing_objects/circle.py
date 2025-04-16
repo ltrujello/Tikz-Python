@@ -41,7 +41,7 @@ class Circle(DrawingObject):
         tikz.show()
         ```
 
-        <img src="../../png/circle_center.png"/> 
+        <img src="../../png/circle_center.png"/>
         """
         return self._center
 
@@ -65,7 +65,7 @@ class Circle(DrawingObject):
         tikz.show()
         ```
 
-        <img src="../../png/circle_north.png"/> 
+        <img src="../../png/circle_north.png"/>
         """
         return self._center + (0, self.radius)
 
@@ -82,7 +82,7 @@ class Circle(DrawingObject):
         tikz.show()
         ```
 
-        <img src="../../png/circle_east.png"/> 
+        <img src="../../png/circle_east.png"/>
         """
         return self._center + (self.radius, 0)
 
@@ -99,7 +99,7 @@ class Circle(DrawingObject):
         tikz.show()
         ```
 
-        <img src="../../png/circle_south.png"/> 
+        <img src="../../png/circle_south.png"/>
         """
         return self._center - (0, self.radius)
 
@@ -116,7 +116,7 @@ class Circle(DrawingObject):
         tikz.show()
         ```
 
-        <img src="../../png/circle_west.png"/> 
+        <img src="../../png/circle_west.png"/>
         """
         return self._center - (self.radius, 0)
 
@@ -138,7 +138,7 @@ class Circle(DrawingObject):
         tikz.show()
         ```
 
-        <img src="../../png/circle_point_at_arg.png"/> 
+        <img src="../../png/circle_point_at_arg.png"/>
         """
         if not radians:
             theta = math.radians(theta)
@@ -174,6 +174,3 @@ class Circle(DrawingObject):
         new_circle = self.copy()
         new_circle.rotate_(angle, about_pt, radians)
         return new_circle
-
-
-
