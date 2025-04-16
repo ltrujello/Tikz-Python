@@ -140,7 +140,7 @@ class TikzPicture(TikzEnvironment):
             if quiet:
                 options += " -quiet "
             cmd = (
-                f"latexmk -pdf {options} -output-directory={tex_file_parents} {tex_file_posix_path}",
+                f"latexmk -pdf {options} -interaction=nonstopmode -output-directory={tex_file_parents} {tex_file_posix_path}",
             )
             completed_process = subprocess.run(cmd, shell=True, capture_output=True)
             if completed_process.returncode != 0:
