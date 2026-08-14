@@ -185,19 +185,20 @@ class TikzPicture(TikzEnvironment):
         """
         pdf_file = self.compile(quiet=quiet)
 
-        if inline is None:
-            inline = in_notebook()
+        if inline is None: inline = in_notebook()
+        
+        if inline and self.display_inline(pdf_file): return
 
-        if inline and not self.display_pdf_inline(pdf_file):
-            inline = False
-
-        if not inline:
-            webbrowser.open_new(str(pdf_file.as_uri()))
+        webbrowser.open_new(str(pdf_file.as_uri()))
     
-    def display_pdf_inline(self, pdf_file: Path) -> bool:
+    def display_inline(self, pdf_file: Optional[Path] = None) -> bool:
         """Renders the first page of pdf_file to a PNG and displays it inline via IPython.
-        Returns False (and warns) instead of raising if PyMuPDF isn't installed, so the
-        caller can fall back to opening the PDF normally."""
+        If pdf_file is not given, the Tikz code is compiled first. Returns False (and warns)
+        instead of raising if PyMuPDF isn't installed, so the caller can fall back to
+        opening the PDF normally."""
+
+        if pdf_file is None: pdf_file = self.compile()
+
         try:
             import pymupdf
         except ImportError:
@@ -211,6 +212,7 @@ class TikzPicture(TikzEnvironment):
         with pymupdf.open(pdf_file) as doc:
             pixmap = doc[0].get_pixmap(dpi=150)
             display(Image(data=pixmap.tobytes("png")))
+
         return True
 
     def scope(self, options: str = "") -> Scope:
