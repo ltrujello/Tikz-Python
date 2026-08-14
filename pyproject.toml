@@ -17,6 +17,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[project.optional-dependencies]
+jupyter = ["pymupdf"]
+
 [tool.ruff]
 ignore-init-module-imports = true
 [project.urls]

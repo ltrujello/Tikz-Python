@@ -108,3 +108,17 @@ def extract_error_content(log_lines: list[str]) -> str:
         return None
 
     return "".join(error_lines)
+
+
+def in_notebook() -> bool:
+    """Returns True if running inside a Jupyter/VS Code notebook kernel, False otherwise
+    (e.g. a plain script or terminal IPython, where there's nowhere to display inline)."""
+    try:
+        from IPython import get_ipython
+
+        shell = get_ipython()
+        if shell is None:
+            return False
+        return shell.__class__.__name__ == "ZMQInteractiveShell"
+    except ImportError:
+        return False

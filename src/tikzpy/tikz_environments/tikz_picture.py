@@ -2,6 +2,7 @@ import subprocess
 import webbrowser
 import tempfile
 import re
+import warnings
 
 from pathlib import Path
 import shutil
@@ -13,6 +14,7 @@ from tikzpy.utils.helpers import (
     brackets,
     true_posix_path,
     extract_error_content,
+    in_notebook,
 )
 from tikzpy.utils.types import CompileError
 from tikzpy.templates.tex_file import TEX_FILE
@@ -174,13 +176,40 @@ class TikzPicture(TikzEnvironment):
             shutil.move(pdf_file, moved_pdf_file)
             return moved_pdf_file.resolve()
 
-    def show(self, quiet: bool = False) -> None:
+    def show(self, quiet: bool = False, inline: Optional[bool] = None) -> None:
         """Compiles the Tikz code and displays the pdf to the user. Set quiet=True to shut up latexmk.
         This should either open the PDF viewer on the user's computer with the graphic,
-        or open the PDF in the user's browser.
+        or open the PDF in the user's browser. Set inline=True/False to force displaying
+        inline (requires the `jupyter` extra) or in the browser; defaults to auto-detecting
+        a notebook environment.
         """
         pdf_file = self.compile(quiet=quiet)
-        webbrowser.open_new(str(pdf_file.as_uri()))
+        if inline is None:
+            inline = in_notebook()
+
+        if inline and not self.display_pdf_inline(pdf_file):
+            inline = False
+        if not inline:
+            webbrowser.open_new(str(pdf_file.as_uri()))
+
+    def display_pdf_inline(self, pdf_file: Path) -> bool:
+        """Renders the first page of pdf_file to a PNG and displays it inline via IPython.
+        Returns False (and warns) instead of raising if PyMuPDF isn't installed, so the
+        caller can fall back to opening the PDF normally."""
+        try:
+            import fitz  # PyMuPDF
+        except ImportError:
+            warnings.warn(
+                "Displaying inline requires PyMuPDF. Install it with: "
+                "pip install tikz_python[jupyter]. Falling back to opening the PDF instead."
+            )
+            return False
+        from IPython.display import Image, display
+
+        with fitz.open(pdf_file) as doc:
+            pixmap = doc[0].get_pixmap(dpi=150)
+            display(Image(data=pixmap.tobytes("png")))
+        return True
 
     def scope(self, options: str = "") -> Scope:
         scope = Scope(options=options)
