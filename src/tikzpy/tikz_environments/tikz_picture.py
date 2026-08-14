@@ -184,20 +184,22 @@ class TikzPicture(TikzEnvironment):
         a notebook environment.
         """
         pdf_file = self.compile(quiet=quiet)
+
         if inline is None:
             inline = in_notebook()
 
         if inline and not self.display_pdf_inline(pdf_file):
             inline = False
+
         if not inline:
             webbrowser.open_new(str(pdf_file.as_uri()))
-
+    
     def display_pdf_inline(self, pdf_file: Path) -> bool:
         """Renders the first page of pdf_file to a PNG and displays it inline via IPython.
         Returns False (and warns) instead of raising if PyMuPDF isn't installed, so the
         caller can fall back to opening the PDF normally."""
         try:
-            import fitz  # PyMuPDF
+            import pymupdf
         except ImportError:
             warnings.warn(
                 "Displaying inline requires PyMuPDF. Install it with: "
@@ -206,7 +208,7 @@ class TikzPicture(TikzEnvironment):
             return False
         from IPython.display import Image, display
 
-        with fitz.open(pdf_file) as doc:
+        with pymupdf.open(pdf_file) as doc:
             pixmap = doc[0].get_pixmap(dpi=150)
             display(Image(data=pixmap.tobytes("png")))
         return True
