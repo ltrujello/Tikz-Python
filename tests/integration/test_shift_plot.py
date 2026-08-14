@@ -35,6 +35,6 @@ def test_shift_plot():
         plot.shift(0, i / 5)
         plot.rotate(45, about_pt=plot.center, radians=False)
 
-    with tempfile.NamedTemporaryFile() as fp:
-        temp_path = Path(fp.name)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        temp_path = Path(tmp_dir) / "out.pdf"
         tikz.compile(temp_path, quiet=True)

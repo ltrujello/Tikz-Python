@@ -30,8 +30,8 @@ def test_controls_example():
         line.options = f"color={rainbow_colors(i)}"
         line.control_pts = [(i - 2, -1), (i + 2, -2)]
 
-    with tempfile.NamedTemporaryFile() as fp:
-        temp_path = Path(fp.name)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        temp_path = Path(tmp_dir) / "out.pdf"
         tikz.compile(temp_path, quiet=True)
 
     assert str(tikz) == code
