@@ -192,10 +192,9 @@ class TikzPicture(TikzEnvironment):
         webbrowser.open_new(str(pdf_file.as_uri()))
     
     def display_inline(self, pdf_file: Optional[Path] = None) -> bool:
-        """Renders the first page of pdf_file to a PNG and displays it inline via IPython.
-        If pdf_file is not given, the Tikz code is compiled first. Returns False (and warns)
-        instead of raising if PyMuPDF isn't installed, so the caller can fall back to
-        opening the PDF normally."""
+        """Displays the Tikz graphic inline, e.g. in a Jupyter/VS Code notebook cell.
+        Compiles the Tikz code first if pdf_file is not given. Returns whether the
+        graphic was successfully displayed."""
 
         if pdf_file is None: pdf_file = self.compile()
 
@@ -204,7 +203,7 @@ class TikzPicture(TikzEnvironment):
         except ImportError:
             warnings.warn(
                 "Displaying inline requires PyMuPDF. Install it with: "
-                "pip install tikz_python[jupyter]. Falling back to opening the PDF instead."
+                "pip install tikz_python[jupyter]."
             )
             return False
         from IPython.display import Image, display
