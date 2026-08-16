@@ -454,11 +454,11 @@ provides-extras = ["jupyter"]
 [package.metadata.requires-dev]
 dev = [
     { name = "black", specifier = ">=26.5.1" },
-    { name = "pre-commit", specifier = "==4.6.0" },
+    { name = "pre-commit", specifier = ">=4.6.0" },
     { name = "pytest", specifier = ">=7.4.0" },
     { name = "pytest-mock", specifier = ">=3.15.1" },
     { name = "ruff", specifier = ">=0.16.3" },
-    { name = "rust-just", specifier = "==1.58.0" },
+    { name = "rust-just", specifier = ">=1.58.0" },
 ]
 examples = [{ name = "numpy", specifier = "==2.5.2" }]
 
