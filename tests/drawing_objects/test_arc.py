@@ -1,5 +1,6 @@
-from tikzpy import TikzPicture, Arc, Point
 import pytest
+
+from tikzpy import Arc, TikzPicture
 
 
 @pytest.fixture

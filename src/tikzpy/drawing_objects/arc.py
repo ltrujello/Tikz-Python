@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import Tuple, Union
-from math import sin, cos, tan, atan2, pi, sqrt
-from math import radians as degs_2_rads
+
+from math import atan2, cos, pi, sin, sqrt, tan
 from math import degrees as rads_2_degs
-from tikzpy.drawing_objects.point import Point
+from math import radians as degs_2_rads
+
 from tikzpy.drawing_objects.drawing_object import DrawingObject
+from tikzpy.drawing_objects.point import Point
 
 
 class Arc(DrawingObject):
@@ -27,7 +28,7 @@ class Arc(DrawingObject):
 
     def __init__(
         self,
-        position: Union[Tuple[float, float], Point],
+        position: tuple[float, float] | Point,
         start_angle: float,
         end_angle: float,
         radius: float = None,
@@ -84,7 +85,7 @@ class Arc(DrawingObject):
                 )
                 return "ellipse"
 
-    def draw_start(self) -> Tuple[float, float]:
+    def draw_start(self) -> tuple[float, float]:
         """Return the point at which we should begin drawing the arc."""
         if self.draw_from_start:
             start_pos = self._position
@@ -99,7 +100,7 @@ class Arc(DrawingObject):
         return self._position
 
     @position.setter
-    def position(self, new_pos: Tuple[float, float]) -> None:
+    def position(self, new_pos: tuple[float, float]) -> None:
         self._position = Point(new_pos)
 
     @property
@@ -114,7 +115,7 @@ class Arc(DrawingObject):
             start_angle, end_angle = rads_2_degs(t_start), rads_2_degs(t_end)
         return f"{self.draw_start()} arc [start angle = {start_angle}, end angle = {end_angle}, {self.radius_statement}]"
 
-    def start_pos_circle(self) -> Tuple[float, float]:
+    def start_pos_circle(self) -> tuple[float, float]:
         """Calculates the point at which the circle should begin
         drawing, given that the user specified what the center, radius,
         start, and end angles of the desired circular arc.
@@ -128,7 +129,7 @@ class Arc(DrawingObject):
 
         return (start_pt_x, start_pt_y)
 
-    def start_pos_ellipse(self) -> Tuple[float, float]:
+    def start_pos_ellipse(self) -> tuple[float, float]:
         """Calculates the point at which the ellipse arc should begin
         drawing, given that the user specified what the center, x_radius, y_radius,
         start, and end angles of the desired elliptic arc.

@@ -1,9 +1,10 @@
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import Tuple
 from copy import deepcopy
-from tikzpy.utils.helpers import brackets
+
 from tikzpy.drawing_objects.node import Node
+from tikzpy.utils.helpers import brackets
 
 
 class DrawingObject(ABC):
@@ -39,17 +40,17 @@ class DrawingObject(ABC):
         """
 
     @abstractmethod
-    def shift(self, xshift: float, yshift: float) -> "DrawingObject":
+    def shift(self, xshift: float, yshift: float) -> DrawingObject:
         """Shift the coordinates of the drawing object by (xshift, yshift)"""
 
     @abstractmethod
-    def scale(self, scale: float) -> "DrawingObject":
+    def scale(self, scale: float) -> DrawingObject:
         """Scale the coordinates of the drawing object by amount "scale"."""
 
     @abstractmethod
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
-    ) -> "DrawingObject":
+        self, angle: float, about_pt: tuple[float, float] = None, radians: bool = False
+    ) -> DrawingObject:
         """Rotate the coordinates of the drawing object (counterclockwise) by "angle" about the
         point "about_pt".
         """

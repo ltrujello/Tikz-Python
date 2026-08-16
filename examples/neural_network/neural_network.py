@@ -1,4 +1,4 @@
-from tikzpy import TikzPicture, Point
+from tikzpy import Point, TikzPicture
 
 node_radius = 0.5
 node_sep = 2
@@ -6,6 +6,7 @@ layer_sep = 3
 
 input_layer_pos = (0, 0)
 hidden_layer_pos = (layer_sep, 0)
+
 
 def network_layer(init_pos, num_nodes, symbol, color):
     layer_nodes = []
@@ -24,13 +25,14 @@ def draw_layer_connection(curr_layer, next_layer):
         for next_node in next_layer:
             tikz.connect_circle_edges(curr_node, next_node, "->", dst_delta=0.1)
 
+
 def draw_neural_network(layer_sizes):
     max_size = max(layer_sizes)
     layers = []
     init_pos = Point((0, 0))
     for idx, size in enumerate(layer_sizes):
         x_shift = idx * layer_sep
-        y_shift = - (max_size - size) / 2 * node_sep
+        y_shift = -(max_size - size) / 2 * node_sep
         pos = init_pos + (x_shift, y_shift)
         if idx == 0:
             symbol = "x"
@@ -53,4 +55,3 @@ if __name__ == "__main__":
     tikz = TikzPicture(center=True)
     draw_neural_network([4, 5, 3, 4, 3, 2])
     tikz.show()
-

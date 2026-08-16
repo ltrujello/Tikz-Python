@@ -1,11 +1,11 @@
 from __future__ import annotations
-from typing import Tuple, Union
-from tikzpy.drawing_objects.point import Point
+
 from tikzpy.drawing_objects.drawing_object import DrawingObject
+from tikzpy.drawing_objects.point import Point
 
 
 class Rectangle(DrawingObject):
-    """
+    r"""
     A class to manage rectangles in a tikz environment
 
     The `Rectangle` class is used to handle rectangles in TikZ. It is analagous to the TikZ code
@@ -23,7 +23,7 @@ class Rectangle(DrawingObject):
 
     def __init__(
         self,
-        left_corner: Union[Tuple[float, float], Point],
+        left_corner: tuple[float, float] | Point,
         width: float,
         height: float,
         options: str = "",
@@ -48,7 +48,7 @@ class Rectangle(DrawingObject):
         )
 
     @center.setter
-    def center(self, center_point: Union[Point, tuple[int, int]]) -> Point:
+    def center(self, center_point: Point | tuple[int, int]) -> Point:
         """Sets the center of the rectangle."""
         if isinstance(center_point, tuple):
             center_point = Point(center_point)
@@ -65,7 +65,7 @@ class Rectangle(DrawingObject):
         )
 
     @north.setter
-    def north(self, north_point: Union[Point, tuple[int, int]]) -> Point:
+    def north(self, north_point: Point | tuple[int, int]) -> Point:
         """Sets the north point of the rectangle."""
         if isinstance(north_point, tuple):
             north_point = Point(north_point)
@@ -82,7 +82,7 @@ class Rectangle(DrawingObject):
         )
 
     @east.setter
-    def east(self, east_point: Union[Point, tuple[int, int]]) -> Point:
+    def east(self, east_point: Point | tuple[int, int]) -> Point:
         """Sets the east point of the rectangle."""
         if isinstance(east_point, tuple):
             east_point = Point(east_point)
@@ -99,7 +99,7 @@ class Rectangle(DrawingObject):
         )
 
     @south.setter
-    def south(self, south_point: Union[Point, tuple[int, int]]) -> Point:
+    def south(self, south_point: Point | tuple[int, int]) -> Point:
         """Sets the south point of the rectangle."""
         if isinstance(south_point, tuple):
             south_point = Point(south_point)
@@ -114,7 +114,7 @@ class Rectangle(DrawingObject):
         )
 
     @west.setter
-    def west(self, west_point: Union[Point, tuple[int, int]]) -> Point:
+    def west(self, west_point: Point | tuple[int, int]) -> Point:
         """Sets the west point of the rectangle."""
         if isinstance(west_point, tuple):
             west_point = Point(west_point)
@@ -146,30 +146,30 @@ class Rectangle(DrawingObject):
         self.height = scale * self.height
 
     def rotate_(
-        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
     ) -> None:
         self._left_corner.rotate_(angle, about_pt, radians)
 
-    def shift(self, xshift: float, yshift: float) -> "Rectangle":
+    def shift(self, xshift: float, yshift: float) -> Rectangle:
         new_rectangle = self.copy()
         new_rectangle.shift_(xshift, yshift)
         return new_rectangle
 
-    def scale(self, scale: float) -> "Rectangle":
+    def scale(self, scale: float) -> Rectangle:
         new_rectangle = self.copy()
         new_rectangle.scale_(scale)
         return new_rectangle
 
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
-    ) -> "Rectangle":
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
+    ) -> Rectangle:
         new_rectangle = self.copy()
         new_rectangle.rotate_(angle, about_pt, radians)
         return new_rectangle
 
 
 def rectangle_from_north(
-    north_point: Union[Tuple[float, float], Point],
+    north_point: tuple[float, float] | Point,
     width: float = 0,
     height: float = 0,
     options: str = "",
@@ -188,7 +188,7 @@ def rectangle_from_north(
 
 
 def rectangle_from_east(
-    east_point: Union[Tuple[float, float], Point],
+    east_point: tuple[float, float] | Point,
     width: float = 0,
     height: float = 0,
     options: str = "",
@@ -207,7 +207,7 @@ def rectangle_from_east(
 
 
 def rectangle_from_south(
-    south_point: Union[Tuple[float, float], Point],
+    south_point: tuple[float, float] | Point,
     width: float = 0,
     height: float = 0,
     options: str = "",
@@ -226,7 +226,7 @@ def rectangle_from_south(
 
 
 def rectangle_from_west(
-    west_point: Union[Tuple[float, float], Point],
+    west_point: tuple[float, float] | Point,
     width: float = 0,
     height: float = 0,
     options: str = "",
@@ -245,7 +245,7 @@ def rectangle_from_west(
 
 
 def rectangle_from_center(
-    center: Union[Tuple[float, float], Point],
+    center: tuple[float, float] | Point,
     width: float = 0,
     height: float = 0,
     options: str = "",

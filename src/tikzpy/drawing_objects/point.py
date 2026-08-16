@@ -1,7 +1,6 @@
 import math
-import copy
 from numbers import Number
-from typing import Tuple, Union, Optional
+from typing import Union
 
 
 class Point:
@@ -23,8 +22,8 @@ class Point:
     def __init__(
         self,
         first_arg: Union[float, Number, tuple, "Point"],
-        second_arg: Union[float, Number, None] = None,
-        third_arg: Union[float, Number, None] = None,
+        second_arg: float | Number | None = None,
+        third_arg: float | Number | None = None,
     ) -> None:
         # Check if attempting to construct from one tuple of two numeric types
         if isinstance(first_arg, tuple) and second_arg is None:
@@ -77,9 +76,7 @@ class Point:
     def copy(self):
         return Point((self.x, self.y, self.z))
 
-    def shift_(
-        self, xshift: float, yshift: float, zshift: Optional[float] = None
-    ) -> None:
+    def shift_(self, xshift: float, yshift: float, zshift: float | None = None) -> None:
         """Translate the point via x, y offsets. This performs an in-place operation."""
         self.x = self.x + xshift
         self.y = self.y + yshift
@@ -96,7 +93,7 @@ class Point:
     def rotate_(
         self,
         angle: float,
-        about_pt: Union[Tuple[float, float], "Point"],
+        about_pt: Union[tuple[float, float], "Point"],
         radians: bool = False,
     ) -> None:
         """Rotate the point about another point. This performs an in-place operation."""
@@ -122,7 +119,7 @@ class Point:
         self.y = rotated_y
 
     def shift(
-        self, xshift: float, yshift: float, zshift: Optional[float] = None
+        self, xshift: float, yshift: float, zshift: float | None = None
     ) -> "Point":
         """Returns a point translated by x, y, z offsets."""
         new_point = self.copy()
@@ -138,7 +135,7 @@ class Point:
     def rotate(
         self,
         angle: float,
-        about_pt: Union[Tuple[float, float], "Point"],
+        about_pt: Union[tuple[float, float], "Point"],
         radians: bool = False,
     ) -> "Point":
         """Returns a point that is rotated about another point."""
@@ -146,7 +143,7 @@ class Point:
         new_point.rotate_(angle, about_pt, radians)
         return new_point
 
-    def to_tuple(self) -> Tuple:
+    def to_tuple(self) -> tuple:
         """Return a tuple of the x, y data."""
         if self.z is None:
             return self.x, self.y

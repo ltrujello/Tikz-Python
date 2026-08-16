@@ -1,4 +1,5 @@
 import numpy as np
+
 from tikzpy import TikzPicture
 from tikzpy.colors import rainbow_colors
 
@@ -72,6 +73,7 @@ def plot_linear_transformation(matrix, num_vecs=40):
             vec.options += ", opacity=0.2"
 
     tikz.show()
+
 
 if __name__ == "__main__":
     matrix = np.array([[2, 0], [1, 1], [1, 1]])

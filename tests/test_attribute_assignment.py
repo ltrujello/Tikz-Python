@@ -1,5 +1,6 @@
 import pytest
-from tikzpy import TikzPicture, Point
+
+from tikzpy import Point, TikzPicture
 
 """ #2
     We test that reassignment of attributes returns the correct Tikz code.

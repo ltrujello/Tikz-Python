@@ -1,21 +1,20 @@
-import subprocess
-import webbrowser
-import tempfile
 import re
-
-from pathlib import Path
 import shutil
-from typing import List, Optional
+import subprocess
+import tempfile
+import webbrowser
+from pathlib import Path
+
+from tikzpy.templates.tex_file import TEX_FILE
 from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.tikz_style import TikzStyle
 from tikzpy.utils.helpers import (
     brackets,
-    true_posix_path,
     extract_error_content,
+    true_posix_path,
 )
 from tikzpy.utils.types import CompileError
-from tikzpy.templates.tex_file import TEX_FILE
 
 
 class TikzPicture(TikzEnvironment):
@@ -82,7 +81,7 @@ class TikzPicture(TikzEnvironment):
         self.add_styles(style)
         return style
 
-    def add_styles(self, *styles: List[TikzStyle]) -> None:
+    def add_styles(self, *styles: list[TikzStyle]) -> None:
         """Add a TikzStyle object to the environment."""
         for style in styles:
             self._preamble[f"tikz_style:{style.style_name}"] = style.code
@@ -94,9 +93,9 @@ class TikzPicture(TikzEnvironment):
         phi: The angle (in degrees) through which the coordinate frame is rotated about the z axis.
         """
         self.tdplotsetmaincoords = (theta, phi)
-        self._preamble[
-            "tdplotsetmaincoords"
-        ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
+        self._preamble["tdplotsetmaincoords"] = (
+            f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
+        )
 
     def write_tex_file(self, tex_filepath):
         tex_code = TEX_FILE
@@ -120,9 +119,7 @@ class TikzPicture(TikzEnvironment):
         with open(tikz_code_filepath, "w") as f:
             f.write(self.code())
 
-    def compile(
-        self, pdf_destination: Optional[str] = None, quiet: bool = True
-    ) -> Path:
+    def compile(self, pdf_destination: str | None = None, quiet: bool = True) -> Path:
         """Compiles the Tikz code and returns a Path to the final PDF.
         If no file path is provided, a default value of "tex_file.pdf" will be used.
 

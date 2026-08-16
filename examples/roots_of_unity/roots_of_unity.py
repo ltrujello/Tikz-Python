@@ -1,5 +1,6 @@
 #!/bin/bash/python3
-from math import pi, sin, cos
+from math import cos, pi, sin
+
 from tikzpy import TikzPicture
 
 
@@ -27,10 +28,11 @@ def roots_of_unity(n, scale=5):
         tikz.node(
             line_to_root.end,
             options=node_option,
-            text=f"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$",
+            text=rf"$e^{{ (2 \cdot \pi \cdot {i})/ {n} }}$",
         )
 
     tikz.show()
+
 
 if __name__ == "__main__":
     roots_of_unity(10)

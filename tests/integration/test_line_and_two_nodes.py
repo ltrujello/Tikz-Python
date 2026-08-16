@@ -1,7 +1,7 @@
 import tempfile
 from pathlib import Path
+
 from tikzpy import TikzPicture
-from tikzpy.colors import rainbow_colors
 
 code = r"""\begin{tikzpicture}
     \draw[thick, blue, o-o] (0, 0) to (1, 1);

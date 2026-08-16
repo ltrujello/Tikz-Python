@@ -1,9 +1,10 @@
-import sys
 from itertools import combinations
-from tikzpy import TikzPicture, Circle, PlotCoordinates, Rectangle
+
+from tikzpy import Circle, PlotCoordinates, TikzPicture
 from tikzpy.colors import rainbow_colors
 
 tikz = TikzPicture()
+
 
 def ven_diagram(blobs, show_outlines=False):
     """A function that takes in an arbitrary number of 2D blobs and intersects and colors every
@@ -43,6 +44,7 @@ def ven_diagram(blobs, show_outlines=False):
             tikz.draw(draw_blob)
     tikz.write()
     tikz.show()
+
 
 # A set of three plots
 pts_one = [
@@ -102,4 +104,4 @@ if __name__ == "__main__":
             )
             circles.append(circ)
     ven_diagram(circles)
-    #ven_diagram(blobs)
+    # ven_diagram(blobs)

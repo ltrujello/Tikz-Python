@@ -1,16 +1,16 @@
 from __future__ import annotations
-from typing import List, Tuple
-from tikzpy.tikz_environments.scope import Scope
+
 from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.node import Node
+from tikzpy.tikz_environments.scope import Scope
 
 
 class R2_Space:
     def __init__(
         self,
-        x_interval: Tuple[float, float],
-        y_interval: Tuple[float, float],
-        origin: Tuple[float, float] = (0, 0),
+        x_interval: tuple[float, float],
+        y_interval: tuple[float, float],
+        origin: tuple[float, float] = (0, 0),
         show_ticks: bool = False,
         show_labels: bool = True,
     ):

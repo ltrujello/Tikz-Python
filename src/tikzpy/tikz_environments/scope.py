@@ -1,8 +1,8 @@
 from __future__ import annotations
-from typing import Tuple
+
 from tikzpy.drawing_objects.drawing_object import DrawingObject
-from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.clip import Clip
+from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.utils.helpers import brackets
 
 
@@ -54,7 +54,7 @@ class Scope(TikzEnvironment):
             draw_obj.scale(scale)
 
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
     ) -> None:
         for draw_obj in self.drawing_objects:
             draw_obj.rotate(angle, about_pt, radians)

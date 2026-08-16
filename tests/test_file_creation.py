@@ -1,9 +1,7 @@
-import shutil
-import re
 import tempfile
 from pathlib import Path
+
 from tikzpy import TikzPicture
-from tikzpy.utils.helpers import true_posix_path
 
 TEX_FILE = r"""%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 %

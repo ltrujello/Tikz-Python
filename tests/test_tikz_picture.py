@@ -1,11 +1,12 @@
 import tempfile
-import pytest
-import tikzpy
-
 from pathlib import Path
+from unittest.mock import Mock
+
+import pytest
+
+import tikzpy
 from tikzpy import TikzPicture
 from tikzpy.utils.types import CompileError
-from unittest.mock import Mock
 
 
 def completed_process_factory(returncode=0):

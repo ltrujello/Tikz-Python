@@ -1,14 +1,14 @@
-from tikzpy import TikzPicture 
+from tikzpy import TikzPicture
 from tikzpy.drawing_objects.drawing_utils import calc_intersection
 
 tikz = TikzPicture(center=True)
 
 # Draw nodes A, B
-A = tikz.node((0,0), options="left", text="$A$")
+A = tikz.node((0, 0), options="left", text="$A$")
 B = tikz.node((1.25, 0.25), options="right", text="$B$")
 
 # Draw circle about A, B
-AB_dist = A.position.distance(B.position) # Calc distance between A and B
+AB_dist = A.position.distance(B.position)  # Calc distance between A and B
 circle_A = tikz.circle(A.position, radius=AB_dist)
 circle_B = tikz.circle(B.position, radius=AB_dist)
 
@@ -30,4 +30,3 @@ intersections = calc_intersection(line_a, line_b)
 tikz.node(intersections[0], options="fill=red,inner sep=1pt")
 
 tikz.show(quiet=False)
-

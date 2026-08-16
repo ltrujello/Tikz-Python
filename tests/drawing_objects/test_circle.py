@@ -1,5 +1,6 @@
-from tikzpy import TikzPicture, Circle, Point
 import pytest
+
+from tikzpy import Circle, Point, TikzPicture
 
 
 @pytest.fixture

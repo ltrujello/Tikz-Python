@@ -1,6 +1,8 @@
 #!/bin/bash/python3
-from math import pi, cos, sin, tan, atan
+from math import atan, cos, pi, sin, tan
+
 import numpy as np
+
 from tikzpy import TikzPicture
 
 """ Plots the blowup at a point.
@@ -9,6 +11,7 @@ from tikzpy import TikzPicture
 tikz = TikzPicture(center=True)
 tikz.set_tdplotsetmaincoords(65, 25)
 tikz.options = "tdplot_main_coords"
+
 
 # The blowup
 def blowup(r, t):
@@ -42,6 +45,8 @@ if __name__ == "__main__":
         new_points = []
         for j in np.linspace(umin, umax, 10):
             new_points.append(blowup(j, i))
-        tikz.plot_coordinates(new_points, options="ProcessBlue!70", plot_options="smooth")
+        tikz.plot_coordinates(
+            new_points, options="ProcessBlue!70", plot_options="smooth"
+        )
 
     tikz.show()

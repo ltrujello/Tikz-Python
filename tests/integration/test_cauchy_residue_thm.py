@@ -1,5 +1,6 @@
 import tempfile
 from pathlib import Path
+
 from tikzpy import TikzPicture
 from tikzpy.styles import arrows_along_path_style
 

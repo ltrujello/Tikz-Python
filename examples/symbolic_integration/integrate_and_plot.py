@@ -2,6 +2,7 @@
 import numpy as np
 from sympy import *  # Without caution, import * can become a very stupid idea. Here it is okay.
 from sympy.abc import x  # Don't name any function, variable, etc, as 'x'.
+
 from tikzpy import TikzPicture
 from tikzpy.colors import rainbow_colors
 
@@ -53,6 +54,6 @@ def integrate_n_times(func, n, x_start=-2.5, x_end=2.5):
 
     tikz.show()
 
+
 if __name__ == "__main__":
     integrate_n_times(poly(x**2), 5)
-

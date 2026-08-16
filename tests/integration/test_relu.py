@@ -1,9 +1,7 @@
 import tempfile
 from pathlib import Path
 
-import numpy as np
-from tikzpy import TikzPicture, Point, R2_Space
-import math
+from tikzpy import R2_Space, TikzPicture
 
 code = r"""\begin{tikzpicture}
     \begin{scope}

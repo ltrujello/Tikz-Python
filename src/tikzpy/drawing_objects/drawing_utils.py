@@ -1,6 +1,7 @@
 import math
-from tikzpy.drawing_objects.line import Line
+
 from tikzpy.drawing_objects.circle import Circle
+from tikzpy.drawing_objects.line import Line
 from tikzpy.drawing_objects.point import Point
 
 
