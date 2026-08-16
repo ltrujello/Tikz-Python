@@ -14,7 +14,6 @@ TEX_FILE = r"""%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 \usepackage[left=0.3in, right=0.3in]{geometry}
 \usepackage{amsmath, amsfonts, amssymb}
 \usepackage[dvipsnames]{xcolor} % Colors, use dvipsnames for more color options
-\usepackage{tikz-cd} % Diagrams
 \usepackage{tikz} % General purpose graphics
 \usepackage{pgfplots}
 \usepackage{tikz-3dplot}
