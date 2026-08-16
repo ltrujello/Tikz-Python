@@ -28,6 +28,8 @@ dev = [
     "pytest>=7.4.0",
     "ruff>=0.16.3",
     "pytest-mock>=3.15.1",
+    "just==0.8.165", 
+    "pre-commit==4.6.0",
 ]
 
 [tool.ruff]
