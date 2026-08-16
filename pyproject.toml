@@ -17,7 +17,6 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-
 [dependency-groups]
 examples = [
     "numpy==2.5.2",
@@ -32,6 +31,9 @@ dev = [
     "pre-commit==4.6.0",
 ]
 
+
+[project.optional-dependencies]
+jupyter = ["pymupdf"]
 
 [project.urls]
 "Homepage" = "https://github.com/ltrujello/Tikz-Python/"
