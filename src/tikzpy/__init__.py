@@ -12,16 +12,16 @@ from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_picture import TikzPicture
 
 __all__ = [
-    TikzPicture,
-    Scope,
-    Clip,
-    Line,
-    PlotCoordinates,
-    Circle,
-    Node,
-    Rectangle,
-    Ellipse,
-    Arc,
-    R2_Space,
-    Point,
+    "Arc",
+    "Circle",
+    "Clip",
+    "Ellipse",
+    "Line",
+    "Node",
+    "PlotCoordinates",
+    "Point",
+    "R2_Space",
+    "Rectangle",
+    "Scope",
+    "TikzPicture",
 ]

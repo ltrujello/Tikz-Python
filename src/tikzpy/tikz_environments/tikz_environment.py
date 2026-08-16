@@ -58,10 +58,12 @@ class TikzEnvironment(ABC):
         end: tuple[float, float] | Point,
         options: str = "",
         to_options: str = "",
-        control_pts: list = [],
+        control_pts: list | None = None,
         action: str = "draw",
     ) -> Line:
         """Draws a line by creating an instance of the Line class."""
+        if control_pts is None:
+            control_pts = []
         line = Line(start, end, options, to_options, control_pts, action)
         self.draw(line)
         return line
@@ -331,9 +333,9 @@ class TikzEnvironment(ABC):
         position: tuple[float, float] | Point,
         start_angle: float,
         end_angle: float,
-        radius: float = None,
-        x_radius: float = None,
-        y_radius: float = None,
+        radius: float | None = None,
+        x_radius: float | None = None,
+        y_radius: float | None = None,
         options: str = "",
         radians: bool = False,
         draw_from_start: bool = True,

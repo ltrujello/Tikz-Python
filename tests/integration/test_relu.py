@@ -21,9 +21,7 @@ code = r"""\begin{tikzpicture}
 
 def test_relu_example():
     tikz = TikzPicture()
-    xrange = (-3, 3)
     vert_scale = 4.5
-    horiz_scale = 1.5
 
     # Set up xy-plane
     xy_plane = R2_Space(x_interval=(-4, 4), y_interval=(0, vert_scale + 0.5))

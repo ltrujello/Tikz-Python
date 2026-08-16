@@ -31,9 +31,9 @@ class Arc(DrawingObject):
         position: tuple[float, float] | Point,
         start_angle: float,
         end_angle: float,
-        radius: float = None,
-        x_radius: float = None,
-        y_radius: float = None,
+        radius: float | None = None,
+        x_radius: float | None = None,
+        y_radius: float | None = None,
         options: str = "",
         radians: bool = False,
         draw_from_start: bool = True,
@@ -157,7 +157,7 @@ class Arc(DrawingObject):
         self.y_radius *= scale
 
     def rotate(
-        self, angle: float, about_pt: tuple = None, radians: bool = False
+        self, angle: float, about_pt: tuple | None = None, radians: bool = False
     ) -> None:
         if about_pt is None:
             about_pt = self.draw_start()

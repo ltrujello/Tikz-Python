@@ -40,11 +40,11 @@ def test_compile_smoke(mocker):
 
 def test_compile_error_no_log_file(mocker):
     # Mock the subprocess call to simulate failure
-    mock_completed_process = mocker.patch(
+    mocker.patch(
         "tikzpy.tikz_environments.tikz_picture.subprocess.run",
         completed_process_factory(-1),
     )
-    with tempfile.TemporaryDirectory() as tmp_dir:
+    with tempfile.TemporaryDirectory():
         tikz = TikzPicture()
         tikz.circle((0, 0), 3, options="thin, fill=orange!15")
         with pytest.raises(CompileError) as e:
@@ -54,11 +54,11 @@ def test_compile_error_no_log_file(mocker):
 
 def test_compile_error_log_file_parsing_failed(mocker):
     # Mock the subprocess call to simulate failure
-    mock_completed_process = mocker.patch(
+    mocker.patch(
         "tikzpy.tikz_environments.tikz_picture.subprocess.run",
         completed_process_factory(-1),
     )
-    with tempfile.TemporaryDirectory() as tmp_dir:
+    with tempfile.TemporaryDirectory():
         tikz = TikzPicture()
         tikz.circle((0, 0), 3, options="thin, fill=orange!15")
 
@@ -84,7 +84,7 @@ def test_compile_compile_error_log_file_parsing(mocker):
         "run",
     )
 
-    with tempfile.TemporaryDirectory() as tmp_dir:
+    with tempfile.TemporaryDirectory():
         tikz = TikzPicture()
         tikz.circle((0, 0), 3, options="thin, fill=orange!15, meow")
         with pytest.raises(CompileError) as e:

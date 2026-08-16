@@ -29,9 +29,11 @@ class Line(DrawingObject):
         end: tuple[float, float] | Point,
         options: str = "",
         to_options: str = "",
-        control_pts: list[tuple] = [],
+        control_pts: list[tuple] | None = None,
         action: str = "draw",
     ) -> None:
+        if control_pts is None:
+            control_pts = []
         self._start = Point(start)
         self._end = Point(end)
         self.options = options
@@ -175,7 +177,10 @@ class Line(DrawingObject):
             point.scale_(scale)
 
     def rotate_(
-        self, angle: float, about_pt: tuple[float, float] = None, radians: bool = False
+        self,
+        angle: float,
+        about_pt: tuple[float, float] | None = None,
+        radians: bool = False,
     ) -> None:
         """Rotate start, end, and control_pts. By default, the rotation is done relative to the midpoint
         of the line."""
@@ -200,7 +205,10 @@ class Line(DrawingObject):
         return new_line
 
     def rotate(
-        self, angle: float, about_pt: tuple[float, float] = None, radians: bool = False
+        self,
+        angle: float,
+        about_pt: tuple[float, float] | None = None,
+        radians: bool = False,
     ) -> Line:
         """Rotate start, end, and control_pts. By default, the rotation is done relative to the midpoint
         of the line."""

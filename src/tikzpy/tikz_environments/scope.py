@@ -35,7 +35,7 @@ class Scope(TikzEnvironment):
     def __repr__(self) -> str:
         return self.code
 
-    def append(self, *args: List[DrawingObject]) -> None:
+    def append(self, *args: list[DrawingObject]) -> None:
         """Append a drawing object to the scope statement"""
         for draw_obj in args:
             self.drawing_objects.append(draw_obj)

@@ -32,8 +32,6 @@ dev = [
     "pre-commit==4.6.0",
 ]
 
-[tool.ruff]
-ignore-init-module-imports = true
 
 [project.urls]
 "Homepage" = "https://github.com/ltrujello/Tikz-Python/"

@@ -139,7 +139,9 @@ class TikzPicture(TikzEnvironment):
             cmd = (
                 f"latexmk -pdf {options} -interaction=nonstopmode -output-directory={tex_file_parents} {tex_file_posix_path}",
             )
-            completed_process = subprocess.run(cmd, shell=True, capture_output=True)
+            completed_process = subprocess.run(
+                cmd, shell=True, capture_output=True, check=False
+            )
             if completed_process.returncode != 0:
                 logfile = Path(tmp_dir) / "tex_file.log"
                 if not logfile.exists():

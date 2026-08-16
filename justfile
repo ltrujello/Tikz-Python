@@ -3,7 +3,7 @@ install-dev:
     pre-commit install
 
 lint:
-    uv run black . && uv run ruff check --fix .
+    uv run black -t py314 src/ tests/ && uv run ruff check --fix src/ tests/
 
 test: 
     uv run pytest tests

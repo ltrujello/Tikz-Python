@@ -48,7 +48,7 @@ def test_replace_code():
         It doesn't grab this end, right?
         """
         replacement_text = f"{begin} Hi! {end}"
-        updated_text, num_matches = replace_code(begin, end, content, replacement_text)
+        updated_text, _num_matches = replace_code(begin, end, content, replacement_text)
         assert updated_text == f"""
         {begin} Hi! {end}
         It doesn't grab this end, right?

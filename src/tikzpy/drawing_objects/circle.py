@@ -155,7 +155,10 @@ class Circle(DrawingObject):
         self.radius *= scale
 
     def rotate_(
-        self, angle: float, about_pt: tuple[float, float] = None, radians: bool = False
+        self,
+        angle: float,
+        about_pt: tuple[float, float] | None = None,
+        radians: bool = False,
     ) -> None:
         self._center.rotate_(angle, about_pt, radians)
 
@@ -170,7 +173,10 @@ class Circle(DrawingObject):
         return new_circle
 
     def rotate(
-        self, angle: float, about_pt: tuple[float, float] = None, radians: bool = False
+        self,
+        angle: float,
+        about_pt: tuple[float, float] | None = None,
+        radians: bool = False,
     ) -> Circle:
         new_circle = self.copy()
         new_circle.rotate_(angle, about_pt, radians)
