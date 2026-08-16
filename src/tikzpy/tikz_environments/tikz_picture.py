@@ -2,6 +2,7 @@ import subprocess
 import webbrowser
 import tempfile
 import re
+import warnings
 
 from pathlib import Path
 import shutil
@@ -13,6 +14,7 @@ from tikzpy.utils.helpers import (
     brackets,
     true_posix_path,
     extract_error_content,
+    in_notebook,
 )
 from tikzpy.utils.types import CompileError
 from tikzpy.templates.tex_file import TEX_FILE
@@ -172,13 +174,43 @@ class TikzPicture(TikzEnvironment):
             shutil.move(pdf_file, moved_pdf_file)
             return moved_pdf_file.resolve()
 
-    def show(self, quiet: bool = False) -> None:
+    def show(self, quiet: bool = False, inline: Optional[bool] = None) -> None:
         """Compiles the Tikz code and displays the pdf to the user. Set quiet=True to shut up latexmk.
         This should either open the PDF viewer on the user's computer with the graphic,
-        or open the PDF in the user's browser.
+        or open the PDF in the user's browser. Set inline=True/False to force displaying
+        inline (requires the `jupyter` extra) or in the browser; defaults to auto-detecting
+        a notebook environment.
         """
         pdf_file = self.compile(quiet=quiet)
+
+        if inline is None: inline = in_notebook()
+        
+        if inline and self.display_inline(pdf_file): return
+
         webbrowser.open_new(str(pdf_file.as_uri()))
+    
+    def display_inline(self, pdf_file: Optional[Path] = None) -> bool:
+        """Displays the Tikz graphic inline, e.g. in a Jupyter/VS Code notebook cell.
+        Compiles the Tikz code first if pdf_file is not given. Returns whether the
+        graphic was successfully displayed."""
+
+        if pdf_file is None: pdf_file = self.compile()
+
+        try:
+            import pymupdf
+        except ImportError:
+            warnings.warn(
+                "Displaying inline requires PyMuPDF. Install it with: "
+                "pip install tikz_python[jupyter]."
+            )
+            return False
+        from IPython.display import Image, display
+
+        with pymupdf.open(pdf_file) as doc:
+            pixmap = doc[0].get_pixmap(dpi=150)
+            display(Image(data=pixmap.tobytes("png")))
+
+        return True
 
     def scope(self, options: str = "") -> Scope:
         scope = Scope(options=options)
