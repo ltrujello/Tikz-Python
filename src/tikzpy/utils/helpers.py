@@ -21,13 +21,13 @@ def true_posix_path(path_obj: Path) -> str:
     We'd naturally just do str(path_obj.resolve()), which works on linux. But this will cause an error on windows machines
     since such a command returns something like "C:\Users\user\Desktop..."
     Since pathlib does not happen to have a method for this, we write one.
+
+    On Windows, we keep the drive letter (e.g. "C:/Users/user/Desktop...") rather than
+    stripping it, since dropping the drive produces a path TeX/latexmk cannot resolve.
     """
     full_path = path_obj.resolve()
     if isinstance(path_obj, WindowsPath):
-        drive = full_path.drive  # C:, E:, etc.
-        return "/" + str(
-            full_path.relative_to(f"{drive}/").as_posix()
-        )  # Need / so we may obtain /Users/... not Users/...
+        return full_path.as_posix()  # e.g. "C:/Users/..." keeps the drive letter
     else:
         return str(full_path)
 
