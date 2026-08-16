@@ -10,15 +10,29 @@ authors = [
 ]
 description = "A python wrapper for tikz"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 
+
+[dependency-groups]
+examples = [
+    "numpy==2.5.2",
+]
+
+dev = [
+    "black>=26.5.1",
+    "pytest>=7.4.0",
+    "ruff>=0.16.3",
+    "pytest-mock>=3.15.1",
+]
+
 [tool.ruff]
 ignore-init-module-imports = true
+
 [project.urls]
 "Homepage" = "https://github.com/ltrujello/Tikz-Python/"
 "Documentation" = "https://ltrujello.github.io/Tikz-Python/"
