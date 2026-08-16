@@ -72,7 +72,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]
+        # os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v7
 
@@ -86,6 +87,18 @@ jobs:
         uses: extractions/setup-just@v4
         with:
           just-version: '1.58.0'
+
+      - name: Install TeX Live
+        run: |
+          curl -fsSL -o install-tl-unx.tar.gz https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+          mkdir install-tl
+          tar xzf install-tl-unx.tar.gz -C install-tl --strip-components=1
+          perl install-tl/install-tl --no-interaction --scheme=basic \
+            --texdir="$HOME/texlive" --texuserdir="$HOME/.texlive"
+          echo "$HOME"/texlive/bin/* >> "$GITHUB_PATH"
+
+      - name: Install LaTeX packages
+        run: tlmgr install latexmk pgf tikz-3dplot pgfplots hobby
 
       - name: Sync dependencies
         run: just install-dev
