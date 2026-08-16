@@ -1,6 +1,6 @@
 install-dev:
     uv sync --all-groups 
-    pre-commit install
+    uv run pre-commit install
 
 lint:
     uv run black -t py314 src/ tests/ && uv run ruff check --fix src/ tests/
