@@ -1,10 +1,10 @@
 from tikzpy import (
-    TikzPicture,
-    Rectangle,
-    Point,
     Line,
     PlotCoordinates,
+    Point,
+    Rectangle,
     Scope,
+    TikzPicture,
 )
 
 tikz = TikzPicture(center=True)
@@ -189,6 +189,7 @@ def add_symbol(pos, flip=True):
 
     return circle
 
+
 def draw_fork_line(start, end):
     line = tikz.line(start, end)
     tikz.plot_coordinates(
@@ -199,15 +200,13 @@ def draw_fork_line(start, end):
     )
     return line
 
+
 def draw_three_parallel_lines(start, end):
     line = tikz.line(start, end)
-    tikz.line(
-        start - (1, 0), end - (1, 0)
-    )
-    tikz.line(
-        start + (1, 0), end + (1, 0)
-    )
+    tikz.line(start - (1, 0), end - (1, 0))
+    tikz.line(start + (1, 0), end + (1, 0))
     return line
+
 
 def draw_left_rectangular_arrow(start, end):
     left_shift = 2.45
@@ -220,6 +219,7 @@ def draw_left_rectangular_arrow(start, end):
         ]
     )
 
+
 def draw_right_rectangular_arrow(start, end):
     right_shift = 2.25
     tikz.plot_coordinates(
@@ -230,6 +230,7 @@ def draw_right_rectangular_arrow(start, end):
             end,
         ]
     )
+
 
 # Input/Output blocks
 input = input_block(input_pos)
@@ -316,7 +317,7 @@ tikz.line(decoder_feed_forward.north, decoder_add_3.south, options=" ")
 tikz.line(decoder_add_3.north, linear.south)
 tikz.line(linear.north, softmax.south)
 
-# Encoder add symbol and input connection 
+# Encoder add symbol and input connection
 encoder_add_symbol = add_symbol(input.north + (0, 0.9), flip=False)
 tikz.line(input.north, encoder_add_symbol.south)
 tikz.line(encoder_add_symbol.north, encoder_layer_norm_1.south)
@@ -347,7 +348,5 @@ for obj in tikz.drawing_objects:
                 "rounded corners, rounded corners=7pt, ultra thick, ->, >=stealth"
             )
         else:
-            obj.options = (
-                "rounded corners, rounded corners=7pt, ultra thick"
-            )
+            obj.options = "rounded corners, rounded corners=7pt, ultra thick"
 tikz.show()

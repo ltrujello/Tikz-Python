@@ -1,23 +1,22 @@
-import subprocess
-import webbrowser
-import tempfile
 import re
-import warnings
-
-from pathlib import Path
 import shutil
-from typing import List, Optional
+import subprocess
+import tempfile
+import warnings
+import webbrowser
+from pathlib import Path
+
+from tikzpy.templates.tex_file import TEX_FILE
 from tikzpy.tikz_environments.scope import Scope
 from tikzpy.tikz_environments.tikz_environment import TikzEnvironment
 from tikzpy.tikz_environments.tikz_style import TikzStyle
 from tikzpy.utils.helpers import (
     brackets,
-    true_posix_path,
     extract_error_content,
     in_notebook,
+    true_posix_path,
 )
 from tikzpy.utils.types import CompileError
-from tikzpy.templates.tex_file import TEX_FILE
 
 
 class TikzPicture(TikzEnvironment):
@@ -84,7 +83,7 @@ class TikzPicture(TikzEnvironment):
         self.add_styles(style)
         return style
 
-    def add_styles(self, *styles: List[TikzStyle]) -> None:
+    def add_styles(self, *styles: list[TikzStyle]) -> None:
         """Add a TikzStyle object to the environment."""
         for style in styles:
             self._preamble[f"tikz_style:{style.style_name}"] = style.code
@@ -96,9 +95,9 @@ class TikzPicture(TikzEnvironment):
         phi: The angle (in degrees) through which the coordinate frame is rotated about the z axis.
         """
         self.tdplotsetmaincoords = (theta, phi)
-        self._preamble[
-            "tdplotsetmaincoords"
-        ] = f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
+        self._preamble["tdplotsetmaincoords"] = (
+            f"\\tdplotsetmaincoords{{{theta}}}{{{phi}}}\n"
+        )
 
     def write_tex_file(self, tex_filepath):
         tex_code = TEX_FILE
@@ -122,9 +121,7 @@ class TikzPicture(TikzEnvironment):
         with open(tikz_code_filepath, "w") as f:
             f.write(self.code())
 
-    def compile(
-        self, pdf_destination: Optional[str] = None, quiet: bool = True
-    ) -> Path:
+    def compile(self, pdf_destination: str | None = None, quiet: bool = True) -> Path:
         """Compiles the Tikz code and returns a Path to the final PDF.
         If no file path is provided, a default value of "tex_file.pdf" will be used.
 
@@ -141,8 +138,12 @@ class TikzPicture(TikzEnvironment):
             options = ""
             if quiet:
                 options += " -quiet "
-            cmd = f"latexmk -pdf {options} -interaction=nonstopmode -output-directory={tex_file_parents} {tex_file_posix_path}"
-            completed_process = subprocess.run(cmd, shell=True, capture_output=True)
+            cmd = (
+                f"latexmk -pdf {options} -interaction=nonstopmode -output-directory={tex_file_parents} {tex_file_posix_path}",
+            )
+            completed_process = subprocess.run(
+                cmd, shell=True, capture_output=True, check=False
+            )
             if completed_process.returncode != 0:
                 logfile = Path(tmp_dir) / "tex_file.log"
                 if not logfile.exists():
@@ -174,7 +175,7 @@ class TikzPicture(TikzEnvironment):
             shutil.move(pdf_file, moved_pdf_file)
             return moved_pdf_file.resolve()
 
-    def show(self, quiet: bool = False, inline: Optional[bool] = None) -> None:
+    def show(self, quiet: bool = False, inline: bool | None = None) -> None:
         """Compiles the Tikz code and displays the pdf to the user. Set quiet=True to shut up latexmk.
         This should either open the PDF viewer on the user's computer with the graphic,
         or open the PDF in the user's browser. Set inline=True/False to force displaying
@@ -183,18 +184,21 @@ class TikzPicture(TikzEnvironment):
         """
         pdf_file = self.compile(quiet=quiet)
 
-        if inline is None: inline = in_notebook()
-        
-        if inline and self.display_inline(pdf_file): return
+        if inline is None:
+            inline = in_notebook()
+
+        if inline and self.display_inline(pdf_file):
+            return
 
         webbrowser.open_new(str(pdf_file.as_uri()))
-    
-    def display_inline(self, pdf_file: Optional[Path] = None) -> bool:
+
+    def display_inline(self, pdf_file: Path | None = None) -> bool:
         """Displays the Tikz graphic inline, e.g. in a Jupyter/VS Code notebook cell.
         Compiles the Tikz code first if pdf_file is not given. Returns whether the
         graphic was successfully displayed."""
 
-        if pdf_file is None: pdf_file = self.compile()
+        if pdf_file is None:
+            pdf_file = self.compile()
 
         try:
             import pymupdf

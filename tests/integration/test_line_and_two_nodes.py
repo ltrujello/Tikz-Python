@@ -1,7 +1,7 @@
 import tempfile
 from pathlib import Path
+
 from tikzpy import TikzPicture
-from tikzpy.colors import rainbow_colors
 
 code = r"""\begin{tikzpicture}
     \draw[thick, blue, o-o] (0, 0) to (1, 1);
@@ -14,8 +14,8 @@ code = r"""\begin{tikzpicture}
 def test_line_and_two_nodes():
     tikz = TikzPicture()
     line = tikz.line((0, 0), (1, 1), options="thick, blue, o-o")
-    start_node = tikz.node(line.start, options="below", text="Start!")
-    end_node = tikz.node(line.end, options="above", text="End!")
+    tikz.node(line.start, options="below", text="Start!")
+    tikz.node(line.end, options="above", text="End!")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         temp_path = Path(tmp_dir) / "out.pdf"

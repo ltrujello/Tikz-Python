@@ -1,6 +1,7 @@
 #!/bin/bash/python3
 import numpy as np
 from scipy.integrate import odeint
+
 from tikzpy import TikzPicture
 
 """ Plots the Lorenz dynamical system. 
@@ -23,12 +24,10 @@ if __name__ == "__main__":
     sigma = 10.0
     beta = 8.0 / 3.0
 
-
     # Next state according to the ODEs
     def next(*state):
         x, y, z = state[0][0], state[0][1], state[0][2]
         return sigma * (y - x), x * (rho - z) - y, x * y - beta * z
-
 
     # Set initial conditions and time steps
     initial = [1.0, 1.0, 1.0]

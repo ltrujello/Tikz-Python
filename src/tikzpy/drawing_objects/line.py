@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import List, Tuple, Union, Optional
-from tikzpy.drawing_objects.point import Point
+
 from tikzpy.drawing_objects.drawing_object import DrawingObject
+from tikzpy.drawing_objects.point import Point
 from tikzpy.utils.helpers import brackets
 
 
@@ -25,13 +25,15 @@ class Line(DrawingObject):
 
     def __init__(
         self,
-        start: Union[Tuple[float, float], Point],
-        end: Union[Tuple[float, float], Point],
+        start: tuple[float, float] | Point,
+        end: tuple[float, float] | Point,
         options: str = "",
         to_options: str = "",
-        control_pts: List[Tuple] = [],
+        control_pts: list[tuple] | None = None,
         action: str = "draw",
     ) -> None:
+        if control_pts is None:
+            control_pts = []
         self._start = Point(start)
         self._end = Point(end)
         self.options = options
@@ -101,14 +103,14 @@ class Line(DrawingObject):
         return self._end
 
     @start.setter
-    def start(self, new_start: Union[Tuple, Point]) -> None:
+    def start(self, new_start: tuple | Point) -> None:
         if isinstance(new_start, (tuple, Point)):
             self._start = Point(new_start)
         else:
             raise TypeError(f"Invalid type '{type(new_start)}' for start")
 
     @end.setter
-    def end(self, new_end: Union[Tuple, Point]) -> None:
+    def end(self, new_end: tuple | Point) -> None:
         if isinstance(new_end, (tuple, Point)):
             self._end = Point(new_end)
         else:
@@ -148,13 +150,13 @@ class Line(DrawingObject):
         """
         return self.pos_at_t(0.5)
 
-    def slope(self) -> Optional[float]:
+    def slope(self) -> float | None:
         """Returns the slope of the line"""
         if self.end.x == self.start.x:
             return None
         return (self.end.y - self.start.y) / (self.end.x - self.start.x)
 
-    def y_intercept(self) -> Optional[float]:
+    def y_intercept(self) -> float | None:
         slope = self.slope()
         if slope is None:
             return None
@@ -175,7 +177,10 @@ class Line(DrawingObject):
             point.scale_(scale)
 
     def rotate_(
-        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
+        self,
+        angle: float,
+        about_pt: tuple[float, float] | None = None,
+        radians: bool = False,
     ) -> None:
         """Rotate start, end, and control_pts. By default, the rotation is done relative to the midpoint
         of the line."""
@@ -187,21 +192,24 @@ class Line(DrawingObject):
         for point in self.control_pts:
             point.rotate_(angle, about_pt, radians)
 
-    def shift(self, xshift: float, yshift: float) -> "Line":
+    def shift(self, xshift: float, yshift: float) -> Line:
         """Shift start, end, and control_pts"""
         new_line = self.copy()
         new_line.shift_(xshift, yshift)
         return new_line
 
-    def scale(self, scale: float) -> "Line":
+    def scale(self, scale: float) -> Line:
         """Scale start, end, and control_pts."""
         new_line = self.copy()
         new_line.scale_(scale)
         return new_line
 
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
-    ) -> "Line":
+        self,
+        angle: float,
+        about_pt: tuple[float, float] | None = None,
+        radians: bool = False,
+    ) -> Line:
         """Rotate start, end, and control_pts. By default, the rotation is done relative to the midpoint
         of the line."""
         new_line = self.copy()

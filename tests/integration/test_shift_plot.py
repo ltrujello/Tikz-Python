@@ -1,5 +1,6 @@
 import tempfile
 from pathlib import Path
+
 from tikzpy import TikzPicture
 from tikzpy.colors import rainbow_colors
 

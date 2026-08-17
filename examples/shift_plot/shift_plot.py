@@ -2,7 +2,6 @@
 from tikzpy import TikzPicture
 from tikzpy.colors import rainbow_colors
 
-
 if __name__ == "__main__":
     tikz = TikzPicture()
     # points = [(14.4, 3.2), (16.0, 3.6), (16.8, 4.8), (16.0, 6.8), (16.4, 8.8), (13.6, 8.8), (12.4, 7.6), (12.8, 5.6), (12.4, 3.6)]

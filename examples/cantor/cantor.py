@@ -1,5 +1,6 @@
 import numpy as np
-from tikzpy import TikzPicture, R2_Space
+
+from tikzpy import R2_Space, TikzPicture
 
 
 def cantor(n):

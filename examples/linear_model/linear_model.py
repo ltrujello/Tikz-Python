@@ -1,6 +1,8 @@
 #!/bin/bash/python3
 import math
-from tikzpy import TikzPicture, Point
+
+from tikzpy import TikzPicture
+
 tikz = TikzPicture()
 radius = 0.25
 
@@ -12,14 +14,14 @@ if __name__ == "__main__":
         x_1 = 0
         y_1 = 4 - i
         if y_1 - y_2 == 0:
-            theta = math.pi/2
+            theta = math.pi / 2
         else:
             theta = math.atan(abs(x_2 - x_1) / abs(y_1 - y_2))
         if y_2 > y_1:
-            start = (x_1 + radius * math.sin(theta), y_1 + radius* math.cos(theta))
+            start = (x_1 + radius * math.sin(theta), y_1 + radius * math.cos(theta))
             end = (x_2 - radius * math.sin(theta), y_2 - radius * math.cos(theta))
         else:
-            start = (x_1 + radius * math.sin(theta), y_1 - radius* math.cos(theta))
+            start = (x_1 + radius * math.sin(theta), y_1 - radius * math.cos(theta))
             end = (x_2 - radius * math.sin(theta), y_2 + radius * math.cos(theta))
 
         line = tikz.line(start, end, options="->")

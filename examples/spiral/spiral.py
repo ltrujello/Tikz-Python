@@ -1,5 +1,6 @@
 import numpy as np
-from tikzpy import TikzPicture, PlotCoordinates, Circle
+
+from tikzpy import Circle, PlotCoordinates, TikzPicture
 
 if __name__ == "__main__":
     tikz = TikzPicture(center=True)
@@ -12,8 +13,12 @@ if __name__ == "__main__":
             At the self intersection, we draw a white circle.
             We then draw in the order: first curve half, white circle, second curve half. This provides the necessary crossing over feature.
         """
-        curve_under = PlotCoordinates([], plot_options="smooth")  # Curve before cross over
-        curve_over = PlotCoordinates([], plot_options="smooth")  # Curve after cross over
+        curve_under = PlotCoordinates(
+            [], plot_options="smooth"
+        )  # Curve before cross over
+        curve_over = PlotCoordinates(
+            [], plot_options="smooth"
+        )  # Curve after cross over
         points = []  # Points on the spiral
         under = True  # Controls if we are drawing curve_under or curve_over
         t = 0

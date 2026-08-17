@@ -1,8 +1,9 @@
 from __future__ import annotations
+
 import math
-from typing import Tuple, Union
-from tikzpy.drawing_objects.point import Point
+
 from tikzpy.drawing_objects.drawing_object import DrawingObject
+from tikzpy.drawing_objects.point import Point
 
 
 class Circle(DrawingObject):
@@ -18,7 +19,7 @@ class Circle(DrawingObject):
 
     def __init__(
         self,
-        center: Union[Tuple[float, float], Point],
+        center: tuple[float, float] | Point,
         radius: float,
         options: str = "",
         action: str = "draw",
@@ -46,7 +47,7 @@ class Circle(DrawingObject):
         return self._center
 
     @center.setter
-    def center(self, new_center: Union[tuple, Point]) -> None:
+    def center(self, new_center: tuple | Point) -> None:
         if isinstance(new_center, (tuple, Point)):
             self._center = Point(new_center)
         else:
@@ -154,23 +155,29 @@ class Circle(DrawingObject):
         self.radius *= scale
 
     def rotate_(
-        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
+        self,
+        angle: float,
+        about_pt: tuple[float, float] | None = None,
+        radians: bool = False,
     ) -> None:
         self._center.rotate_(angle, about_pt, radians)
 
-    def shift(self, xshift: float, yshift: float) -> "Circle":
+    def shift(self, xshift: float, yshift: float) -> Circle:
         new_circle = self.copy()
         new_circle.shift_(xshift, yshift)
         return new_circle
 
-    def scale(self, scale: float) -> "Circle":
+    def scale(self, scale: float) -> Circle:
         new_circle = self.copy()
         new_circle.scale_(scale)
         return new_circle
 
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
-    ) -> "Circle":
+        self,
+        angle: float,
+        about_pt: tuple[float, float] | None = None,
+        radians: bool = False,
+    ) -> Circle:
         new_circle = self.copy()
         new_circle.rotate_(angle, about_pt, radians)
         return new_circle

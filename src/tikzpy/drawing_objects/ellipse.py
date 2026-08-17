@@ -1,7 +1,7 @@
 from __future__ import annotations
-from typing import Tuple, Union
-from tikzpy.drawing_objects.point import Point
+
 from tikzpy.drawing_objects.drawing_object import DrawingObject
+from tikzpy.drawing_objects.point import Point
 
 
 class Ellipse(DrawingObject):
@@ -23,7 +23,7 @@ class Ellipse(DrawingObject):
 
     def __init__(
         self,
-        center: Union[Tuple[float, float], Point],
+        center: tuple[float, float] | Point,
         x_axis: float,
         y_axis: float,
         options: str = "",
@@ -40,7 +40,7 @@ class Ellipse(DrawingObject):
         return self._center
 
     @center.setter
-    def center(self, new_center: Union[tuple, Point]) -> None:
+    def center(self, new_center: tuple | Point) -> None:
         if isinstance(new_center, (tuple, Point)):
             self._center = Point(new_center)
         else:
@@ -79,23 +79,23 @@ class Ellipse(DrawingObject):
         self.y_axis *= scale
 
     def rotate_(
-        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
     ) -> None:
         self._center.rotate_(angle, about_pt, radians)
 
-    def shift(self, xshift: float, yshift: float) -> "Ellipse":
+    def shift(self, xshift: float, yshift: float) -> Ellipse:
         new_ellipse = self.copy()
         new_ellipse.shift_(xshift, yshift)
         return new_ellipse
 
-    def scale(self, scale: float) -> "Ellipse":
+    def scale(self, scale: float) -> Ellipse:
         new_ellipse = self.copy()
         new_ellipse.scale_(scale)
         return new_ellipse
 
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
-    ) -> "Ellipse":
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
+    ) -> Ellipse:
         new_ellipse = self.copy()
         new_ellipse.rotate_(angle, about_pt, radians)
         return new_ellipse

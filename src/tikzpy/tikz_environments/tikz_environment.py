@@ -1,27 +1,28 @@
 from __future__ import annotations
-from typing import List, Tuple, Union
-from abc import ABC, abstractmethod
-from tikzpy.drawing_objects.line import Line
-from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
+
+from abc import ABC
+
+from tikzpy.drawing_objects.arc import Arc
 from tikzpy.drawing_objects.circle import Circle
-from tikzpy.drawing_objects.node import Node
-from tikzpy.drawing_objects.rectangle import (
-    Rectangle,
-    rectangle_from_north,
-    rectangle_from_east,
-    rectangle_from_south,
-    rectangle_from_west,
-    rectangle_from_center,
+from tikzpy.drawing_objects.drawing_object import DrawingObject
+from tikzpy.drawing_objects.drawing_utils import (
+    draw_segments,
+    line_connecting_circle_edges,
 )
 from tikzpy.drawing_objects.ellipse import Ellipse
-from tikzpy.drawing_objects.arc import Arc
+from tikzpy.drawing_objects.line import Line
+from tikzpy.drawing_objects.node import Node
+from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
 from tikzpy.drawing_objects.point import Point
-from tikzpy.drawing_objects.drawing_object import DrawingObject
-from tikzpy.tikz_environments.tikz_command import TikzCommand
-from tikzpy.drawing_objects.drawing_utils import (
-    line_connecting_circle_edges,
-    draw_segments,
+from tikzpy.drawing_objects.rectangle import (
+    Rectangle,
+    rectangle_from_center,
+    rectangle_from_east,
+    rectangle_from_north,
+    rectangle_from_south,
+    rectangle_from_west,
 )
+from tikzpy.tikz_environments.tikz_command import TikzCommand
 
 
 class TikzEnvironment(ABC):
@@ -29,7 +30,7 @@ class TikzEnvironment(ABC):
         self.options = options
         self.drawing_objects = []
 
-    def draw(self, *args: List[DrawingObject]) -> None:
+    def draw(self, *args: list[DrawingObject]) -> None:
         """Add an arbitrary sequence of drawing objects."""
         for draw_obj in args:
             self.drawing_objects.append(draw_obj)
@@ -53,21 +54,23 @@ class TikzEnvironment(ABC):
 
     def line(
         self,
-        start: Union[Tuple[float, float], Point],
-        end: Union[Tuple[float, float], Point],
+        start: tuple[float, float] | Point,
+        end: tuple[float, float] | Point,
         options: str = "",
         to_options: str = "",
-        control_pts: list = [],
+        control_pts: list | None = None,
         action: str = "draw",
     ) -> Line:
         """Draws a line by creating an instance of the Line class."""
+        if control_pts is None:
+            control_pts = []
         line = Line(start, end, options, to_options, control_pts, action)
         self.draw(line)
         return line
 
     def plot_coordinates(
         self,
-        points: Union[List[tuple], List[Point]],
+        points: list[tuple] | list[Point],
         options: str = "",
         plot_options: str = "",
         action: str = "draw",
@@ -79,7 +82,7 @@ class TikzEnvironment(ABC):
 
     def plot_relative_coordinates(
         self,
-        points: Union[List[tuple], List[Point]],
+        points: list[tuple] | list[Point],
         options: str = "",
         plot_options: str = "",
         action: str = "draw",
@@ -98,7 +101,7 @@ class TikzEnvironment(ABC):
 
     def circle(
         self,
-        center: Union[Tuple[float, float], Point],
+        center: tuple[float, float] | Point,
         radius: float,
         options: str = "",
         action: str = "draw",
@@ -159,7 +162,7 @@ class TikzEnvironment(ABC):
 
     def node(
         self,
-        position: Union[Tuple[float, float], Point],
+        position: tuple[float, float] | Point,
         options: str = "",
         text: str = "",
     ) -> Node:
@@ -170,7 +173,7 @@ class TikzEnvironment(ABC):
 
     def rectangle(
         self,
-        left_corner: Union[Tuple[float, float], Point],
+        left_corner: tuple[float, float] | Point,
         width: float = 0,
         height: float = 0,
         options: str = "",
@@ -183,7 +186,7 @@ class TikzEnvironment(ABC):
 
     def rectangle_from_north(
         self,
-        north_point: Union[Tuple[float, float], Point],
+        north_point: tuple[float, float] | Point,
         width: float = 0,
         height: float = 0,
         options: str = "",
@@ -218,7 +221,7 @@ class TikzEnvironment(ABC):
 
     def rectangle_from_east(
         self,
-        east_point: Union[Tuple[float, float], Point],
+        east_point: tuple[float, float] | Point,
         width: float = 0,
         height: float = 0,
         options: str = "",
@@ -246,7 +249,7 @@ class TikzEnvironment(ABC):
 
     def rectangle_from_south(
         self,
-        south_point: Union[Tuple[float, float], Point],
+        south_point: tuple[float, float] | Point,
         width: float = 0,
         height: float = 0,
         options: str = "",
@@ -274,7 +277,7 @@ class TikzEnvironment(ABC):
 
     def rectangle_from_west(
         self,
-        west_point: Union[Tuple[float, float], Point],
+        west_point: tuple[float, float] | Point,
         width: float = 0,
         height: float = 0,
         options: str = "",
@@ -302,7 +305,7 @@ class TikzEnvironment(ABC):
 
     def rectangle_from_center(
         self,
-        center: Union[Tuple[float, float], Point],
+        center: tuple[float, float] | Point,
         width: float = 0,
         height: float = 0,
         options: str = "",
@@ -314,7 +317,7 @@ class TikzEnvironment(ABC):
 
     def ellipse(
         self,
-        center: Union[Tuple[float, float], Point],
+        center: tuple[float, float] | Point,
         x_axis: float,
         y_axis: float,
         options: str = "",
@@ -327,12 +330,12 @@ class TikzEnvironment(ABC):
 
     def arc(
         self,
-        position: Union[Tuple[float, float], Point],
+        position: tuple[float, float] | Point,
         start_angle: float,
         end_angle: float,
-        radius: float = None,
-        x_radius: float = None,
-        y_radius: float = None,
+        radius: float | None = None,
+        x_radius: float | None = None,
+        y_radius: float | None = None,
         options: str = "",
         radians: bool = False,
         draw_from_start: bool = True,

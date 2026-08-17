@@ -1,5 +1,6 @@
 import pytest
-from tikzpy.utils.helpers import brackets, replace_code, extract_error_content
+
+from tikzpy.utils.helpers import brackets, extract_error_content, replace_code
 
 
 @pytest.fixture
@@ -12,7 +13,7 @@ See the pgfkeys package documentation for explanation.
 Type  H <return>  for immediate help.
  ...
 
-l.28     \draw[dashed meow]
+l.28     \\draw[dashed meow]
                             (3, 0) arc [start angle = 0.0, end angle = 179.9...
 
 ?
@@ -47,14 +48,11 @@ def test_replace_code():
         It doesn't grab this end, right?
         """
         replacement_text = f"{begin} Hi! {end}"
-        updated_text, num_matches = replace_code(begin, end, content, replacement_text)
-        assert (
-            updated_text
-            == f"""
+        updated_text, _num_matches = replace_code(begin, end, content, replacement_text)
+        assert updated_text == f"""
         {begin} Hi! {end}
         It doesn't grab this end, right?
         """
-        )
 
 
 def test_extract_error_content(mock_latex_error_msg):

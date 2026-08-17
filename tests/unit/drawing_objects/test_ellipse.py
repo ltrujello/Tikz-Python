@@ -1,5 +1,6 @@
-from tikzpy import TikzPicture, Ellipse, Point
 import pytest
+
+from tikzpy import Ellipse, Point, TikzPicture
 
 
 @pytest.fixture

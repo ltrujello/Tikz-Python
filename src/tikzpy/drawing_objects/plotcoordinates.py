@@ -1,6 +1,5 @@
-from typing import List, Tuple, Union
-from tikzpy.drawing_objects.point import Point
 from tikzpy.drawing_objects.drawing_object import DrawingObject
+from tikzpy.drawing_objects.point import Point
 from tikzpy.utils.helpers import brackets
 
 
@@ -23,7 +22,7 @@ class PlotCoordinates(DrawingObject):
 
     def __init__(
         self,
-        points: Union[List[Tuple], Point],
+        points: list[tuple] | Point,
         options: str = "",
         plot_options: str = "",
         action: str = "draw",
@@ -72,7 +71,7 @@ class PlotCoordinates(DrawingObject):
     def rotate_(
         self,
         angle: float,
-        about_pt: Union[Tuple[float, float], None, Point] = None,
+        about_pt: tuple[float, float] | None | Point = None,
         radians: bool = False,
     ) -> None:
         if about_pt is None:
@@ -93,7 +92,7 @@ class PlotCoordinates(DrawingObject):
     def rotate(
         self,
         angle: float,
-        about_pt: Union[Tuple[float, float], None, Point] = None,
+        about_pt: tuple[float, float] | None | Point = None,
         radians: bool = False,
     ) -> None:
         new_plot = self.copy()

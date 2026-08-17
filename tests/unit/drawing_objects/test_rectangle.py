@@ -1,5 +1,6 @@
-from tikzpy import TikzPicture, Rectangle, Point
 import pytest
+
+from tikzpy import Point, Rectangle, TikzPicture
 
 
 @pytest.fixture

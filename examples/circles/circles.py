@@ -1,5 +1,6 @@
 #!/bin/bash/python3
 import numpy as np
+
 from tikzpy import TikzPicture
 
 if __name__ == "__main__":

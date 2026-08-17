@@ -1,13 +1,13 @@
 from __future__ import annotations
-from typing import Tuple
-from tikzpy.drawing_objects.line import Line
-from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
-from tikzpy.drawing_objects.circle import Circle
-from tikzpy.drawing_objects.node import Node
-from tikzpy.drawing_objects.rectangle import Rectangle
-from tikzpy.drawing_objects.ellipse import Ellipse
+
 from tikzpy.drawing_objects.arc import Arc
+from tikzpy.drawing_objects.circle import Circle
 from tikzpy.drawing_objects.drawing_object import DrawingObject
+from tikzpy.drawing_objects.ellipse import Ellipse
+from tikzpy.drawing_objects.line import Line
+from tikzpy.drawing_objects.node import Node
+from tikzpy.drawing_objects.plotcoordinates import PlotCoordinates
+from tikzpy.drawing_objects.rectangle import Rectangle
 
 
 class Clip:
@@ -47,6 +47,6 @@ class Clip:
         self.draw_obj.scale(scale)
 
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
     ) -> None:
         self.draw_obj.rotate(angle, about_pt, radians)

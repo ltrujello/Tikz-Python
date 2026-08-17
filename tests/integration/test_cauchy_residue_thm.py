@@ -1,5 +1,6 @@
 import tempfile
 from pathlib import Path
+
 from tikzpy import TikzPicture
 from tikzpy.styles import arrows_along_path_style
 
@@ -44,7 +45,7 @@ def test_cauchy_residue_example():
     tikz.options = "thick"
 
     # Draws the main boundary
-    plot = tikz.plot_coordinates(
+    tikz.plot_coordinates(
         options="arrows_along_path=red",
         plot_options="smooth, tension=.5, closed hobby",
         points=points,

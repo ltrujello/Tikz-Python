@@ -1,6 +1,7 @@
 #!/bin/bash/python3
 import numpy as np
-from tikzpy import TikzPicture, PlotCoordinates
+
+from tikzpy import PlotCoordinates, TikzPicture
 
 if __name__ == "__main__":
     tikz = TikzPicture(center=True, options="tdplot_main_coords")
@@ -10,8 +11,12 @@ if __name__ == "__main__":
     O = (1, 2, HEIGHT / 2)  # The origin
 
     # Draw the rectangle
-    floor = tikz.plot_coordinates([(0, 0, 0), (5, 0, 0), (5, 5, 0), (0, 5, 0), (0, 0, 0)])
-    floor.options = "shade, left color = NavyBlue!30, right color = NavyBlue, opacity = 0.3"
+    floor = tikz.plot_coordinates(
+        [(0, 0, 0), (5, 0, 0), (5, 5, 0), (0, 5, 0), (0, 0, 0)]
+    )
+    floor.options = (
+        "shade, left color = NavyBlue!30, right color = NavyBlue, opacity = 0.3"
+    )
 
     # Initialize the top and bottom curves. Note the points are empty. We'll add to them.
     top_curve = PlotCoordinates([], options="line width = 0.07mm")
@@ -37,9 +42,9 @@ if __name__ == "__main__":
     tikz.circle(O, radius=0.03, action="fill")
     tikz.node(O, options="left", text="$O$")
     tikz.node((3, 3, 0), text="$Y$")
-    tikz.node((1, 4.5, 0), text="$\mathbf{P}^2$")
+    tikz.node((1, 4.5, 0), text=r"$\mathbf{P}^2$")
     tikz.node((0, 2.5, 1), text="$C(Y)$")
-    tikz.node((0, 4.2, 3.5), text="$\mathbf{A}^3$")
+    tikz.node((0, 4.2, 3.5), text=r"$\mathbf{A}^3$")
     with open("code.tex", "w") as f:
         f.write(tikz.code())
 

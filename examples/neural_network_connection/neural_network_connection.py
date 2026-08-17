@@ -1,6 +1,6 @@
 from tikzpy import TikzPicture
 
-tikz = TikzPicture(center=True) # center it in the PDF
+tikz = TikzPicture(center=True)  # center it in the PDF
 radius = 0.25
 pos_a = (0, 0)
 pos_b = (4, 1)
@@ -24,4 +24,3 @@ tikz.node(node_a.center + (0, -0.75), text="\\vdots")
 tikz.node(node_b.center + (0, 1.5), text="\\vdots")
 tikz.node(node_b.center + (0, -0.75), text="\\vdots")
 tikz.show()
-

@@ -1,5 +1,6 @@
 #!/bin/bash/python3
 from math import exp
+
 from tikzpy import TikzPicture
 from tikzpy.colors import rainbow_colors
 

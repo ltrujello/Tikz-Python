@@ -1,9 +1,10 @@
 from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from typing import Tuple
 from copy import deepcopy
-from tikzpy.utils.helpers import brackets
+
 from tikzpy.drawing_objects.node import Node
+from tikzpy.utils.helpers import brackets
 
 
 class DrawingObject(ABC):
@@ -39,17 +40,20 @@ class DrawingObject(ABC):
         """
 
     @abstractmethod
-    def shift(self, xshift: float, yshift: float) -> "DrawingObject":
+    def shift(self, xshift: float, yshift: float) -> DrawingObject:
         """Shift the coordinates of the drawing object by (xshift, yshift)"""
 
     @abstractmethod
-    def scale(self, scale: float) -> "DrawingObject":
+    def scale(self, scale: float) -> DrawingObject:
         """Scale the coordinates of the drawing object by amount "scale"."""
 
     @abstractmethod
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float] = None, radians: bool = False
-    ) -> "DrawingObject":
+        self,
+        angle: float,
+        about_pt: tuple[float, float] | None = None,
+        radians: bool = False,
+    ) -> DrawingObject:
         """Rotate the coordinates of the drawing object (counterclockwise) by "angle" about the
         point "about_pt".
         """
@@ -64,7 +68,7 @@ class DrawingObject(ABC):
             return f"{draw_cmd} node{brackets(self.node.options)} {self.node._command};"
 
     def add_node(
-        self, position: tuple = None, options: str = "", text: str = ""
+        self, position: tuple | None = None, options: str = "", text: str = ""
     ) -> None:
         """A method to build a node on a drawing object directly.
         This bypasses having to (1) define a Node object and then (2) use node.setter.

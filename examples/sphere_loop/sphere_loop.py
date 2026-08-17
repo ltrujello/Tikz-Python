@@ -1,7 +1,8 @@
 #!/bin/bash/python3
+import numpy as np
+
 from tikzpy import TikzPicture
 from tikzpy.colors import rainbow_colors
-import numpy as np
 
 if __name__ == "__main__":
     tikz = TikzPicture()

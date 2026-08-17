@@ -1,5 +1,4 @@
-from tikzpy import TikzPicture, R2_Space
-
+from tikzpy import R2_Space, TikzPicture
 
 if __name__ == "__main__":
     tikz = TikzPicture()
@@ -7,7 +6,9 @@ if __name__ == "__main__":
     vert_scale = 4.5
 
     # Set up xy-plane
-    xy_plane = R2_Space(x_interval=(-axes_len, axes_len), y_interval=(0, vert_scale + .5))
+    xy_plane = R2_Space(
+        x_interval=(-axes_len, axes_len), y_interval=(0, vert_scale + 0.5)
+    )
     xy_plane.x_axis_options = "Gray!30, ->"
     xy_plane.y_axis_options = "Gray!30, ->"
     tikz.draw(xy_plane)

@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import Tuple, Union
+
 from copy import deepcopy
+
 from tikzpy.drawing_objects.point import Point
 from tikzpy.utils.helpers import brackets
 
@@ -22,7 +23,7 @@ class Node:
 
     def __init__(
         self,
-        position: Union[Tuple[float, float], Point],
+        position: tuple[float, float] | Point,
         options: str = "",
         text: str = "",
     ) -> None:
@@ -45,7 +46,7 @@ class Node:
         return self._position
 
     @position.setter
-    def position(self, new_pos: Union[Tuple[float, float], Point]) -> None:
+    def position(self, new_pos: tuple[float, float] | Point) -> None:
         if isinstance(new_pos, (tuple, Point)):
             self._position = Point(new_pos)
         else:
@@ -64,24 +65,24 @@ class Node:
             self._position.scale_(scale)
 
     def rotate_(
-        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
     ) -> None:
         if self._position is not None:
             self._position.rotate_(angle, about_pt, radians)
 
-    def shift(self, xshift: float, yshift: float) -> "Node":
+    def shift(self, xshift: float, yshift: float) -> Node:
         new_node = self.copy()
         new_node.shift_(xshift, yshift)
         return new_node
 
-    def scale(self, scale: float) -> "Node":
+    def scale(self, scale: float) -> Node:
         new_node = self.copy()
         new_node.scale_(scale)
         return new_node
 
     def rotate(
-        self, angle: float, about_pt: Tuple[float, float], radians: bool = False
-    ) -> "Node":
+        self, angle: float, about_pt: tuple[float, float], radians: bool = False
+    ) -> Node:
         new_node = self.copy()
         new_node.rotate_(angle, about_pt, radians)
         return new_node

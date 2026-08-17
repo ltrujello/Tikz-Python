@@ -1,5 +1,6 @@
-from tikzpy import TikzPicture, Line, Point
 import pytest
+
+from tikzpy import Line, Point, TikzPicture
 
 
 @pytest.fixture
@@ -72,7 +73,7 @@ def test_line_scale(line_simple):
     assert new_line.end == Point(4, 4)
 
 
-def test_line_scale(line_simple):
+def test_line_shift(line_simple):
     new_line = line_simple.shift(1, 1)
     assert new_line.start == Point(1, 1)
     assert new_line.end == Point(2, 2)

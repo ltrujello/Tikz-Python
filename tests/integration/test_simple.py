@@ -1,5 +1,6 @@
 import tempfile
 from pathlib import Path
+
 from tikzpy import TikzPicture
 
 code = r"""\begin{tikzpicture}
@@ -14,8 +15,8 @@ def test_basic_circle_example():
     tikz = TikzPicture()
     tikz.circle((0, 0), 3, options="thin, fill=orange!15")
 
-    arc_one = tikz.arc((3, 0), 0, 180, x_radius=3, y_radius=1.5, options=f"dashed")
-    arc_two = tikz.arc((-3, 0), 180, 360, x_radius=3, y_radius=1.5)
+    tikz.arc((3, 0), 0, 180, x_radius=3, y_radius=1.5, options="dashed")
+    tikz.arc((-3, 0), 180, 360, x_radius=3, y_radius=1.5)
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         temp_path = Path(tmp_dir) / "out.pdf"

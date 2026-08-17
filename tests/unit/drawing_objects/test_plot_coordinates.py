@@ -1,5 +1,6 @@
-from tikzpy import TikzPicture, PlotCoordinates, Point
 import pytest
+
+from tikzpy import PlotCoordinates, Point, TikzPicture
 
 
 @pytest.fixture

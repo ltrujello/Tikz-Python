@@ -1,28 +1,31 @@
 import math
+
 from tikzpy import TikzPicture
+
 
 def calc_start_end_between_nodes(pos_a, rad_a, pos_b, rad_b):
     x_1, y_1 = pos_a
     x_2, y_2 = pos_b
     if y_1 - y_2 == 0:
-        theta = math.pi/2
+        theta = math.pi / 2
     else:
         theta = math.atan(abs(x_2 - x_1) / abs(y_1 - y_2))
 
     if y_2 > y_1:
-        start = (x_1 + radius * math.sin(theta), y_1 + radius* math.cos(theta))
+        start = (x_1 + radius * math.sin(theta), y_1 + radius * math.cos(theta))
         end = (x_2 - radius * math.sin(theta), y_2 - radius * math.cos(theta))
     else:
-        start = (x_1 + radius * math.sin(theta), y_1 - radius* math.cos(theta))
+        start = (x_1 + radius * math.sin(theta), y_1 - radius * math.cos(theta))
         end = (x_2 - radius * math.sin(theta), y_2 + radius * math.cos(theta))
     return start, end
+
 
 if __name__ == "__main__":
     tikz = TikzPicture()
     layers = []
     horiz_space = 3
     vert_space = 2.5
-    radius=0.25
+    radius = 0.25
     epsilon = 0.3
 
     # x_0 node
@@ -46,13 +49,17 @@ if __name__ == "__main__":
     tikz.node((horiz_space, -vert_space + radius + epsilon), text="$1$")
 
     # Add the final output layer
-    x_2 = 1.75*horiz_space
+    x_2 = 1.75 * horiz_space
     y_2 = 0
 
     output_node = tikz.circle((x_2, y_2), radius)
     tikz.node((x_2, y_2 + radius + epsilon), text="$y$")
 
-    layers = [[x_0_node, x_1_node, x_2_node], [h_0_node, h_1_node, h_2_node], [output_node]]
+    layers = [
+        [x_0_node, x_1_node, x_2_node],
+        [h_0_node, h_1_node, h_2_node],
+        [output_node],
+    ]
 
     # Draw labels for hidden layer
     lines = []
@@ -76,14 +83,14 @@ if __name__ == "__main__":
     tikz.node(lines[1].pos_at_t(0.2), options="above", text="4")
     tikz.node(lines[2].pos_at_t(0.2), options="above", text="2")
     tikz.node(lines[3].pos_at_t(0.3), options="above", text="3")
-    # label the biases in the first layer 
+    # label the biases in the first layer
     tikz.node(lines[4].pos_at_t(0.2), options="left", text="-2")
     tikz.node(lines[5].pos_at_t(0.5), options="below", text="-4")
 
-    # label the weights in the final layer 
+    # label the weights in the final layer
     tikz.node(lines[6].pos_at_t(0.4), options="right", text="5")
     tikz.node(lines[7].pos_at_t(0.5), options="above", text="-5")
-    # label the bias in the final layer 
+    # label the bias in the final layer
     tikz.node(lines[8].pos_at_t(0.5), options="left", text="-2")
 
     tikz.show()

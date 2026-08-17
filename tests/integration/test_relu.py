@@ -1,9 +1,7 @@
 import tempfile
 from pathlib import Path
 
-import numpy as np
-from tikzpy import TikzPicture, Point, R2_Space
-import math
+from tikzpy import R2_Space, TikzPicture
 
 code = r"""\begin{tikzpicture}
     \begin{scope}
@@ -23,9 +21,7 @@ code = r"""\begin{tikzpicture}
 
 def test_relu_example():
     tikz = TikzPicture()
-    xrange = (-3, 3)
     vert_scale = 4.5
-    horiz_scale = 1.5
 
     # Set up xy-plane
     xy_plane = R2_Space(x_interval=(-4, 4), y_interval=(0, vert_scale + 0.5))

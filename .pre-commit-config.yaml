@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: uv run black src/ tests/
+        language: system
+        types: [python]
+      - id: ruff
+        name: ruff
+        entry: uv run ruff check --fix src/ tests/
+        language: system
+        types: [python]
+
