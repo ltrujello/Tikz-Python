@@ -39,8 +39,8 @@ def test_relu_example():
     tikz.line((-4, 0), (0, 0), options="ProcessBlue, <-")
     tikz.line((0, 0), (4.5, 4.5), options="ProcessBlue, ->")
 
-    with tempfile.NamedTemporaryFile() as fp:
-        temp_path = Path(fp.name)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        temp_path = Path(tmp_dir) / "out.pdf"
         tikz.compile(temp_path, quiet=True)
 
     assert str(tikz) == code

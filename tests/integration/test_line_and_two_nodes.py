@@ -17,8 +17,8 @@ def test_line_and_two_nodes():
     start_node = tikz.node(line.start, options="below", text="Start!")
     end_node = tikz.node(line.end, options="above", text="End!")
 
-    with tempfile.NamedTemporaryFile() as fp:
-        temp_path = Path(fp.name)
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        temp_path = Path(tmp_dir) / "out.pdf"
         tikz.compile(temp_path, quiet=True)
 
     assert str(tikz) == code
